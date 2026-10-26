@@ -20,7 +20,7 @@ export interface Ctx {
   readOnly?: boolean;
   /** Requests per second, already checked against the hard cap. */
   rate: number;
-  /** Replaces the `Authorization: Bearer` header (the Console API uses its own headers). */
+  /** Replaces the `Authorization: Bearer` header (the Console API uses its own headers). It can also replace `Accept`. */
   headers?: Record<string, string>;
 }
 
@@ -98,8 +98,8 @@ export async function send(ctx: Ctx, req: HttpRequest): Promise<HttpResponse> {
       res = await d.fetch(req.url, {
         method: req.method,
         headers: {
-          ...(ctx.headers ?? { Authorization: `Bearer ${ctx.key}` }),
           Accept: "application/json",
+          ...(ctx.headers ?? { Authorization: `Bearer ${ctx.key}` }),
           "User-Agent": userAgent(ctx),
           "X-Request-Id": requestId,
           ...(req.body !== undefined ? { "Content-Type": "application/json" } : {}),

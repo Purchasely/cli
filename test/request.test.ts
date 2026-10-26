@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { writeConfig, type Config } from "../src/core/config.js";
+import { send } from "../src/core/http.js";
+import { Runtime } from "../src/core/runtime.js";
 import { EXT, setup } from "./helpers.js";
 
 describe("request building", () => {
@@ -85,8 +87,16 @@ describe("request building", () => {
     expect(h["User-Agent"]).toBe("purchasely-cli/9.9.9 (kevin@purchasely.com; weekly audit; placements list; script)");
     expect(h["X-Request-Id"]).toMatch(/^[0-9a-f-]{36}$/);
     expect(h.Authorization).toBe("Bearer pk_mgmt_live_SECRET123");
+    expect(h.Accept).toBe("application/json");
     expect(t.calls[1].init.headers["User-Agent"]).toContain("; -; placements list; script)");
     expect(t.calls[1].init.headers["X-Request-Id"]).not.toBe(h["X-Request-Id"]);
+  });
+
+  it("the headers of the context replace Authorization and can replace Accept", async () => {
+    const t = setup();
+    const ctx = { ...(await new Runtime(t.d).ctx({})), headers: { Authorization: "Bearer other", Accept: "application/json, text/event-stream" } };
+    await send(ctx, { method: "POST", url: "https://api.purchasely.io/x", pathTemplate: "/x", body: "{}", write: false });
+    expect(t.calls[0].init.headers).toMatchObject({ Authorization: "Bearer other", Accept: "application/json, text/event-stream" });
   });
 
   it("never puts an email in the public User-Agent, even with identity_email in the shared config", async () => {

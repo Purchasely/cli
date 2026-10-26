@@ -12,7 +12,7 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 
 - `--env prod|staging` is mandatory on every write, also with `--dry-run`. Reads default to `prod` (or `PURCHASELY_ENV`).
 - Every run prints one header line on stderr: `purchasely env=prod surface=management identity=- key=…a1b2`.
-- `--reason "<why>"` goes to the server in the `User-Agent`: `purchasely-cli/<version> (-; <reason>; <command>; <runner>)`. The command is its name only (`placements list`), never the values you pass. The runner is `agent` (`CLAUDECODE` is set), `ci` (`CI` is set), `tty` (a terminal) or `script`. The CLI never sends an email.
+- `--reason "<why>"` goes to the server in the `User-Agent`: `purchasely-cli/<version> (-; <reason>; <command>; <runner>)`. The command is its name only (`placements list`), never the values you pass. The runner is `agent:<name>` when an AI agent runs it (`claude-code`, `codex`, `gemini-cli` or `cursor`, from the variable that the agent sets), `ci` (`CI` is set), `tty` (a terminal) or `script`. The CLI never sends an email.
 - **Write allow-list.** List the apps that a write may change, per env, in `~/.config/purchasely/config.json`. A write to another app, or a write with no app, exits 10, also with `--dry-run`. An env with no list has no limit. An empty list refuses every write. Use it to keep an agent on a test app:
 
   ```json

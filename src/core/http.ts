@@ -49,9 +49,17 @@ export const REQUEST_TIMEOUT_MS = 120_000;
 
 export const stateKey = (env: string, surface: string, key: string) => `${env}-${surface}-${keyHash(key)}`;
 
-/** Who runs the CLI. shortcut: only `CLAUDECODE` is a checked agent variable, add others when checked. */
+/**
+ * The variable that each agent sets in the shell of its tool calls. Checked in the source code (Codex,
+ * Gemini CLI), on the machine (Claude Code), or by the vendor on its forum (Cursor). Before `CI`: Cursor sets both.
+ * shortcut: no variable found for Copilot CLI and OpenCode, they count as tty, script or ci. Add them when found.
+ */
+const AGENT_VARS: [string, string][] = [["CLAUDECODE", "claude-code"], ["CODEX_THREAD_ID", "codex"], ["GEMINI_CLI", "gemini-cli"], ["CURSOR_AGENT", "cursor"]];
+
+/** Who runs the CLI: `agent:<name>`, `ci`, `tty` or `script`. */
 export function runner(d: Pick<Deps, "env" | "isTTY">): string {
-  if (d.env.CLAUDECODE) return "agent";
+  const agent = AGENT_VARS.find(([v]) => d.env[v]);
+  if (agent) return `agent:${agent[1]}`;
   if (d.env.CI) return "ci";
   return d.isTTY ? "tty" : "script";
 }

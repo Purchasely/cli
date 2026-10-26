@@ -107,7 +107,8 @@ describe("request building", () => {
   });
 
   it("sends the command name and the runner, never the argument values", async () => {
-    for (const [opts, who] of [[{ env: { CLAUDECODE: "1", CI: "true" } }, "agent"], [{ env: { CI: "true" } }, "ci"], [{ isTTY: true }, "tty"]] as const) {
+    const cases = [[{ env: { CLAUDECODE: "1", CI: "true" } }, "agent:claude-code"], [{ env: { CODEX_THREAD_ID: "t1" } }, "agent:codex"], [{ env: { GEMINI_CLI: "1" } }, "agent:gemini-cli"], [{ env: { CURSOR_AGENT: "1", CI: "1" } }, "agent:cursor"], [{ env: { CI: "true" } }, "ci"], [{ isTTY: true }, "tty"]] as const;
+    for (const [opts, who] of cases) {
       const t = setup(opts);
       await t.exec("placements", "get", "--app", "app_secret_1", "--id", "plc_1");
       expect(t.calls[0].init.headers["User-Agent"]).toBe(`purchasely-cli/9.9.9 (-; -; placements get; ${who})`);

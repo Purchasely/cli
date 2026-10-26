@@ -192,6 +192,9 @@ section{padding:clamp(4rem,9vw,7rem) 0 0}
 @media (max-width:899px){.uses{grid-template-columns:minmax(0,1fr)}}
 .uses>article{background:var(--white);border-radius:var(--r-m);padding:1.75rem;display:flex;flex-direction:column;gap:.875rem;min-width:0}
 .uses .code{font-size:.8125rem}
+.uses>.wide{grid-column:1/-1}
+.uses>.wide .pair{margin-top:0}
+.uses>.wide .code{word-break:normal;overflow-wrap:break-word}
 
 /* CLI or MCP */
 .vs-wrap{overflow-x:auto;border-radius:var(--r-m);background:var(--white)}
@@ -310,6 +313,22 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
     <p class="lead soft">Replace <code>app_xxx</code> with an id from <code>purchasely apps list</code>. These examples need <code>jq</code> for the pipes.</p>
   </div>
   <div class="uses">
+    <article class="wide">
+      <h3>A dashboard that updates itself</h3>
+      <p class="soft">The Purchasely plugin in your AI assistant answers questions about your data. The CLI lets a script get the same data every day, with nobody in the loop. Use them together.</p>
+      <div class="pair">
+        <div>
+          <p><strong>1. Ask your AI assistant once.</strong> In Claude Desktop, or any AI assistant that works on your computer:</p>
+<pre class="code"><code>"Build a dashboard of our paywall conversions. Install the Purchasely CLI, and write a script that updates the data every morning."</code></pre>
+        </div>
+        <div>
+          <p><strong>2. The script does the rest.</strong> The assistant asks your permission, installs the CLI and writes a script that calls it, for example:</p>
+<pre class="code"><code>purchasely dashboard summary --app app_xxx \
+  --days 30 --out data/metrics.json</code></pre>
+          <p class="soft">The update does not use the AI: it is fast, it gives the same result each time and it costs no AI credits. The script runs when your computer is on. To run it every day on a server, use the <a href="/recipes">recipes</a>.</p>
+        </div>
+      </div>
+    </article>
     <article>
       <h3>Build your own dashboard</h3>
       <p class="soft">The same numbers as the Console dashboard, ready for a cron job, a Slack message from your own script, or a sheet.</p>

@@ -72,7 +72,7 @@ export function register(program: Command, rt: Runtime): void {
       const allow = rt.cfg.write_allowlist?.[env];
       add("writes", "ok", `${rt.readOnly() ? "Read-only mode" : "Writes allowed"}${allow ? `, write_allowlist.${env}: ${allow.join(", ") || "empty"}` : ""}`);
 
-      emit(d, o, checks, { env, key: cred?.key ?? null, name: "doctor", columns: ["check", "status", "detail"] });
+      emit(d, o, { checks }, { env, key: cred?.key ?? null, name: "doctor", columns: ["check", "status", "detail"] });
       if (checks.some((c) => c.status === "fail")) throw new CliError(EXIT.GENERIC, "DOCTOR_FAILED", checks.filter((c) => c.status === "fail").map((c) => `${c.check}: ${c.detail}`));
     });
 }

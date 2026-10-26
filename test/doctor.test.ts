@@ -10,7 +10,7 @@ describe("doctor", () => {
     const t = setup({ replies: (c) => (c.url.endsWith("/latest.json") ? { body: { version: "9.9.9" } } : { body: { data: [] } }) });
     const r = await t.exec("doctor");
     expect(r.code).toBe(0);
-    const rows = byName(r.json());
+    const rows = byName(r.json().checks);
     expect(rows.version).toMatchObject({ status: "ok", detail: "9.9.9, the latest" });
     expect(rows.key).toMatchObject({ status: "ok", detail: "prod key …T123 from env" });
     expect(rows.api.status).toBe("ok");
@@ -24,7 +24,7 @@ describe("doctor", () => {
     const t = setup({ replies: (c) => (c.url.endsWith("/latest.json") ? { body: { version: "10.0.0" } } : { status: 401, body: {} }) });
     const r = await t.exec("doctor");
     expect(r.code).toBe(1);
-    const rows = byName(r.json());
+    const rows = byName(r.json().checks);
     expect(rows.api).toMatchObject({ status: "fail" });
     expect(rows.version.detail).toContain("10.0.0 is available");
     expect(r.errJson().error.code).toBe("DOCTOR_FAILED");
@@ -36,6 +36,8 @@ describe("doctor", () => {
     const r = await t.exec("doctor", "--output", "table");
     expect(r.code).toBe(1);
     expect(t.calls).toHaveLength(0);
+    expect(r.out.split("\n")[0]).toMatch(/^check\s+status\s+detail/);
+    expect(r.out).not.toContain("{");
     expect(r.out).toContain("auth login");
     expect(r.out).toContain("Read-only mode, write_allowlist.prod: app_test");
   });

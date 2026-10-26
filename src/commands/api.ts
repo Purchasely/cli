@@ -2,7 +2,7 @@ import type { Command } from "commander";
 import { usage } from "../core/errors.js";
 import { addGlobals, type Runtime } from "../core/runtime.js";
 import { BASE_URLS, type Env, type Globals } from "../core/types.js";
-import { execute, managementCommands } from "../surfaces/management/index.js";
+import { execute, managementCommands, PLAN_HELP } from "../surfaces/management/index.js";
 import { jsonBody, readData, withToken } from "../surfaces/management/request.js";
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"];
@@ -52,6 +52,7 @@ export function register(program: Command, rt: Runtime): void {
     .option("--query <k=v>", "query parameter (repeatable)", (v: string, prev: string[]) => [...prev, v], [] as string[])
     .option("--data <json>", "request body: JSON, @file.json or - for stdin")
     .option("--confirm-token <token>", "token from a CONFIRMATION_REQUIRED response")
+    .option("--plan <file>", PLAN_HELP)
     .addHelpText("after", HELP.replaceAll("purchasely ", `${rt.d.name} `))
     .action(async (m: string, raw: string, o: Globals & { query: string[]; data?: string; confirmToken?: string }) => {
       const method = m.toUpperCase();

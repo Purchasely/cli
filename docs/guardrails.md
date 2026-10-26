@@ -21,6 +21,16 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 
 - **Read-only mode.** Set `PURCHASELY_READ_ONLY=1`, or put `"read_only": true` in `~/.config/purchasely/config.json`. The CLI then refuses every write before it sends it (exit 10). Reads and `--dry-run` still work. Use it for a script or an agent that only reads.
 
+## Plan, then apply
+
+An agent prepares the writes, a person reads them, then applies them.
+
+- `--plan <file>` on a write records the request in a plan file and sends nothing. The checks of a write still run first: `--env`, `write_allowlist`. It works in read-only mode and with no key, so an agent can prepare a plan with `PURCHASELY_READ_ONLY=1`.
+- `purchasely apply <file> --dry-run` lists the writes that are left. `purchasely apply <file>` lists them, asks once (or `--yes`), then sends them in order.
+- Before each send, `apply` checks the entry again: the env is `prod` or `staging`, the method is a write, and the URL is the Management API of that env. Read-only mode and `write_allowlist` apply too. Any other entry exits 10, and the CLI sends nothing.
+- `--yes` approves the plan, not a risky change. A risky change still asks in a terminal. Without a terminal, `apply` stops there (exit 8).
+- Each applied write is marked (`applied_at`) in the file. `apply` stops at the first error (exit 9 when some writes were applied). Run it again to send the rest.
+
 ## Confirmation flow
 
 A risky change (delete a used placement, replace webhooks) returns `CONFIRMATION_REQUIRED` with the impact and a `confirm_token`.

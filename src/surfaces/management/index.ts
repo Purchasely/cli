@@ -1,5 +1,7 @@
 import { Command as Cli, Option } from "commander";
-import { CliError, EXIT, exitFor } from "../../core/errors.js";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { CliError, EXIT, exitFor, usage } from "../../core/errors.js";
 import { send, userAgent, type HttpResponse } from "../../core/http.js";
 import { emit } from "../../core/output.js";
 import { addGlobals, group, Runtime, refused } from "../../core/runtime.js";
@@ -64,6 +66,7 @@ function leafOf(parent: Cli, c: Command, rt: Runtime): void {
   const leaf = parent.command(c.action).description(plain(c.summary));
   addGlobals(leaf);
   addOperationOptions(leaf, c);
+  if ([c.appOp, c.globalOp].some((o) => o && o.method !== "GET")) leaf.option("--plan <file>", PLAN_HELP);
   leaf.addHelpText("after", helpText(c, rt.d.name));
   leaf.action(async (opts: Record<string, unknown>) => runOp(rt, c, opts));
 }
@@ -99,33 +102,49 @@ function notFound(c: Command, values: Values): string | undefined {
 
 export interface Req { method: string; url: string; pathTemplate: string; body?: string; confirm?: Op["confirm"] }
 
+export const PLAN_HELP = "record the write in this plan file, send nothing. A person reads it, then runs `apply <file>`";
+
+type Meta = { name: string; confirmToken?: string; columns?: string[]; notFound?: string; refuseRedirect?: boolean };
+type Out = { env: Env; key: string | null; name: string; columns?: string[] };
+
 /**
  * One Management request, for the generated commands and `api`: the Management key, `--env` on every write
- * (also with --dry-run), the masked dry-run, then the send and the confirm flow.
+ * (also with --dry-run), the masked dry-run or the plan, then the send and the confirm flow.
  */
-export async function execute(
-  rt: Runtime,
-  g: Globals,
-  build: (env: Env, token?: string) => Req,
-  meta: { name: string; confirmToken?: string; columns?: string[]; notFound?: string; refuseRedirect?: boolean },
-): Promise<void> {
+export async function execute(rt: Runtime, g: Globals, build: (env: Env, token?: string) => Req, meta: Meta): Promise<void> {
+  const { value, out } = await perform(rt, g, build, meta);
+  emit(rt.d, g, value, out);
+}
+
+/** `execute` without the output: `apply` prints one result for the whole plan. */
+export async function perform(rt: Runtime, g: Globals, build: (env: Env, token?: string) => Req, meta: Meta): Promise<{ value: unknown; out: Out }> {
   const ctx = await rt.ctx(g, "management");
   const first = build(ctx.env, meta.confirmToken);
   if (first.method !== "GET" && !g.env) throw refused("A write needs --env prod or --env staging. Add it, also with --dry-run.");
   if (first.method !== "GET") checkAllowlist(rt, ctx.env, first.url);
   const out = { env: ctx.env, key: ctx.key, name: meta.name, columns: meta.columns };
+  const bodyJson = (r: Req) => (r.body === undefined ? null : JSON.parse(r.body));
+
+  if (g.plan !== undefined) {
+    if (g.dryRun) throw usage("Use --plan or --dry-run, not both.");
+    if (first.method === "GET") throw usage("--plan records a write. Run a GET without it.");
+    // No confirm token in a plan: a token lives 5 minutes, and `apply` asks for its own.
+    const r = build(ctx.env);
+    const number = appendPlan(g.plan, { command: meta.name, env: ctx.env, method: r.method, url: r.url, pathTemplate: r.pathTemplate, body: r.body, confirm: r.confirm });
+    return { value: { planned: resolve(g.plan), number, method: r.method, url: r.url, body: bodyJson(r) }, out };
+  }
 
   if (g.dryRun) {
     const headers: Record<string, string> = { Authorization: "Bearer <redacted>", Accept: "application/json", "User-Agent": userAgent(ctx) };
     if (first.body !== undefined) headers["Content-Type"] = "application/json";
-    return emit(rt.d, g, { method: first.method, url: first.url, headers, body: first.body === undefined ? null : JSON.parse(first.body) }, out);
+    return { value: { method: first.method, url: first.url, headers, body: bodyJson(first) }, out };
   }
 
   let sentToken = meta.confirmToken;
   let built = first;
   for (;;) {
     const res = await send(ctx, { method: built.method, url: built.url, pathTemplate: built.pathTemplate, body: built.body, refuseRedirect: meta.refuseRedirect });
-    if (res.status >= 200 && res.status < 300) return emit(rt.d, g, res.text.trim() ? safeJson(res.text) : {}, out);
+    if (res.status >= 200 && res.status < 300) return { value: res.text.trim() ? safeJson(res.text) : {}, out };
     const err = toError(res);
     if (meta.notFound && err.exit === EXIT.NOT_FOUND) err.messages.unshift(meta.notFound);
     const token = err.extra.confirm_token as string | undefined;
@@ -137,6 +156,31 @@ export async function execute(
     sentToken = token;
     built = build(ctx.env, token);
   }
+}
+
+export interface PlanEntry extends Req { command: string; env: Env; applied_at?: string }
+export interface Plan { version: 1; requests: PlanEntry[] }
+
+/** Read a plan file. Its content is not trusted: `apply` checks each entry again before it sends it. */
+export function readPlan(file: string): Plan {
+  let plan: Plan;
+  try {
+    plan = JSON.parse(readFileSync(file, "utf8")) as Plan;
+  } catch {
+    throw usage(`${file} is not a readable plan file (JSON).`);
+  }
+  if (plan?.version !== 1 || !Array.isArray(plan.requests)) throw usage(`${file} is not a plan file: it needs "version": 1 and a "requests" array.`);
+  return plan;
+}
+
+export const writePlan = (file: string, plan: Plan) => writeFileSync(file, JSON.stringify(plan, null, 2) + "\n", { mode: 0o600 });
+
+/** Add one write to the plan file (created when missing). Returns its number, from 1. */
+function appendPlan(file: string, entry: PlanEntry): number {
+  const plan: Plan = existsSync(file) ? readPlan(file) : { version: 1, requests: [] };
+  plan.requests.push(entry);
+  writePlan(file, plan);
+  return plan.requests.length;
 }
 
 /** `write_allowlist` of the config: when the env has a list, a write must target one of its apps. */

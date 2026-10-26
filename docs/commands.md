@@ -24,6 +24,7 @@ Commands:
   games [game]                   Play a game in the terminal
   completion <shell>             Print a shell completion script (bash, zsh or fish)
   api [options] <method> <path>  Send a raw Management API request
+  apply [options] <file>         Send the writes of a plan file, after a person reads them
   dashboard [options]            Analytics dashboards. Start with: dashboard summary --app <app_id>
                                  --output table
   ab-tests                       Management API: ab-tests
@@ -171,6 +172,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create an AB test (draft) on an application.
@@ -217,6 +220,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Permanently delete a DRAFT AB test. REST-only, requires confirmation.
@@ -324,6 +329,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Start a DRAFT AB test, wires it into its placements. Requires >= 2 variants with positions 0..n-1 and weights summing to 100.
@@ -359,6 +366,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Terminate a RUNNING AB test, unwires it from its placements.
@@ -395,6 +404,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update an AB test. Most fields apply only while DRAFT (see individual field descriptions). category_tag_ids/placement_ids, when provided, fully replace the existing set (send the complete list, not a diff); omit either to leave the existing set untouched. ab_test_variants, when provided, is a full-resend of every variant.
@@ -570,6 +581,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Add a new answer option to an existing survey.
@@ -651,6 +664,8 @@ Options:
   --query <k=v>            query parameter (repeatable) (default: [])
   --data <json>            request body: JSON, @file.json or - for stdin
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 The path is relative to /management/v1, or starts with it. The CLI sends it only to the Management API of --env.
@@ -804,6 +819,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update an application's settings and/or platform credentials.
@@ -847,6 +864,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Replace an application's colors palette.
@@ -862,6 +881,44 @@ Body (required): --data '<json>' or --data @file.json or --data -
 
 Example:
   purchasely applications update-colors-palette --app app_xxx --data @body.json --env prod
+```
+
+## apply
+
+Send the writes of a plan file, after a person reads them
+
+### `purchasely apply`
+
+```text
+Usage: purchasely apply [options] <file>
+
+Send the writes of a plan file, after a person reads them
+
+Arguments:
+  file               plan file from --plan
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  -h, --help         display help for command
+
+A plan file holds writes that a command recorded with --plan <file>. An agent can record them
+with PURCHASELY_READ_ONLY=1 or with no key: nothing is sent. A person reads the plan, then applies it.
+
+The CLI lists the writes and asks once (or --yes). A risky change still asks on its own in a terminal;
+without a terminal, apply stops there (exit 8). Each applied write is marked in the file, so a second
+run sends only the rest. apply stops at the first error: exit 9 when some writes were applied.
+
+Examples:
+  purchasely placements update --app app_xxx --id plc_xxx --data @placement.json --env prod --plan plan.json
+  purchasely apply plan.json --dry-run
+  purchasely apply plan.json
 ```
 
 ## audiences
@@ -908,6 +965,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a targeting audience on an application.
@@ -952,6 +1011,8 @@ Options:
                            repeated
   --data <json>            request body: JSON, @file.json or - for stdin
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Discard (soft-delete) an audience. Requires confirm_token on the second call if the audience is still targeted by live placements.
@@ -1030,6 +1091,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update an audience's name, vendor_id, targeting definition, and/or category tags.
@@ -1181,6 +1244,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a campaign on an application.
@@ -1228,6 +1293,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Discard (soft-delete) a campaign. REST-only, requires confirmation.
@@ -1378,6 +1445,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Bulk-reorder running campaigns by public_id.
@@ -1417,6 +1486,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a campaign. Resends the full campaign object, category_tag_ids/placement_ids, if provided, fully replace the existing set; omitted config/tags/placements are preserved. Running campaigns cannot change vendor_id, content or audience, and need complete timing. Deactivation must be requested separately from other field changes; running campaigns cannot return to draft.
@@ -1484,6 +1555,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a category tag on an application.
@@ -1525,6 +1598,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Permanently delete a category tag from an application. REST + client MCP only, requires confirmation.
@@ -1689,6 +1764,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Bulk-update client errors (mark read/unread, or resolved). Scoped to the applications you can access.
@@ -1775,6 +1852,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Declare a custom event property on an application. It is available to every custom event of the app. data_type must be one of: int, bool, float, string, date, array_of_strings.
@@ -1817,6 +1896,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Permanently delete a custom event property from an application (and so from every custom event). Requires confirmation.
@@ -1925,6 +2006,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a custom event property (partial, omitted fields are left untouched). data_type must be one of: int, bool, float, string, date, array_of_strings.
@@ -1988,6 +2071,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a custom event (event-schema definition) on an application.
@@ -2103,6 +2188,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a custom event (partial, omitted fields are left untouched, except category_tag_ids, which fully replaces the existing set when sent).
@@ -2170,6 +2257,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a custom property (user-attribute schema definition) on an application. data_type must be one of: bool, date, float, int, array_string, string, version.
@@ -2281,6 +2370,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a custom property (partial, omitted fields are left untouched). data_type must be one of: bool, date, float, int, array_string, string, version. Builtin properties cannot be updated.
@@ -3913,6 +4004,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Add a store distribution (the store SKU / store_product_id) to a plan. The app must already have that store's platform configured. For stripe, pass store_product_ids (an array of Stripe price IDs). store_product_id is frozen once a purchase has been made.
@@ -3958,6 +4051,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Remove a store's distribution from a plan. For stripe this clears the plan's entire stripe set. A distribution that already has purchases cannot be removed.
@@ -4063,6 +4158,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a store's distribution on a plan (its store_product_id and, for play_store, the Google Play base plan / SwG settings). For stripe, store_product_ids REPLACES the whole stripe set. store_product_id is frozen once a purchase has been made.
@@ -4130,6 +4227,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create an in-app flow: a graph of steps, each displaying a screen, that the SDK opens through the deeplink ply/flows/<vendor_id>. Send the same content as draft_content to publish it right away.
@@ -4174,6 +4273,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Discard (soft-delete) an in-app flow. Refused while a draft or running A/B test uses it.
@@ -4277,6 +4378,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update an in-app flow (partial: omitted fields are left untouched). Sending content publishes it; draft_content only changes the draft edited in the console.
@@ -4343,6 +4446,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a custom font on an application.
@@ -4454,6 +4559,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a custom font on an application.
@@ -4648,6 +4755,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Replace the ordered audience-targeting list for a placement. Must include every currently-targeted audience (even if unchanged), an outdated/stale list is rejected with VALIDATION_FAILED. Every audience and presentable referenced must belong to this application, or the call is rejected.
@@ -4686,6 +4795,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a placement on an application. The first placement created for an app automatically becomes its default.
@@ -4732,6 +4843,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Discard (soft-delete) a placement. Requires confirm_token on retry if the placement is still associated with running campaigns/audiences. Blocked outright (non-overridable) if the placement has draft/running AB tests or is the app's default placement.
@@ -4771,6 +4884,8 @@ Options:
   --fields <a,b>         Field selection for token economy: an explicit list of field names to
                          include in the response, or ["*"] for every field. Omit for this endpoint's
                          own default field set. [array of string] comma separated or repeated
+  --plan <file>          record the write in this plan file, send nothing. A person reads it, then
+                         runs `apply <file>`
   -h, --help             display help for command
 
 Remove a single audience-targeting rule from a placement, by the audience's public_id.
@@ -4808,6 +4923,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Duplicate a placement's audience-targeting configuration, either into a NEW placement (name + vendor_id) or by copying it onto an EXISTING placement (target_id). Exactly one of target_id or (name and vendor_id) must be given.
@@ -4916,6 +5033,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Set a placement as the application's default placement (shown when no other placement matches).
@@ -4953,6 +5072,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a placement (partial, omitted fields are left untouched, except category_tag_ids, which fully replaces the existing set when sent).
@@ -5020,6 +5141,8 @@ Options:
                            repeated
   --data <json>            request body: JSON, @file.json or - for stdin
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Create a plan for a product. product_type/period_type/level define the plan and cannot be changed once it has purchases, collect them from the user, never guess. Store distributions (SKUs) are managed separately, via the distributions endpoints.
@@ -5073,6 +5196,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Permanently delete a plan. REST-only, requires confirmation.
@@ -5178,6 +5303,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a plan's attributes and/or promo offers. Store distributions (SKUs) are managed separately, via the distributions endpoints.
@@ -5248,6 +5375,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Configure a store platform (app_store/play_store/amazon/huawei) for an application. Provide the store's credentials as flat fields; they are write-only and never returned. Stripe is connected out-of-band and cannot be configured here.
@@ -5365,6 +5494,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a store platform's settings and/or credentials for an application. Credential fields are write-only and never returned.
@@ -5436,6 +5567,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a product for an application.
@@ -5480,6 +5613,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Permanently delete a product. REST-only, requires confirmation.
@@ -5587,6 +5722,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a product's name, description, icon, and/or default screen.
@@ -5785,6 +5922,8 @@ Options:
                            endpoint's own default field set. [array of string] comma separated or
                            repeated
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Discard (soft-delete) a screen. Requires confirm_token on retry if the screen is still associated with placements/audiences. Blocked outright (non-overridable) if the screen has draft/running A/B tests, is the app's default screen, or is referenced by other screens/flows.
@@ -5891,6 +6030,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Set a screen as the application's default screen.
@@ -6240,6 +6381,8 @@ Options:
                            repeated
   --data <json>            request body: JSON, @file.json or - for stdin
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Replace ALL translations for an application from a CSV upload (key,<lang1>,<lang2>,... header). Destructive, requires confirmation.
@@ -6514,6 +6657,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Activate a web2app flow: creates or enables its web slug and returns the public and sandbox URLs. Idempotent.
@@ -6641,6 +6786,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Create a web2app flow: a graph of steps, each displaying a screen, served as a funnel in the browser once activated. Send the same content as draft_content to publish it right away.
@@ -6685,6 +6832,8 @@ Options:
   --fields <a,b>     Field selection for token economy: an explicit list of field names to include
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Discard (soft-delete) a web2app flow. Refused while a draft or running A/B test uses it.
@@ -6788,6 +6937,8 @@ Options:
                      in the response, or ["*"] for every field. Omit for this endpoint's own default
                      field set. [array of string] comma separated or repeated
   --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
   -h, --help         display help for command
 
 Update a web2app flow (partial: omitted fields are left untouched). Sending content publishes it; draft_content only changes the draft edited in the console.
@@ -6974,6 +7125,8 @@ Options:
                            repeated
   --data <json>            request body: JSON, @file.json or - for stdin
   --confirm-token <token>  token from a CONFIRMATION_REQUIRED response
+  --plan <file>            record the write in this plan file, send nothing. A person reads it, then
+                           runs `apply <file>`
   -h, --help               display help for command
 
 Update per-event webhook delivery toggles for an application. Always requires confirmation.

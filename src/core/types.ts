@@ -82,4 +82,6 @@ export interface Globals {
   rate?: string;
   iAskedBackend?: boolean;
   out?: string;
+  /** Record the write in this plan file instead of sending it. */
+  plan?: string;
 }

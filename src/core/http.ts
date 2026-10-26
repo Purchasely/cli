@@ -44,6 +44,9 @@ export interface HttpResponse {
   text: string;
 }
 
+/** One request, headers and body, must end in this time. A slow query can take a minute. */
+export const REQUEST_TIMEOUT_MS = 120_000;
+
 export const stateKey = (env: string, surface: string, key: string) => `${env}-${surface}-${keyHash(key)}`;
 
 /** Who runs the CLI. shortcut: only `CLAUDECODE` is a checked agent variable, add others when checked. */
@@ -94,6 +97,8 @@ export async function send(ctx: Ctx, req: HttpRequest): Promise<HttpResponse> {
           ...(req.body !== undefined ? { "Content-Type": "application/json" } : {}),
         },
         body: req.body,
+        // Also covers the body read: a server that sends the headers and then stops ends here.
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         ...(req.refuseRedirect ? { redirect: "manual" as const } : {}),
       });
       text = await res.text();

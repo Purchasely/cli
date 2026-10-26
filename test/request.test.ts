@@ -132,6 +132,12 @@ describe("request building", () => {
     expect(c.calls).toHaveLength(0);
   });
 
+  it("gives every request a time limit that also covers the body read", async () => {
+    const t = setup();
+    await t.exec("placements", "list");
+    expect(t.calls[0].init.signal).toBeInstanceOf(AbortSignal);
+  });
+
   it("prints the env header on stderr", async () => {
     const t = setup();
     const r = await t.exec("placements", "list", "--env", "staging");

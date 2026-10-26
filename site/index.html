@@ -185,6 +185,51 @@ section{padding:clamp(4rem,9vw,7rem) 0 0}
 /* who it is for */
 .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:1rem}
 .who>article{background:var(--white);border-radius:var(--r-m);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;min-width:0}
+/* small pictures of the result, at the top of a card */
+.tile{margin:0;border-radius:var(--r-s);padding:.875rem;height:9rem;display:flex;align-items:center;justify-content:center}
+.tile.lavender{background:var(--lavender)}
+.tile.coral{background:var(--coral)}
+.tile.green{background:var(--light-green)}
+.tile.cream{background:var(--cream)}
+.tile.ink{background:var(--black-green)}
+.mini{width:100%;background:var(--white);border-radius:.75rem;padding:.625rem .75rem;font-size:.75rem;line-height:1.45;box-shadow:0 .75rem 1.5rem -1rem color-mix(in srgb,var(--dark-green) 45%,transparent);display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.mini p{margin:0}
+.mini .mt{font-weight:700}
+.mini .mono,.code-mini,.term-mini{font-family:var(--mono);font-size:.6875rem;overflow-wrap:anywhere}
+.mini .tag{align-self:flex-start;margin-top:.3rem;border-radius:var(--r-full);padding:.15rem .5rem;background:var(--light-grey);color:var(--ink-soft)}
+.mini .big{font:300 1.75rem/1 var(--heading);letter-spacing:-.02em}
+.mini .ok::before,.mini .ko::before{display:inline-block;width:1rem;font-weight:700}
+.mini .ok::before{content:"\2713";color:var(--deep-green)}
+.mini .ko::before{content:"\2717";color:#b3261e}
+.mini .ko{color:#8c1d18}
+.mini .ko-tag{background:color-mix(in srgb,var(--coral) 60%,transparent);color:#8c1d18}
+.code-mini{display:block;white-space:pre-wrap}
+.code-mini .cm{color:var(--ink-soft)}
+.code-mini .hl{background:var(--light-green);border-radius:.25rem;padding:0 .2rem}
+.term-mini{display:block;white-space:pre-wrap;background:var(--deep-green);color:var(--light-grey);box-shadow:none}
+.term-mini .ask{color:var(--lavender)}
+.term-mini .p{color:var(--light-green)}
+.term-mini .o{color:var(--on-dark-soft)}
+.spark,.chart{display:block;width:100%;height:2rem;margin-top:.35rem}
+.spark polygon,.chart polygon{fill:color-mix(in srgb,var(--light-green) 70%,transparent)}
+.spark polyline,.chart polyline{fill:none;stroke:var(--dark-green);stroke-width:1.5;vector-effect:non-scaling-stroke}
+/* the dashboard that updates itself */
+.dash-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem 3rem;align-items:center}
+.dash-top>div{display:flex;flex-direction:column;gap:.875rem}
+@media (max-width:899px){.dash-top{grid-template-columns:minmax(0,1fr)}}
+.tile.dash{height:auto;padding:clamp(1rem,3vw,1.75rem)}
+.browser{width:100%;background:var(--white);border-radius:.75rem;overflow:hidden;box-shadow:0 1rem 2rem -1.25rem color-mix(in srgb,var(--dark-green) 45%,transparent)}
+.browser .bar{display:flex;align-items:center;gap:.35rem;padding:.5rem .75rem;background:var(--light-grey);font-size:.6875rem;color:var(--ink-soft)}
+.browser .bar i{width:.5rem;height:.5rem;border-radius:50%;background:color-mix(in srgb,var(--dark-green) 20%,transparent)}
+.browser .bar span{margin-left:.5rem;background:var(--white);border-radius:var(--r-full);padding:.1rem .6rem}
+.browser .page{padding:1rem 1.125rem 1.125rem;display:flex;flex-direction:column;gap:.25rem}
+.browser .dt{font:300 1.375rem/1.1 var(--heading);letter-spacing:-.02em;margin:0}
+.browser .upd{font-size:.75rem;color:var(--ink-soft);margin:0}
+.browser .kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-top:.75rem}
+.browser .kpi div{background:var(--light-grey);border-radius:.5rem;padding:.5rem .625rem;display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.browser .kpi span{font-size:.6875rem;color:var(--ink-soft)}
+.browser .kpi b{font:300 1.25rem/1 var(--heading);letter-spacing:-.02em}
+.browser .chart{height:5rem;margin-top:.75rem}
 .who .k{font:700 .75rem/1 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
 
 /* use cases */
@@ -280,26 +325,35 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
   </div>
   <div class="who">
     <article>
+      <figure class="tile lavender" role="img" aria-label="Example: SDK code that uses the real placement id onboarding, read from your account."><div class="mini code-mini"><span class="cm">// from your account</span>
+id: <span class="hl">"onboarding"</span></div></figure>
       <span class="k">Mobile developers</span>
       <h3>Integrate with your real ids</h3>
       <p class="soft">Your AI agent reads your placements, products, plans and custom events from your account, then writes the SDK code with the real values. No copy and paste from the Console.</p>
     </article>
     <article>
+      <figure class="tile coral" role="img" aria-label="Example: a dry run shows the request to rename a placement and sends nothing."><div class="mini"><p class="mt">Dry run</p><p class="mono">PUT /placements</p><p class="mono">name: Onboarding</p><p class="tag">Nothing sent</p></div></figure>
       <span class="k">Growth and product teams</span>
       <h3>Change configuration with a safety net</h3>
       <p class="soft">Rename placements, start or stop A/B tests, update audiences. Every write shows its request first with <code>--dry-run</code>, and a risky change asks for confirmation.</p>
     </article>
     <article>
+      <figure class="tile green" role="img" aria-label="Example: the MRR of the last 30 days with a trend line."><div class="mini"><p class="mt">MRR</p><p class="big">1,250</p><svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><polygon points="0,32 0.0,22.6 9.2,19.4 18.5,21.2 27.7,20.8 36.9,16.8 46.2,16.5 55.4,19.0 64.6,16.6 73.8,12.0 83.1,11.9 92.3,12.3 101.5,7.8 110.8,4.3 120.0,6.2 120,32"/><polyline points="0.0,22.6 9.2,19.4 18.5,21.2 27.7,20.8 36.9,16.8 46.2,16.5 55.4,19.0 64.6,16.6 73.8,12.0 83.1,11.9 92.3,12.3 101.5,7.8 110.8,4.3 120.0,6.2"/></svg></div></figure>
       <span class="k">Data and BI</span>
       <h3>Your numbers, in your tools</h3>
       <p class="soft">MRR, active subscriptions, paywall viewers and conversions as JSON. Send them to a spreadsheet, a database or your own dashboard with a short script.</p>
     </article>
     <article>
+      <figure class="tile cream" role="img" aria-label="Example: a release check finds the onboarding placement and fails because settings_paywall is missing."><div class="mini"><p class="mt">Release check</p><p class="ok">onboarding</p><p class="ko">settings_paywall</p><p class="tag ko-tag">Failed</p></div></figure>
       <span class="k">Platform and CI</span>
       <h3>Checks before each release</h3>
       <p class="soft">A CI job reads your configuration and fails when something is missing. Stable exit codes and JSON output make the result easy to test.</p>
     </article>
     <article>
+      <figure class="tile ink" role="img" aria-label="Example: an AI coding agent gets a request in plain words and runs a purchasely command to find the placements."><div class="mini term-mini"><span class="ask">&gt; add the paywall</span>
+<span class="p">$ </span>purchasely
+  placements list
+<span class="o">2 placements</span></div></figure>
       <span class="k">AI coding agents</span>
       <h3>A tool your agent already knows</h3>
       <p class="soft">Claude Code, Codex, Cursor and the others run shell commands well. The CLI gives them search, help, JSON and guardrails, with no extra server to set up.</p>
@@ -314,8 +368,23 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
   </div>
   <div class="uses">
     <article class="wide">
-      <h3>A dashboard that updates itself</h3>
-      <p class="soft">The Purchasely plugin in your AI assistant answers questions about your data. The CLI lets a script get the same data every day, with nobody in the loop. Use them together.</p>
+      <div class="dash-top">
+        <div>
+          <h3>A dashboard that updates itself</h3>
+          <p class="soft">The Purchasely plugin in your AI assistant answers questions about your data. The CLI lets a script get the same data every day, with nobody in the loop. Use them together.</p>
+        </div>
+      <figure class="tile lavender dash" role="img" aria-label="Example: a dashboard page that your AI assistant built. It shows the MRR, the paywall viewers and the conversions of the last 30 days with a chart, and the script updated it today at 08:00.">
+        <div class="browser">
+          <div class="bar"><i></i><i></i><i></i><span>dashboard.html</span></div>
+          <div class="page">
+            <p class="dt">Paywall conversions</p>
+            <p class="upd">Updated today at 08:00</p>
+            <div class="kpi"><div><span>MRR</span><b>1,250</b></div><div><span>Viewers</span><b>4,210</b></div><div><span>Conversions</span><b>87</b></div></div>
+            <svg class="chart" viewBox="0 0 320 90" preserveAspectRatio="none"><polygon points="0,90 0.0,59.0 11.0,62.5 22.1,71.2 33.1,65.6 44.1,58.0 55.2,63.2 66.2,64.9 77.2,52.5 88.3,46.2 99.3,52.7 110.3,51.3 121.4,41.5 132.4,44.0 143.4,53.2 154.5,48.4 165.5,39.2 176.6,42.8 187.6,45.3 198.6,33.5 209.7,26.2 220.7,33.0 231.7,33.7 242.8,24.3 253.8,25.5 264.8,34.8 275.9,30.8 286.9,20.1 297.9,22.2 309.0,25.5 320.0,14.7 320,90"/><polyline points="0.0,59.0 11.0,62.5 22.1,71.2 33.1,65.6 44.1,58.0 55.2,63.2 66.2,64.9 77.2,52.5 88.3,46.2 99.3,52.7 110.3,51.3 121.4,41.5 132.4,44.0 143.4,53.2 154.5,48.4 165.5,39.2 176.6,42.8 187.6,45.3 198.6,33.5 209.7,26.2 220.7,33.0 231.7,33.7 242.8,24.3 253.8,25.5 264.8,34.8 275.9,30.8 286.9,20.1 297.9,22.2 309.0,25.5 320.0,14.7"/></svg>
+          </div>
+        </div>
+      </figure>
+      </div>
       <div class="pair">
         <div>
           <p><strong>1. Ask your AI assistant once.</strong> In Claude Desktop, or any AI assistant that works on your computer:</p>

@@ -13,6 +13,12 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 - `--env prod|staging` is mandatory on every write, also with `--dry-run`. Reads default to `prod` (or `PURCHASELY_ENV`).
 - Every run prints one header line on stderr: `purchasely env=prod surface=management identity=- key=…a1b2`.
 - `--reason "<why>"` goes to the server in the `User-Agent`: `purchasely-cli/<version> (-; <reason>; <command>; <runner>)`. The command is its name only (`placements list`), never the values you pass. The runner is `agent` (`CLAUDECODE` is set), `ci` (`CI` is set), `tty` (a terminal) or `script`. The CLI never sends an email.
+- **Write allow-list.** List the apps that a write may change, per env, in `~/.config/purchasely/config.json`. A write to another app, or a write with no app, exits 10, also with `--dry-run`. An env with no list has no limit. An empty list refuses every write. Use it to keep an agent on a test app:
+
+  ```json
+  { "write_allowlist": { "prod": ["app_test"] } }
+  ```
+
 - **Read-only mode.** Set `PURCHASELY_READ_ONLY=1`, or put `"read_only": true` in `~/.config/purchasely/config.json`. The CLI then refuses every write before it sends it (exit 10). Reads and `--dry-run` still work. Use it for a script or an agent that only reads.
 
 ## Confirmation flow

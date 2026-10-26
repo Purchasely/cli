@@ -112,6 +112,7 @@ export async function execute(
   const ctx = await rt.ctx(g, "management");
   const first = build(ctx.env, meta.confirmToken);
   if (first.method !== "GET" && !g.env) throw refused("A write needs --env prod or --env staging. Add it, also with --dry-run.");
+  if (first.method !== "GET") checkAllowlist(rt, ctx.env, first.url);
   const out = { env: ctx.env, key: ctx.key, name: meta.name, columns: meta.columns };
 
   if (g.dryRun) {
@@ -136,6 +137,15 @@ export async function execute(
     sentToken = token;
     built = build(ctx.env, token);
   }
+}
+
+/** `write_allowlist` of the config: when the env has a list, a write must target one of its apps. */
+function checkAllowlist(rt: Runtime, env: Env, url: string): void {
+  const apps = rt.cfg.write_allowlist?.[env];
+  if (!apps) return;
+  const app = /\/applications\/([^/?]+)/.exec(new URL(url).pathname)?.[1];
+  if (!app) throw refused(`write_allowlist.${env} is set in the config, and this write targets no app. Writes go to the listed apps only.`);
+  if (!apps.includes(decodeURIComponent(app))) throw refused(`${decodeURIComponent(app)} is not in write_allowlist.${env} of the config. Writes go to the listed apps only.`);
 }
 
 export const safeJson = (t: string): unknown => {

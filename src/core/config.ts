@@ -9,6 +9,8 @@ export interface Config {
   auto_update?: boolean;
   /** `true` refuses every write before it is sent. Same as `PURCHASELY_READ_ONLY=1`. */
   read_only?: boolean;
+  /** Per env, the only apps a write may change. A missing env means no limit; an empty list refuses every write. */
+  write_allowlist?: { staging?: string[]; prod?: string[] };
 }
 
 export function readJson<T>(file: string, fallback: T): T {

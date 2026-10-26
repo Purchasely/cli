@@ -138,6 +138,22 @@ describe("request building", () => {
     expect(t.calls[0].init.signal).toBeInstanceOf(AbortSignal);
   });
 
+  it("write_allowlist limits the writes of an env to its apps, before the dry-run", async () => {
+    const t = setup();
+    writeConfig(t.d.configDir, { write_allowlist: { staging: ["app_test"] } });
+    const other = await t.exec("placements", "create", "--env", "staging", "--app", "app_live", "--data", "{}", "--dry-run");
+    expect(other.code).toBe(10);
+    expect(other.err).toContain("app_live is not in write_allowlist.staging");
+    expect((await t.exec("api", "POST", "/applications/app_live/placements", "--data", "{}", "--env", "staging")).code).toBe(10);
+    expect((await t.exec("placements", "create", "--env", "staging", "--app", "app_test", "--data", "{}")).code).toBe(0);
+    // No list for prod: no limit. Reads are never limited.
+    expect((await t.exec("placements", "create", "--env", "prod", "--app", "app_live", "--data", "{}")).code).toBe(0);
+    expect((await t.exec("placements", "list", "--env", "staging", "--app", "app_live")).code).toBe(0);
+    expect(t.calls).toHaveLength(3);
+    writeConfig(t.d.configDir, { write_allowlist: { prod: [] } });
+    expect((await t.exec("placements", "create", "--env", "prod", "--app", "app_live", "--data", "{}")).code).toBe(10);
+  });
+
   it("prints the env header on stderr", async () => {
     const t = setup();
     const r = await t.exec("placements", "list", "--env", "staging");

@@ -25,6 +25,7 @@ Commands:
   completion <shell>             Print a shell completion script (bash, zsh or fish)
   api [options] <method> <path>  Send a raw Management API request
   apply [options] <file>         Send the writes of a plan file, after a person reads them
+  doctor [options]               Check the install, the key, the network and the version
   dashboard [options]            Analytics dashboards. Start with: dashboard summary --app <app_id>
                                  --output table
   ab-tests                       Management API: ab-tests
@@ -4179,6 +4180,36 @@ Body (required): --data '<json>' or --data @file.json or --data -
 
 Example:
   purchasely distributions update --app app_xxx --plan-id <plan-id> --store <store> --data @body.json --env prod
+```
+
+## doctor
+
+Check the install, the key, the network and the version
+
+### `purchasely doctor`
+
+```text
+Usage: purchasely doctor [options]
+
+Check the install, the key, the network and the version
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  -h, --help         display help for command
+
+Checks the install, the key, the network, the version and the AI plugin. It sends one read request.
+It never prints the key. Exit 1 when a check fails. Send the output to support when you ask for help.
+
+Examples:
+  purchasely doctor
+  purchasely doctor --output table
 ```
 
 ## flows

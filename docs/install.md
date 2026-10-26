@@ -80,6 +80,7 @@ Config `~/.config/purchasely`, state `~/.local/state/purchasely`, cache `~/.cach
 
 ## Troubleshooting
 
+- First run `purchasely doctor`. It checks Node, the install, the version, the key, the Management API and the AI plugin, and never prints the key. Send its output to support.
 - `command not found`: open a new terminal. With fish, add `~/.local/bin` to PATH by hand.
 - `Node 20 or newer is required`: install Node (`brew install node`).
 - `only the latest version ... is published`: do not pass `--version`.

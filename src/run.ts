@@ -2,6 +2,7 @@ import { Command, CommanderError } from "commander";
 import { register as registerAi } from "./commands/ai.js";
 import { register as registerApi } from "./commands/api.js";
 import { register as registerApply } from "./commands/apply.js";
+import { register as registerDoctor } from "./commands/doctor.js";
 import { register as registerAuth } from "./commands/auth.js";
 import { register as registerCompletion } from "./commands/completion.js";
 import { register as registerDashboard } from "./commands/dashboard.js";
@@ -62,7 +63,7 @@ export function build(rt: Runtime): Command {
     .exitOverride()
     .configureOutput({ writeOut: rt.d.stdout, writeErr: rt.d.stderr, outputError: () => undefined })
     .addHelpText("after", intro(rt.d.name));
-  for (const r of [registerAuth, registerUsage, registerSearch, registerReference, registerAi, registerUpdate, registerGames, registerCompletion, registerApi, registerApply, registerDashboard, registerManagement]) r(program, rt);
+  for (const r of [registerAuth, registerUsage, registerSearch, registerReference, registerAi, registerUpdate, registerGames, registerCompletion, registerApi, registerApply, registerDoctor, registerDashboard, registerManagement]) r(program, rt);
   const before = new Set(program.commands);
   for (const r of rt.d.ext?.modules ?? []) r(program, rt);
   program.commands.filter((c) => !before.has(c)).forEach((c) => rt.extTop.add(c));

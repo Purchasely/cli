@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Breaker, pauseFromHeaders } from "./breaker.js";
 import { CliError, EXIT } from "./errors.js";
 import { hint, keyHash, what, type Surface } from "./credentials.js";
+import { demo, demoResponse, demoWriteError } from "./demo.js";
 import { Limiter } from "./limiter.js";
 import { StateStore } from "./state.js";
 import { logUsage } from "./usage.js";
@@ -82,10 +83,15 @@ export function limits(d: Deps, env: string, surface: Surface, key: string) {
 }
 
 export async function send(ctx: Ctx, req: HttpRequest): Promise<HttpResponse> {
-  if (!ctx.key) throw new CliError(EXIT.AUTH, "UNAUTHORIZED", [`No ${what(ctx.surface)}. ${hint(ctx.surface, ctx.d.name)}`]);
   const { d } = ctx;
-  const { limiter, breaker } = limits(d, ctx.env, ctx.surface, ctx.key);
   const write = req.write ?? req.method !== "GET";
+  // Demo mode answers from the sample data: no key, no limiter state, no request, no usage line.
+  if (demo(d)) {
+    if (write) throw demoWriteError();
+    return demoResponse(req, d.name);
+  }
+  if (!ctx.key) throw new CliError(EXIT.AUTH, "UNAUTHORIZED", [`No ${what(ctx.surface)}. ${hint(ctx.surface, ctx.d.name)}`]);
+  const { limiter, breaker } = limits(d, ctx.env, ctx.surface, ctx.key);
   if (write && ctx.readOnly) throw readOnlyError(d);
 
   for (let attempt = 0; ; attempt++) {

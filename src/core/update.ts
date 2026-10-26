@@ -25,7 +25,7 @@ export function newer(a: string, b: string): boolean {
 }
 
 export const autoUpdateOff = (env: Deps["env"], cfg: Config): boolean =>
-  env.CI !== undefined || env.PURCHASELY_DISABLE_AUTOUPDATE === "1" || env.PURCHASELY_OFFLINE === "1" || cfg.auto_update === false;
+  env.CI !== undefined || env.PURCHASELY_DISABLE_AUTOUPDATE === "1" || env.PURCHASELY_OFFLINE === "1" || env.PURCHASELY_DEMO === "1" || cfg.auto_update === false;
 
 /** An npm install of `purchasely` runs the install script again; an extension may name its own command. */
 export const noticeLine = (d: Deps, kind: "brew" | "npm", latest: string): string =>

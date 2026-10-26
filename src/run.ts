@@ -6,12 +6,14 @@ import { register as registerDoctor } from "./commands/doctor.js";
 import { register as registerAuth } from "./commands/auth.js";
 import { register as registerCompletion } from "./commands/completion.js";
 import { register as registerDashboard } from "./commands/dashboard.js";
+import { register as registerDemo } from "./commands/demo.js";
 import { register as registerGames } from "./commands/games.js";
 import { register as registerReference } from "./commands/reference.js";
 import { register as registerSearch } from "./commands/search.js";
 import { register as registerUpdate } from "./commands/update.js";
 import { register as registerUsage } from "./commands/usage.js";
 import { credentialDisplay } from "./core/credentials.js";
+import { demo } from "./core/demo.js";
 import { CliError, EXIT, usage } from "./core/errors.js";
 import { Runtime } from "./core/runtime.js";
 import { autoUpdate } from "./core/update.js";
@@ -63,7 +65,7 @@ export function build(rt: Runtime): Command {
     .exitOverride()
     .configureOutput({ writeOut: rt.d.stdout, writeErr: rt.d.stderr, outputError: () => undefined })
     .addHelpText("after", intro(rt.d.name));
-  for (const r of [registerAuth, registerUsage, registerSearch, registerReference, registerAi, registerUpdate, registerGames, registerCompletion, registerApi, registerApply, registerDoctor, registerDashboard, registerManagement]) r(program, rt);
+  for (const r of [registerAuth, registerUsage, registerSearch, registerReference, registerAi, registerUpdate, registerGames, registerCompletion, registerApi, registerApply, registerDoctor, registerDashboard, registerDemo, registerManagement]) r(program, rt);
   const before = new Set(program.commands);
   for (const r of rt.d.ext?.modules ?? []) r(program, rt);
   program.commands.filter((c) => !before.has(c)).forEach((c) => rt.extTop.add(c));
@@ -88,8 +90,8 @@ export function build(rt: Runtime): Command {
     rt.command = path.join(" ");
     // A game and `completion` need no key, no update check and no log line on the screen.
     if (["games", "play", "completion"].includes(top.name())) return;
-    // `reference` is offline: no credential, no update check, no stderr line, no request, not even a valid --env.
-    if (top.name() === "reference") return;
+    // `reference` and `demo` are offline: no credential, no update check, no stderr line, no request, not even a valid --env.
+    if (top.name() === "reference" || top.name() === "demo") return;
     // `grep` reads local files only. It still validates --env itself.
     if (top.name() === "grep") return;
     const g = action.opts() as Globals;
@@ -99,7 +101,7 @@ export function build(rt: Runtime): Command {
     // A built-in command uses the Management key. A command added by an extension module uses the surface of the extension.
     const surface = rt.d.ext && rt.extTop.has(top) ? rt.d.ext.surface : "management";
     const cred = await rt.credential(env, surface);
-    rt.d.stderr(`${rt.d.name} env=${env} surface=${surface} identity=${rt.d.ext?.identity ? rt.cfg.identity_email ?? "-" : "-"} key=${credentialDisplay(surface, cred?.key)}\n`);
+    rt.d.stderr(`${rt.d.name} env=${env} surface=${surface} identity=${rt.d.ext?.identity ? rt.cfg.identity_email ?? "-" : "-"} key=${credentialDisplay(surface, cred?.key)}${demo(rt.d) ? " demo=on (sample data, not real)" : ""}\n`);
   });
   return program;
 }

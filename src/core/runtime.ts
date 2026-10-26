@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { readConfig, type Config } from "./config.js";
 import { resolveCredential, surfaceDef, type Credential, type Surface } from "./credentials.js";
+import { demo } from "./demo.js";
 import { CliError, EXIT, usage } from "./errors.js";
 import type { Ctx } from "./http.js";
 import type { Deps, Env, Globals } from "./types.js";
@@ -55,6 +56,8 @@ export class Runtime {
   }
 
   credential(env: Env, surface: Surface): Promise<Credential | null> {
+    // Demo mode uses no key, even when one is set: the header shows key=- and nothing reads the keychain.
+    if (demo(this.d)) return Promise.resolve(null);
     const k = `${env}:${surface}`;
     if (!this.creds.has(k)) this.creds.set(k, resolveCredential(this.d, env, surface));
     return this.creds.get(k)!;

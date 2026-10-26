@@ -28,6 +28,8 @@ Commands:
   doctor [options]               Check the install, the key, the network and the version
   dashboard [options]            Analytics dashboards. Start with: dashboard summary --app <app_id>
                                  --output table
+  demo [options]                 Try the CLI with no key: sample data of a fictional app, for a
+                                 first test
   ab-tests                       Management API: ab-tests
   answers                        Management API: answers
   applications|apps              Management API: applications
@@ -3956,6 +3958,38 @@ Request:
 
 Example:
   purchasely dashboard trials-live --app app_xxx --date-range <date-range>
+```
+
+## demo
+
+Try the CLI with no key: sample data of a fictional app, for a first test
+
+### `purchasely demo`
+
+```text
+Usage: purchasely demo [options]
+
+Try the CLI with no key: sample data of a fictional app, for a first test
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  -h, --help         display help for command
+
+Demo mode answers every read from the built-in sample data of one fictional app (app_demo).
+It needs no key and sends no request. The data is not real. A write exits 10; --dry-run and --plan still work.
+Each run prints demo=on in the stderr header line.
+
+Example:
+  export PURCHASELY_DEMO=1
+  purchasely dashboard summary --app app_demo --output table
+  unset PURCHASELY_DEMO
 ```
 
 ## distributions

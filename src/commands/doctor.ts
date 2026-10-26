@@ -1,6 +1,7 @@
 import type { Command } from "commander";
 import { offline } from "../core/ai.js";
 import { credentialDisplay } from "../core/credentials.js";
+import { demo } from "../core/demo.js";
 import { CliError, EXIT } from "../core/errors.js";
 import { send } from "../core/http.js";
 import { emit } from "../core/output.js";
@@ -36,7 +37,7 @@ export function register(program: Command, rt: Runtime): void {
       const kind = installKind(d.env, import.meta.url);
       add("install", "ok", `${kind} install, automatic update ${autoUpdateOff(d.env, rt.cfg) || kind !== "managed" ? "off" : "on"}`);
 
-      if (offline(d)) add("version", "warn", `${d.version}. PURCHASELY_OFFLINE=1 is set: no check of the latest version`);
+      if (offline(d) || demo(d)) add("version", "warn", `${d.version}. ${demo(d) ? "PURCHASELY_DEMO" : "PURCHASELY_OFFLINE"}=1 is set: no check of the latest version`);
       else {
         try {
           const latest = await latestVersion(d);
@@ -49,10 +50,12 @@ export function register(program: Command, rt: Runtime): void {
 
       const ctx = await rt.ctx(o, "management");
       const cred = await rt.credential(env, "management");
-      if (!cred) add("key", "fail", `No Management API key for ${env}. Run \`${d.name} auth login\` or set PURCHASELY_API_KEY`);
+      if (demo(d)) add("key", "ok", "Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real");
+      else if (!cred) add("key", "fail", `No Management API key for ${env}. Run \`${d.name} auth login\` or set PURCHASELY_API_KEY`);
       else add("key", "ok", `${env} key ${credentialDisplay("management", cred.key)} from ${cred.source}`);
 
-      if (!cred) add("api", "warn", "Not checked: no key");
+      if (demo(d)) add("api", "ok", "Not checked: demo mode sends no request");
+      else if (!cred) add("api", "warn", "Not checked: no key");
       else if (offline(d)) add("api", "warn", "Not checked: PURCHASELY_OFFLINE=1 is set");
       else {
         try {
@@ -71,7 +74,7 @@ export function register(program: Command, rt: Runtime): void {
       add("ai plugin", agents.length ? "ok" : "warn", agents.length ? `Installed for ${agents.join(", ")}` : `Not installed with the CLI. Run \`${d.name} ai install\``);
 
       const allow = rt.cfg.write_allowlist?.[env];
-      add("writes", "ok", `${rt.readOnly() ? "Read-only mode" : "Writes allowed"}${allow ? `, write_allowlist.${env}: ${allow.join(", ") || "empty"}` : ""}`);
+      add("writes", "ok", `${demo(d) ? "Demo mode: every write is refused" : rt.readOnly() ? "Read-only mode" : "Writes allowed"}${allow ? `, write_allowlist.${env}: ${allow.join(", ") || "empty"}` : ""}`);
 
       emit(d, o, { checks }, { env, key: cred?.key ?? null, name: "doctor", columns: ["check", "status", "detail"] });
       if (checks.some((c) => c.status === "fail")) throw new CliError(EXIT.GENERIC, "DOCTOR_FAILED", checks.filter((c) => c.status === "fail").map((c) => `${c.check}: ${c.detail}`));

@@ -120,7 +120,7 @@ describe("pack-release.sh", () => {
     expect(statSync(join(site, "assets")).isDirectory()).toBe(true);
     expect(walk(site).filter((f) => f.endsWith(".md"))).toEqual([]);
     expect(readdirSync(site).sort()).toEqual(
-      ["404.html", "SHA256SUMS", "_headers", "assets", "index.html", "install.sh", "latest.json", "reference.html", "robots.txt", `purchasely-${VER}.tgz`].sort(),
+      ["404.html", "SHA256SUMS", "_headers", "assets", "index.html", "install.sh", "latest.json", "recipes.html", "reference.html", "robots.txt", `purchasely-${VER}.tgz`].sort(),
     );
     const install = readFileSync(join(site, "install.sh"), "utf8");
     expect(install).toMatch(/^NAME=purchasely$/m);

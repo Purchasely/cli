@@ -231,6 +231,7 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
       <li><a href="#agents">AI agents</a></li>
       <li><a href="#safety">Safety</a></li>
       <li><a href="#install">Install</a></li>
+      <li><a href="/recipes">Recipes</a></li>
       <li class="narrow"><a href="https://docs.purchasely.com/docs/management-api">Management API docs</a></li>
     </ul>
   </nav>
@@ -259,7 +260,7 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
 
 <span class="c"># Your CI: fail when a placement is missing</span>
 <span class="p">$ </span>purchasely placements list --app app_xxx \
-    --fields vendor_id | jq -e \
+    --fields vendor_id --per-page 100 | jq -e \
     'any(.placements[]; .vendor_id == "onboarding")'
 
 <span class="c"># Your AI agent: find a command in plain words</span>
@@ -315,6 +316,7 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
 <pre class="code"><code>purchasely dashboard summary --app app_xxx --days 90 \
   --out metrics.json</code></pre>
       <p class="soft">Add <code>--output table</code> to read them yourself, with a sparkline per metric. <code>purchasely dashboard</code> lists every dashboard.</p>
+      <p><a href="/recipes#slack">Recipe: key metrics in Slack</a> · <a href="/recipes#sheets">in Google Sheets</a></p>
     </article>
     <article>
       <h3>Guard your releases in CI</h3>
@@ -324,17 +326,20 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
     echo "$HOME/.local/bin" &gt;&gt; "$GITHUB_PATH"
 - run: |
     purchasely placements list --app "$APP_ID" --fields vendor_id \
-      | jq -e 'any(.placements[]; .vendor_id == "onboarding")'
+      --per-page 100 | jq -e 'any(.placements[]; .vendor_id == "onboarding")'
   env:
     PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}</code></pre>
+      <p class="soft">Add your Management API key as the repository secret <code>PURCHASELY_API_KEY</code>: Settings, Secrets and variables, Actions. The CLI reads it from the environment and never prints it.</p>
+      <p><a href="/recipes#release-check">Recipe: the full release check</a></p>
     </article>
     <article>
       <h3>Keep a history of your configuration</h3>
       <p class="soft">Save your placements, audiences, campaigns and A/B tests as JSON in a git repository. Each change is a diff you can review.</p>
 <pre class="code"><code>for r in placements audiences campaigns ab-tests; do
-  purchasely "$r" list --app app_xxx &gt; "config/$r.json"
+  purchasely "$r" list --app app_xxx --per-page 100 --out "config/$r.json"
 done
 git diff config/</code></pre>
+      <p><a href="/recipes#backup">Recipe: a nightly backup in GitHub Actions</a></p>
     </article>
     <article>
       <h3>Change a placement, see the request first</h3>
@@ -566,6 +571,7 @@ rm "$(command -v purchasely)"</code></pre>
     <svg viewBox="0 0 142 24" width="142" height="24" role="img" aria-label="Purchasely"><use href="#logo-mark"/></svg>
     <ul>
       <li><a href="/reference">CLI reference</a></li>
+      <li><a href="/recipes">Recipes</a></li>
       <li><a href="https://docs.purchasely.com/docs/management-api">Management API docs</a></li>
       <li><a href="https://www.purchasely.com">purchasely.com</a></li>
     </ul>

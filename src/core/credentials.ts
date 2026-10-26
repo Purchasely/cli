@@ -52,11 +52,12 @@ export function credentialDisplay(surface: Surface, key: string | undefined | nu
 }
 export const keyHash = (key: string) => createHash("sha256").update(key).digest("hex").slice(0, 12);
 
-function run(cmd: string, args: string[]): Promise<string> {
-  return new Promise((resolve, reject) =>
-    // No shell. Limit: the secret is on the argv of the child for a few ms (see README).
-    execFile(cmd, args, (err, stdout) => (err ? reject(err) : resolve(stdout))),
-  );
+function run(cmd: string, args: string[], input?: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // No shell. A secret goes on stdin, never on the argv of the child.
+    const child = execFile(cmd, args, (err, stdout) => (err ? reject(err) : resolve(stdout)));
+    if (input !== undefined) child.stdin?.end(input);
+  });
 }
 
 export const macKeychain: Keychain = {
@@ -68,7 +69,9 @@ export const macKeychain: Keychain = {
     }
   },
   async set(service, account, secret) {
-    await run("security", ["add-generic-password", "-U", "-s", service, "-a", account, "-w", secret]);
+    // `security -i` reads its commands on stdin. `-X` takes the secret in hex, so no character needs quoting.
+    // The service and the account are our own names (`purchasely-cli`, `prod:management`): no space, no quote.
+    await run("security", ["-i"], `add-generic-password -U -s ${service} -a ${account} -X ${Buffer.from(secret, "utf8").toString("hex")}\n`);
   },
   async delete(service, account) {
     await run("security", ["delete-generic-password", "-s", service, "-a", account]).catch(() => undefined);

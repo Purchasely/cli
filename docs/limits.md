@@ -25,5 +25,5 @@
 
 ## Security
 
-- The macOS `security` CLI receives the secret on the argv of a child process for a few milliseconds when `auth login` stores a key. Another process of your user could read it in that window. Use `PURCHASELY_API_KEY` or the file fallback if this is a concern.
+- On macOS the CLI stores a key with the `security` CLI. The key goes to it on stdin, never on its argv, so another process cannot read it there.
 - The keychain read at each run also uses `security`. The secret goes to the CLI through stdout, not argv.

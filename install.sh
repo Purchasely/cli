@@ -58,8 +58,8 @@ main() {
 
   # --- prerequisites -----------------------------------------------------------
   if ! command -v node >/dev/null 2>&1 ||
-    ! node -e 'process.exit(+process.versions.node.split(".")[0] >= 20 ? 0 : 1)' >/dev/null 2>&1; then
-    die 2 "Node 20 or newer is required. Install it (for example 'brew install node'), then run this again."
+    ! node -e 'const [a, b] = process.versions.node.split(".").map(Number); process.exit(a > 22 || (a === 22 && b >= 12) ? 0 : 1)' >/dev/null 2>&1; then
+    die 2 "Node 22.12 or newer is required. Install it (for example 'brew install node'), then run this again."
   fi
   if ! command -v tar >/dev/null 2>&1 || ! command -v gzip >/dev/null 2>&1; then
     die 2 "tar and gzip are required. Install them, then run this again."

@@ -255,7 +255,7 @@ describe("background is silent", () => {
 
 describe("detach", () => {
   it("a blocked child does not delay the parent's exit", () => {
-    // Compile first: Node 20 cannot import TypeScript source (same as limiter.test.ts).
+    // Compile first: Node 22.12 cannot import TypeScript source (same as limiter.test.ts).
     const dist = mkdtempSync(join(tmpdir(), "cli-dist-"));
     const tsc = join(process.cwd(), "node_modules/typescript/bin/tsc");
     execFileSync(process.execPath, [tsc, "-p", join(process.cwd(), "tsconfig.json"), "--outDir", dist], { stdio: "pipe" });

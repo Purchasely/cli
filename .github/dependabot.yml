@@ -7,6 +7,10 @@ updates:
     groups:
       dev:
         dependency-type: development
+    ignore:
+      # The types follow the oldest Node in engines, so a call to a newer API fails the typecheck.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:

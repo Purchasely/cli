@@ -3,7 +3,7 @@
 The installer is `install.sh`. Its line `HOST=` is set by `scripts/pack-release.sh` to the public host.
 
 - Bootstrap: `curl -fsSL https://cli.purchasely.io/install.sh | sh`
-- Prerequisites: Node 20 or newer, `curl`, `tar` and `gzip`.
+- Prerequisites: Node 22.12 or newer, `curl`, `tar` and `gzip`.
 - Install root: `${XDG_DATA_HOME:-~/.local/share}/purchasely/install`.
 - Versions: the latest only (the site holds one snapshot).
 
@@ -82,7 +82,7 @@ Config `~/.config/purchasely`, state `~/.local/state/purchasely`, cache `~/.cach
 
 - First run `purchasely doctor`. It checks Node, the install, the version, the key, the Management API and the AI plugin, and never prints the key. Send its output to support.
 - `command not found`: open a new terminal. With fish, add `~/.local/bin` to PATH by hand.
-- `Node 20 or newer is required`: install Node (`brew install node`).
+- `Node 22.12 or newer is required`: install Node (`brew install node`).
 - `only the latest version ... is published`: do not pass `--version`.
 - `<name> exists but is incomplete`: remove that release directory and run again.
 - An old npm copy comes first on PATH: uninstall it (`npm uninstall -g @purchasely/cli`).

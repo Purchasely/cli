@@ -8,7 +8,7 @@ The `purchasely` command line tool for the Purchasely Management API. It reads a
 curl -fsSL https://cli.purchasely.io/install.sh | sh
 ```
 
-You need Node 20 or newer. The installer puts the program in `~/.local/share/purchasely/install` and links `purchasely` into a bin directory that is already on your `PATH` (`~/.local/bin` or `~/bin`). If there is none, it creates `~/.local/bin` and adds one line to the profile of your login shell. It never uses sudo. Open a new terminal if the command is not found.
+You need Node 22.12 or newer. The installer puts the program in `~/.local/share/purchasely/install` and links `purchasely` into a bin directory that is already on your `PATH` (`~/.local/bin` or `~/bin`). If there is none, it creates `~/.local/bin` and adds one line to the profile of your login shell. It never uses sudo. Open a new terminal if the command is not found.
 
 ## Update
 

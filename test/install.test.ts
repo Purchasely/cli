@@ -292,7 +292,7 @@ describe("install.sh", () => {
     expect(spawnSync(join(bindir, "purchasely"), ["--version"], { env: t.env, encoding: "utf8" }).stdout.trim()).toBe("1.1.0");
   });
 
-  it("prerequisites: Node 20 and curl", () => {
+  it("prerequisites: Node 22.12 and curl", () => {
     makeRelease(t.assets, "1.2.3");
     // A fake node that fails the version check.
     const fakeNode = join(t.tmp, "fakenode");
@@ -301,7 +301,7 @@ describe("install.sh", () => {
     chmodSync(join(fakeNode, "node"), 0o755);
     const old = install([], { PATH: `${fakeNode}:${t.env.PATH}` });
     expect(old.status).toBe(2);
-    expect(old.all).toContain("Node 20");
+    expect(old.all).toContain("Node 22.12");
     // No curl: PATH has only a dir of symlinks to the tools the script uses.
     const bare = bareBin(join(t.tmp, "barebin"));
     const nocurl = install([], { PATH: `${bare}:${dirname(process.execPath)}` });

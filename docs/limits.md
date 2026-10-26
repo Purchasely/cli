@@ -3,7 +3,7 @@
 ## Product
 
 - The public host holds the latest version only. `install.sh --version <old>` fails on the public host.
-- You need Node 20 or newer. There is no standalone binary yet.
+- You need Node 22.12 or newer. There is no standalone binary yet.
 - No Windows. There is no installer and no launcher for it.
 - fish users add `~/.local/bin` to PATH by hand. The installer writes `~/.profile` for any shell that is not zsh or bash.
 - The CLI gives no screen JSON. The Management API omits the `content` of a screen for a client key.

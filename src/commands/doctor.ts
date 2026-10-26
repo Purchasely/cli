@@ -29,8 +29,9 @@ export function register(program: Command, rt: Runtime): void {
       const add = (check: string, status: Status, detail: string) => void checks.push({ check, status, detail });
       const env = rt.env(o);
 
-      const node = Number(process.versions.node.split(".")[0]);
-      add("node", node >= 20 ? "ok" : "fail", `Node ${process.versions.node}${node >= 20 ? "" : ": the CLI needs Node 20 or newer"}`);
+      const [major, minor] = process.versions.node.split(".").map(Number);
+      const nodeOk = major > 22 || (major === 22 && minor >= 12);
+      add("node", nodeOk ? "ok" : "fail", `Node ${process.versions.node}${nodeOk ? "" : ": the CLI needs Node 22.12 or newer"}`);
 
       const kind = installKind(d.env, import.meta.url);
       add("install", "ok", `${kind} install, automatic update ${autoUpdateOff(d.env, rt.cfg) || kind !== "managed" ? "off" : "on"}`);

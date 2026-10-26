@@ -12,7 +12,8 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 
 - `--env prod|staging` is mandatory on every write, also with `--dry-run`. Reads default to `prod` (or `PURCHASELY_ENV`).
 - Every run prints one header line on stderr: `purchasely env=prod surface=management identity=- key=…a1b2`.
-- `--reason "<why>"` goes to the server in the `User-Agent`: `purchasely-cli/<version> (-; <reason>)`. The CLI never sends an email.
+- `--reason "<why>"` goes to the server in the `User-Agent`: `purchasely-cli/<version> (-; <reason>; <command>; <runner>)`. The command is its name only (`placements list`), never the values you pass. The runner is `agent` (`CLAUDECODE` is set), `ci` (`CI` is set), `tty` (a terminal) or `script`. The CLI never sends an email.
+- **Read-only mode.** Set `PURCHASELY_READ_ONLY=1`, or put `"read_only": true` in `~/.config/purchasely/config.json`. The CLI then refuses every write before it sends it (exit 10). Reads and `--dry-run` still work. Use it for a script or an agent that only reads.
 
 ## Confirmation flow
 

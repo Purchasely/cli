@@ -82,10 +82,10 @@ describe("request building", () => {
     await t.exec("placements", "list", "--reason", "weekly audit");
     await t.exec("placements", "list");
     const h = t.calls[0].init.headers;
-    expect(h["User-Agent"]).toBe("purchasely-cli/9.9.9 (kevin@purchasely.com; weekly audit)");
+    expect(h["User-Agent"]).toBe("purchasely-cli/9.9.9 (kevin@purchasely.com; weekly audit; placements list; script)");
     expect(h["X-Request-Id"]).toMatch(/^[0-9a-f-]{36}$/);
     expect(h.Authorization).toBe("Bearer pk_mgmt_live_SECRET123");
-    expect(t.calls[1].init.headers["User-Agent"]).toContain("; -)");
+    expect(t.calls[1].init.headers["User-Agent"]).toContain("; -; placements list; script)");
     expect(t.calls[1].init.headers["X-Request-Id"]).not.toBe(h["X-Request-Id"]);
   });
 
@@ -94,8 +94,8 @@ describe("request building", () => {
     writeConfig(t.d.configDir, { identity_email: "kevin@purchasely.com" } as Config);
     await t.exec("placements", "list", "--reason", "weekly audit");
     await t.exec("placements", "list");
-    expect(t.calls[0].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (-; weekly audit)");
-    expect(t.calls[1].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (-; -)");
+    expect(t.calls[0].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (-; weekly audit; placements list; script)");
+    expect(t.calls[1].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (-; -; placements list; script)");
     expect((await t.exec("placements", "list")).err.split("\n")[0]).toBe("purchasely env=prod surface=management identity=- key=…T123");
   });
 
@@ -103,7 +103,33 @@ describe("request building", () => {
     const t = setup({ name: "acme", ext: EXT });
     await t.exec("auth", "login", "--api-key", "pk_x", "--email", "kevin@purchasely.com");
     await t.exec("placements", "list", "--reason", "weekly audit");
-    expect(t.calls[0].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (kevin@purchasely.com; weekly audit)");
+    expect(t.calls[0].init.headers["User-Agent"]).toBe("purchasely-cli/9.9.9 (kevin@purchasely.com; weekly audit; placements list; script)");
+  });
+
+  it("sends the command name and the runner, never the argument values", async () => {
+    for (const [opts, who] of [[{ env: { CLAUDECODE: "1", CI: "true" } }, "agent"], [{ env: { CI: "true" } }, "ci"], [{ isTTY: true }, "tty"]] as const) {
+      const t = setup(opts);
+      await t.exec("placements", "get", "--app", "app_secret_1", "--id", "plc_1");
+      expect(t.calls[0].init.headers["User-Agent"]).toBe(`purchasely-cli/9.9.9 (-; -; placements get; ${who})`);
+    }
+  });
+
+  it("read-only mode refuses a write before the send, and keeps reads and --dry-run", async () => {
+    const t = setup({ env: { PURCHASELY_READ_ONLY: "1" } });
+    const w = await t.exec("placements", "create", "--env", "staging", "--app", "app_1", "--data", "{}");
+    expect(w.code).toBe(10);
+    expect(w.err).toContain("PURCHASELY_READ_ONLY=1");
+    expect(t.calls).toHaveLength(0);
+    expect((await t.exec("placements", "create", "--env", "staging", "--app", "app_1", "--data", "{}", "--dry-run")).code).toBe(0);
+    expect(t.calls).toHaveLength(0);
+    expect((await t.exec("placements", "list")).code).toBe(0);
+    expect(t.calls).toHaveLength(1);
+    const c = setup();
+    writeConfig(c.d.configDir, { read_only: true });
+    const r = await c.exec("api", "DELETE", "/applications/app_1/placements/plc_1", "--env", "prod");
+    expect(r.code).toBe(10);
+    expect(r.err).toContain("read_only is true in the config");
+    expect(c.calls).toHaveLength(0);
   });
 
   it("prints the env header on stderr", async () => {

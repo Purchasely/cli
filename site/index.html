@@ -526,7 +526,7 @@ git diff config/</code></pre>
   "headers": {
     "Authorization": "Bearer &lt;redacted&gt;",
     "Accept": "application/json",
-    "User-Agent": "purchasely-cli/&lt;version&gt; (-; -)",
+    "User-Agent": "purchasely-cli/&lt;version&gt; (-; -; placements update; tty)",
     "Content-Type": "application/json"
   },
   "body": {
@@ -581,7 +581,7 @@ git diff config/</code></pre>
     <div><dt>Your key stays secret</dt><dd>The key is in the macOS keychain, or in a file only you can read. It is never printed: status shows its last 4 characters and the usage log keeps no key.</dd></div>
     <div><dt>Output for scripts</dt><dd>JSON on stdout, one JSON error on stderr, and stable exit codes: 0 success, 3 no key, 4 forbidden, 6 not found, 7 rate limited, 8 confirmation required, 10 write refused. An answer over 200 KB goes to a file.</dd></div>
     <div><dt>What the CLI sends</dt><dd>
-      <p>Management commands go to <code>api.purchasely.io</code> with your key. The User-Agent header carries the CLI version and your <code>--reason</code> value.</p>
+      <p>Management commands go to <code>api.purchasely.io</code> with your key. The User-Agent header carries the CLI version, your <code>--reason</code> value, the command name and who runs it (a terminal, a script, a CI or an AI agent). It never carries the values you pass.</p>
       <p>Once a day, the CLI asks <code>cli.purchasely.io</code> for the latest version. <code>purchasely ai</code> downloads the public Purchasely AI plugin from GitHub.</p>
     </dd></div>
     <div><dt>Every command, documented</dt><dd>The <a href="/reference">CLI reference</a> has the help of every command. <code class="brk">purchasely --help</code>, <code>man purchasely</code> and shell completion (<code class="brk">purchasely completion zsh</code>) give the same in your terminal.</dd></div>

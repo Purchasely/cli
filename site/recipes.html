@@ -213,7 +213,7 @@ section{padding:0}
 <section class="setup" aria-labelledby="setup-h">
   <h2 id="setup-h">Before you start</h2>
   <ol>
-    <li>Create a Management API key in the Console. Use a key with read access only if you can: these recipes never write.</li>
+    <li>Create a Management API key in the Console. Use a key with read access only if you can: these recipes never write. Each workflow also sets <code>PURCHASELY_READ_ONLY=1</code>, so the CLI refuses a write before it sends it.</li>
     <li>In your GitHub repository, open Settings, then Secrets and variables, then Actions. Add the key as the repository secret <code>PURCHASELY_API_KEY</code>. The CLI reads it from the environment and never prints it.</li>
     <li>Replace <code>app_xxx</code> with the id of your app. <code>purchasely apps list</code> shows it.</li>
   </ol>
@@ -258,6 +258,7 @@ jobs:
       - name: Send the key metrics to Slack
         env:
           PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}
+          PURCHASELY_READ_ONLY: "1"
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           APP_ID: app_xxx
         run: |
@@ -310,6 +311,7 @@ jobs:
       - name: Add one row to the sheet
         env:
           PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}
+          PURCHASELY_READ_ONLY: "1"
           SHEET_WEBHOOK_URL: ${{ secrets.SHEET_WEBHOOK_URL }}
           APP_ID: app_xxx
         run: |
@@ -354,6 +356,7 @@ jobs:
       - name: Check the placements that this app version uses
         env:
           PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}
+          PURCHASELY_READ_ONLY: "1"
           APP_ID: app_xxx
           REQUIRED: "onboarding settings_paywall"
         run: |
@@ -404,6 +407,7 @@ jobs:
       - name: Export the configuration
         env:
           PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}
+          PURCHASELY_READ_ONLY: "1"
           APP_ID: app_xxx
         run: |
           mkdir -p purchasely

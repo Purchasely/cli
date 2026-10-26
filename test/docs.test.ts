@@ -76,7 +76,7 @@ describe("docs", () => {
     expect(site).toContain('href="/reference"');
     expect(site).toContain('href="https://docs.purchasely.com/docs/management-api"');
     // The dry-run sample shows the real User-Agent form, and no install promise without a date.
-    expect(site).toContain('"User-Agent": "purchasely-cli/&lt;version&gt; (-; -)"');
+    expect(site).toContain('"User-Agent": "purchasely-cli/&lt;version&gt; (-; -; placements update; tty)"');
     expect(site).not.toMatch(/homebrew|@placement\.json/i);
     const notFound = read("site/404.html");
     expect(notFound).toContain('href="/"');

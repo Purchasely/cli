@@ -35,6 +35,8 @@ export class Runtime {
   extTop = new Set<Command>();
   /** Entries from extension modules, computed at search time. Each one reads a cache and sends nothing. */
   searchExtra: ((env: Env) => Promise<SearchEntry[]>)[] = [];
+  /** The path of the command that runs, set by the `preAction` hook. */
+  command?: string;
   private creds = new Map<string, Promise<Credential | null>>();
 
   constructor(public d: Deps) {
@@ -45,6 +47,11 @@ export class Runtime {
     const v = g.env ?? this.d.env.PURCHASELY_ENV ?? "prod";
     if (v !== "prod" && v !== "staging") throw usage(`--env must be prod or staging, got "${v}".`);
     return v;
+  }
+
+  /** `PURCHASELY_READ_ONLY=1` or `read_only` in the config: every write is refused before the send. */
+  readOnly(): boolean {
+    return this.d.env.PURCHASELY_READ_ONLY === "1" || this.cfg.read_only === true;
   }
 
   credential(env: Env, surface: Surface): Promise<Credential | null> {
@@ -75,6 +82,8 @@ export class Runtime {
       key: cred?.key ?? null,
       identity: this.cfg.identity_email,
       reason: g.reason,
+      command: this.command,
+      readOnly: this.readOnly(),
       rate: this.rate(surface, g),
     };
   }

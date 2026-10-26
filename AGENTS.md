@@ -17,6 +17,7 @@ Rules for an AI coding agent that uses or changes the Purchasely CLI (`purchasel
 11. Add `--reason "<why>"` on every command. It goes to the server in the User-Agent.
 12. Large answers go to a file (`{file, bytes}`). Read the file. Use `--fields` to ask for less.
 13. Do not run `update` or `install.sh` unless the user asks.
+14. A script that only reads (a dashboard, a report) sets `PURCHASELY_READ_ONLY=1`. Exit 10 with `Read-only mode` means the command writes. Do not remove the variable without the user.
 
 Examples: `purchasely screens list --app app_xxx`, `purchasely placements get --app app_xxx --id <placement>`, `purchasely dashboard summary --app app_xxx` (key metrics; add `--output table` for charts when a person reads it).
 

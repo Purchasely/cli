@@ -14,6 +14,10 @@ export interface Ctx {
   key: string | null;
   identity?: string;
   reason?: string;
+  /** The command path, never its arguments. Sent in the User-Agent. */
+  command?: string;
+  /** Refuse every write before it is sent (`PURCHASELY_READ_ONLY=1` or `read_only` in the config). */
+  readOnly?: boolean;
   /** Requests per second, already checked against the hard cap. */
   rate: number;
   /** Replaces the `Authorization: Bearer` header (the Console API uses its own headers). */
@@ -42,11 +46,23 @@ export interface HttpResponse {
 
 export const stateKey = (env: string, surface: string, key: string) => `${env}-${surface}-${keyHash(key)}`;
 
-export function userAgent(ctx: Pick<Ctx, "d" | "identity" | "reason">): string {
+/** Who runs the CLI. shortcut: only `CLAUDECODE` is a checked agent variable, add others when checked. */
+export function runner(d: Pick<Deps, "env" | "isTTY">): string {
+  if (d.env.CLAUDECODE) return "agent";
+  if (d.env.CI) return "ci";
+  return d.isTTY ? "tty" : "script";
+}
+
+export function userAgent(ctx: Pick<Ctx, "d" | "identity" | "reason" | "command">): string {
   const clean = (s: string) => s.replace(/[\r\n();]+/g, " ").trim();
   // Only an extension with `identity` sends the email. `purchasely` never does, even when the shared config has one.
   const who = (ctx.d.ext?.identity && clean(ctx.identity ?? "")) || "-";
-  return `purchasely-cli/${ctx.d.version} (${who}; ${clean(ctx.reason ?? "") || "-"})`;
+  return `purchasely-cli/${ctx.d.version} (${who}; ${clean(ctx.reason ?? "") || "-"}; ${clean(ctx.command ?? "") || "-"}; ${runner(ctx.d)})`;
+}
+
+export function readOnlyError(d: Pick<Deps, "env">): CliError {
+  const why = d.env.PURCHASELY_READ_ONLY === "1" ? "PURCHASELY_READ_ONLY=1 is set" : "read_only is true in the config";
+  return new CliError(EXIT.REFUSED, "REFUSED", [`Read-only mode: ${why}. This command writes, so the CLI sent nothing.`]);
 }
 
 export function limits(d: Deps, env: string, surface: Surface, key: string) {
@@ -59,6 +75,7 @@ export async function send(ctx: Ctx, req: HttpRequest): Promise<HttpResponse> {
   const { d } = ctx;
   const { limiter, breaker } = limits(d, ctx.env, ctx.surface, ctx.key);
   const write = req.write ?? req.method !== "GET";
+  if (write && ctx.readOnly) throw readOnlyError(d);
 
   for (let attempt = 0; ; attempt++) {
     const factor = await breaker.gate();

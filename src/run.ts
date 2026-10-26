@@ -81,6 +81,9 @@ export function build(rt: Runtime): Command {
     }
     let top = action;
     while (top.parent?.parent) top = top.parent;
+    const path: string[] = [];
+    for (let c: Command | null = action; c?.parent; c = c.parent) path.unshift(c.name());
+    rt.command = path.join(" ");
     // A game and `completion` need no key, no update check and no log line on the screen.
     if (["games", "play", "completion"].includes(top.name())) return;
     // `reference` is offline: no credential, no update check, no stderr line, no request, not even a valid --env.

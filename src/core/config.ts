@@ -7,6 +7,8 @@ export interface Config {
   rate?: Record<string, number>;
   /** `false` turns off the automatic update check and notice. `purchasely update` still works. */
   auto_update?: boolean;
+  /** `true` refuses every write before it is sent. Same as `PURCHASELY_READ_ONLY=1`. */
+  read_only?: boolean;
 }
 
 export function readJson<T>(file: string, fallback: T): T {

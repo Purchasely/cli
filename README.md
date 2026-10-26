@@ -87,8 +87,9 @@ rm "$(command -v purchasely)"
 
 - [docs/install.md](docs/install.md): the installer, the update and the uninstall in detail.
 - [docs/commands.md](docs/commands.md): every command and its help.
-- [docs/guardrails.md](docs/guardrails.md): rate limits, writes and the confirmation flow.
+- [docs/guardrails.md](docs/guardrails.md): rate limits, writes, read-only mode, plan then apply, and the confirmation flow.
 - [docs/exit-codes.md](docs/exit-codes.md), [docs/limits.md](docs/limits.md).
+- [SECURITY.md](SECURITY.md): report a vulnerability, check a download.
 - [docs/development.md](docs/development.md), [docs/release.md](docs/release.md), [AGENTS.md](AGENTS.md): for contributors and coding agents.
 
 ## License

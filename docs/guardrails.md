@@ -21,6 +21,15 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 
 - **Read-only mode.** Set `PURCHASELY_READ_ONLY=1`, or put `"read_only": true` in `~/.config/purchasely/config.json`. The CLI then refuses every write before it sends it (exit 10). Reads and `--dry-run` still work. Use it for a script or an agent that only reads.
 
+## Demo mode
+
+`PURCHASELY_DEMO=1` turns on demo mode, for a first test by a person or an agent that has no key yet. `purchasely demo` prints how to start.
+
+- Every read answers from the built-in sample data of one fictional app, `app_demo`: applications, placements, screens, products, plans (`--product-id prd_demo_premium`), campaigns and `dashboard summary`. Another read exits 6 with a message that demo mode has no data for it.
+- The CLI uses no key, even when one is set, and sends no request: no limiter state, no usage line, no update check.
+- A write exits 10 and sends nothing. `--dry-run` and `--plan` still work.
+- The header line ends with `demo=on (sample data, not real)`. `doctor` reports demo mode instead of a missing key.
+
 ## Plan, then apply
 
 An agent prepares the writes, a person reads them, then applies them.

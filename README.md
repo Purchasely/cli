@@ -50,7 +50,7 @@ purchasely placements get --app app_xxx --id <placement>
 purchasely dashboard summary --app app_xxx --output table   # key metrics with charts
 ```
 
-Add `--dry-run` to any command to print the request without sending it. A write needs `--env prod` or `--env staging`.
+Add `--dry-run` to any command to print the request without sending it. A write needs `--env prod` or `--env staging`. No key yet? `export PURCHASELY_DEMO=1` turns on demo mode: the reads answer from the sample data of a fictional app (`app_demo`), with no key and no request, and the writes are refused. `purchasely demo` shows the commands to try.
 
 ## Commands
 

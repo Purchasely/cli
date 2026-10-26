@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purchasely CLI: your account in the terminal, the CI and your AI agent</title>
+<meta name="description" content="Read your Purchasely data, change your configuration with guardrails and automate it, from your terminal, your CI pipeline or your AI coding agent.">
+<link rel="canonical" href="https://cli.purchasely.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cli.purchasely.io/">
+<meta property="og:site_name" content="Purchasely">
+<meta property="og:title" content="Purchasely CLI: your account in the terminal, the CI and your AI agent">
+<meta property="og:description" content="Read your Purchasely data, change your configuration with guardrails and automate it, from your terminal, your CI pipeline or your AI coding agent.">
+<meta property="og:image" content="https://cli.purchasely.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Purchasely CLI. curl -fsSL https://cli.purchasely.io/install.sh | sh">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Purchasely CLI: your account in the terminal, the CI and your AI agent">
+<meta name="twitter:description" content="Read your Purchasely data, change your configuration with guardrails and automate it, from your terminal, your CI pipeline or your AI coding agent.">
+<meta name="twitter:image" content="https://cli.purchasely.io/assets/og.png">
+<meta name="theme-color" content="#002420">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-white.png" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/ABCArizonaFlare-Light.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/SuisseIntl-Book.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/SuisseIntl-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Abcarizonaflare";src:url(assets/fonts/ABCArizonaFlare-Light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Suisseintl";src:url(assets/fonts/SuisseIntl-Book.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Suisseintl";src:url(assets/fonts/SuisseIntl-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+
+:root{
+  /* purchasely.com swatches, see BRAND.md */
+  --dark-green:#002420;
+  --deep-green:#00352f;
+  --black-green:#001614;
+  --light-grey:#eef3e9;
+  --light-green:#ceecd0;
+  --lavender:#bdbbff;
+  --coral:#ffb6b2;
+  --cream:#fff3d6;
+  --white:#fff;
+  --ink:var(--dark-green);
+  --ink-soft:#3c5852;          /* dark-green 75% on light-grey: 6.9:1 */
+  --on-dark-soft:#90b09b;      /* light-green 70% on dark-green: 7.0:1 */
+  --line:color-mix(in srgb,var(--dark-green) 15%,transparent);
+  --heading:"Abcarizonaflare",Georgia,sans-serif;
+  --body:"Suisseintl",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --gutter:2.5rem;
+  --r-s:1rem;--r-m:1.5rem;--r-l:2rem;--r-xl:2.5rem;--r-full:99rem;
+}
+@media (max-width:767px){:root{--gutter:1rem}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--light-grey);color:var(--ink);font:400 1rem/1.4 var(--body);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--dark-green);outline-offset:3px;border-radius:.25rem}
+/* dark surfaces: a dark green ring would be invisible there */
+.dark :focus-visible,.term :focus-visible,.foot :focus-visible{outline-color:var(--light-green)}
+.term pre:focus-visible{outline-offset:-3px}
+.skip{position:absolute;left:-999px;top:0;background:var(--dark-green);color:var(--white);padding:.75rem 1rem;border-radius:var(--r-full);z-index:10}
+.skip:focus{left:1rem;top:1rem}
+
+.wrap{max-width:80rem;margin:0 auto;padding:0 var(--gutter)}
+h1,h2{font-family:var(--heading);font-weight:300;margin:0;letter-spacing:-.03em}
+h2{font-size:clamp(2.25rem,5vw,3rem);line-height:1}
+h3{font-size:1.25rem;line-height:1.2;margin:0;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.lead{font-size:clamp(1.125rem,2vw,1.375rem);line-height:1.5;letter-spacing:0;max-width:38rem}
+.soft{color:var(--ink-soft)}
+code,pre,kbd{font-family:var(--mono);font-size:.875rem;letter-spacing:0}
+:not(pre)>code{background:color-mix(in srgb,var(--dark-green) 7%,transparent);padding:.1em .35em;border-radius:.35rem;white-space:nowrap}
+code.brk{white-space:normal;display:inline-block;max-width:100%}
+.dark :not(pre)>code{background:color-mix(in srgb,var(--light-green) 12%,transparent)}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 0}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--ink)}
+.brand svg{width:9rem;height:auto}
+.tag{font:700 .75rem/1 var(--body);letter-spacing:0;border:1px solid var(--ink);border-radius:var(--r-full);padding:.3rem .55rem}
+.nav ul{display:flex;gap:1.75rem;list-style:none;margin:0;padding:0;font-size:.875rem;white-space:nowrap}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{text-decoration:underline}
+.links{display:flex;align-items:center;gap:1.5rem;font-size:.875rem}
+.links>a:not(.btn){text-decoration:none;white-space:nowrap}
+.links>a:not(.btn):hover{text-decoration:underline}
+.narrow{display:none}
+/* below this width the anchors no longer fit beside the links: they become a scrolling row */
+@media (max-width:1099px){
+  .nav{flex-wrap:wrap;row-gap:.75rem}
+  .nav nav{order:3;width:100%}
+  .nav ul{overflow-x:auto;gap:1.25rem;padding:.375rem .25rem;margin:0 -.25rem}
+}
+@media (max-width:599px){.links .wide{display:none}.narrow{display:list-item}}
+@media (max-width:479px){.brand svg{width:7.25rem}.brand{gap:.5rem}.nav .btn{padding:.75rem 1rem}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.75rem 1.5rem;border-radius:var(--r-full);background:var(--dark-green);color:var(--white);font:400 .875rem/1 var(--body);text-decoration:none;border:0;cursor:pointer;transition:background-color .3s;white-space:nowrap}
+.btn:hover{background:var(--deep-green)}
+
+/* hero */
+.hero{position:relative;border-radius:var(--r-l);padding:clamp(2rem,6vw,4.5rem) clamp(1.25rem,5vw,4rem);
+  background:radial-gradient(120% 90% at 0% 0%,var(--light-green) 0 25%,transparent 65%),radial-gradient(90% 80% at 100% 100%,var(--coral) 0 15%,transparent 60%),var(--lavender);
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (max-width:999px){.hero{grid-template-columns:minmax(0,1fr)}}
+.hero h1{font-size:clamp(2.75rem,7.4vw,5.5rem);line-height:1;text-transform:uppercase;margin-bottom:1.5rem}
+.hero .lead{margin-bottom:2rem}
+.req{margin-top:.875rem;font-size:.875rem}
+.status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* a command with its Copy button: the command wraps, it is never cut */
+.cmd{display:flex;align-items:center;gap:.5rem;background:var(--light-grey);border-radius:var(--r-s);padding:.375rem .375rem .375rem 1.125rem}
+.cmd pre{margin:0;flex:1;min-width:0;padding:.5rem 0;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.cmd .btn{flex:none;padding:.75rem 1.25rem}
+.install{background:var(--white);border-radius:var(--r-full);padding-left:1.25rem;max-width:36rem}
+.install code{font-size:.8125rem}
+@media (min-width:1000px){.install code{font-size:.75rem}}
+.install .btn{padding:.75rem 1rem}
+.on-white{background:var(--white)}
+@media (max-width:479px){
+  .cmd{flex-wrap:wrap;padding:.5rem}
+  .cmd pre{flex-basis:100%;padding:.5rem .625rem}
+  .cmd .btn{width:100%}
+  .install{border-radius:var(--r-m)}
+}
+
+.term{background:var(--black-green);color:var(--light-grey);border-radius:var(--r-m);overflow:hidden;min-width:0}
+.term-bar{display:flex;gap:.4rem;padding:.875rem 1rem;border-bottom:1px solid color-mix(in srgb,var(--light-green) 15%,transparent)}
+.term-bar i{width:.625rem;height:.625rem;border-radius:50%;background:color-mix(in srgb,var(--light-green) 30%,transparent)}
+.term pre{margin:0;padding:1.25rem;overflow-x:auto;line-height:1.6;font-size:.8125rem}
+.term .p{color:var(--lavender);user-select:none}
+/* output wraps as in a real terminal; prompt lines keep their layout and scroll */
+.term .o{color:var(--on-dark-soft);white-space:pre-wrap;overflow-wrap:anywhere}
+.term .c{color:var(--light-green)}
+.term .n{color:var(--coral)}
+.hero-term{box-shadow:0 1.5rem 3rem -1.5rem color-mix(in srgb,var(--dark-green) 45%,transparent)}
+
+/* sections */
+section{padding:clamp(4rem,9vw,7rem) 0 0}
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem 4rem;align-items:end;margin-bottom:3rem}
+@media (max-width:899px){.head{grid-template-columns:minmax(0,1fr)}}
+.head .lead+.lead{margin-top:1rem}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;counter-reset:s}
+@media (max-width:899px){.steps{grid-template-columns:minmax(0,1fr)}}
+.steps>li{background:var(--white);border-radius:var(--r-m);padding:1.75rem;counter-increment:s;display:flex;flex-direction:column;gap:.875rem;min-width:0}
+.steps>li:first-child{grid-column:1/-1}
+.steps>li::before{content:counter(s);font:300 2.5rem/1 var(--heading);letter-spacing:-.03em}
+.code{margin:0;background:var(--light-grey);border-radius:var(--r-s);padding:1rem 1.125rem;overflow-x:auto;line-height:1.55;white-space:pre-wrap;word-break:break-all}
+
+.uninstall{margin-top:2.5rem;border-top:1px solid var(--ink);padding-top:1.25rem;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem 4rem;align-items:start}
+@media (max-width:899px){.uninstall{grid-template-columns:minmax(0,1fr)}}
+.uninstall>div{display:flex;flex-direction:column;gap:.75rem}
+.uninstall .code{background:var(--white)}
+
+.updates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+@media (max-width:899px){.updates{grid-template-columns:minmax(0,1fr)}}
+.updates>div{border-top:1px solid var(--ink);padding-top:1.25rem;display:flex;flex-direction:column;gap:.75rem;min-width:0}
+
+/* dark section */
+.dark{background:var(--dark-green);color:var(--light-grey);border-radius:var(--r-xl);padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,5vw,4rem);margin-top:clamp(4rem,9vw,7rem)}
+.dark h2{color:var(--light-green)}
+.dark .soft{color:var(--on-dark-soft)}
+.feats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 4rem;margin:0}
+@media (max-width:899px){.feats{grid-template-columns:minmax(0,1fr)}}
+.feats>div{border-top:1px solid color-mix(in srgb,var(--light-green) 25%,transparent);padding:1.5rem 0;display:flex;flex-direction:column;gap:.5rem}
+.feats dt{font-weight:700;color:var(--light-green)}
+.feats dd{margin:0;color:var(--light-grey)}
+.feats dd p+p{margin-top:.5rem}
+
+/* agents */
+.agents{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(2rem,5vw,4rem);align-items:start}
+@media (max-width:999px){.agents{grid-template-columns:minmax(0,1fr)}}
+.agents>div{min-width:0}
+.rules{margin:2rem 0 0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column}
+.rules li{counter-increment:r;display:grid;grid-template-columns:2.25rem minmax(0,1fr);gap:.75rem;padding:1rem 0;border-top:1px solid var(--line)}
+.rules li::before{content:counter(r);font:300 1.75rem/1 var(--heading)}
+.note{margin-top:1.5rem;background:var(--white);border-radius:var(--r-s);padding:1rem 1.25rem;font-size:.875rem}
+.agents h3+.cmd{margin-top:1rem}
+
+/* who it is for */
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:1rem}
+.who>article{background:var(--white);border-radius:var(--r-m);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;min-width:0}
+.who .k{font:700 .75rem/1 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* use cases */
+.uses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:899px){.uses{grid-template-columns:minmax(0,1fr)}}
+.uses>article{background:var(--white);border-radius:var(--r-m);padding:1.75rem;display:flex;flex-direction:column;gap:.875rem;min-width:0}
+.uses .code{font-size:.8125rem}
+
+/* CLI or MCP */
+.vs-wrap{overflow-x:auto;border-radius:var(--r-m);background:var(--white)}
+.vs{width:100%;min-width:40rem;border-collapse:collapse;font-size:.9375rem}
+.vs th,.vs td{text-align:left;vertical-align:top;padding:1rem 1.25rem;border-bottom:1px solid var(--line)}
+.vs thead th{font:300 1.5rem/1.1 var(--heading);letter-spacing:-.02em;border-bottom:1px solid var(--ink)}
+.vs tbody th{font-weight:700;width:22%}
+.vs tr:last-child th,.vs tr:last-child td{border-bottom:0}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+@media (max-width:899px){.pair{grid-template-columns:minmax(0,1fr)}}
+.pair>div{border-top:1px solid var(--ink);padding-top:1.25rem;display:flex;flex-direction:column;gap:.75rem}
+.pair ul{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.4rem}
+
+/* footer */
+footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
+.foot{background:var(--dark-green);color:var(--light-grey);border-radius:var(--r-l);padding:clamp(2rem,5vw,3rem) clamp(1.25rem,5vw,4rem);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem 3rem}
+.foot svg{width:9rem;height:auto;color:var(--light-green)}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.75rem 2rem;font-size:.875rem}
+.foot small{width:100%;font-size:.75rem;color:var(--on-dark-soft)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="logo-mark" viewBox="0 0 142 24"><path d="M23.9434 12.2183C23.9378 12.2428 23.934 12.269 23.9326 12.2962C23.7715 15.1058 21.7292 16.4954 20.8481 16.9655C20.5248 17.1379 20.2579 17.2725 20.0214 17.3924L19.7823 17.5137C19.2484 17.7868 18.8705 18.0032 18.452 18.4208C17.9736 18.8981 17.7594 19.3225 17.4213 19.9864C17.3012 20.2232 17.1661 20.4898 16.9933 20.8113C16.5222 21.6893 15.13 23.7276 12.3148 23.889C12.2877 23.8902 12.263 23.8943 12.2414 23.8987C12.1819 23.8999 12.1229 23.9005 12.0637 23.9009C13.5762 23.2217 14.8171 21.8848 15.5904 20.1131C15.6326 20.0163 15.678 19.91 15.7255 19.7996C15.9001 19.3922 16.1167 18.8864 16.368 18.4041C16.6205 17.9195 16.9019 17.4711 17.2019 17.1718C17.5019 16.8725 17.9513 16.5917 18.437 16.3398C18.9204 16.089 19.4271 15.873 19.8355 15.6988C19.9468 15.6511 20.0516 15.6061 20.1492 15.5643L20.1498 15.5639C21.9251 14.7925 23.2639 13.5548 23.9456 12.0463C23.9452 12.1037 23.9446 12.161 23.9434 12.2183Z" fill="currentColor"></path><path d="M23.1779 7.95271C23.5142 9.18535 23.4847 10.3204 23.0953 11.3462C22.5739 12.7197 21.3844 13.878 19.7281 14.5982C19.6333 14.6397 19.5303 14.6828 19.4196 14.7302C18.5098 15.118 17.217 15.6663 16.455 16.4265C15.6932 17.1876 15.1437 18.4765 14.755 19.3853C14.708 19.4956 14.6642 19.5982 14.6227 19.6926C13.9011 21.3447 12.7404 22.5324 11.3644 23.0519C10.3357 23.4404 9.19709 23.4697 7.96162 23.1338C8.24875 23.0973 8.53562 23.0386 8.82072 22.9569C10.8978 22.3615 12.6103 20.6545 13.2966 18.5058C14.0781 16.06 14.53 15.4934 15.0254 14.9991C15.5206 14.5041 16.0885 14.0541 18.54 13.2744C20.6935 12.5897 22.4044 10.8821 23.0012 8.80863C23.083 8.5246 23.1416 8.23882 23.1779 7.95271Z" fill="currentColor"></path><path d="M22.9548 16.7256C22.3732 18.0621 21.5362 19.3135 20.442 20.4052C19.3477 21.497 18.0926 22.3322 16.7527 22.9125C17.33 22.3089 17.7077 21.7042 17.9213 21.3066C18.0999 20.9736 18.2385 20.7001 18.3604 20.4607C18.6877 19.8174 18.8416 19.5174 19.1968 19.1631C19.5456 18.815 19.8417 18.6608 20.4641 18.346H20.465L20.4995 18.3284C20.7383 18.2069 21.0124 18.0688 21.346 17.8906C21.7446 17.6783 22.3504 17.3011 22.9548 16.7256Z" fill="currentColor"></path><path d="M11.9681 0C15.0382 0 18.1067 1.1651 20.442 3.49607C20.5809 3.6347 20.7163 3.77743 20.847 3.92128C22.0186 5.30937 22.4226 6.91128 22.0071 8.44653L21.9868 8.51971C21.5045 10.1973 20.0638 11.655 18.3033 12.246L18.2193 12.2735C16.9051 12.6914 16.0736 13.033 15.4936 13.3479C14.9094 13.665 14.5836 13.9534 14.2796 14.2567C13.9756 14.56 13.6865 14.8852 13.3686 15.4681C13.0728 16.0106 12.7534 16.7737 12.3695 17.9473L12.2918 18.1876C11.7193 19.9819 10.2377 21.4566 8.52936 21.9464C6.96835 22.394 5.3348 21.9978 3.92153 20.8104C3.77675 20.6803 3.63462 20.5452 3.49426 20.4052C1.24087 18.1569 0 15.1544 0 11.9506C3.80952e-06 8.74688 1.2409 5.74449 3.49521 3.49623C5.83053 1.16528 8.89805 5.29783e-06 11.9681 0Z" fill="currentColor"></path><path d="M39.1243 4.52331C38.0095 4.09002 36.7429 3.87339 35.3272 3.87339H28.7948V4.00632C29.0957 4.44822 29.3029 4.96029 29.4188 5.54374C29.5335 6.1272 29.5915 6.86082 29.5915 7.74339V15.8834C29.5915 16.8202 29.5335 17.8258 29.4188 18.4093C29.3029 18.9927 29.0957 19.5048 28.7948 19.9467V20.0796H34.2383V19.9467C33.8843 19.5048 33.6451 18.9927 33.5218 18.4093C33.3972 17.8258 33.3355 16.8029 33.3355 15.8305V15.2704H35.3272C36.7429 15.2704 38.0045 15.0452 39.1107 14.5947C40.2169 14.1442 41.0888 13.4905 41.7264 12.6338C42.364 11.7771 42.6821 10.7481 42.6821 9.54545C42.6821 8.34284 42.3677 7.29287 41.74 6.44477C41.111 5.59666 40.2391 4.95659 39.1243 4.52331ZM37.8356 12.0774C37.1894 12.6523 36.2731 12.9391 35.0867 12.9391H33.3343V6.2072H35.0867C36.2731 6.2072 37.1881 6.48539 37.8356 7.04177C38.4818 7.59814 38.8049 8.4327 38.8049 9.54668C38.8049 10.6607 38.4818 11.5038 37.8356 12.0774Z" fill="currentColor"></path><path d="M55.0343 7.51609H50.9708V7.64903C51.1829 8.01953 51.3334 8.42696 51.4222 8.86886C51.5109 9.31076 51.5553 9.91145 51.5553 10.6709V14.5139C51.5553 15.2561 51.4444 15.8876 51.2236 16.4095C51.0016 16.9314 50.7094 17.3203 50.3468 17.5751C49.9842 17.8312 49.6069 17.9592 49.2184 17.9592C48.7041 17.9592 48.2972 17.7869 47.9975 17.4422C47.6966 17.0975 47.5461 16.5633 47.5461 15.8383V7.51609H43.4839V7.64903C43.696 8.01953 43.8465 8.42696 43.9353 8.86886C44.0241 9.31076 44.0684 9.91145 44.0684 10.6709V15.5749C44.0684 16.6175 44.2362 17.505 44.5728 18.2386C44.9095 18.9722 45.3695 19.5237 45.954 19.8954C46.5386 20.2672 47.2021 20.4518 47.9457 20.4518C48.6893 20.4518 49.4108 20.2524 50.0039 19.856C50.5971 19.4584 51.0707 18.9156 51.4246 18.2263H51.5837V20.0813H55.5929V19.9225C55.3981 19.5692 55.2563 19.1803 55.1675 18.7568C55.0787 18.3322 55.0343 17.7942 55.0343 17.1406V7.51609Z" fill="currentColor"></path><path d="M62.1981 8.09859C61.5963 8.73498 61.145 9.64463 60.8441 10.8288H60.7109V7.51514H56.5685V7.67393C56.8336 7.99151 57.0112 8.37186 57.1 8.81376C57.1888 9.25566 57.2332 9.86497 57.2332 10.6429V17.0572C57.2332 17.7995 57.1937 18.3743 57.1136 18.7805C57.0334 19.1867 56.8965 19.5757 56.7017 19.9462V20.0791H61.3756V19.9462C61.1104 19.5929 60.9328 19.2125 60.8441 18.8063C60.7553 18.4001 60.7109 17.8167 60.7109 17.0572V14.9363C60.7109 13.9122 60.8749 13.0727 61.2017 12.4179C61.5285 11.7643 61.949 11.2965 62.4633 11.0134C62.9763 10.7315 63.5337 10.5887 64.1368 10.5887C64.6325 10.5887 65.0666 10.6503 65.4378 10.7746V7.22341C65.1542 7.17049 64.8446 7.14341 64.508 7.14341C63.5695 7.14341 62.8 7.46099 62.1981 8.09737V8.09859Z" fill="currentColor"></path><path d="M74.8643 17.4942C74.3328 17.6628 73.784 17.7453 73.218 17.7453C72.3683 17.7453 71.6283 17.573 71.0006 17.2283C70.3717 16.8837 69.8895 16.3851 69.5528 15.7303C69.2161 15.0767 69.0484 14.3086 69.0484 13.4248C69.0484 12.541 69.2075 11.843 69.5269 11.2251C69.8451 10.6072 70.2977 10.1345 70.881 9.80711C71.4656 9.48092 72.1377 9.31721 72.8986 9.31721C73.4831 9.31721 74.0356 9.45876 74.5585 9.74187C75.0801 10.025 75.492 10.3955 75.7929 10.8546H75.952V7.93858C75.4735 7.69116 74.9469 7.49668 74.3723 7.35512C73.7963 7.21357 73.1723 7.14341 72.5002 7.14341C71.1548 7.14341 69.9462 7.43021 68.8758 8.00505C67.8041 8.57989 66.9729 9.37506 66.3797 10.3906C65.7866 11.4073 65.4906 12.5508 65.4906 13.8224C65.4906 15.0939 65.7693 16.23 66.3267 17.2283C66.8841 18.2266 67.6672 19.0131 68.6772 19.5868C69.686 20.1604 70.8551 20.4484 72.182 20.4484C73.102 20.4484 73.9431 20.2798 74.7052 19.9449C75.4661 19.6101 76.1567 19.0968 76.7758 18.4075L76.3775 16.7913C75.899 17.0917 75.3946 17.3256 74.8643 17.4942Z" fill="currentColor"></path><path d="M88.7307 17.1113V12.0756C88.7307 11.0515 88.558 10.1677 88.2127 9.42542C87.8674 8.68318 87.3889 8.11819 86.7785 7.72922C86.168 7.34025 85.4639 7.14576 84.6672 7.14576C83.8706 7.14576 83.1972 7.33532 82.5954 7.71567C81.9936 8.09603 81.4978 8.62163 81.1081 9.29248H80.9749V3.79521H76.8325V3.92815C77.0804 4.26419 77.2531 4.6667 77.3505 5.13444C77.4479 5.60342 77.496 6.21642 77.496 6.97589V17.1113C77.496 17.8178 77.4566 18.3791 77.3764 18.7939C77.2962 19.2087 77.1594 19.594 76.9645 19.9473V20.0802H81.5052V19.9473C81.2931 19.6125 81.1513 19.2408 81.0798 18.8346C81.0082 18.4284 80.9737 17.8535 80.9737 17.1113V12.7649C80.9737 12.094 81.0884 11.5192 81.319 11.0416C81.5484 10.564 81.8456 10.2071 82.2082 9.96826C82.5707 9.72946 82.9555 9.61006 83.3637 9.61006C83.7719 9.61006 84.111 9.7073 84.386 9.90178C84.6598 10.0963 84.8732 10.3917 85.0236 10.7893C85.1741 11.1869 85.2493 11.6768 85.2493 12.2602V17.11C85.2493 17.8523 85.2135 18.4271 85.1432 18.8333C85.0717 19.2395 84.9311 19.6113 84.7178 19.9461V20.079H89.2585V19.9461C89.0637 19.5756 88.9268 19.1817 88.8466 18.7668C88.7664 18.352 88.727 17.7993 88.727 17.11L88.7307 17.1113Z" fill="currentColor"></path><path d="M108.173 12.896L106.154 12.0479C105.694 11.8534 105.357 11.6553 105.145 11.4522C104.933 11.2491 104.827 10.9795 104.827 10.6434C104.827 10.2015 105.035 9.86181 105.451 9.62301C105.867 9.38421 106.385 9.26482 107.005 9.26482C107.695 9.26482 108.319 9.40637 108.877 9.68948C109.434 9.9726 109.863 10.3517 110.164 10.8293H110.323V7.94035C109.863 7.69293 109.341 7.49845 108.757 7.3569C108.173 7.21534 107.562 7.14517 106.925 7.14517C105.969 7.14517 105.101 7.32612 104.323 7.68801C103.543 8.0499 102.938 8.54965 102.504 9.18604C102.069 9.82242 101.852 10.5474 101.852 11.3598C101.852 12.1722 102.069 12.8222 102.504 13.4142C102.938 14.0063 103.596 14.4876 104.482 14.8581L106.314 15.6274C106.757 15.8219 107.08 16.0115 107.284 16.1973C107.487 16.3832 107.589 16.6343 107.589 16.9531C107.589 17.3778 107.381 17.7089 106.965 17.9477C106.55 18.1865 106.04 18.3059 105.439 18.3059C104.784 18.3059 104.155 18.152 103.553 17.8418C102.951 17.5329 102.402 17.0688 101.907 16.4509H101.748V19.3399C102.296 19.6931 102.903 19.9676 103.567 20.1609C104.23 20.3541 104.916 20.4526 105.625 20.4526C106.545 20.4526 107.395 20.2803 108.174 19.9356C108.952 19.591 109.567 19.0962 110.019 18.4512C110.47 17.8062 110.696 17.0688 110.696 16.238C110.696 15.46 110.484 14.7978 110.058 14.25C109.633 13.7023 109.005 13.2518 108.173 12.8985V12.896Z" fill="currentColor"></path><path d="M120.983 17.4806C120.407 17.6579 119.828 17.7453 119.245 17.7453C118.412 17.7453 117.673 17.5779 117.027 17.2419C116.381 16.9058 115.868 16.3765 115.487 15.6515C115.197 15.1013 115.019 14.4378 114.949 13.6636H122.883V12.5508C122.883 11.4196 122.665 10.4484 122.231 9.63479C121.797 8.82238 121.192 8.20323 120.412 7.77979C119.633 7.35513 118.722 7.14341 117.677 7.14341C116.544 7.14341 115.513 7.43021 114.584 8.00505C113.654 8.57989 112.919 9.37013 112.38 10.377C111.84 11.3839 111.57 12.4893 111.57 13.6907C111.57 15.0521 111.857 16.2448 112.433 17.2689C113.008 18.2943 113.805 19.0808 114.823 19.6274C115.841 20.1751 116.988 20.4496 118.262 20.4496C119.164 20.4496 120.028 20.2687 120.85 19.9068C121.674 19.5449 122.404 19.0193 123.04 18.33L122.642 16.6867C122.111 17.04 121.558 17.3059 120.982 17.4819L120.983 17.4806ZM116.177 9.52892C116.559 9.24704 116.978 9.10426 117.439 9.10426C117.9 9.10426 118.292 9.22366 118.621 9.46245C118.947 9.70125 119.191 10.0545 119.351 10.5223C119.478 10.8952 119.553 11.3334 119.579 11.8344H114.992C115.049 11.4615 115.138 11.1205 115.261 10.814C115.491 10.2404 115.796 9.8108 116.177 9.52892Z" fill="currentColor"></path><path d="M127.766 16.9783V3.79521H123.624V3.95399C123.906 4.39589 124.088 4.82917 124.167 5.25261C124.248 5.67727 124.287 6.30382 124.287 7.13469V16.9783C124.287 17.7563 124.251 18.357 124.181 18.7804C124.109 19.2038 123.969 19.5928 123.756 19.9461V20.079H128.296V19.9461C128.066 19.6113 127.92 19.2395 127.858 18.8333C127.797 18.4271 127.766 17.8092 127.766 16.9783Z" fill="currentColor"></path><path d="M137.992 7.51555V7.6485C138.187 7.98454 138.257 8.40797 138.204 8.92127C138.151 9.43456 138.001 10.034 137.753 10.7233L135.789 15.839H135.681L133.742 10.6704C133.494 9.99955 133.344 9.42963 133.291 8.96065C133.238 8.4929 133.291 8.0547 133.45 7.6485V7.51555H128.484V7.6485C128.821 8.07316 129.099 8.4966 129.32 8.92127C129.541 9.34593 129.811 9.96385 130.13 10.7763L133.898 20.1657C133.725 20.3663 133.538 20.5325 133.334 20.6605C132.803 20.9966 132.156 21.164 131.396 21.164C130.688 21.164 130.023 21.031 129.404 20.7664V23.4695C130.023 23.8227 130.732 24 131.529 24C132.644 24 133.63 23.6996 134.49 23.099C135.348 22.4983 136.078 21.4114 136.68 19.8383L140.273 10.775C140.592 9.94416 140.875 9.29546 141.123 8.82648C141.371 8.35874 141.663 7.96484 142 7.64726V7.51432H137.991L137.992 7.51555Z" fill="currentColor"></path><path d="M100.363 17.136V12.1262C100.363 10.8891 100.111 9.89943 99.6055 9.15719C99.1012 8.41495 98.4636 7.89427 97.694 7.59392C96.9233 7.29358 96.0872 7.14341 95.1844 7.14341C94.2817 7.14341 93.4579 7.31573 92.6082 7.66039C91.7585 8.00505 90.9976 8.44203 90.3243 8.97255L90.6955 10.7217C91.9522 9.97944 93.1299 9.60893 94.2275 9.60893C94.9711 9.60893 95.6124 9.80342 96.1525 10.1924C96.6927 10.5814 96.9627 11.1648 96.9627 11.9415V12.7108L94.7318 13.2672C93.1915 13.6562 92.0101 14.1338 91.1863 14.6988C90.3625 15.265 89.9519 16.0774 89.9519 17.1372C89.9519 18.1269 90.2787 18.9257 90.9347 19.5363C91.5896 20.1456 92.3949 20.4508 93.3506 20.4508C94.0943 20.4508 94.7713 20.2613 95.3817 19.8809C95.9922 19.5018 96.4744 18.9578 96.8296 18.2512H96.9146V20.0803H100.924V19.9216C100.729 19.5683 100.587 19.1793 100.498 18.7559C100.41 18.3312 100.36 17.7933 100.36 17.1397L100.363 17.136ZM96.964 15.0693C96.964 15.7229 96.8481 16.2756 96.6187 16.7261C96.3881 17.1766 96.0958 17.5077 95.7419 17.7207C95.3879 17.9324 95.034 18.0382 94.68 18.0382C94.3261 18.0382 94.0252 17.9189 93.7773 17.6801C93.5294 17.4413 93.4061 17.1101 93.4061 16.6867C93.4061 16.3864 93.4863 16.1303 93.6454 15.9174C93.8045 15.7044 94.0351 15.5198 94.336 15.361C94.6369 15.2022 95.0266 15.0434 95.5038 14.8834L96.964 14.4095V15.0693Z" fill="currentColor"></path></symbol></svg>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="wrap">
+<header class="nav">
+  <a class="brand" href="https://www.purchasely.com" aria-label="Purchasely website">
+    <svg viewBox="0 0 142 24" width="142" height="24" role="img" aria-label="Purchasely"><use href="#logo-mark"/></svg>
+    <span class="tag">CLI</span>
+  </a>
+  <nav aria-label="Sections">
+    <ul>
+      <li><a href="#who">Who it is for</a></li>
+      <li><a href="#use-cases">Use cases</a></li>
+      <li><a href="#mcp">CLI or MCP</a></li>
+      <li><a href="#agents">AI agents</a></li>
+      <li><a href="#safety">Safety</a></li>
+      <li><a href="#install">Install</a></li>
+      <li class="narrow"><a href="https://docs.purchasely.com/docs/management-api">Management API docs</a></li>
+    </ul>
+  </nav>
+  <div class="links">
+    <a class="wide" href="https://docs.purchasely.com/docs/management-api">Management API docs</a>
+    <a class="btn" href="/reference">CLI reference</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="hero">
+  <div>
+    <h1>Purchasely in your terminal</h1>
+    <p class="lead">Read your data, change your configuration with guardrails, and automate the rest. One tool for you, your CI pipeline and your AI coding agent.</p>
+    <div class="cmd install">
+      <pre id="install-cmd"><code>curl -fsSL https://cli.purchasely.io/install.sh | sh</code></pre>
+      <button class="btn" type="button" data-copy="install-cmd" aria-label="Copy the install command">Copy</button>
+    </div>
+    <p class="req">macOS and Linux. Needs Node 20 or later. Then <code>purchasely auth login</code> with a Management API key.</p>
+  </div>
+  <div class="term hero-term" role="group" aria-label="Example terminal session">
+    <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+<pre><code><span class="c"># You: the key metrics of an app, with charts</span>
+<span class="p">$ </span>purchasely dashboard summary \
+    --app app_xxx --output table
+
+<span class="c"># Your CI: fail when a placement is missing</span>
+<span class="p">$ </span>purchasely placements list --app app_xxx \
+    --fields vendor_id | jq -e \
+    'any(.placements[]; .vendor_id == "onboarding")'
+
+<span class="c"># Your AI agent: find a command in plain words</span>
+<span class="p">$ </span>purchasely search "start an a/b test"
+<span class="o">[{ "command": "purchasely ab-tests start …", … }]</span></code></pre>
+  </div>
+</div>
+<p id="copy-status" class="status" aria-live="polite"></p>
+
+<section id="who" aria-labelledby="who-h">
+  <div class="head">
+    <h2 id="who-h">One tool, every team</h2>
+    <p class="lead soft">The Console is the place to design and explore. The CLI is the place to repeat, script and automate. It covers every resource of the Management API, and gets a new command each time the API gets a new endpoint.</p>
+  </div>
+  <div class="who">
+    <article>
+      <span class="k">Mobile developers</span>
+      <h3>Integrate with your real ids</h3>
+      <p class="soft">Your AI agent reads your placements, products, plans and custom events from your account, then writes the SDK code with the real values. No copy and paste from the Console.</p>
+    </article>
+    <article>
+      <span class="k">Growth and product teams</span>
+      <h3>Change configuration with a safety net</h3>
+      <p class="soft">Rename placements, start or stop A/B tests, update audiences. Every write shows its request first with <code>--dry-run</code>, and a risky change asks for confirmation.</p>
+    </article>
+    <article>
+      <span class="k">Data and BI</span>
+      <h3>Your numbers, in your tools</h3>
+      <p class="soft">MRR, active subscriptions, paywall viewers and conversions as JSON. Send them to a spreadsheet, a database or your own dashboard with a short script.</p>
+    </article>
+    <article>
+      <span class="k">Platform and CI</span>
+      <h3>Checks before each release</h3>
+      <p class="soft">A CI job reads your configuration and fails when something is missing. Stable exit codes and JSON output make the result easy to test.</p>
+    </article>
+    <article>
+      <span class="k">AI coding agents</span>
+      <h3>A tool your agent already knows</h3>
+      <p class="soft">Claude Code, Codex, Cursor and the others run shell commands well. The CLI gives them search, help, JSON and guardrails, with no extra server to set up.</p>
+    </article>
+  </div>
+</section>
+
+<section id="use-cases" aria-labelledby="use-cases-h">
+  <div class="head">
+    <h2 id="use-cases-h">What you can do with it</h2>
+    <p class="lead soft">Replace <code>app_xxx</code> with an id from <code>purchasely apps list</code>. These examples need <code>jq</code> for the pipes.</p>
+  </div>
+  <div class="uses">
+    <article>
+      <h3>Build your own dashboard</h3>
+      <p class="soft">The same numbers as the Console dashboard, ready for a cron job, a Slack message from your own script, or a sheet.</p>
+<pre class="code"><code>purchasely dashboard summary --app app_xxx --days 90 \
+  --out metrics.json</code></pre>
+      <p class="soft">Add <code>--output table</code> to read them yourself, with a sparkline per metric. <code>purchasely dashboard</code> lists every dashboard.</p>
+    </article>
+    <article>
+      <h3>Guard your releases in CI</h3>
+      <p class="soft">A GitHub Actions job that fails when the placement your new app version needs does not exist.</p>
+<pre class="code"><code>- run: |
+    curl -fsSL https://cli.purchasely.io/install.sh | sh
+    echo "$HOME/.local/bin" &gt;&gt; "$GITHUB_PATH"
+- run: |
+    purchasely placements list --app "$APP_ID" --fields vendor_id \
+      | jq -e 'any(.placements[]; .vendor_id == "onboarding")'
+  env:
+    PURCHASELY_API_KEY: ${{ secrets.PURCHASELY_API_KEY }}</code></pre>
+    </article>
+    <article>
+      <h3>Keep a history of your configuration</h3>
+      <p class="soft">Save your placements, audiences, campaigns and A/B tests as JSON in a git repository. Each change is a diff you can review.</p>
+<pre class="code"><code>for r in placements audiences campaigns ab-tests; do
+  purchasely "$r" list --app app_xxx &gt; "config/$r.json"
+done
+git diff config/</code></pre>
+    </article>
+    <article>
+      <h3>Change a placement, see the request first</h3>
+      <p class="soft">The dry run prints the request and sends nothing. A write always names its environment.</p>
+<pre class="code"><code>purchasely placements update --app app_xxx --id plc_xxx \
+  --data '{"name":"Onboarding"}' --env prod --dry-run</code></pre>
+      <p class="soft">Remove <code>--dry-run</code> to send it. A risky change, such as the delete of a placement in use, stops and shows its impact first.</p>
+    </article>
+    <article>
+      <h3>Integrate the SDK with your AI agent</h3>
+      <p class="soft">Install the Purchasely AI plugin in your coding agents, then ask in plain words.</p>
+<pre class="code"><code>purchasely ai install
+# Then, in your agent:
+# "Show the onboarding paywall at the first launch.
+#  Use our real placement and our products."</code></pre>
+    </article>
+    <article>
+      <h3>Call any endpoint</h3>
+      <p class="soft">An endpoint with no command of its own is one line away, with the same key, limiter and guardrails.</p>
+<pre class="code"><code>purchasely api GET /applications</code></pre>
+      <p class="soft">The <a href="/reference">CLI reference</a> lists every command, option and example. <code>man purchasely</code> shows the same.</p>
+    </article>
+  </div>
+</section>
+
+<section id="mcp" aria-labelledby="mcp-h">
+  <div class="head">
+    <h2 id="mcp-h">CLI or MCP server?</h2>
+    <p class="lead soft">An MCP server gives tools to an AI chat app. A CLI gives commands to anything that has a shell: you, a script, a CI job, or a coding agent. The two do not compete. Use the one that fits where the work happens.</p>
+  </div>
+  <div class="vs-wrap">
+    <table class="vs">
+      <caption class="status">The CLI and an MCP server, compared</caption>
+      <thead><tr><th scope="col"></th><th scope="col">CLI</th><th scope="col">MCP server</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Who runs it</th><td>You, your scripts, your CI and your coding agent, with the same commands</td><td>An AI app that supports MCP</td></tr>
+        <tr><th scope="row">Cost for an agent</th><td>Low: the agent reads the help of one command when it needs it, and filters the output with <code>jq</code></td><td>Higher: the tool list goes into the context, and each result comes back in full</td></tr>
+        <tr><th scope="row">Combine with other tools</th><td>Pipes, files, <code>jq</code>, git, cron</td><td>Only through the AI app</td></tr>
+        <tr><th scope="row">Repeat the same task</th><td>A script runs it again, with no AI and no tokens</td><td>The model runs it again, each time</td></tr>
+        <tr><th scope="row">CI and automation</th><td>Yes: an environment variable for the key, stable exit codes</td><td>Not made for it</td></tr>
+        <tr><th scope="row">Needs a shell</th><td>Yes</td><td>No: it also works in chat and browser apps</td></tr>
+        <tr><th scope="row">Access per user</th><td>One API key per person or per pipeline</td><td>Can use a login per user (OAuth), which suits shared or hosted agents</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pair">
+    <div>
+      <h3>Use the CLI when</h3>
+      <ul>
+        <li>you work in a terminal or an IDE with a coding agent;</li>
+        <li>the task must run again: a script, a cron job, a CI step;</li>
+        <li>the output goes into another tool or a file.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Use an MCP server when</h3>
+      <ul>
+        <li>the AI app has no shell, such as a chat app;</li>
+        <li>an agent acts for many users, each with their own login.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="agents" aria-labelledby="agents-h">
+  <div class="agents">
+    <div>
+      <h2 id="agents-h">Made for AI coding agents</h2>
+      <p class="lead soft" style="margin-top:1.5rem">The CLI behaves the same for a person and for an agent. Give the agent these rules, or install the <a href="#ai">Purchasely AI plugin</a>, which has them.</p>
+      <ol class="rules">
+        <li><span>Find the command with <code class="brk">purchasely search "&lt;task&gt;"</code>. The first result is the best match. <code class="brk">purchasely reference --format json</code> gives the whole tree.</span></li>
+        <li><span>Read the help of that one command: <code class="brk">purchasely &lt;resource&gt; &lt;action&gt; --help</code>.</span></li>
+        <li><span>Read the JSON on stdout and the exit code. Use <code>--fields</code> to ask for less data.</span></li>
+        <li><span>Run <code>--dry-run</code> before every write and show the request to the user.</span></li>
+        <li><span>Never pass <code>--yes</code> without the approval of the user.</span></li>
+      </ol>
+      <p class="note">Give the agent the key through <code>PURCHASELY_API_KEY</code> or <code>purchasely auth login</code>. Never put the key in a command.</p>
+    </div>
+    <div class="term" role="group" aria-label="Example agent session">
+      <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+<pre><code><span class="c"># User: rename the onboarding placement</span>
+<span class="p">$ </span>purchasely search "update a placement"
+<span class="o">[
+  {
+    "command": "purchasely placements update --app app_xxx --id &lt;id&gt; --data @body.json --env prod",
+    "method": "PATCH",
+    …
+  }
+]</span>
+<span class="p">$ </span>purchasely placements update --help
+<span class="p">$ </span>purchasely placements update --app app_xxx --id plc_xxx \
+    --data '{"name":"Onboarding"}' --env prod --dry-run
+<span class="o">{
+  "method": "PATCH",
+  "url": "https://api.purchasely.io/management/v1/applications/app_xxx/placements/plc_xxx",
+  "headers": {
+    "Authorization": "Bearer &lt;redacted&gt;",
+    "Accept": "application/json",
+    "User-Agent": "purchasely-cli/&lt;version&gt; (-; -)",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "name": "Onboarding"
+  }
+}</span>
+<span class="c"># Agent: this is the request. Send it?</span>
+<span class="c"># User: yes</span>
+<span class="p">$ </span>purchasely placements update --app app_xxx --id plc_xxx \
+    --data '{"name":"Onboarding"}' --env prod</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="ai" aria-labelledby="ai-h">
+  <div class="head">
+    <h2 id="ai-h">The Purchasely AI plugin</h2>
+    <p class="lead soft">The rules above make the CLI safe for any agent. The plugin adds Purchasely knowledge to the agent: SDK integration, review, debug and migration.</p>
+  </div>
+  <div class="agents">
+    <div>
+      <h3>One command</h3>
+      <div class="cmd on-white">
+        <pre id="ai-install"><code>purchasely ai install</code></pre>
+        <button class="btn" type="button" data-copy="ai-install" aria-label="Copy the ai install command">Copy</button>
+      </div>
+      <ol class="rules">
+        <li><span>It finds Claude Code, Codex, Copilot CLI, Gemini CLI, Cursor and OpenCode on your machine. Use <code>--agent</code> to choose one.</span></li>
+        <li><span><code class="brk">purchasely ai status</code> shows the agents and the plugin version. <code class="brk">purchasely ai update</code> and <code class="brk">purchasely ai uninstall</code> change only what <code>ai install</code> registered.</span></li>
+        <li><span>The CLI also updates the plugin once a day in the background, only in those agents.</span></li>
+      </ol>
+    </div>
+    <div>
+      <h3>6 skills</h3>
+      <p style="margin-top:.75rem"><code>purchasely-cli</code>, <code>sdk-expert</code>, <code>integrate</code>, <code>review</code>, <code>debug</code> and <code>migrate</code>.</p>
+      <p style="margin-top:1rem">Ask the agent to integrate the SDK with your real placements, products, plans and custom events, read by the CLI from your account. Ask it to debug, review or improve your integration.</p>
+      <p class="note">The CLI does not return the SDK API key of an app. Copy it from the Console (App settings) into your app configuration. The agent does not ask for it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="safety" aria-labelledby="safety-h" class="dark">
+  <div class="head">
+    <h2 id="safety-h">Safe by default</h2>
+    <p class="lead soft">The guardrails are in the CLI, not in the prompt. They work the same for a person, a script and an agent.</p>
+  </div>
+  <dl class="feats">
+    <div><dt>A dry run on every write</dt><dd><code>--dry-run</code> prints the method, URL, headers and body, and sends nothing. The key shows as <code>&lt;redacted&gt;</code>. It works without a key.</dd></div>
+    <div><dt>Explicit environment</dt><dd>A write without <code>--env</code> is refused, also with <code>--dry-run</code>. Reads use prod by default.</dd></div>
+    <div><dt>Confirmation for risky changes</dt><dd>When the API asks for a confirmation, the CLI shows the impact. In a terminal, it asks you first. In a script, it stops with exit code 8 and gives a token that you send back with <code>--confirm-token</code> within 5 minutes.</dd></div>
+    <div><dt>Rate limits handled for you</dt><dd>A built-in limiter, shared by all CLI processes on your machine, stays under the API limits. On a 429, the CLI waits for the time the server gives and slows down. After too many rejections it stops with exit code 7.</dd></div>
+    <div><dt>Your key stays secret</dt><dd>The key is in the macOS keychain, or in a file only you can read. It is never printed: status shows its last 4 characters and the usage log keeps no key.</dd></div>
+    <div><dt>Output for scripts</dt><dd>JSON on stdout, one JSON error on stderr, and stable exit codes: 0 success, 3 no key, 4 forbidden, 6 not found, 7 rate limited, 8 confirmation required, 10 write refused. An answer over 200 KB goes to a file.</dd></div>
+    <div><dt>What the CLI sends</dt><dd>
+      <p>Management commands go to <code>api.purchasely.io</code> with your key. The User-Agent header carries the CLI version and your <code>--reason</code> value.</p>
+      <p>Once a day, the CLI asks <code>cli.purchasely.io</code> for the latest version. <code>purchasely ai</code> downloads the public Purchasely AI plugin from GitHub.</p>
+    </dd></div>
+    <div><dt>Every command, documented</dt><dd>The <a href="/reference">CLI reference</a> has the help of every command. <code class="brk">purchasely --help</code>, <code>man purchasely</code> and shell completion (<code class="brk">purchasely completion zsh</code>) give the same in your terminal.</dd></div>
+  </dl>
+</section>
+
+<section id="install" aria-labelledby="install-h">
+  <div class="head">
+    <h2 id="install-h">Start in one minute</h2>
+    <p class="lead soft">One command installs the CLI under <code>~/.local/share/purchasely/install</code> and links <code>purchasely</code> into <code>~/.local/bin</code> or <code>~/bin</code>. Node 20 or later must be installed first.</p>
+  </div>
+  <ol class="steps">
+    <li>
+      <h3>Run the installer</h3>
+      <div class="cmd">
+        <pre id="step-install"><code>curl -fsSL https://cli.purchasely.io/install.sh | sh</code></pre>
+        <button class="btn" type="button" data-copy="step-install" aria-label="Copy the install command">Copy</button>
+      </div>
+      <p class="soft">It downloads the latest version and checks its checksum. It uses <code>~/.local/bin</code> or <code>~/bin</code> if one of them is already on your PATH. Else it creates <code>~/.local/bin</code> and adds one line to your shell profile: <code>~/.zshrc</code> for zsh, <code>~/.bashrc</code> and <code>~/.bash_profile</code> for bash, <code>~/.profile</code> for other shells. It never uses sudo.</p>
+      <p class="soft">Open a new terminal if the command is not found.</p>
+    </li>
+    <li>
+      <h3>Log in with a Management API key</h3>
+      <div class="cmd">
+        <pre id="step-login"><code>purchasely auth login</code></pre>
+        <button class="btn" type="button" data-copy="step-login" aria-label="Copy the login command">Copy</button>
+      </div>
+      <p class="soft">Create the key in the Purchasely Console, from the account menu, in Management API keys. It is not the SDK API key of your app. The CLI asks for the key with a hidden prompt. In CI, set <code>PURCHASELY_API_KEY</code> as a secret instead.</p>
+    </li>
+    <li>
+      <h3>Read your first data</h3>
+      <div class="cmd">
+        <pre id="step-apps"><code>purchasely apps list --output table</code></pre>
+        <button class="btn" type="button" data-copy="step-apps" aria-label="Copy the apps list command">Copy</button>
+      </div>
+      <p class="soft">It prints your applications with their ids. Use an id as <code>--app</code> in the other commands.</p>
+    </li>
+  </ol>
+  <div class="uninstall">
+    <div>
+      <h3>Uninstall</h3>
+      <p class="soft">Remove the install folder and the <code>purchasely</code> link in your bin folder. <code>command -v purchasely</code> shows the link.</p>
+    </div>
+<pre class="code"><code>rm -rf ~/.local/share/purchasely/install
+rm "$(command -v purchasely)"</code></pre>
+  </div>
+</section>
+
+<section id="updates" aria-labelledby="updates-h">
+  <div class="head">
+    <h2 id="updates-h">Updates</h2>
+    <p class="lead soft">The CLI keeps itself up to date. You do not need to run the installer again.</p>
+  </div>
+  <div class="updates">
+    <div>
+      <h3>Automatic</h3>
+      <p>Once a day, the CLI checks for a new version in the background. It downloads and installs it in a separate process, so your command does not wait. The new version is used on the next run.</p>
+    </div>
+    <div>
+      <h3>Now</h3>
+<pre class="code"><code>purchasely update</code></pre>
+      <p>Checks and installs the latest version at once.</p>
+    </div>
+    <div>
+      <h3>Off</h3>
+<pre class="code"><code>export PURCHASELY_DISABLE_AUTOUPDATE=1</code></pre>
+      <p>The automatic check also stays off when the <code>CI</code> variable is set, so a pipeline always runs the version it installed.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot">
+    <svg viewBox="0 0 142 24" width="142" height="24" role="img" aria-label="Purchasely"><use href="#logo-mark"/></svg>
+    <ul>
+      <li><a href="/reference">CLI reference</a></li>
+      <li><a href="https://docs.purchasely.com/docs/management-api">Management API docs</a></li>
+      <li><a href="https://www.purchasely.com">purchasely.com</a></li>
+    </ul>
+    <small>© 2026 Purchasely. All rights reserved.</small>
+  </div>
+</footer>
+</div>
+
+<script>
+document.querySelectorAll("[data-copy]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var text = document.getElementById(btn.dataset.copy).textContent.trim();
+    var status = document.getElementById("copy-status");
+    var done = function () {
+      btn.textContent = "Copied";
+      status.textContent = "Command copied to the clipboard";
+      setTimeout(function () { btn.textContent = "Copy"; status.textContent = ""; }, 2000);
+    };
+    var fallback = function () {
+      var range = document.createRange();
+      range.selectNodeContents(document.getElementById(btn.dataset.copy));
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      status.textContent = "Command selected. Press Command C or Control C to copy it.";
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  });
+});
+</script>
+</body>
+</html>

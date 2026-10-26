@@ -126,6 +126,53 @@ footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
 .need{display:flex;flex-direction:column;gap:.5rem}
 .recipe .code{font-size:.8125rem;white-space:pre;word-break:normal}
 .notes{color:var(--ink-soft)}
+/* recipes: text beside the picture of the result on wide screens */
+.recipe{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.25rem 3rem;align-items:start}
+.recipe>*{grid-column:1/-1}
+.recipe>h2,.recipe>.lead,.recipe>.need{grid-column:1}
+.recipe>.ill{grid-column:2;grid-row:1/span 3}
+@media (max-width:899px){.recipe{grid-template-columns:minmax(0,1fr)}.recipe>h2,.recipe>.lead,.recipe>.need,.recipe>.ill{grid-column:1;grid-row:auto}}
+.ill{margin:0;border-radius:var(--r-m);padding:clamp(1rem,3vw,1.75rem);display:flex;flex-direction:column;gap:1rem;min-width:0}
+.ill.lavender{background:var(--lavender)}
+.ill.green{background:var(--light-green)}
+.ill.coral{background:var(--coral)}
+.ill.cream{background:var(--cream)}
+.flow{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;font-size:.8125rem}
+.flow li{position:relative;background:color-mix(in srgb,var(--white) 70%,transparent);border-radius:var(--r-full);padding:.35rem .75rem}
+.flow li+li::before{content:"";position:absolute;left:-1.25rem;top:50%;width:1rem;height:1px;background:var(--ink)}
+@media (max-width:479px){.flow{flex-direction:column;align-items:flex-start;gap:.75rem}.flow li+li::before{left:1.25rem;top:-.75rem;width:1px;height:.75rem}}
+.flow .cli{background:var(--dark-green);color:var(--light-green);font-family:var(--mono)}
+.mock{background:var(--white);border-radius:var(--r-s);padding:1rem 1.125rem;box-shadow:0 1rem 2rem -1.25rem color-mix(in srgb,var(--dark-green) 40%,transparent);font-size:.875rem;min-width:0}
+.mock p{margin:0}
+.chat .chan{font-weight:700;padding-bottom:.6rem;margin-bottom:.75rem;border-bottom:1px solid var(--line)}
+.chat .msg{display:grid;grid-template-columns:2.25rem minmax(0,1fr);gap:.75rem}
+.chat .av{width:2.25rem;height:2.25rem;padding:.4rem;border-radius:.5rem;background:var(--dark-green);color:var(--light-green)}
+.chat .who{font-weight:700;margin-bottom:.25rem}
+.chat .badge{font:700 .625rem/1 var(--body);background:var(--light-grey);color:var(--ink-soft);border-radius:.25rem;padding:.15rem .3rem;vertical-align:middle}
+.chat .time{font-weight:400;color:var(--ink-soft);font-size:.75rem}
+.kpis{margin:.4rem 0 0;display:grid;gap:.15rem}
+.kpis dt,.kpis dd{display:inline}
+.kpis dt::after{content:": "}
+.kpis dd{margin:0;font-variant-numeric:tabular-nums}
+.sheet{padding:0;overflow-x:auto}
+.sheet table{border-collapse:collapse;width:100%;font-size:.75rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sheet th,.sheet td{border:1px solid var(--line);padding:.35rem .5rem;text-align:left}
+.sheet thead th,.sheet tbody th{background:var(--light-grey);color:var(--ink-soft);font-weight:400;text-align:center}
+.sheet tbody tr:first-child td{font-weight:700}
+.sheet tr.new td{background:color-mix(in srgb,var(--light-green) 70%,transparent)}
+.checks .title{font-weight:700;margin-bottom:.6rem}
+.checks ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.checks li{display:grid;grid-template-columns:1.25rem minmax(0,1fr);gap:.5rem;align-items:start}
+.checks li::before{font-weight:700;text-align:center}
+.checks .ok::before{content:"\2713";color:var(--deep-green)}
+.checks .ko::before{content:"\2717";color:#b3261e}
+.checks .ko{color:#8c1d18}
+.checks .result{margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--line);color:var(--ink-soft)}
+.diff .commit{font-weight:700}
+.diff .file{color:var(--ink-soft);font-family:var(--mono);font-size:.75rem;margin:.25rem 0 .6rem}
+.diff pre{margin:0;font-size:.75rem;line-height:1.6;overflow-x:auto;background:var(--light-grey);border-radius:.5rem;padding:.6rem .75rem}
+.diff .del{display:inline-block;width:100%;background:color-mix(in srgb,var(--coral) 55%,transparent)}
+.diff .add{display:inline-block;width:100%;background:color-mix(in srgb,var(--light-green) 85%,transparent)}
 .setup :not(pre)>code,.recipe :not(pre)>code{white-space:normal;overflow-wrap:anywhere}
 
 section{padding:0}
@@ -176,6 +223,20 @@ section{padding:0}
 <article class="recipe" id="slack">
   <h2>Daily key metrics in Slack</h2>
   <p class="lead">Every weekday morning, a Slack channel gets the MRR, the active subscriptions, the paywall viewers and the conversions of the last 7 days.</p>
+  <figure class="ill lavender" role="img" aria-label="Example: every weekday at 08:00, the Purchasely CLI posts the MRR, active subscriptions, paywall viewers and conversions of the last 7 days in a Slack channel.">
+  <ol class="flow" aria-hidden="true"><li>Mon to Fri, 08:00</li><li class="cli">purchasely</li><li>Slack</li></ol>
+  <div class="mock chat" aria-hidden="true">
+    <div class="chan"># growth</div>
+    <div class="msg">
+      <svg class="av" viewBox="0 0 24 24" width="36" height="36"><path d="M23.9434 12.2183C23.9378 12.2428 23.934 12.269 23.9326 12.2962C23.7715 15.1058 21.7292 16.4954 20.8481 16.9655C20.5248 17.1379 20.2579 17.2725 20.0214 17.3924L19.7823 17.5137C19.2484 17.7868 18.8705 18.0032 18.452 18.4208C17.9736 18.8981 17.7594 19.3225 17.4213 19.9864C17.3012 20.2232 17.1661 20.4898 16.9933 20.8113C16.5222 21.6893 15.13 23.7276 12.3148 23.889C12.2877 23.8902 12.263 23.8943 12.2414 23.8987C12.1819 23.8999 12.1229 23.9005 12.0637 23.9009C13.5762 23.2217 14.8171 21.8848 15.5904 20.1131C15.6326 20.0163 15.678 19.91 15.7255 19.7996C15.9001 19.3922 16.1167 18.8864 16.368 18.4041C16.6205 17.9195 16.9019 17.4711 17.2019 17.1718C17.5019 16.8725 17.9513 16.5917 18.437 16.3398C18.9204 16.089 19.4271 15.873 19.8355 15.6988C19.9468 15.6511 20.0516 15.6061 20.1492 15.5643L20.1498 15.5639C21.9251 14.7925 23.2639 13.5548 23.9456 12.0463C23.9452 12.1037 23.9446 12.161 23.9434 12.2183Z" fill="currentColor"></path><path d="M23.1779 7.95271C23.5142 9.18535 23.4847 10.3204 23.0953 11.3462C22.5739 12.7197 21.3844 13.878 19.7281 14.5982C19.6333 14.6397 19.5303 14.6828 19.4196 14.7302C18.5098 15.118 17.217 15.6663 16.455 16.4265C15.6932 17.1876 15.1437 18.4765 14.755 19.3853C14.708 19.4956 14.6642 19.5982 14.6227 19.6926C13.9011 21.3447 12.7404 22.5324 11.3644 23.0519C10.3357 23.4404 9.19709 23.4697 7.96162 23.1338C8.24875 23.0973 8.53562 23.0386 8.82072 22.9569C10.8978 22.3615 12.6103 20.6545 13.2966 18.5058C14.0781 16.06 14.53 15.4934 15.0254 14.9991C15.5206 14.5041 16.0885 14.0541 18.54 13.2744C20.6935 12.5897 22.4044 10.8821 23.0012 8.80863C23.083 8.5246 23.1416 8.23882 23.1779 7.95271Z" fill="currentColor"></path><path d="M22.9548 16.7256C22.3732 18.0621 21.5362 19.3135 20.442 20.4052C19.3477 21.497 18.0926 22.3322 16.7527 22.9125C17.33 22.3089 17.7077 21.7042 17.9213 21.3066C18.0999 20.9736 18.2385 20.7001 18.3604 20.4607C18.6877 19.8174 18.8416 19.5174 19.1968 19.1631C19.5456 18.815 19.8417 18.6608 20.4641 18.346H20.465L20.4995 18.3284C20.7383 18.2069 21.0124 18.0688 21.346 17.8906C21.7446 17.6783 22.3504 17.3011 22.9548 16.7256Z" fill="currentColor"></path><path d="M11.9681 0C15.0382 0 18.1067 1.1651 20.442 3.49607C20.5809 3.6347 20.7163 3.77743 20.847 3.92128C22.0186 5.30937 22.4226 6.91128 22.0071 8.44653L21.9868 8.51971C21.5045 10.1973 20.0638 11.655 18.3033 12.246L18.2193 12.2735C16.9051 12.6914 16.0736 13.033 15.4936 13.3479C14.9094 13.665 14.5836 13.9534 14.2796 14.2567C13.9756 14.56 13.6865 14.8852 13.3686 15.4681C13.0728 16.0106 12.7534 16.7737 12.3695 17.9473L12.2918 18.1876C11.7193 19.9819 10.2377 21.4566 8.52936 21.9464C6.96835 22.394 5.3348 21.9978 3.92153 20.8104C3.77675 20.6803 3.63462 20.5452 3.49426 20.4052C1.24087 18.1569 0 15.1544 0 11.9506C3.80952e-06 8.74688 1.2409 5.74449 3.49521 3.49623C5.83053 1.16528 8.89805 5.29783e-06 11.9681 0Z" fill="currentColor"></path></svg>
+      <div>
+        <p class="who">Purchasely KPIs <span class="badge">app</span> <span class="time">08:00</span></p>
+        <p><strong>Purchasely, last 7 days</strong></p>
+        <dl class="kpis"><div><dt>MRR</dt><dd>1,250</dd></div><div><dt>Active subscriptions</dt><dd>310</dd></div><div><dt>Paywall unique viewers</dt><dd>4,210</dd></div><div><dt>Conversions</dt><dd>87</dd></div></dl>
+      </div>
+    </div>
+  </div>
+</figure>
   <div class="need"><h3>You need</h3><ul><li>The secret <code>SLACK_WEBHOOK_URL</code>: an incoming webhook of your Slack workspace (Slack app settings, Incoming Webhooks).</li></ul></div>
   <pre class="code"><code># .github/workflows/purchasely-slack.yml
 name: Purchasely KPIs to Slack
@@ -204,16 +265,26 @@ jobs:
             | jq '{text: ("*Purchasely, last 7 days*\n"
                 + ([.panels[] | "\(.name): \(.value)"] | join("\n")))}' \
             | curl -fsS -H 'Content-Type: application/json' \
-                --data @- "$SLACK_WEBHOOK_URL"</code></pre><p class="soft">The message looks like this:</p><pre class="code"><code>*Purchasely, last 7 days*
-MRR: 1250
-Active subscriptions: 310
-Paywall unique viewers: 4210
-Conversions: 87</code></pre>
+                --data @- "$SLACK_WEBHOOK_URL"</code></pre>
   <ul class="notes"><li>MRR is today's value, in the dashboard currency of the app. Viewers and conversions are the total of the 7 days.</li><li>Change <code>--days</code> for another range, from 2 to 730 days.</li></ul>
 </article>
 <article class="recipe" id="sheets">
   <h2>Weekly key metrics in Google Sheets</h2>
   <p class="lead">Every Monday, the sheet gets one row: the first day, the last day, MRR, active subscriptions, paywall unique viewers and conversions.</p>
+  <figure class="ill green" role="img" aria-label="Example: every Monday, the Purchasely CLI adds one row with the key metrics of the last 7 days to a Google Sheet.">
+  <ol class="flow" aria-hidden="true"><li>Every Monday</li><li class="cli">purchasely</li><li>Google Sheets</li></ol>
+  <div class="mock sheet" aria-hidden="true">
+    <table>
+      <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+      <tbody>
+        <tr><th>1</th><td>From</td><td>To</td><td>MRR</td><td>Active subs</td><td>Viewers</td><td>Conversions</td></tr>
+        <tr><th>2</th><td>10-05</td><td>10-11</td><td>1,180</td><td>302</td><td>3,980</td><td>79</td></tr>
+        <tr><th>3</th><td>10-12</td><td>10-18</td><td>1,215</td><td>305</td><td>4,105</td><td>83</td></tr>
+        <tr class="new"><th>4</th><td>10-19</td><td>10-25</td><td>1,250</td><td>310</td><td>4,210</td><td>87</td></tr>
+      </tbody>
+    </table>
+  </div>
+</figure>
   <div class="need"><h3>You need</h3><ul><li>A Google Sheet with this header row: From, To, MRR, Active subscriptions, Paywall unique viewers, Conversions.</li><li>In the sheet, open Extensions, then Apps Script, and paste the script below. Then click Deploy, New deployment, type Web app. Set Execute as to Me and Who has access to Anyone. Copy the web app URL.</li><li>The secret <code>SHEET_WEBHOOK_URL</code>: the web app URL. Anyone with this URL can add rows, so keep it secret.</li></ul></div>
   <pre class="code"><code>function doPost(e) {
   const row = JSON.parse(e.postData.contents);
@@ -251,6 +322,18 @@ jobs:
 <article class="recipe" id="release-check">
   <h2>Check the placements before a release</h2>
   <p class="lead">The build fails when a placement that the new app version needs does not exist in Purchasely. You find the error before your users do.</p>
+  <figure class="ill coral" role="img" aria-label="Example: on a pull request, the release check passes for the onboarding placement and fails because the settings_paywall placement is missing in Purchasely.">
+  <ol class="flow" aria-hidden="true"><li>Each pull request</li><li class="cli">purchasely</li><li>GitHub checks</li></ol>
+  <div class="mock checks" aria-hidden="true">
+    <p class="title">Purchasely release check</p>
+    <ul>
+      <li class="ok"><span>Install the Purchasely CLI</span></li>
+      <li class="ok"><span>Placement <code>onboarding</code> found</span></li>
+      <li class="ko"><span>Placement <code>settings_paywall</code> is missing in Purchasely</span></li>
+    </ul>
+    <p class="result">The check failed. The merge waits for the fix.</p>
+  </div>
+</figure>
   <div class="need"><h3>You need</h3><ul><li>The list of the placement ids that your code uses, in <code>REQUIRED</code>, separated by spaces.</li></ul></div>
   <pre class="code"><code># .github/workflows/purchasely-check.yml
 name: Purchasely release check
@@ -286,6 +369,17 @@ jobs:
 <article class="recipe" id="backup">
   <h2>A history of your configuration in git</h2>
   <p class="lead">Every night, the workflow saves your placements, audiences, campaigns, A/B tests, flows and products as JSON files, and commits the changes. Each change in the Console becomes a diff that you can read and review.</p>
+  <figure class="ill cream" role="img" aria-label="Example: the nightly backup commits a change of a placement name, shown as a git diff.">
+  <ol class="flow" aria-hidden="true"><li>Every night</li><li class="cli">purchasely</li><li>git history</li></ol>
+  <div class="mock diff" aria-hidden="true">
+    <p class="commit">Purchasely configuration of 2026-10-26</p>
+    <p class="file">purchasely/placements.json</p>
+<pre>   "vendor_id": "onboarding",
+<span class="del">-  "name": "Onboarding",</span>
+<span class="add">+  "name": "Onboarding, spring offer",</span>
+   "audiences": [</pre>
+  </div>
+</figure>
   <div class="need"><h3>You need</h3><ul><li>A git repository for the backup. The workflow commits to it, so it needs <code>contents: write</code>.</li></ul></div>
   <pre class="code"><code># .github/workflows/purchasely-backup.yml
 name: Purchasely configuration backup

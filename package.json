@@ -1,6 +1,6 @@
 {
   "name": "@purchasely/cli",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "description": "Purchasely command line tool, generated from the Management OpenAPI spec",

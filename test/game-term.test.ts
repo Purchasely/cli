@@ -6,7 +6,7 @@ import minesweeper from "../src/games/minesweeper.js";
 import pong from "../src/games/pong.js";
 import snake from "../src/games/snake.js";
 import tetris from "../src/games/tetris.js";
-import { play, type Game, type GameFactory } from "../src/games/term.js";
+import { menu, play, type Game, type GameFactory } from "../src/games/term.js";
 
 /** Fake streams: nothing touches the real terminal. */
 function rig(cols = 80, rows = 24) {
@@ -101,4 +101,45 @@ describe("play on a small terminal", () => {
       await expect(play(make, true, tight.io)).rejects.toThrow(/too small/);
     });
   }
+});
+
+describe("menu search", () => {
+  const names = ["Acme Fitness  app_1  Acme", "Blue Radio  app_2  Blue", "Acme Radio  app_3  Acme"];
+
+  it("keeps the names that contain the typed letters, in any case, and returns the place in the full list", () => {
+    const g = menu(names)(80, 24);
+    for (const k of "RADIO") g.key(k);
+    const plain = g.draw().join("\n").replace(/\x1b\[[\d;]+m/g, "");
+    expect(plain).toContain("Search: RADIO_");
+    expect(plain).not.toContain("Acme Fitness");
+    g.key("down");
+    g.key("return");
+    expect(g.index).toBe(2);
+    expect(g.over).toBe(names[2]);
+  });
+
+  it("backspace widens the list again, no match selects nothing", () => {
+    const g = menu(names)(80, 24);
+    for (const k of "zz") g.key(k);
+    expect(g.draw().join("\n")).toContain("No match.");
+    g.key("return");
+    expect(g.index).toBeUndefined();
+    g.key("backspace");
+    g.key("backspace");
+    g.key("return");
+    expect(g.index).toBe(0);
+  });
+
+  it("in play, a typed q and a space go to the search, Esc quits", async () => {
+    const r = rig();
+    const typed: string[] = [];
+    const done = play(idle({ typing: true, key: (k) => void typed.push(k) }), false, r.io);
+    r.stdin.emit("keypress", "q", { name: "q" });
+    r.stdin.emit("keypress", " ", { name: "space" });
+    r.stdin.emit("keypress", "Q", { name: "q", shift: true });
+    expect(typed).toEqual(["q", " ", "Q"]);
+    r.key("escape");
+    expect(await done).toBe("Bye.");
+    restored(r);
+  });
 });

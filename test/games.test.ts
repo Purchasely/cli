@@ -48,7 +48,7 @@ describe("games", () => {
     expect(plain).toContain("    pong");
     expect(plain.slice(1, 6).join("\n")).toContain("███  █  █ ███");
     g.key("down");
-    g.key("s");
+    g.key("down");
     expect(g.over).toBeUndefined();
     g.key("return");
     expect(g.over).toBe("pong");

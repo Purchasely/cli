@@ -12,6 +12,8 @@ export interface Game {
   draw(): string[];
   /** The end message, with the score. When it is set, `play` stops the game and ends at the next key. */
   over?: string;
+  /** The game takes text: `key` gets a printable character as typed (" ", "Q", "_"), and only Esc or Ctrl+C quits. */
+  typing?: boolean;
 }
 
 /** Makes a game for a terminal of `cols` x `rows` characters. */
@@ -56,31 +58,41 @@ export const banner = (): string[] =>
   [0, 1, 2, 3, 4].map((r) => [..."PURCHASELY"].map((c, i) => fg(GRADIENT[i], FONT[c][r])).join(" "));
 
 /**
- * A list of names: the arrows choose, Enter or space sets `over` to the chosen name and `index` to its place. Run it with `play(menu(names), false)`.
+ * A list of names: the typed letters keep the names that contain them (any case), the arrows choose, Enter sets `over` to the
+ * chosen name and `index` to its place in `names`. Run it with `play(menu(names), false)`.
  * A list longer than the screen scrolls and keeps the choice in view.
  */
 export const menu =
   (names: string[], { title = "Arcade", verb = "play" } = {}): ((cols: number, rows: number) => Game & { index?: number }) =>
   (cols, rows) => {
     let i = 0;
+    let query = "";
+    // The places in `names` of the names that contain the query.
+    let shown = names.map((_, j) => j);
+    const search = (q: string) => {
+      query = q;
+      shown = names.flatMap((n, j) => (n.toLowerCase().includes(q.toLowerCase()) ? [j] : []));
+      i = 0;
+    };
     const g: Game & { index?: number } = {
       tick: 0,
+      typing: true,
       key(k) {
-        if (k === "up" || k === "w") i = (i + names.length - 1) % names.length;
-        else if (k === "down" || k === "s") i = (i + 1) % names.length;
-        else if (k === "return" || k === "enter" || k === "space") [g.over, g.index] = [names[i], i];
+        const n = shown.length;
+        if (k === "up") i = n ? (i + n - 1) % n : 0;
+        else if (k === "down") i = n ? (i + 1) % n : 0;
+        else if (k === "return" || k === "enter") {
+          if (n) [g.over, g.index] = [names[shown[i]], shown[i]];
+        } else if (k === "backspace") search(query.slice(0, -1));
+        else if (k.length === 1) search(query + k);
       },
       step() {},
       draw: () => {
-        const head = ["", ...(cols >= 51 && rows >= 16 ? banner().map((l) => ` ${l}`) : [fg(BRAND.lightGreen, " PURCHASELY")]), fg(BRAND.sage, ` ${title}`), ""];
+        const head = ["", ...(cols >= 51 && rows >= 16 ? banner().map((l) => ` ${l}`) : [fg(BRAND.lightGreen, " PURCHASELY")]), fg(BRAND.sage, ` ${title}`), ` ${fg(BRAND.sage, "Search:")} ${query}_`, ""];
         const room = Math.max(3, rows - head.length - 2);
-        const top = Math.min(Math.max(0, i - (room >> 1)), Math.max(0, names.length - room));
-        return [
-          ...head,
-          ...names.slice(top, top + room).map((n, j) => (top + j === i ? ` ${bg(BRAND.lavender, fg(BRAND.darkGreen, ` P ${n} `))}` : `    ${n}`)),
-          "",
-          fg(BRAND.sage, ` ↑↓ choose   Enter ${verb}   q quit`),
-        ];
+        const top = Math.min(Math.max(0, i - (room >> 1)), Math.max(0, shown.length - room));
+        const lines = shown.slice(top, top + room).map((at, j) => (top + j === i ? ` ${bg(BRAND.lavender, fg(BRAND.darkGreen, ` P ${names[at]} `))}` : `    ${names[at]}`));
+        return [...head, ...(lines.length ? lines : ["    No match."]), "", fg(BRAND.sage, ` ↑↓ choose   Enter ${verb}   type to search   Esc quit`)];
       },
     };
     return g;
@@ -148,8 +160,10 @@ export function play(make: GameFactory, wait = true, io: Partial<Io> = {}): Prom
       }
     };
     const onKey = (s: string | undefined, k: Key | undefined) => {
-      if (g.over || (k?.ctrl && k.name === "c") || k?.name === "q" || k?.name === "escape") return end();
-      const name = k?.name ?? s;
+      // In a game that takes text, a printable character goes to it as typed, so q is a letter there: Esc quits.
+      const typed = g.typing && s?.length === 1 && !/[\x00-\x1f\x7f-\x9f]/.test(s) && !k?.ctrl && !k?.meta;
+      if (g.over || (k?.ctrl && k.name === "c") || (k?.name === "q" && !typed) || k?.name === "escape") return end();
+      const name = typed ? s : (k?.name ?? s);
       if (name) guard(() => g.key(name));
     };
     emitKeypressEvents(stdin as NodeJS.ReadStream);

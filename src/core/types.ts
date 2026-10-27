@@ -49,6 +49,8 @@ export interface Extension {
   modules: Register[];
   /** The surface (credential and rate) of the top-level commands that the modules add. */
   surface: string;
+  /** A top-level command whose surface is not `surface`, by its name. */
+  surfaces?: Record<string, string>;
   /** Send `identity_email` of the config in the User-Agent, and ask for it at `auth login`. */
   identity: boolean;
   /** The heading of the added commands in `reference`, and the line under it. */

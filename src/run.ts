@@ -99,7 +99,7 @@ export function build(rt: Runtime): Command {
     if (g.output && g.output !== "json" && g.output !== "table") throw new CliError(EXIT.USAGE, "USAGE", ["--output must be json or table."]);
     await autoUpdate(rt, action);
     // A built-in command uses the Management key. A command added by an extension module uses the surface of the extension.
-    const surface = rt.d.ext && rt.extTop.has(top) ? rt.d.ext.surface : "management";
+    const surface = rt.d.ext && rt.extTop.has(top) ? (rt.d.ext.surfaces?.[top.name()] ?? rt.d.ext.surface) : "management";
     const cred = await rt.credential(env, surface);
     rt.d.stderr(`${rt.d.name} env=${env} surface=${surface} identity=${rt.d.ext?.identity ? rt.cfg.identity_email ?? "-" : "-"} key=${credentialDisplay(surface, cred?.key)}${demo(rt.d) ? " demo=on (sample data, not real)" : ""}\n`);
   });

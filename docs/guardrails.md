@@ -26,7 +26,7 @@ The Management API allows 60 requests per minute per key and 10 writes per minut
 `PURCHASELY_DEMO=1` turns on demo mode, for a first test by a person or an agent that has no key yet. `purchasely demo` prints how to start.
 
 - Every read answers from the built-in sample data of one fictional app, `app_demo`: applications, placements, screens, products, plans (`--product-id prd_demo_premium`), campaigns and `dashboard summary`. Another read exits 6 with a message that demo mode has no data for it.
-- The CLI uses no key, even when one is set, and sends no request: no limiter state, no usage line, no update check.
+- The CLI uses no key, even when one is set, and sends no request: no limiter state, no usage line, no background update check. `update` and `ai` still use the network when you run them. `--fields` does not filter the sample data.
 - A write exits 10 and sends nothing. `--dry-run` and `--plan` still work.
 - The header line ends with `demo=on (sample data, not real)`. `doctor` reports demo mode instead of a missing key.
 

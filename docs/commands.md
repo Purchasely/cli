@@ -98,17 +98,14 @@ Options:
   -h, --help                                 display help for command
 
 Commands:
-  list [options]                             List AB tests for an application (excludes
-                                             campaign-owned draft AB tests)
-  create [options]                           Create an AB test (draft) on an application
-  get [options]                              Show an AB test
+  list [options]                             List AB tests
+  create [options]                           Create an AB test
+  get [options]                              Get an AB test
   update [options]                           Update an AB test
-  delete [options]                           Permanently delete a DRAFT AB test
-  ab-test-variants-detailed-stats [options]  Per-dimension conversion + revenue stats for the
-                                             variants of one AB test
-  start [options]                            Start a DRAFT AB test, wires it into its placements
-  terminate [options]                        Terminate a RUNNING AB test, unwires it from its
-                                             placements
+  delete [options]                           Delete a draft AB test
+  ab-test-variants-detailed-stats [options]  Get detailed stats for an AB test variant
+  start [options]                            Start an AB test
+  terminate [options]                        Terminate an AB test
   help [command]                             display help for command
 ```
 
@@ -117,7 +114,7 @@ Commands:
 ```text
 Usage: purchasely ab-tests ab-test-variants-detailed-stats [options]
 
-Per-dimension conversion + revenue stats for the variants of one AB test
+Get detailed stats for an AB test variant
 
 Options:
   --output <format>             json (default) or table
@@ -159,7 +156,7 @@ Example:
 ```text
 Usage: purchasely ab-tests create [options]
 
-Create an AB test (draft) on an application
+Create an AB test
 
 Options:
   --output <format>  json (default) or table
@@ -205,7 +202,7 @@ Example:
 ```text
 Usage: purchasely ab-tests delete [options]
 
-Permanently delete a DRAFT AB test
+Delete a draft AB test
 
 Options:
   --output <format>        json (default) or table
@@ -247,7 +244,7 @@ Example:
 ```text
 Usage: purchasely ab-tests get [options]
 
-Show an AB test
+Get an AB test
 
 Options:
   --output <format>  json (default) or table
@@ -280,7 +277,7 @@ Example:
 ```text
 Usage: purchasely ab-tests list [options]
 
-List AB tests for an application (excludes campaign-owned draft AB tests)
+List AB tests
 
 Options:
   --output <format>   json (default) or table
@@ -316,7 +313,7 @@ Example:
 ```text
 Usage: purchasely ab-tests start [options]
 
-Start a DRAFT AB test, wires it into its placements
+Start an AB test
 
 Options:
   --output <format>  json (default) or table
@@ -353,7 +350,7 @@ Example:
 ```text
 Usage: purchasely ab-tests terminate [options]
 
-Terminate a RUNNING AB test, unwires it from its placements
+Terminate an AB test
 
 Options:
   --output <format>  json (default) or table
@@ -411,7 +408,11 @@ Options:
                      `apply <file>`
   -h, --help         display help for command
 
-Update an AB test. Most fields apply only while DRAFT (see individual field descriptions). category_tag_ids/placement_ids, when provided, fully replace the existing set (send the complete list, not a diff); omit either to leave the existing set untouched. ab_test_variants, when provided, is a full-resend of every variant.
+Update an AB test.
+
+- Most fields apply only while the AB test is DRAFT (see individual field descriptions).
+- `category_tag_ids` and `placement_ids`, when provided, fully replace the existing set: send the complete list, not a diff. Omit either to leave the existing set untouched.
+- `ab_test_variants`, when provided, is a full resend of every variant.
 
 Required scope: experimentation.ab_tests:edit
 Request:
@@ -558,8 +559,8 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List answer options for a survey
-  create [options]  Add a new answer option to an existing survey
+  list [options]    List survey answers
+  create [options]  Add an answer to a survey
   help [command]    display help for command
 ```
 
@@ -568,7 +569,7 @@ Commands:
 ```text
 Usage: purchasely answers create [options]
 
-Add a new answer option to an existing survey
+Add an answer to a survey
 
 Options:
   --output <format>  json (default) or table
@@ -609,7 +610,7 @@ Example:
 ```text
 Usage: purchasely answers list [options]
 
-List answer options for a survey
+List survey answers
 
 Options:
   --output <format>    json (default) or table
@@ -695,10 +696,10 @@ Options:
   -h, --help                       display help for command
 
 Commands:
-  list [options]                   List your applications
-  get [options]                    Show an application
-  update [options]                 Update an application's settings and/or platform credentials
-  colors-palette [options]         Show an application's colors palette
+  list [options]                   List applications
+  get [options]                    Get an application
+  update [options]                 Update an application
+  colors-palette [options]         Get an application's colors palette
   update-colors-palette [options]  Replace an application's colors palette
   help [command]                   display help for command
 ```
@@ -708,7 +709,7 @@ Commands:
 ```text
 Usage: purchasely applications colors-palette [options]
 
-Show an application's colors palette
+Get an application's colors palette
 
 Options:
   --output <format>  json (default) or table
@@ -740,7 +741,7 @@ Example:
 ```text
 Usage: purchasely applications get [options]
 
-Show an application
+Get an application
 
 Options:
   --output <format>  json (default) or table
@@ -772,7 +773,7 @@ Example:
 ```text
 Usage: purchasely applications list [options]
 
-List your applications
+List applications
 
 Options:
   --output <format>   json (default) or table
@@ -806,7 +807,7 @@ Example:
 ```text
 Usage: purchasely applications update [options]
 
-Update an application's settings and/or platform credentials
+Update an application
 
 Options:
   --output <format>  json (default) or table
@@ -939,11 +940,10 @@ Options:
   -h, --help         display help for command
 
 Commands:
-  list [options]     List audiences for an application
-  create [options]   Create a targeting audience on an application
-  update [options]   Update an audience's name, vendor_id, targeting definition, and/or category
-                     tags
-  discard [options]  Discard (soft-delete) an audience
+  list [options]     List audiences
+  create [options]   Create an audience
+  update [options]   Update an audience
+  discard [options]  Discard an audience
   help [command]     display help for command
 ```
 
@@ -952,7 +952,7 @@ Commands:
 ```text
 Usage: purchasely audiences create [options]
 
-Create a targeting audience on an application
+Create an audience
 
 Options:
   --output <format>  json (default) or table
@@ -995,7 +995,7 @@ Example:
 ```text
 Usage: purchasely audiences discard [options]
 
-Discard (soft-delete) an audience
+Discard an audience
 
 Options:
   --output <format>        json (default) or table
@@ -1042,7 +1042,7 @@ Example:
 ```text
 Usage: purchasely audiences list [options]
 
-List audiences for an application
+List audiences
 
 Options:
   --output <format>   json (default) or table
@@ -1077,7 +1077,7 @@ Example:
 ```text
 Usage: purchasely audiences update [options]
 
-Update an audience's name, vendor_id, targeting definition, and/or category tags
+Update an audience
 
 Options:
   --output <format>  json (default) or table
@@ -1216,13 +1216,13 @@ Options:
   -h, --help             display help for command
 
 Commands:
-  list [options]         List campaigns for an application
-  create [options]       Create a campaign on an application
-  index-stats [options]  Conversion stats for campaigns matching the given filters
-  positions [options]    Bulk-reorder running campaigns by public_id
-  get [options]          Show a campaign
+  list [options]         List campaigns
+  create [options]       Create a campaign
+  index-stats [options]  Get campaign conversion stats
+  positions [options]    Reorder running campaigns
+  get [options]          Get a campaign
   update [options]       Update a campaign
-  delete [options]       Discard (soft-delete) a campaign
+  delete [options]       Discard a campaign
   help [command]         display help for command
 ```
 
@@ -1231,7 +1231,7 @@ Commands:
 ```text
 Usage: purchasely campaigns create [options]
 
-Create a campaign on an application
+Create a campaign
 
 Options:
   --output <format>  json (default) or table
@@ -1278,7 +1278,7 @@ Example:
 ```text
 Usage: purchasely campaigns delete [options]
 
-Discard (soft-delete) a campaign
+Discard a campaign
 
 Options:
   --output <format>        json (default) or table
@@ -1320,7 +1320,7 @@ Example:
 ```text
 Usage: purchasely campaigns get [options]
 
-Show a campaign
+Get a campaign
 
 Options:
   --output <format>  json (default) or table
@@ -1353,7 +1353,7 @@ Example:
 ```text
 Usage: purchasely campaigns index-stats [options]
 
-Conversion stats for campaigns matching the given filters
+Get campaign conversion stats
 
 Options:
   --output <format>         json (default) or table
@@ -1391,7 +1391,7 @@ Example:
 ```text
 Usage: purchasely campaigns list [options]
 
-List campaigns for an application
+List campaigns
 
 Options:
   --output <format>         json (default) or table
@@ -1432,7 +1432,7 @@ Example:
 ```text
 Usage: purchasely campaigns positions [options]
 
-Bulk-reorder running campaigns by public_id
+Reorder running campaigns
 
 Options:
   --output <format>  json (default) or table
@@ -1493,7 +1493,13 @@ Options:
                      `apply <file>`
   -h, --help         display help for command
 
-Update a campaign. Resends the full campaign object, category_tag_ids/placement_ids, if provided, fully replace the existing set; omitted config/tags/placements are preserved. Running campaigns cannot change vendor_id, content or audience, and need complete timing. Deactivation must be requested separately from other field changes; running campaigns cannot return to draft.
+Update a campaign. The request resends the full campaign object.
+
+- `category_tag_ids` and `placement_ids`, if provided, fully replace the existing set.
+- Omitted config, tags and placements are preserved.
+- A running campaign cannot change its `vendor_id`, content or audience, and needs complete timing.
+- A running campaign cannot return to draft.
+- Request a deactivation separately from other field changes.
 
 Required scope: targeting.campaigns:edit
 Request:
@@ -1530,10 +1536,10 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List category tags for an application
-  create [options]  Create a category tag on an application
-  get [options]     Show a single category tag for an application
-  delete [options]  Permanently delete a category tag from an application
+  list [options]    List category tags
+  create [options]  Create a category tag
+  get [options]     Get a category tag
+  delete [options]  Delete a category tag
   help [command]    display help for command
 ```
 
@@ -1542,7 +1548,7 @@ Commands:
 ```text
 Usage: purchasely category-tags create [options]
 
-Create a category tag on an application
+Create a category tag
 
 Options:
   --output <format>  json (default) or table
@@ -1583,7 +1589,7 @@ Example:
 ```text
 Usage: purchasely category-tags delete [options]
 
-Permanently delete a category tag from an application
+Delete a category tag
 
 Options:
   --output <format>        json (default) or table
@@ -1625,7 +1631,7 @@ Example:
 ```text
 Usage: purchasely category-tags get [options]
 
-Show a single category tag for an application
+Get a category tag
 
 Options:
   --output <format>  json (default) or table
@@ -1658,7 +1664,7 @@ Example:
 ```text
 Usage: purchasely category-tags list [options]
 
-List category tags for an application
+List category tags
 
 Options:
   --output <format>   json (default) or table
@@ -1704,9 +1710,8 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  list [options]               List active, actionable client integration errors for an application
-                               (or across every application you can access)
-  update-collection [options]  Bulk-update client errors (mark read/unread, or resolved)
+  list [options]               List client errors
+  update-collection [options]  Update client errors in bulk
   help [command]               display help for command
 ```
 
@@ -1715,8 +1720,7 @@ Commands:
 ```text
 Usage: purchasely client-errors list [options]
 
-List active, actionable client integration errors for an application (or across every application
-you can access)
+List client errors
 
 Options:
   --output <format>   json (default) or table
@@ -1751,7 +1755,7 @@ Example:
 ```text
 Usage: purchasely client-errors update-collection [options]
 
-Bulk-update client errors (mark read/unread, or resolved)
+Update client errors in bulk
 
 Options:
   --output <format>  json (default) or table
@@ -1825,12 +1829,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List the custom event properties of an application
-  create [options]  Declare a custom event property on an application
-  get [options]     Show a single custom event property of an application
-  update [options]  Update a custom event property (partial, omitted fields are left untouched)
-  delete [options]  Permanently delete a custom event property from an application (and so from
-                    every custom event)
+  list [options]    List custom event properties
+  create [options]  Create a custom event property
+  get [options]     Get a custom event property
+  update [options]  Update a custom event property
+  delete [options]  Delete a custom event property
   help [command]    display help for command
 ```
 
@@ -1839,7 +1842,7 @@ Commands:
 ```text
 Usage: purchasely custom-event-properties create [options]
 
-Declare a custom event property on an application
+Create a custom event property
 
 Options:
   --output <format>  json (default) or table
@@ -1881,7 +1884,7 @@ Example:
 ```text
 Usage: purchasely custom-event-properties delete [options]
 
-Permanently delete a custom event property from an application (and so from every custom event)
+Delete a custom event property
 
 Options:
   --output <format>        json (default) or table
@@ -1923,7 +1926,7 @@ Example:
 ```text
 Usage: purchasely custom-event-properties get [options]
 
-Show a single custom event property of an application
+Get a custom event property
 
 Options:
   --output <format>  json (default) or table
@@ -1956,7 +1959,7 @@ Example:
 ```text
 Usage: purchasely custom-event-properties list [options]
 
-List the custom event properties of an application
+List custom event properties
 
 Options:
   --output <format>   json (default) or table
@@ -1992,7 +1995,7 @@ Example:
 ```text
 Usage: purchasely custom-event-properties update [options]
 
-Update a custom event property (partial, omitted fields are left untouched)
+Update a custom event property
 
 Options:
   --output <format>  json (default) or table
@@ -2045,11 +2048,10 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List custom events (event-schema definitions) for an application
-  create [options]  Create a custom event (event-schema definition) on an application
-  get [options]     Show a single custom event for an application
-  update [options]  Update a custom event (partial, omitted fields are left untouched, except
-                    category_tag_ids, which fully replaces the existing set when sent)
+  list [options]    List custom events
+  create [options]  Create a custom event
+  get [options]     Get a custom event
+  update [options]  Update a custom event
   help [command]    display help for command
 ```
 
@@ -2058,7 +2060,7 @@ Commands:
 ```text
 Usage: purchasely custom-events create [options]
 
-Create a custom event (event-schema definition) on an application
+Create a custom event
 
 Options:
   --output <format>  json (default) or table
@@ -2104,7 +2106,7 @@ Example:
 ```text
 Usage: purchasely custom-events get [options]
 
-Show a single custom event for an application
+Get a custom event
 
 Options:
   --output <format>  json (default) or table
@@ -2137,7 +2139,7 @@ Example:
 ```text
 Usage: purchasely custom-events list [options]
 
-List custom events (event-schema definitions) for an application
+List custom events
 
 Options:
   --output <format>   json (default) or table
@@ -2173,8 +2175,7 @@ Example:
 ```text
 Usage: purchasely custom-events update [options]
 
-Update a custom event (partial, omitted fields are left untouched, except category_tag_ids, which
-fully replaces the existing set when sent)
+Update a custom event
 
 Options:
   --output <format>  json (default) or table
@@ -2231,11 +2232,10 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List custom properties (user-attribute schema definitions) for an application,
-                    including global builtin properties available to every app
-  create [options]  Create a custom property (user-attribute schema definition) on an application
-  get [options]     Show a single custom property for an application, or a global builtin property
-  update [options]  Update a custom property (partial, omitted fields are left untouched)
+  list [options]    List custom properties
+  create [options]  Create a custom property
+  get [options]     Get a custom property
+  update [options]  Update a custom property
   help [command]    display help for command
 ```
 
@@ -2244,7 +2244,7 @@ Commands:
 ```text
 Usage: purchasely custom-properties create [options]
 
-Create a custom property (user-attribute schema definition) on an application
+Create a custom property
 
 Options:
   --output <format>  json (default) or table
@@ -2287,7 +2287,7 @@ Example:
 ```text
 Usage: purchasely custom-properties get [options]
 
-Show a single custom property for an application, or a global builtin property
+Get a custom property
 
 Options:
   --output <format>  json (default) or table
@@ -2320,8 +2320,7 @@ Example:
 ```text
 Usage: purchasely custom-properties list [options]
 
-List custom properties (user-attribute schema definitions) for an application, including global
-builtin properties available to every app
+List custom properties
 
 Options:
   --output <format>   json (default) or table
@@ -2356,7 +2355,7 @@ Example:
 ```text
 Usage: purchasely custom-properties update [options]
 
-Update a custom property (partial, omitted fields are left untouched)
+Update a custom property
 
 Options:
   --output <format>  json (default) or table
@@ -2421,62 +2420,29 @@ Options:
 Commands:
   summary [options]                      Analytics dashboard of an app: MRR, subscriptions, viewers,
                                          conversions with trend charts
-  composition-live [options]             Subscription composition (by platform/plan/product/state)
-                                         for an application, or across every application you can
-                                         access
-  events [options]                       Event counts per day for an application, or across every
-                                         application you can access
-  flow-paths [options]                   Flow-paths funnel for a single application
-  funnel [options]                       Conversion funnel (views -> purchases) for an application,
-                                         or across every application you can access
-  header-live [options]                  Live header cards (active-subscriptions statuses, live
-                                         users, inactive-subscriptions causes) for an application,
-                                         or across every application you can access
-  header-today [options]                 Today's header card for an application, or across every
-                                         application you can access
-  mrr-evolution-live [options]           Live MRR evolution (by day and by month) for an
-                                         application, or across every application you can access
-  one-time-purchases-revenues [options]  Daily one-time-purchase revenue by country/plan, for an
-                                         application or across every application you can access
-  one-time-purchases-stats [options]     Live one-time-purchase stats (by store/plan, refunds) for
-                                         an application, or across every application you can access
-  subscriptions-revenues [options]       Daily subscription revenue by country/plan, for an
-                                         application or across every application you can access
-  subscriptions-stats [options]          Live subscriptions revenue/churn/refund stats for an
-                                         application, or across every application you can access
-  trials-live [options]                  Trial/intro-offer cohorts and balances for an application,
-                                         or across every application you can access
-  conversion [options]                   Paywall conversion: paywall views and the purchases they
-                                         led to, from 2024-01-01 onwards
-  mau-reports [options]                  Monthly active users: app starts and distinct users who
-                                         started the app, per calendar month, over the rolling 12
-                                         months ending today (always monthly; takes no date_range,
-                                         periodicity or filter)
-  paid-subscription-movements [options]  Paid subscription movements: for each period, how many
-                                         PAYING subscriptions (full price or paid offer) entered the
-                                         paid base (total_activations_count: direct purchases,
-                                         trial/intro/promo conversions, reactivations) and how many
-                                         left it (total_churns_count: voluntary churn,
-                                         involuntary/billing-failure churn, refunds), plus
-                                         net_movement_count = total_activations_count -
-                                         total_churns_count
+  composition-live [options]             Subscription composition
+  events [options]                       Event counts by period
+  flow-paths [options]                   Flow paths funnel
+  funnel [options]                       Conversion funnel
+  header-live [options]                  Live subscription and user status
+  header-today [options]                 Today's key figures
+  mrr-evolution-live [options]           MRR evolution
+  one-time-purchases-revenues [options]  One-time purchase revenue by period
+  one-time-purchases-stats [options]     One-time purchase sales and refunds
+  subscriptions-revenues [options]       Subscription revenue by period
+  subscriptions-stats [options]          Subscription counts, churn and refunds
+  trials-live [options]                  Trials and intro offers
+  conversion [options]                   Paywall conversion
+  mau-reports [options]                  Monthly active users
+  paid-subscription-movements [options]  Paid subscription movements
   paid-subscription-retention [options]  Paid-subscription retention cohort matrix for a single
                                          application
-  paywall-latency [options]              Paywall-serving latency percentiles (p50/p95/p99) for an
-                                         application, or aggregated across every application you can
-                                         access
-  sdk-evolution [options]                SDK-version adoption series over time for a single
-                                         application
-  sdk-versions [options]                 Current SDK-version breakdown for a single application
-  subscription-activations [options]     Subscription activations: how many subscriptions started in
-                                         each period
-  subscription-evolution [options]       Active subscription base: how many subscriptions were
-                                         active in each period, i.e
-  subscription-reactivations [options]   Subscription reactivations: how many subscriptions came
-                                         back to life in each period after having lapsed,
-                                         re-subscribed after expiry/cancellation, recovered from a
-                                         billing retry, or unpaused (one count per subscription per
-                                         day; family-shared subscriptions excluded)
+  paywall-latency [options]              Paywall latency
+  sdk-evolution [options]                SDK version adoption over time
+  sdk-versions [options]                 SDK versions in use
+  subscription-activations [options]     Subscription activations
+  subscription-evolution [options]       Active subscription base
+  subscription-reactivations [options]   Subscription reactivations
   help [command]                         display help for command
 
 Without a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days.
@@ -2492,8 +2458,7 @@ Example:
 ```text
 Usage: purchasely dashboard composition-live [options]
 
-Subscription composition (by platform/plan/product/state) for an application, or across every
-application you can access
+Subscription composition
 
 Options:
   --output <format>           json (default) or table
@@ -2556,7 +2521,7 @@ Example:
 ```text
 Usage: purchasely dashboard conversion [options]
 
-Paywall conversion: paywall views and the purchases they led to, from 2024-01-01 onwards
+Paywall conversion
 
 Options:
   --output <format>                    json (default) or table
@@ -2620,7 +2585,27 @@ Options:
                                        string] comma separated or repeated
   -h, --help                           display help for command
 
-Paywall conversion: paywall views and the purchases they led to, from 2024-01-01 onwards. Returns one object with five keys: primary_metric_by_period, [{period, group_by, group_by_public_id, group_by_name, presentation_views_count, unique_viewers_count}] (views and distinct viewers per period, split by primary_metric_group_by); secondary_metric_by_period, [{period, group_by…, purchase_tapped_count, conversions_to_offer_count, conversions_to_regular_count, total_conversions_count, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio, click_through_rate_purchase_tapped_ratio}] (counts split by secondary_metric_group_by; each ratio divides the group's count by the unique viewers of the whole period, not of the group); primary_metric_table and secondary_metric_table, the same counts totalled over the whole range per dimension value, with *_by_presentation_views_ratio and *_by_unique_viewers_ratio; kpi, [{presentation_views_count, unique_viewers_count, paywalls_viewed_per_user_average, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio}] for the whole range. conversions_to_offer = free-trial/intro/promotional-offer starts; conversions_to_regular = those offers converting to paid plus direct full-price purchases; total_conversions = offer starts plus direct purchases. Units: counts, and ratios of a count to a viewer count (a viewer can start several subscriptions, so a ratio can exceed 1; not a percentage). date_range is mandatory here. Recommended periodicity: WEEK or MONTH. Single application only.
+Paywall conversion: paywall views and the purchases they led to, from 2024-01-01 onwards.
+
+Returns one object with five keys:
+
+- `primary_metric_by_period`: `[{period, group_by, group_by_public_id, group_by_name, presentation_views_count, unique_viewers_count}]`. Views and distinct viewers per period, split by `primary_metric_group_by`.
+- `secondary_metric_by_period`: `[{period, group_by, group_by_public_id, group_by_name, purchase_tapped_count, conversions_to_offer_count, conversions_to_regular_count, total_conversions_count, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio, click_through_rate_purchase_tapped_ratio}]`. Counts split by `secondary_metric_group_by`. Each ratio divides the group's count by the unique viewers of the whole period, not of the group.
+- `primary_metric_table` and `secondary_metric_table`: the same counts totalled over the whole range per dimension value, with `*_by_presentation_views_ratio` and `*_by_unique_viewers_ratio`.
+- `kpi`: `[{presentation_views_count, unique_viewers_count, paywalls_viewed_per_user_average, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio}]` for the whole range.
+
+Definitions:
+
+- `conversions_to_offer`: free-trial, intro-offer and promotional-offer starts.
+- `conversions_to_regular`: those offers converting to paid, plus direct full-price purchases.
+- `total_conversions`: offer starts plus direct purchases.
+
+Units and constraints:
+
+- Units: counts, and ratios of a count to a viewer count. A viewer can start several subscriptions, so a ratio can exceed 1. A ratio is not a percentage.
+- `date_range` is mandatory here.
+- Recommended periodicity: WEEK or MONTH.
+- Single application only.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -2635,7 +2620,7 @@ Example:
 ```text
 Usage: purchasely dashboard events [options]
 
-Event counts per day for an application, or across every application you can access
+Event counts by period
 
 Options:
   --output <format>           json (default) or table
@@ -2700,7 +2685,7 @@ Example:
 ```text
 Usage: purchasely dashboard flow-paths [options]
 
-Flow-paths funnel for a single application
+Flow paths funnel
 
 Options:
   --output <format>           json (default) or table
@@ -2763,8 +2748,7 @@ Example:
 ```text
 Usage: purchasely dashboard funnel [options]
 
-Conversion funnel (views -> purchases) for an application, or across every application you can
-access
+Conversion funnel
 
 Options:
   --output <format>           json (default) or table
@@ -2832,8 +2816,7 @@ Example:
 ```text
 Usage: purchasely dashboard header-live [options]
 
-Live header cards (active-subscriptions statuses, live users, inactive-subscriptions causes) for an
-application, or across every application you can access
+Live subscription and user status
 
 Options:
   --output <format>           json (default) or table
@@ -2902,7 +2885,7 @@ Example:
 ```text
 Usage: purchasely dashboard header-today [options]
 
-Today's header card for an application, or across every application you can access
+Today's key figures
 
 Options:
   --output <format>           json (default) or table
@@ -2965,8 +2948,7 @@ Example:
 ```text
 Usage: purchasely dashboard mau-reports [options]
 
-Monthly active users: app starts and distinct users who started the app, per calendar month, over
-the rolling 12 months ending today (always monthly; takes no date_range, periodicity or filter)
+Monthly active users
 
 Options:
   --output <format>  json (default) or table
@@ -2983,7 +2965,13 @@ Options:
                      field set. [array of string] comma separated or repeated
   -h, --help         display help for command
 
-Monthly active users: app starts and distinct users who started the app, per calendar month, over the rolling 12 months ending today (always monthly; takes no date_range, periodicity or filter). For one application returns {data: {app_starts: [{period: "YYYY-MM", value}], unique_users: [{period, value}]}}; without application_id returns {data: {applications: [{mobile_application_id, mobile_application_name, client_name, chart_data: {app_starts, unique_users}}]}} with one entry per application you can access (never summed across apps). Unit: count of app starts / of unique users per month (unique_users is a per-month distinct count, do not sum it across months).
+Monthly active users: app starts and distinct users who started the app, per calendar month, over the rolling 12 months ending today.
+
+- Always monthly: takes no `date_range`, `periodicity` or filter.
+- For one application, returns `{data: {app_starts: [{period: "YYYY-MM", value}], unique_users: [{period, value}]}}`.
+- Without `application_id`, returns `{data: {applications: [{mobile_application_id, mobile_application_name, client_name, chart_data: {app_starts, unique_users}}]}}`, with one entry per application you can access. Values are never summed across applications.
+- Unit: count of app starts, or of unique users, per month.
+- `unique_users` is a per-month distinct count: do not sum it across months.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -2999,8 +2987,7 @@ Example:
 ```text
 Usage: purchasely dashboard mrr-evolution-live [options]
 
-Live MRR evolution (by day and by month) for an application, or across every application you can
-access
+MRR evolution
 
 Options:
   --output <format>           json (default) or table
@@ -3065,8 +3052,7 @@ Example:
 ```text
 Usage: purchasely dashboard one-time-purchases-revenues [options]
 
-Daily one-time-purchase revenue by country/plan, for an application or across every application you
-can access
+One-time purchase revenue by period
 
 Options:
   --output <format>           json (default) or table
@@ -3131,8 +3117,7 @@ Example:
 ```text
 Usage: purchasely dashboard one-time-purchases-stats [options]
 
-Live one-time-purchase stats (by store/plan, refunds) for an application, or across every
-application you can access
+One-time purchase sales and refunds
 
 Options:
   --output <format>           json (default) or table
@@ -3200,11 +3185,7 @@ Example:
 ```text
 Usage: purchasely dashboard paid-subscription-movements [options]
 
-Paid subscription movements: for each period, how many PAYING subscriptions (full price or paid
-offer) entered the paid base (total_activations_count: direct purchases, trial/intro/promo
-conversions, reactivations) and how many left it (total_churns_count: voluntary churn,
-involuntary/billing-failure churn, refunds), plus net_movement_count = total_activations_count -
-total_churns_count
+Paid subscription movements
 
 Options:
   --output <format>         json (default) or table
@@ -3264,7 +3245,18 @@ Options:
                             repeated
   -h, --help                display help for command
 
-Paid subscription movements: for each period, how many PAYING subscriptions (full price or paid offer) entered the paid base (total_activations_count: direct purchases, trial/intro/promo conversions, reactivations) and how many left it (total_churns_count: voluntary churn, involuntary/billing-failure churn, refunds), plus net_movement_count = total_activations_count - total_churns_count. Always restricted to the paid segment (no `segment` parameter), this is the paid counterpart of subscription_activations. Returns an array of {period, group_by, group_by_public_id, group_by_name, total_activations_count, total_churns_count, net_movement_count} rows; unit: count of subscriptions (a flow, summable across periods). Recommended periodicity: MONTH. Single application only.
+Paid subscription movements: for each period, how many PAYING subscriptions (full price or paid offer) entered the paid base and how many left it.
+
+- Returns an array of `{period, group_by, group_by_public_id, group_by_name, total_activations_count, total_churns_count, net_movement_count}` rows.
+- `total_activations_count`: subscriptions that entered the paid base (direct purchases, trial/intro/promo conversions, reactivations).
+- `total_churns_count`: subscriptions that left it (voluntary churn, involuntary/billing-failure churn, refunds).
+- `net_movement_count`: `total_activations_count - total_churns_count`.
+- Unit: count of subscriptions. A flow: summable across periods.
+- Always restricted to the paid segment (no `segment` parameter). This is the paid counterpart of `subscription_activations`.
+- These movements do not reconcile exactly with `subscription_evolution`: a close is not the previous close plus `net_movement_count`, because the two follow different rules. Movements count only classified store events and apply the paid filter to each event. ENTERED_BILLING_RETRY and GRACE_PERIOD_TERMINATED count as involuntary churn on their date, and a switch from paid to free without DEACTIVATE counts no churn.
+- For the exact base on a date, use `subscription_evolution` (its last row on the `date_range` end date, or `periodicity=DAY`), not a close minus movements.
+- Recommended periodicity: MONTH.
+- Single application only.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -3343,8 +3335,7 @@ Example:
 ```text
 Usage: purchasely dashboard paywall-latency [options]
 
-Paywall-serving latency percentiles (p50/p95/p99) for an application, or aggregated across every
-application you can access
+Paywall latency
 
 Options:
   --output <format>  json (default) or table
@@ -3380,7 +3371,7 @@ Example:
 ```text
 Usage: purchasely dashboard sdk-evolution [options]
 
-SDK-version adoption series over time for a single application
+SDK version adoption over time
 
 Options:
   --output <format>         json (default) or table
@@ -3419,7 +3410,10 @@ Options:
   --unique-users <value>    Restrict to unique users ("true"/"false"). [string]
   --survey <value>          Filter by survey identifier. [string]
   --group-by <value>        Split the series by one dimension. Omit for a single, ungrouped series.
-                            Values beyond the 10 largest groups are collapsed into one "Other" row.
+                            With sdk_version, a version gets its own series when it reaches 3% of
+                            app starts in at least one period. The newest version always gets its
+                            own series. At most 8 versions get their own series. The other versions
+                            are summed into one "Other" series. sdk_running_mode is never collapsed.
                             sdk_version = SDK version; sdk_running_mode = SDK running mode. [enum:
                             sdk_version|sdk_running_mode]
   --fields <a,b>            Field selection for token economy: an explicit list of field names to
@@ -3443,7 +3437,7 @@ Example:
 ```text
 Usage: purchasely dashboard sdk-versions [options]
 
-Current SDK-version breakdown for a single application
+SDK versions in use
 
 Options:
   --output <format>         json (default) or table
@@ -3499,7 +3493,7 @@ Example:
 ```text
 Usage: purchasely dashboard subscription-activations [options]
 
-Subscription activations: how many subscriptions started in each period
+Subscription activations
 
 Options:
   --output <format>         json (default) or table
@@ -3562,7 +3556,15 @@ Options:
                             repeated
   -h, --help                display help for command
 
-Subscription activations: how many subscriptions started in each period. Each subscription is counted once, on its first activation event inside the chosen segment (direct purchase, free-trial/intro/promo start, or trial/intro/promo conversion to paid, for segment=paid, only the first PAYING activation counts); reactivations, transfers and family-shared subscriptions are excluded. Returns an array of {period, group_by, group_by_public_id, group_by_name, total_activations_count} rows, one per period (and per group_by value when set); unit: count of subscriptions (a flow, summable across periods). Recommended periodicity: MONTH, WEEK for ranges under ~6 months. Single application only.
+Subscription activations: how many subscriptions started in each period.
+
+- Returns an array of `{period, group_by, group_by_public_id, group_by_name, total_activations_count}` rows, one per period (and per `group_by` value when set).
+- Each subscription counts once, on its first activation event inside the chosen segment: direct purchase, free-trial/intro/promo start, or trial/intro/promo conversion to paid.
+- For `segment=paid`, only the first PAYING activation counts.
+- Reactivations, transfers and family-shared subscriptions are excluded.
+- Unit: count of subscriptions. A flow: summable across periods.
+- Recommended periodicity: MONTH, or WEEK for ranges under ~6 months.
+- Single application only.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -3577,7 +3579,7 @@ Example:
 ```text
 Usage: purchasely dashboard subscription-evolution [options]
 
-Active subscription base: how many subscriptions were active in each period, i.e
+Active subscription base
 
 Options:
   --output <format>         json (default) or table
@@ -3639,7 +3641,16 @@ Options:
                             repeated
   -h, --help                display help for command
 
-Active subscription base: how many subscriptions were active in each period, i.e. activated in or before that period and not deactivated before it (auto-renewing, cancelled-but-not-expired and grace-period subscriptions all count as active; family-shared subscriptions and transfers are excluded). Returns an array of {period, group_by, group_by_public_id, group_by_name, count} rows, one per period (and per group_by value when set); unit: count of active subscriptions, a stock, not a flow: never sum it across periods, read the last period for the current base. Recommended periodicity: MONTH (WEEK for a close look at the last few months). Single application only.
+Active subscription base per period.
+
+- Returns an array of `{period, group_by, group_by_public_id, group_by_name, count}` rows, one per period (and per `group_by` value when set).
+- `count`: the number of subscriptions active at the close of the period. The last row is the number active at the end of `date_range` (end date included), so a range ending mid-period reads the base on that date.
+- Auto-renewing, cancelled-but-not-expired and grace-period subscriptions all count as active. Family-shared subscriptions and transfers are excluded.
+- Unit: count of active subscriptions. A stock, not a flow: never sum it across periods. Read the last period for the current base.
+- The `paid_subscription_movements` flows do not reconcile exactly with this base: a close is not the previous close plus `net_movement_count`, because the two follow different rules. This base counts every ACTIVATE and DEACTIVATE, keeps a grace-period subscription active until its DEACTIVATE, and ends a paid segment when the offer changes from paid to free.
+- For the exact base on a date, read the last row of a `date_range` that ends on that date, or use `periodicity=DAY`, not a close plus movements.
+- Recommended periodicity: MONTH (WEEK for a close look at the last few months).
+- Single application only.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -3654,9 +3665,7 @@ Example:
 ```text
 Usage: purchasely dashboard subscription-reactivations [options]
 
-Subscription reactivations: how many subscriptions came back to life in each period after having
-lapsed, re-subscribed after expiry/cancellation, recovered from a billing retry, or unpaused (one
-count per subscription per day; family-shared subscriptions excluded)
+Subscription reactivations
 
 Options:
   --output <format>         json (default) or table
@@ -3721,7 +3730,14 @@ Options:
                             repeated
   -h, --help                display help for command
 
-Subscription reactivations: how many subscriptions came back to life in each period after having lapsed, re-subscribed after expiry/cancellation, recovered from a billing retry, or unpaused (one count per subscription per day; family-shared subscriptions excluded). Returns an array of {period, group_by, group_by_public_id, group_by_name, total_reactivations_count} rows, one per period (and per group_by value when set); unit: count of subscriptions (a flow, summable across periods). Recommended periodicity: MONTH. Single application only.
+Subscription reactivations: how many subscriptions came back to life in each period after having lapsed.
+
+- Returns an array of `{period, group_by, group_by_public_id, group_by_name, total_reactivations_count}` rows, one per period (and per `group_by` value when set).
+- A reactivation is a re-subscription after expiry or cancellation, a recovery from a billing retry, or an unpause.
+- One count per subscription per day. Family-shared subscriptions are excluded.
+- Unit: count of subscriptions. A flow: summable across periods.
+- Recommended periodicity: MONTH.
+- Single application only.
 
 Required scope: analytics.dashboards:view
 Request:
@@ -3736,8 +3752,7 @@ Example:
 ```text
 Usage: purchasely dashboard subscriptions-revenues [options]
 
-Daily subscription revenue by country/plan, for an application or across every application you can
-access
+Subscription revenue by period
 
 Options:
   --output <format>           json (default) or table
@@ -3802,8 +3817,7 @@ Example:
 ```text
 Usage: purchasely dashboard subscriptions-stats [options]
 
-Live subscriptions revenue/churn/refund stats for an application, or across every application you
-can access
+Subscription counts, churn and refunds
 
 Options:
   --output <format>           json (default) or table
@@ -3899,8 +3913,7 @@ Example:
 ```text
 Usage: purchasely dashboard trials-live [options]
 
-Trial/intro-offer cohorts and balances for an application, or across every application you can
-access
+Trials and intro offers
 
 Options:
   --output <format>           json (default) or table
@@ -4007,13 +4020,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List every store distribution (SKU) configured for a plan
-  create [options]  Add a store distribution (the store SKU / store_product_id) to a plan
-  get [options]     Show a plan's distribution for one store
-                    (app_store/play_store/amazon/huawei/stripe)
-  update [options]  Update a store's distribution on a plan (its store_product_id and, for
-                    play_store, the Google Play base plan / SwG settings)
-  delete [options]  Remove a store's distribution from a plan
+  list [options]    List store distributions
+  create [options]  Create a store distribution
+  get [options]     Get a store distribution
+  update [options]  Update a store distribution
+  delete [options]  Delete a store distribution
   help [command]    display help for command
 ```
 
@@ -4022,7 +4033,7 @@ Commands:
 ```text
 Usage: purchasely distributions create [options]
 
-Add a store distribution (the store SKU / store_product_id) to a plan
+Create a store distribution
 
 Options:
   --output <format>  json (default) or table
@@ -4069,7 +4080,7 @@ Example:
 ```text
 Usage: purchasely distributions delete [options]
 
-Remove a store's distribution from a plan
+Delete a store distribution
 
 Options:
   --output <format>  json (default) or table
@@ -4107,7 +4118,7 @@ Example:
 ```text
 Usage: purchasely distributions get [options]
 
-Show a plan's distribution for one store (app_store/play_store/amazon/huawei/stripe)
+Get a store distribution
 
 Options:
   --output <format>  json (default) or table
@@ -4141,7 +4152,7 @@ Example:
 ```text
 Usage: purchasely distributions list [options]
 
-List every store distribution (SKU) configured for a plan
+List store distributions
 
 Options:
   --output <format>  json (default) or table
@@ -4174,8 +4185,7 @@ Example:
 ```text
 Usage: purchasely distributions update [options]
 
-Update a store's distribution on a plan (its store_product_id and, for play_store, the Google Play
-base plan / SwG settings)
+Update a store distribution
 
 Options:
   --output <format>  json (default) or table
@@ -4261,12 +4271,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List the in-app flows of an application, newest first
-  create [options]  Create an in-app flow: a graph of steps, each displaying a screen, that the SDK
-                    opens through the deeplink ply/flows/<vendor_id>
-  get [options]     Show an in-app flow with its published and draft content
-  update [options]  Update an in-app flow (partial: omitted fields are left untouched)
-  delete [options]  Discard (soft-delete) an in-app flow
+  list [options]    List in-app flows
+  create [options]  Create an in-app flow
+  get [options]     Get an in-app flow
+  update [options]  Update an in-app flow
+  delete [options]  Discard an in-app flow
   help [command]    display help for command
 ```
 
@@ -4275,8 +4284,7 @@ Commands:
 ```text
 Usage: purchasely flows create [options]
 
-Create an in-app flow: a graph of steps, each displaying a screen, that the SDK opens through the
-deeplink ply/flows/<vendor_id>
+Create an in-app flow
 
 Options:
   --output <format>  json (default) or table
@@ -4322,7 +4330,7 @@ Example:
 ```text
 Usage: purchasely flows delete [options]
 
-Discard (soft-delete) an in-app flow
+Discard an in-app flow
 
 Options:
   --output <format>  json (default) or table
@@ -4359,7 +4367,7 @@ Example:
 ```text
 Usage: purchasely flows get [options]
 
-Show an in-app flow with its published and draft content
+Get an in-app flow
 
 Options:
   --output <format>  json (default) or table
@@ -4392,7 +4400,7 @@ Example:
 ```text
 Usage: purchasely flows list [options]
 
-List the in-app flows of an application, newest first
+List in-app flows
 
 Options:
   --output <format>   json (default) or table
@@ -4426,7 +4434,7 @@ Example:
 ```text
 Usage: purchasely flows update [options]
 
-Update an in-app flow (partial: omitted fields are left untouched)
+Update an in-app flow
 
 Options:
   --output <format>  json (default) or table
@@ -4483,10 +4491,10 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List custom fonts for an application
-  create [options]  Create a custom font on an application
-  get [options]     Show a single custom font for an application
-  update [options]  Update a custom font on an application
+  list [options]    List custom fonts
+  create [options]  Create a custom font
+  get [options]     Get a custom font
+  update [options]  Update a custom font
   help [command]    display help for command
 ```
 
@@ -4495,7 +4503,7 @@ Commands:
 ```text
 Usage: purchasely fonts create [options]
 
-Create a custom font on an application
+Create a custom font
 
 Options:
   --output <format>  json (default) or table
@@ -4538,7 +4546,7 @@ Example:
 ```text
 Usage: purchasely fonts get [options]
 
-Show a single custom font for an application
+Get a custom font
 
 Options:
   --output <format>  json (default) or table
@@ -4571,7 +4579,7 @@ Example:
 ```text
 Usage: purchasely fonts list [options]
 
-List custom fonts for an application
+List custom fonts
 
 Options:
   --output <format>   json (default) or table
@@ -4607,7 +4615,7 @@ Example:
 ```text
 Usage: purchasely fonts update [options]
 
-Update a custom font on an application
+Update a custom font
 
 Options:
   --output <format>  json (default) or table
@@ -4685,9 +4693,8 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  list [options]  List purchasely one-time purchases for an application (or across every application
-                  you can access)
-  get [options]   Show a purchasely one-time purchase, including its webhook delivery history
+  list [options]  List one-time purchases
+  get [options]   Get a one-time purchase
   help [command]  display help for command
 ```
 
@@ -4696,7 +4703,7 @@ Commands:
 ```text
 Usage: purchasely one-time-purchases get [options]
 
-Show a purchasely one-time purchase, including its webhook delivery history
+Get a one-time purchase
 
 Options:
   --output <format>  json (default) or table
@@ -4714,7 +4721,7 @@ Options:
                      field set. [array of string] comma separated or repeated
   -h, --help         display help for command
 
-Show a purchasely one-time purchase, including its webhook delivery history.
+Show a one-time purchase, including its webhook delivery history.
 
 Required scope: lookups.one_time_purchases:view
 Request:
@@ -4729,7 +4736,7 @@ Example:
 ```text
 Usage: purchasely one-time-purchases list [options]
 
-List purchasely one-time purchases for an application (or across every application you can access)
+List one-time purchases
 
 Options:
   --output <format>         json (default) or table
@@ -4755,7 +4762,7 @@ Options:
   --per-page <value>        Results per page. Defaults to 25, capped at 100. [integer]
   -h, --help                display help for command
 
-List purchasely one-time purchases for an application (or across every application you can access).
+List one-time purchases for an application (or across every application you can access).
 
 Required scope: lookups.one_time_purchases:view
 Request:
@@ -4781,20 +4788,15 @@ Options:
   -h, --help                 display help for command
 
 Commands:
-  list [options]             List placements for an application
-  create [options]           Create a placement on an application
-  get [options]              Show a placement
-  update [options]           Update a placement (partial, omitted fields are left untouched, except
-                             category_tag_ids, which fully replaces the existing set when sent)
-  delete [options]           Discard (soft-delete) a placement
-  audiences [options]        Replace the ordered audience-targeting list for a placement
-  delete-audience [options]  Remove a single audience-targeting rule from a placement, by the
-                             audience's public_id
-  duplicate [options]        Duplicate a placement's audience-targeting configuration, either into a
-                             NEW placement (name + vendor_id) or by copying it onto an EXISTING
-                             placement (target_id)
-  make-default [options]     Set a placement as the application's default placement (shown when no
-                             other placement matches)
+  list [options]             List placements
+  create [options]           Create a placement
+  get [options]              Get a placement
+  update [options]           Update a placement
+  delete [options]           Discard a placement
+  audiences [options]        Replace a placement's audiences
+  delete-audience [options]  Remove an audience from a placement
+  duplicate [options]        Duplicate a placement's targeting
+  make-default [options]     Set the default placement
   help [command]             display help for command
 ```
 
@@ -4803,7 +4805,7 @@ Commands:
 ```text
 Usage: purchasely placements audiences [options]
 
-Replace the ordered audience-targeting list for a placement
+Replace a placement's audiences
 
 Options:
   --output <format>  json (default) or table
@@ -4844,7 +4846,7 @@ Example:
 ```text
 Usage: purchasely placements create [options]
 
-Create a placement on an application
+Create a placement
 
 Options:
   --output <format>  json (default) or table
@@ -4888,7 +4890,7 @@ Example:
 ```text
 Usage: purchasely placements delete [options]
 
-Discard (soft-delete) a placement
+Discard a placement
 
 Options:
   --output <format>        json (default) or table
@@ -4932,7 +4934,7 @@ Example:
 ```text
 Usage: purchasely placements delete-audience [options]
 
-Remove a single audience-targeting rule from a placement, by the audience's public_id
+Remove an audience from a placement
 
 Options:
   --output <format>      json (default) or table
@@ -4970,8 +4972,7 @@ Example:
 ```text
 Usage: purchasely placements duplicate [options]
 
-Duplicate a placement's audience-targeting configuration, either into a NEW placement (name +
-vendor_id) or by copying it onto an EXISTING placement (target_id)
+Duplicate a placement's targeting
 
 Options:
   --output <format>  json (default) or table
@@ -5014,7 +5015,7 @@ Example:
 ```text
 Usage: purchasely placements get [options]
 
-Show a placement
+Get a placement
 
 Options:
   --output <format>  json (default) or table
@@ -5047,7 +5048,7 @@ Example:
 ```text
 Usage: purchasely placements list [options]
 
-List placements for an application
+List placements
 
 Options:
   --output <format>   json (default) or table
@@ -5082,7 +5083,7 @@ Example:
 ```text
 Usage: purchasely placements make-default [options]
 
-Set a placement as the application's default placement (shown when no other placement matches)
+Set the default placement
 
 Options:
   --output <format>  json (default) or table
@@ -5119,8 +5120,7 @@ Example:
 ```text
 Usage: purchasely placements update [options]
 
-Update a placement (partial, omitted fields are left untouched, except category_tag_ids, which fully
-replaces the existing set when sent)
+Update a placement
 
 Options:
   --output <format>  json (default) or table
@@ -5175,11 +5175,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List every plan configured for a product
-  create [options]  Create a plan for a product
-  get [options]     Show a plan
-  update [options]  Update a plan's attributes and/or promo offers
-  delete [options]  Permanently delete a plan
+  list [options]    List plans
+  create [options]  Create a plan
+  get [options]     Get a plan
+  update [options]  Update a plan
+  delete [options]  Delete a plan
   help [command]    display help for command
 ```
 
@@ -5188,7 +5188,7 @@ Commands:
 ```text
 Usage: purchasely plans create [options]
 
-Create a plan for a product
+Create a plan
 
 Options:
   --output <format>        json (default) or table
@@ -5243,7 +5243,7 @@ Example:
 ```text
 Usage: purchasely plans delete [options]
 
-Permanently delete a plan
+Delete a plan
 
 Options:
   --output <format>        json (default) or table
@@ -5285,7 +5285,7 @@ Example:
 ```text
 Usage: purchasely plans get [options]
 
-Show a plan
+Get a plan
 
 Options:
   --output <format>  json (default) or table
@@ -5318,7 +5318,7 @@ Example:
 ```text
 Usage: purchasely plans list [options]
 
-List every plan configured for a product
+List plans
 
 Options:
   --output <format>     json (default) or table
@@ -5351,7 +5351,7 @@ Example:
 ```text
 Usage: purchasely plans update [options]
 
-Update a plan's attributes and/or promo offers
+Update a plan
 
 Options:
   --output <format>  json (default) or table
@@ -5410,12 +5410,10 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List the store platforms (app_store/play_store/amazon/huawei) configured for an
-                    application
-  create [options]  Configure a store platform (app_store/play_store/amazon/huawei) for an
-                    application
-  get [options]     Show one store platform configured for an application
-  update [options]  Update a store platform's settings and/or credentials for an application
+  list [options]    List store platforms
+  create [options]  Add a store platform
+  get [options]     Get a store platform
+  update [options]  Update a store platform
   help [command]    display help for command
 ```
 
@@ -5424,7 +5422,7 @@ Commands:
 ```text
 Usage: purchasely platforms create [options]
 
-Configure a store platform (app_store/play_store/amazon/huawei) for an application
+Add a store platform
 
 Options:
   --output <format>  json (default) or table
@@ -5475,7 +5473,7 @@ Example:
 ```text
 Usage: purchasely platforms get [options]
 
-Show one store platform configured for an application
+Get a store platform
 
 Options:
   --output <format>  json (default) or table
@@ -5508,7 +5506,7 @@ Example:
 ```text
 Usage: purchasely platforms list [options]
 
-List the store platforms (app_store/play_store/amazon/huawei) configured for an application
+List store platforms
 
 Options:
   --output <format>   json (default) or table
@@ -5542,7 +5540,7 @@ Example:
 ```text
 Usage: purchasely platforms update [options]
 
-Update a store platform's settings and/or credentials for an application
+Update a store platform
 
 Options:
   --output <format>  json (default) or table
@@ -5603,11 +5601,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List products for an application
-  create [options]  Create a product for an application
-  get [options]     Show a product
-  update [options]  Update a product's name, description, icon, and/or default screen
-  delete [options]  Permanently delete a product
+  list [options]    List products
+  create [options]  Create a product
+  get [options]     Get a product
+  update [options]  Update a product
+  delete [options]  Delete a product
   help [command]    display help for command
 ```
 
@@ -5616,7 +5614,7 @@ Commands:
 ```text
 Usage: purchasely products create [options]
 
-Create a product for an application
+Create a product
 
 Options:
   --output <format>  json (default) or table
@@ -5660,7 +5658,7 @@ Example:
 ```text
 Usage: purchasely products delete [options]
 
-Permanently delete a product
+Delete a product
 
 Options:
   --output <format>        json (default) or table
@@ -5702,7 +5700,7 @@ Example:
 ```text
 Usage: purchasely products get [options]
 
-Show a product
+Get a product
 
 Options:
   --output <format>  json (default) or table
@@ -5735,7 +5733,7 @@ Example:
 ```text
 Usage: purchasely products list [options]
 
-List products for an application
+List products
 
 Options:
   --output <format>   json (default) or table
@@ -5770,7 +5768,7 @@ Example:
 ```text
 Usage: purchasely products update [options]
 
-Update a product's name, description, icon, and/or default screen
+Update a product
 
 Options:
   --output <format>  json (default) or table
@@ -5864,14 +5862,13 @@ Usage: purchasely screen-versions [options] [command]
 Management API: screen-versions
 
 Options:
-  -h, --help      display help for command
+  -h, --help         display help for command
 
 Commands:
-  list [options]  List a screen's versions (version metadata; the raw store content blob is not
-                  included)
-  get [options]   Show a screen version (version metadata; the raw store content blob is not
-                  included)
-  help [command]  display help for command
+  list [options]     List screen versions
+  get [options]      Get a screen version
+  restore [options]  Restore a screen version
+  help [command]     display help for command
 ```
 
 ### `purchasely screen-versions get`
@@ -5879,7 +5876,7 @@ Commands:
 ```text
 Usage: purchasely screen-versions get [options]
 
-Show a screen version (version metadata; the raw store content blob is not included)
+Get a screen version
 
 Options:
   --output <format>    json (default) or table
@@ -5898,7 +5895,7 @@ Options:
                        default field set. [array of string] comma separated or repeated
   -h, --help           display help for command
 
-Show a screen version (version metadata; the raw store content blob is not included).
+Show a screen version (version metadata; the raw store content is returned only with the experiences.screens:edit scope).
 
 Required scope: experiences.screens:view
 Request:
@@ -5913,7 +5910,7 @@ Example:
 ```text
 Usage: purchasely screen-versions list [options]
 
-List a screen's versions (version metadata; the raw store content blob is not included)
+List screen versions
 
 Options:
   --output <format>    json (default) or table
@@ -5941,6 +5938,44 @@ Example:
   purchasely screen-versions list --app app_xxx --screen-id <screen-id>
 ```
 
+### `purchasely screen-versions restore`
+
+```text
+Usage: purchasely screen-versions restore [options]
+
+Restore a screen version
+
+Options:
+  --output <format>    json (default) or table
+  --env <env>          prod or staging. Mandatory for writes
+  --dry-run            print the request without sending it
+  --yes                accept the confirmation prompt of a risky change
+  --reason <text>      why you run this command (sent in the User-Agent)
+  --rate <n>           requests per second, lower than the default
+  --i-asked-backend    allow a rate above the hard cap
+  --out <file>         write the JSON output to a file, or - for stdout
+  --app <app_id>       application public id (required)
+  --screen-id <value>  Public ID of the resource. [string, required]
+  --id <value>         Public ID of the resource. [string, required]
+  --fields <a,b>       Field selection for token economy: an explicit list of field names to include
+                       in the response, or ["*"] for every field. Omit for this endpoint's own
+                       default field set. [array of string] comma separated or repeated
+  --plan <file>        record the write in this plan file, send nothing. A person reads it, then
+                       runs `apply <file>`
+  -h, --help           display help for command
+
+Write the content of an earlier screen version as the draft of the screen. Does not publish.
+
+Required scope: experiences.screens:restore
+Request:
+  POST /management/v1/applications/{application_id}/screens/{screen_id}/screen_versions/{id}/restore
+
+A write needs --env prod or --env staging. Run it with --dry-run first.
+
+Example:
+  purchasely screen-versions restore --app app_xxx --screen-id <screen-id> --id <id> --env prod
+```
+
 ## screens
 
 Management API: screens
@@ -5956,12 +5991,56 @@ Options:
   -h, --help              display help for command
 
 Commands:
-  list [options]          List screens (paywalls) for an application, metadata only, no
-                          content/draft_content
-  get [options]           Show a screen (paywall), metadata only, no content/draft_content
-  delete [options]        Discard (soft-delete) a screen
-  make-default [options]  Set a screen as the application's default screen
+  list [options]          List screens
+  create [options]        Create a screen
+  get [options]           Get a screen
+  delete [options]        Discard a screen
+  duplicate [options]     Duplicate a screen
+  make-default [options]  Set the default screen
+  publish [options]       Publish a screen draft
+  update-draft [options]  Update a screen draft
+  validate [options]      Validate a screen draft
   help [command]          display help for command
+```
+
+### `purchasely screens create`
+
+```text
+Usage: purchasely screens create [options]
+
+Create a screen
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  --app <app_id>     application public id (required)
+  --fields <a,b>     Field selection for token economy: an explicit list of field names to include
+                     in the response, or ["*"] for every field. Omit for this endpoint's own default
+                     field set. [array of string] comma separated or repeated
+  --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
+  -h, --help         display help for command
+
+Create a screen from a store payload. Fails if the store does not render.
+
+Required scope: experiences.screens:create
+Request:
+  POST /management/v1/applications/{application_id}/screens
+
+A write needs --env prod or --env staging. Run it with --dry-run first.
+
+Body (required): --data '<json>' or --data @file.json or --data -
+  store (object, required) Screen store payload (same shape as a screen's content).
+
+Example:
+  purchasely screens create --app app_xxx --data @body.json --env prod
 ```
 
 ### `purchasely screens delete`
@@ -5969,7 +6048,7 @@ Commands:
 ```text
 Usage: purchasely screens delete [options]
 
-Discard (soft-delete) a screen
+Discard a screen
 
 Options:
   --output <format>        json (default) or table
@@ -6006,12 +6085,49 @@ Example:
   purchasely screens delete --app app_xxx --id <id> --env prod
 ```
 
+### `purchasely screens duplicate`
+
+```text
+Usage: purchasely screens duplicate [options]
+
+Duplicate a screen
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  --app <app_id>     application public id (required)
+  --id <value>       Public ID of the resource. [string, required]
+  --fields <a,b>     Field selection for token economy: an explicit list of field names to include
+                     in the response, or ["*"] for every field. Omit for this endpoint's own default
+                     field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
+  -h, --help         display help for command
+
+Duplicate a screen (content and draft) under a new name and vendor_id.
+
+Required scope: experiences.screens:create
+Request:
+  POST /management/v1/applications/{application_id}/screens/{id}/duplicate
+
+A write needs --env prod or --env staging. Run it with --dry-run first.
+
+Example:
+  purchasely screens duplicate --app app_xxx --id <id> --env prod
+```
+
 ### `purchasely screens get`
 
 ```text
 Usage: purchasely screens get [options]
 
-Show a screen (paywall), metadata only, no content/draft_content
+Get a screen
 
 Options:
   --output <format>  json (default) or table
@@ -6029,7 +6145,7 @@ Options:
                      field set. [array of string] comma separated or repeated
   -h, --help         display help for command
 
-Show a screen (paywall), metadata only, no content/draft_content.
+Show a screen (paywall). content/draft_content are returned only with the experiences.screens:edit scope.
 
 Required scope: experiences.screens:view
 Request:
@@ -6044,7 +6160,7 @@ Example:
 ```text
 Usage: purchasely screens list [options]
 
-List screens (paywalls) for an application, metadata only, no content/draft_content
+List screens
 
 Options:
   --output <format>   json (default) or table
@@ -6079,7 +6195,7 @@ Example:
 ```text
 Usage: purchasely screens make-default [options]
 
-Set a screen as the application's default screen
+Set the default screen
 
 Options:
   --output <format>  json (default) or table
@@ -6109,6 +6225,117 @@ A write needs --env prod or --env staging. Run it with --dry-run first.
 
 Example:
   purchasely screens make-default --app app_xxx --id <id> --env prod
+```
+
+### `purchasely screens publish`
+
+```text
+Usage: purchasely screens publish [options]
+
+Publish a screen draft
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  --app <app_id>     application public id (required)
+  --id <value>       Public ID of the resource. [string, required]
+  --fields <a,b>     Field selection for token economy: an explicit list of field names to include
+                     in the response, or ["*"] for every field. Omit for this endpoint's own default
+                     field set. [array of string] comma separated or repeated
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
+  -h, --help         display help for command
+
+Publish the draft of a screen as its content. Fails, and changes nothing, if the draft does not render.
+
+Required scope: experiences.screens:publish
+Request:
+  POST /management/v1/applications/{application_id}/screens/{id}/publish
+
+A write needs --env prod or --env staging. Run it with --dry-run first.
+
+Example:
+  purchasely screens publish --app app_xxx --id <id> --env prod
+```
+
+### `purchasely screens update-draft`
+
+```text
+Usage: purchasely screens update-draft [options]
+
+Update a screen draft
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  --app <app_id>     application public id (required)
+  --id <value>       Public ID of the resource. [string, required]
+  --fields <a,b>     Field selection for token economy: an explicit list of field names to include
+                     in the response, or ["*"] for every field. Omit for this endpoint's own default
+                     field set. [array of string] comma separated or repeated
+  --data <json>      request body: JSON, @file.json or - for stdin
+  --plan <file>      record the write in this plan file, send nothing. A person reads it, then runs
+                     `apply <file>`
+  -h, --help         display help for command
+
+Replace the draft of a screen with a store payload. The published content is not changed.
+
+Required scope: experiences.screens:edit
+Request:
+  PUT /management/v1/applications/{application_id}/screens/{id}/update_draft
+
+A write needs --env prod or --env staging. Run it with --dry-run first.
+
+Body (required): --data '<json>' or --data @file.json or --data -
+  store (object, required) Screen store payload (same shape as a screen's draft_content).
+
+Example:
+  purchasely screens update-draft --app app_xxx --id <id> --data @body.json --env prod
+```
+
+### `purchasely screens validate`
+
+```text
+Usage: purchasely screens validate [options]
+
+Validate a screen draft
+
+Options:
+  --output <format>  json (default) or table
+  --env <env>        prod or staging. Mandatory for writes
+  --dry-run          print the request without sending it
+  --yes              accept the confirmation prompt of a risky change
+  --reason <text>    why you run this command (sent in the User-Agent)
+  --rate <n>         requests per second, lower than the default
+  --i-asked-backend  allow a rate above the hard cap
+  --out <file>       write the JSON output to a file, or - for stdout
+  --app <app_id>     application public id (required)
+  --id <value>       Public ID of the resource. [string, required]
+  --fields <a,b>     Field selection for token economy: an explicit list of field names to include
+                     in the response, or ["*"] for every field. Omit for this endpoint's own default
+                     field set. [array of string] comma separated or repeated
+  -h, --help         display help for command
+
+Render the draft of a screen the way a publish would and return { valid, errors }. Saves nothing. The check samples one non-default language, so a valid result is not exhaustive.
+
+Required scope: experiences.screens:view
+Request:
+  GET /management/v1/applications/{application_id}/screens/{id}/validate
+
+Example:
+  purchasely screens validate --app app_xxx --id <id>
 ```
 
 ## search
@@ -6157,9 +6384,8 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  list [options]  List purchasely subscriptions for an application (or across every application you
-                  can access)
-  get [options]   Show a purchasely subscription, including its webhook delivery history
+  list [options]  List subscriptions
+  get [options]   Get a subscription
   help [command]  display help for command
 ```
 
@@ -6168,7 +6394,7 @@ Commands:
 ```text
 Usage: purchasely subscriptions get [options]
 
-Show a purchasely subscription, including its webhook delivery history
+Get a subscription
 
 Options:
   --output <format>  json (default) or table
@@ -6186,7 +6412,7 @@ Options:
                      field set. [array of string] comma separated or repeated
   -h, --help         display help for command
 
-Show a purchasely subscription, including its webhook delivery history.
+Show a subscription, including its webhook delivery history.
 
 Required scope: lookups.subscriptions:view
 Request:
@@ -6201,7 +6427,7 @@ Example:
 ```text
 Usage: purchasely subscriptions list [options]
 
-List purchasely subscriptions for an application (or across every application you can access)
+List subscriptions
 
 Options:
   --output <format>          json (default) or table
@@ -6233,7 +6459,7 @@ Options:
   --per-page <value>         Results per page. Defaults to 25, capped at 100. [integer]
   -h, --help                 display help for command
 
-List purchasely subscriptions for an application (or across every application you can access).
+List subscriptions for an application (or across every application you can access).
 
 Required scope: lookups.subscriptions:view
 Request:
@@ -6259,10 +6485,9 @@ Options:
   -h, --help         display help for command
 
 Commands:
-  list [options]     List surveys for an application
-  get [options]      Show a single survey for an application
-  results [options]  Aggregated results for a survey: answer distribution and total presentation
-                     views
+  list [options]     List surveys
+  get [options]      Get a survey
+  results [options]  Get survey results
   help [command]     display help for command
 ```
 
@@ -6271,7 +6496,7 @@ Commands:
 ```text
 Usage: purchasely surveys get [options]
 
-Show a single survey for an application
+Get a survey
 
 Options:
   --output <format>  json (default) or table
@@ -6304,7 +6529,7 @@ Example:
 ```text
 Usage: purchasely surveys list [options]
 
-List surveys for an application
+List surveys
 
 Options:
   --output <format>   json (default) or table
@@ -6340,7 +6565,7 @@ Example:
 ```text
 Usage: purchasely surveys results [options]
 
-Aggregated results for a survey: answer distribution and total presentation views
+Get survey results
 
 Options:
   --output <format>           json (default) or table
@@ -6414,12 +6639,9 @@ Options:
   -h, --help          display help for command
 
 Commands:
-  list [options]      List translation state (languages, key count, timestamps) for an application,
-                      or across every application you can reach
-  create [options]    Replace ALL translations for an application from a CSV upload
-                      (key,<lang1>,<lang2>,.
-  download [options]  Download translation content (structured key/value map + raw CSV) for an
-                      application, or across every application you can reach
+  list [options]      Get translation status
+  create [options]    Replace all translations from a CSV file
+  download [options]  Download translations
   help [command]      display help for command
 ```
 
@@ -6428,7 +6650,7 @@ Commands:
 ```text
 Usage: purchasely translations create [options]
 
-Replace ALL translations for an application from a CSV upload (key,<lang1>,<lang2>,.
+Replace all translations from a CSV file
 
 Options:
   --output <format>        json (default) or table
@@ -6474,8 +6696,7 @@ Example:
 ```text
 Usage: purchasely translations download [options]
 
-Download translation content (structured key/value map + raw CSV) for an application, or across
-every application you can reach
+Download translations
 
 Options:
   --output <format>   json (default) or table
@@ -6510,8 +6731,7 @@ Example:
 ```text
 Usage: purchasely translations list [options]
 
-List translation state (languages, key count, timestamps) for an application, or across every
-application you can reach
+Get translation status
 
 Options:
   --output <format>   json (default) or table
@@ -6606,8 +6826,8 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  list [options]  Search for an end user by anonymous_id or vendor_id (returns 0 or 1 result)
-  get [options]   Show a full end-user profile, including transaction/event history and devices
+  list [options]  Find a user by ID
+  get [options]   Get a user profile
   help [command]  display help for command
 ```
 
@@ -6616,7 +6836,7 @@ Commands:
 ```text
 Usage: purchasely users get [options]
 
-Show a full end-user profile, including transaction/event history and devices
+Get a user profile
 
 Options:
   --output <format>  json (default) or table
@@ -6649,7 +6869,7 @@ Example:
 ```text
 Usage: purchasely users list [options]
 
-Search for an end user by anonymous_id or vendor_id (returns 0 or 1 result)
+Find a user by ID
 
 Options:
   --output <format>     json (default) or table
@@ -6693,11 +6913,9 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  flow [options]               Show the web-activation status (slug, public/sandbox URL) for a flow
-  screen [options]             Show the web-activation status (slug, public/sandbox URL) for a
-                               screen (paywall)
-  activate-web-flow [options]  Activate a web2app flow: creates or enables its web slug and returns
-                               the public and sandbox URLs
+  flow [options]               Get the web activation of a flow
+  screen [options]             Get the web activation of a screen
+  activate-web-flow [options]  Activate a web flow
   help [command]               display help for command
 ```
 
@@ -6706,7 +6924,7 @@ Commands:
 ```text
 Usage: purchasely web-activations activate-web-flow [options]
 
-Activate a web2app flow: creates or enables its web slug and returns the public and sandbox URLs
+Activate a web flow
 
 Options:
   --output <format>  json (default) or table
@@ -6743,7 +6961,7 @@ Example:
 ```text
 Usage: purchasely web-activations flow [options]
 
-Show the web-activation status (slug, public/sandbox URL) for a flow
+Get the web activation of a flow
 
 Options:
   --output <format>  json (default) or table
@@ -6776,7 +6994,7 @@ Example:
 ```text
 Usage: purchasely web-activations screen [options]
 
-Show the web-activation status (slug, public/sandbox URL) for a screen (paywall)
+Get the web activation of a screen
 
 Options:
   --output <format>  json (default) or table
@@ -6819,13 +7037,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    List the web2app flows (funnels opened in the browser) of an application, newest
-                    first
-  create [options]  Create a web2app flow: a graph of steps, each displaying a screen, served as a
-                    funnel in the browser once activated
-  get [options]     Show a web2app flow with its published and draft content
-  update [options]  Update a web2app flow (partial: omitted fields are left untouched)
-  delete [options]  Discard (soft-delete) a web2app flow
+  list [options]    List web flows
+  create [options]  Create a web flow
+  get [options]     Get a web flow
+  update [options]  Update a web flow
+  delete [options]  Discard a web flow
   help [command]    display help for command
 ```
 
@@ -6834,8 +7050,7 @@ Commands:
 ```text
 Usage: purchasely web-flows create [options]
 
-Create a web2app flow: a graph of steps, each displaying a screen, served as a funnel in the browser
-once activated
+Create a web flow
 
 Options:
   --output <format>  json (default) or table
@@ -6881,7 +7096,7 @@ Example:
 ```text
 Usage: purchasely web-flows delete [options]
 
-Discard (soft-delete) a web2app flow
+Discard a web flow
 
 Options:
   --output <format>  json (default) or table
@@ -6918,7 +7133,7 @@ Example:
 ```text
 Usage: purchasely web-flows get [options]
 
-Show a web2app flow with its published and draft content
+Get a web flow
 
 Options:
   --output <format>  json (default) or table
@@ -6951,7 +7166,7 @@ Example:
 ```text
 Usage: purchasely web-flows list [options]
 
-List the web2app flows (funnels opened in the browser) of an application, newest first
+List web flows
 
 Options:
   --output <format>   json (default) or table
@@ -6985,7 +7200,7 @@ Example:
 ```text
 Usage: purchasely web-flows update [options]
 
-Update a web2app flow (partial: omitted fields are left untouched)
+Update a web flow
 
 Options:
   --output <format>  json (default) or table
@@ -7042,8 +7257,8 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  get [options]   Show the webhook delivery history/log for a single event
-  list [options]  List webhook delivery events for a user
+  get [options]   Get webhook delivery details
+  list [options]  List webhook deliveries for a user
   help [command]  display help for command
 ```
 
@@ -7052,7 +7267,7 @@ Commands:
 ```text
 Usage: purchasely webhook-deliveries get [options]
 
-Show the webhook delivery history/log for a single event
+Get webhook delivery details
 
 Options:
   --output <format>  json (default) or table
@@ -7085,7 +7300,7 @@ Example:
 ```text
 Usage: purchasely webhook-deliveries list [options]
 
-List webhook delivery events for a user
+List webhook deliveries for a user
 
 Options:
   --output <format>   json (default) or table
@@ -7130,8 +7345,8 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  list [options]    Show the per-event webhook delivery toggle config for an application
-  update [options]  Update per-event webhook delivery toggles for an application
+  list [options]    Get webhook event settings
+  update [options]  Update webhook event settings
   help [command]    display help for command
 ```
 
@@ -7140,7 +7355,7 @@ Commands:
 ```text
 Usage: purchasely webhooks list [options]
 
-Show the per-event webhook delivery toggle config for an application
+Get webhook event settings
 
 Options:
   --output <format>  json (default) or table
@@ -7172,7 +7387,7 @@ Example:
 ```text
 Usage: purchasely webhooks update [options]
 
-Update per-event webhook delivery toggles for an application
+Update webhook event settings
 
 Options:
   --output <format>        json (default) or table

@@ -9,9 +9,9 @@ const cmds = deriveCommands(ops);
 const find = (r: string, a: string) => cmds.find((c) => c.resource === r && c.action === a);
 
 describe("command generation", () => {
-  it("reads 166 operations in 123 paths", () => {
-    expect(Object.keys(doc.paths)).toHaveLength(123);
-    expect(ops).toHaveLength(166);
+  it("reads 172 operations in 128 paths", () => {
+    expect(Object.keys(doc.paths)).toHaveLength(128);
+    expect(ops).toHaveLength(172);
   });
 
   it("keeps the prod base URL in sync with the spec", () => {
@@ -22,8 +22,8 @@ describe("command generation", () => {
     const names = cmds.map((c) => `${c.resource} ${c.action}`);
     expect(new Set(names).size).toBe(names.length);
     const reached = cmds.flatMap((c) => [c.appOp, c.globalOp]).filter(Boolean);
-    expect(new Set(reached).size).toBe(166);
-    expect(cmds.length).toBe(134);
+    expect(new Set(reached).size).toBe(172);
+    expect(cmds.length).toBe(140);
   });
 
   it("derives the known names", () => {
@@ -49,7 +49,7 @@ describe("command generation", () => {
 
   it("prints a table of resource action to METHOD path", () => {
     const table = cmds.map((c) => `${c.resource} ${c.action} -> ${[c.appOp, c.globalOp].filter(Boolean).map((o) => `${o!.method} ${o!.path}`).join(" | ")}`);
-    expect(table).toHaveLength(134);
+    expect(table).toHaveLength(140);
   });
 
   it("maps apps to applications and --app-id to --app", async () => {

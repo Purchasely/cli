@@ -88,9 +88,9 @@ const ymd = (t: number) => new Date(t).toISOString().slice(0, 10);
 const wave = (day: number, base: number, growth: number, swing: number) => Math.max(0, Math.round(base + growth * (day - 20_000) + swing * Math.sin(day / 1.1)));
 
 /** One bucket per DAY, WEEK or MONTH of `date_range[]`, labelled by its first day. */
-function buckets(url: URL): { period: string; day: number; days: number }[] {
+function buckets(url: URL, def = "DAY"): { period: string; day: number; days: number }[] {
   const [from, to] = url.searchParams.getAll("date_range[]").map((s) => Math.floor(Date.parse(s.slice(0, 10)) / DAY_MS));
-  const step = STEP[url.searchParams.get("periodicity") ?? "DAY"] ?? 1;
+  const step = STEP[url.searchParams.get("periodicity") ?? def] ?? 1;
   if (!(from <= to)) return [];
   const out = [];
   for (let day = from; day <= to; day += step) out.push({ period: ymd(day * DAY_MS), day, days: Math.min(step, to - day + 1) });
@@ -101,13 +101,170 @@ function buckets(url: URL): { period: string; day: number; days: number }[] {
 const total = (b: { day: number; days: number }, base: number, swing: number) =>
   Array.from({ length: b.days }, (_, i) => wave(b.day + i, base, 0, swing)).reduce((a, v) => a + v, 0);
 
+
+/** Active subscriptions of one day (about 4,400 today). */
+const active = (day: number) => wave(day, 2_900, 2, 20);
+
+/** `n` split by shares, rounded. */
+const split = (n: number, shares: Record<string, number>) => Object.fromEntries(Object.entries(shares).map(([k, s]) => [k, Math.round(n * s)]));
+const STORES = { google: 0.4, apple: 0.5, stripe: 0.1 };
+const COUNTRIES = { "United States": 0.45, France: 0.25, "United Kingdom": 0.2, Germany: 0.1 };
+const PLAN_NAMES = { "Premium monthly": 0.6, "Premium yearly": 0.4 };
+
+/** One row per bucket, `{ period, ...fn(bucket) }`. The API default periodicity is MONTH. */
+const series = (url: URL, fn: (b: ReturnType<typeof buckets>[number]) => object, def = "MONTH") => buckets(url, def).map((b) => ({ period: b.period, ...fn(b) }));
+/** The number of days of the range. */
+const days = (url: URL) => buckets(url, "DAY").length;
+
+/** Revenue by store, country and plan: the shape of the subscription and one-time revenue dashboards. */
+const revenue = (url: URL, base: number, plans: Record<string, number>) => ({
+  data: {
+    revenue: { values: series(url, (b) => split(total(b, base, 150), STORES)) },
+    revenue_by_country: { values: series(url, (b) => split(total(b, base, 150), COUNTRIES)) },
+    revenue_by_plan: { values: series(url, (b) => split(total(b, base, 150), plans)) },
+  },
+});
+
+const color = (k: string) => (/not_renewing|grace|retry/.test(k) ? "orange" : /renewing|paused|subscribed|renewed/.test(k) ? "green" : "red");
+/** One card of the header dashboards. */
+const card = (category: string, vals: Record<string, number>) => {
+  const sum = Object.values(vals).reduce((a, v) => a + v, 0);
+  return {
+    title: category[0].toUpperCase() + category.slice(1).replace(/_/g, " "), category, total: `${sum} - 100.0%`, downloadable: false, with_link: false,
+    data: Object.entries(vals).map(([k, val]) => ({ title_key: k, subcategory: k, val, percentage: sum ? Math.round((val / sum) * 1000) / 10 : 0, color: color(k), with_link: false, downloadable: false })),
+  };
+};
+
+/** Cohort rows of the retention matrix: one cohort per calendar month of the range. */
+function retention(url: URL) {
+  const [from, to] = url.searchParams.getAll("date_range[]").map((s) => new Date(s.slice(0, 10) + "T00:00:00Z"));
+  const months: string[] = [];
+  if (from <= to) for (let d = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), 1)); d <= to; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) months.push(d.toISOString().slice(0, 10));
+  const size = 140;
+  const rows = months.flatMap((cohort, c) => months.slice(c).map((m, k) => ({
+    cohort_date: cohort, period_date: m, period_name: `MONTH ${k}`, is_partial: c + k === months.length - 1,
+    retained_count: Math.round(size * 0.82 ** k), retained_ratio: Math.round(0.82 ** k * 1000) / 1000,
+  })));
+  const revenue_per = 9.5;
+  const totals = months.map((cohort) => ({ cohort_date: cohort, total_count: size, total_revenue_in_dashboard_currency: Math.round(size * 2.4 * revenue_per), revenue_per_subscription_in_dashboard_currency: Math.round(2.4 * revenue_per * 100) / 100 }));
+  const periods = months.map((m, k) => {
+    const cohorts = months.length - k;
+    return { period_name: `MONTH ${k}`, period_date: m, retained_count: Math.round(size * 0.82 ** k) * cohorts, total_count: size * cohorts, retained_ratio: Math.round(0.82 ** k * 1000) / 1000 };
+  });
+  return { rows, totals, grand_total: { total_count: size * months.length, total_revenue_in_dashboard_currency: Math.round(size * 2.4 * revenue_per) * months.length, revenue_per_subscription_in_dashboard_currency: Math.round(2.4 * revenue_per * 100) / 100, periods } };
+}
+
+/** A flow of subscriptions: `base` a day, rows without a group (the demo ignores group_by). */
+const flow = (key: string, count: string, base: number) => (url: URL) => ({
+  [key]: series(url, (b) => ({ group_by: null, group_by_public_id: null, group_by_name: null, [count]: total(b, base, 5) })),
+});
+
+/** The last `n` calendar months up to this one, oldest first. */
+const lastMonths = (n: number) => Array.from({ length: n }, (_, i) => { const d = new Date(); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() - (n - 1 - i)); return d.toISOString().slice(0, 7); });
+
+const FUNNEL_GROUPS: Record<string, string[]> = {
+  platform: ["IOS", "ANDROID", "STRIPE"], country: ["US", "FR", "GB"], placement: ["plc_demo_onboarding", "plc_demo_home", "plc_demo_settings"],
+  plan: ["pln_demo_monthly", "pln_demo_yearly", "pln_demo_monthly"], screen: ["pres_demo_onboarding", "pres_demo_upsell", "pres_demo_winback"],
+};
+
 const DASHBOARDS: Record<string, (url: URL) => unknown> = {
   "dashboard/mrr_evolution_live": (url) => ({
     mrr_evolution_live: { data: { mrr: { values: { by_day: buckets(url).map((b) => ({ period: b.period, date_kinds: ["date_period"], value: wave(b.day, 24_000, 18, 150) })), by_month: [] }, variations: [] } } },
   }),
   "dashboard_v2/subscription_evolution": (url) => ({
-    subscription_evolution: buckets(url).map((b) => ({ period: b.period, group_by: null, count: wave(b.day, 2_900, 2, 20) })),
+    subscription_evolution: buckets(url).map((b) => ({ period: b.period, group_by: null, count: active(b.day) })),
   }),
+  "dashboard/composition_live": () => ({
+    composition_live: { data: {
+      composition_plan: { values: [{ name: "Premium monthly", value: 2_600 }, { name: "Premium yearly", value: 1_800 }] },
+      composition_platform: { values: [{ name: "ios", value: 2_200 }, { name: "android", value: 1_900 }, { name: "stripe", value: 300 }] },
+      composition_product: { values: [{ name: "Premium", value: 4_400 }] },
+      subscription_state: { active: 3_700, active_intro: 60, active_trial: 240, canceled_intro: 10, canceled_trial: 90, churners: 300 },
+    } },
+  }),
+  "dashboard/events": (url) => ({
+    events: { data: Object.fromEntries(series(url, (b) => ({ PRESENTATION_VIEWED: total(b, 850, 120), SUBSCRIPTION_STARTED: total(b, 30, 6) })).map((r) => [r.period, r])) },
+  }),
+  "dashboard/flow_paths": () => ({
+    flow_paths: { data: { steps: [{ screen_id: "pres_demo_onboarding", views: 700, next: [{ screen_id: "pres_demo_upsell", count: 260 }] }, { screen_id: "pres_demo_upsell", views: 260, next: [] }] } },
+  }),
+  "dashboard/funnel": (url) => {
+    const n = days(url);
+    const groups = FUNNEL_GROUPS[url.searchParams.get("dimension") ?? "platform"] ?? FUNNEL_GROUPS.platform;
+    return { funnel: { data: groups.map((name, i) => {
+      const s = [0.5, 0.4, 0.1][i];
+      const c = (v: number) => Math.round(v * n * s);
+      return { name, results: { subscription_started_count: c(25), subscription_terminated_count: c(3), trial_started_count: c(12), trial_converted_count: c(9), trial_not_converted_count: c(3), first_renewals_count: c(20) } };
+    }) } };
+  },
+  "dashboard/header_live": (url) => {
+    const cards: Record<string, ReturnType<typeof card>> = {
+      active_subscriptions_statuses: card("active_subscriptions_statuses", { active_renewing: 3_500, active_not_renewing: 420, active_grace_period: 60, trial_renewing: 180, trial_not_renewing: 70, trial_grace_period: 5, intro_period_renewing: 50, intro_period_not_renewing: 10, intro_period_grace_period: 0, promo_code_renewing: 80, promo_code_not_renewing: 15, promo_code_grace_period: 0, promotional_offer_renewing: 10, promotional_offer_not_renewing: 0, promotional_offer_grace_period: 0 }),
+      inactive_subscriptions_causes: card("inactive_subscriptions_causes", { terminated: 1_900, refunded: 40, unpaid: 25, paused: 12, billing_retry: 90, fraud_attemps_blocked: 0 }),
+    };
+    const only = url.searchParams.get("category");
+    return { header_live: { data: only ? [cards[only]].filter(Boolean) : Object.values(cards) } };
+  },
+  "dashboard/header_today": () => ({
+    header_today: { data: [{ ...card("today", { subscribed_with_free_trial: 9, subscribed_with_intro: 2, subscribed_with_promo_code: 1, subscribed_with_promotional_offer: 0, subscribed_paying: 18, renewed: 95, entered_grace_period: 3, churned: 14 }), title: "Today" }] },
+  }),
+  "dashboard/one_time_purchases_revenues": (url) => ({ one_time_purchases_revenues: revenue(url, 40, { "200 coins": 0.7, "1000 coins": 0.3 }) }),
+  "dashboard/one_time_purchases_stats": (url) => ({
+    one_time_purchases_stats: { data: {
+      otp_by_store: { values: series(url, (b) => split(total(b, 3, 1), STORES)) },
+      otp_by_plan: { values: series(url, (b) => split(total(b, 3, 1), { "200 coins": 0.7, "1000 coins": 0.3 })) },
+      otp_refunds: { values: series(url, () => ({ percent: 1.5 })) },
+    } },
+  }),
+  "dashboard/subscriptions_revenues": (url) => ({ subscriptions_revenues: revenue(url, 1_200, PLAN_NAMES) }),
+  "dashboard/subscriptions_stats": (url) => ({
+    subscriptions_stats: { data: {
+      active: { values: series(url, (b) => ({ value: active(b.day) })) },
+      new_churn: { values: series(url, (b) => { const n = total(b, 30, 6); const churn = total(b, 24, 5); return { new: n, churn, sum: n - churn }; }), variations: [] },
+      refund: { values: series(url, (b) => { const count = Math.round(total(b, 30, 6)); const refund_count = Math.round(count * 0.015); return { refund_count, subscription_count: count, percent: Math.round((refund_count / count) * 1000) / 10 }; }) },
+    } },
+  }),
+  "dashboard/trials_live": (url) => {
+    const trials = (b: ReturnType<typeof buckets>[number], p: string) => ({
+      [`${p}_converted`]: total(b, 9, 3), [`${p}_not_converted`]: total(b, 3, 2), [`${p}_ongoing_auto_renewing`]: total(b, 6, 2),
+      [`${p}_ongoing_billing_retry`]: 0, [`${p}_ongoing_grace_period`]: 0, [`${p}_ongoing_non_auto_renewing`]: total(b, 1, 1),
+    });
+    const balance = (b: ReturnType<typeof buckets>[number], p: string) => ({
+      [`${p}_started`]: total(b, 12, 3), [`${p}_started_auto_renewing`]: total(b, 11, 3), [`${p}_started_non_auto_renewing`]: total(b, 1, 1),
+      [`${p}_converted`]: total(b, 9, 3), [`${p}_not_converted`]: total(b, 3, 2), balance: total(b, 0, 2),
+    });
+    return { trials_live: { data: {
+      trials: { values: series(url, (b) => trials(b, "trials")) },
+      intro_offers: { values: series(url, (b) => trials(b, "intro_offers")) },
+      trials_balance: { values: series(url, (b) => balance(b, "trials")) },
+      intro_offers_balance: { values: series(url, (b) => balance(b, "intro_offers")) },
+    } } };
+  },
+  "dashboard_v2/mau_reports": () => {
+    const months = lastMonths(10);
+    const users = months.map((period, i) => ({ period, value: Math.round(15_000 + 400 * i + 800 * Math.sin(i)) }));
+    return { mau_reports: { data: { app_starts: users.map((u) => ({ period: u.period, value: u.value * 8 })), unique_users: users } } };
+  },
+  "dashboard_v2/paid_subscription_movements": (url) => ({
+    paid_subscription_movements: series(url, (b) => {
+      const total_activations_count = total(b, 28, 5);
+      const total_churns_count = total(b, 22, 5);
+      return { group_by: null, group_by_public_id: null, group_by_name: null, total_activations_count, total_churns_count, net_movement_count: total_activations_count - total_churns_count };
+    }),
+  }),
+  "dashboard_v2/paid_subscription_retention": (url) => ({ paid_subscription_retention: retention(url) }),
+  "dashboard_v2/paywall_latency": (url) => {
+    const n = Math.min(90, Math.max(7, Number(url.searchParams.get("period")) || 30));
+    const dates = Array.from({ length: n }, (_, i) => ymd(Date.now() - (n - 1 - i) * DAY_MS));
+    const at = (base: number) => dates.map((d) => wave(Math.floor(Date.parse(d) / DAY_MS), base, 0, base / 10));
+    return { paywall_latency: { data: { dates, p50: at(120), p95: at(340), p99: at(780), request_count: at(2_400), countries: ["US", "FR", "GB"] } } };
+  },
+  "dashboard_v2/sdk_evolution": flow("sdk_evolution", "app_starts_count", 2_500),
+  "dashboard_v2/sdk_versions": () => ({
+    sdk_versions: [{ sdk_version: "6.2.0", events_count: 84_000 }, { sdk_version: "6.1.0", events_count: 3_500 }, { sdk_version: "6.3.0", events_count: 900 }, { sdk_version: "6.0.0", events_count: 20 }],
+  }),
+  "dashboard_v2/subscription_activations": flow("subscription_activations", "total_activations_count", 30),
+  "dashboard_v2/subscription_reactivations": flow("subscription_reactivations", "total_reactivations_count", 4),
   "dashboard_v2/conversion": (url) => {
     const bs = buckets(url);
     const viewers = bs.map((b) => ({ period: b.period, unique_viewers_count: total(b, 850, 120) }));

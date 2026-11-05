@@ -90,7 +90,7 @@ describe("dashboard with no subcommand", () => {
     expect(r.written.join("")).toContain("Two");
   });
 
-  it("menu with --app: no app menu, the chosen dashboard gets the last 30 days and prints JSON", async () => {
+  it("menu with --app: no app menu, the chosen dashboard gets the last 30 days and prints a table", async () => {
     const at = (await list()).filter((x) => x.required_flags.every((f) => FILLED.includes(f))).findIndex((x) => x.command === "purchasely dashboard conversion");
     const r = rig([[...downs(at), "return"]]);
     const t = setup({ replies });
@@ -100,9 +100,20 @@ describe("dashboard with no subcommand", () => {
     expect(t.calls).toHaveLength(1);
     expect(t.calls[0].url).toBe("https://api-staging.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14");
     expect(t.calls[0].init.headers["User-Agent"]).toContain("look at it");
-    expect(out.err).toContain('purchasely dashboard conversion --app app_1 --date-range 2023-10-16,2023-11-14 --env staging --reason "look at it"\n');
-    expect(out.json()).toEqual({});
+    expect(out.err).toContain('purchasely dashboard conversion --app app_1 --date-range 2023-10-16,2023-11-14 --output table --env staging --reason "look at it"\n');
+    expect(out.out).toMatch(/^key\s+value/);
     expect(r.stdin.setRawMode.mock.calls).toEqual([[true], [false]]);
+  });
+
+  it("menu without --output: the chosen dashboard prints a table, not JSON", async () => {
+    const at = (await list()).filter((x) => x.required_flags.every((f) => FILLED.includes(f))).findIndex((x) => x.command === "purchasely dashboard conversion");
+    const t = setup({ replies: [{ body: { conversion: 7 } }] });
+    t.d.io = rig([[...downs(at), "return"]]).io;
+    const out = await t.exec("dashboard", "--app", "app_1");
+    expect(out.code, out.err).toBe(0);
+    expect(out.out).not.toMatch(/^\s*[{[]/);
+    expect(out.out).toContain("conversion");
+    expect(out.err).toContain("--output table");
   });
 
   it("a dashboard without a date range gets none", async () => {
@@ -112,7 +123,7 @@ describe("dashboard with no subcommand", () => {
     const out = await t.exec("dashboard", "--app", "app_1");
     expect(out.code, out.err).toBe(0);
     expect(t.calls[0].url).toBe("https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/mau_reports");
-    expect(out.err).toContain("purchasely dashboard mau-reports --app app_1\n");
+    expect(out.err).toContain("purchasely dashboard mau-reports --app app_1 --output table\n");
   });
 
   it("quit restores the terminal and sends no request, with --app", async () => {

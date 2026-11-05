@@ -2445,7 +2445,7 @@ Commands:
   subscription-reactivations [options]   Subscription reactivations
   help [command]                         display help for command
 
-Without a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days.
+Without a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days, as a table.
 The menu leaves out the dashboards that need another flag (funnel, flow-paths): run them by name.
 With --output json, or without a terminal, it prints the list of all the dashboards as JSON, with their required flags, and sends no request.
 

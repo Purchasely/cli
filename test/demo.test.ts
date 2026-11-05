@@ -64,6 +64,29 @@ describe("demo mode", () => {
     expect(t.calls).toHaveLength(0);
   });
 
+  it("every dashboard of the menu has sample data, as JSON and as a table", async () => {
+    const t = demo();
+    const rows = (await t.exec("dashboard", "--output", "json")).json() as { command: string; required_flags: string[] }[];
+    const FILLED = ["--app", "--date-range", "--periodicity"];
+    const menu = rows.filter((r) => r.required_flags.every((f) => FILLED.includes(f))).map((r) => r.command.split(" ").at(-1)!).filter((n) => n !== "summary");
+    expect(menu.length).toBeGreaterThanOrEqual(15);
+    const extra = [["funnel", "--dimension", "platform"], ["flow-paths", "--flow-id", "flow_demo"]];
+    for (const argv of [...menu.map((n) => [n]), ...extra]) {
+      const name = argv[0];
+      // mau-reports and paywall-latency take no date range.
+      const dated = !["mau-reports", "paywall-latency"].includes(name);
+      const base = ["dashboard", ...argv, "--app", "app_demo", ...(dated ? ["--date-range", "2026-10-07,2026-11-05"] : [])];
+      const spec = rows.find((r) => r.command.endsWith(` ${name}`))!;
+      const args = spec.required_flags.includes("--periodicity") ? [...base, "--periodicity", "DAY"] : base;
+      const json = await t.exec(...args);
+      expect(json.code, `${name}: ${json.err}`).toBe(0);
+      expect(Object.keys(json.json()), name).toEqual([name.replace(/-/g, "_")]);
+      const table = await t.exec(...args, "--output", "table");
+      expect(table.code, `${name} table: ${table.err}`).toBe(0);
+    }
+    expect(t.calls).toHaveLength(0);
+  });
+
   it("an unknown read is a 404 that says demo mode has no data for it", async () => {
     const t = demo();
     const other = await t.exec("audiences", "list", "--app", "app_demo");

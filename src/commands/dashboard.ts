@@ -210,7 +210,7 @@ export function menuGroup(program: Command, dashboard: Command, prefix: string):
     // The options of the group stop at the subcommand: `dashboard summary --app x` reaches summary.
     // Commander needs it on the root too: the root hands the raw arguments to the group.
     .enablePositionalOptions()
-    .addHelpText("after", `\nWithout a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days.\nThe menu leaves out the dashboards that need another flag (funnel, flow-paths): run them by name.\nWith --output json, or without a terminal, it prints the list of all the dashboards as JSON, with their required flags, and sends no request.\n\nExample:\n  ${prefix} --output json | jq -r '.[].command'\n`);
+    .addHelpText("after", `\nWithout a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days, as a table.\nThe menu leaves out the dashboards that need another flag (funnel, flow-paths): run them by name.\nWith --output json, or without a terminal, it prints the list of all the dashboards as JSON, with their required flags, and sends no request.\n\nExample:\n  ${prefix} --output json | jq -r '.[].command'\n`);
 }
 
 /**
@@ -243,7 +243,9 @@ export function menuAction(rt: Runtime, src: MenuSource): (o: Globals & { app?: 
       rt.d.stderr([item.command, "--app", app, "--days", "30", "--output", "table", ...tail].join(" ") + "\n");
       return src.summary({ ...o, app, days: "30", output: "table" });
     }
-    rt.d.stderr([item.command, "--app", app, ...(item.dated ? ["--date-range", range] : []), ...(item.daily ? ["--periodicity", "DAY"] : []), ...(o.output ? ["--output", o.output] : []), ...tail].join(" ") + "\n");
-    return src.run({ ...o, app }, item, range);
+    // A person in the menu wants a table, so the menu sets it. --output json never gets here: it prints the list.
+    const output = o.output ?? "table";
+    rt.d.stderr([item.command, "--app", app, ...(item.dated ? ["--date-range", range] : []), ...(item.daily ? ["--periodicity", "DAY"] : []), "--output", output, ...tail].join(" ") + "\n");
+    return src.run({ ...o, app, output }, item, range);
   };
 }

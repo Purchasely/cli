@@ -14,7 +14,8 @@ type Point = { period: string; value: number };
 type Panel = { name: string; value: number; series: Point[] };
 type Mrr = { mrr_evolution_live?: { data?: { mrr?: { values?: { by_day?: unknown } } } } };
 
-const BLOCKS = "▁▂▃▄▅▆▇█";
+// No full block (█): it fills the cell, so the charts of two rows touch and read as one block.
+const BLOCKS = "▁▂▃▄▅▆▇";
 const DAY_MS = 86_400_000;
 
 /** One block character per point, scaled from the lowest to the highest value. */

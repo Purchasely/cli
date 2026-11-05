@@ -36,8 +36,13 @@ describe("dashboard summary", () => {
     const t = setup({ replies: replies([1, 2, 3]) });
     const r = await t.exec("dashboard", "summary", "--app", "app_1", "--output", "table");
     expect(r.code).toBe(0);
-    expect(r.out).toMatch(/^MRR\s+30\s+▁▅█$/m);
-    expect(r.out).toMatch(/^Conversions\s+6\s+▁▅█$/m);
+    expect(r.out).toMatch(/^MRR\s+30\s+▁▄▇$/m);
+    expect(r.out).toMatch(/^Conversions\s+6\s+▁▄▇$/m);
+  });
+
+  it("never draws a full block, so the rows of a table keep a gap", () => {
+    expect(sparkline([1, 5, 9, 2, 9])).not.toContain("█");
+    expect(sparkline([0, 100])).toBe("▁▇");
   });
 
   it("survives all zeros and empty series", async () => {

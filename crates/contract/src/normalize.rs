@@ -11,8 +11,25 @@ pub fn normalize(input: &str, root: &str, pid: u32, version: &str) -> String {
     value
 }
 
+/// Replaces the PID only as a whole number: `1423` and the digits of a UUID stay.
 pub fn replace_pid(input: &str, pid: u32) -> String {
-    input.replace(&pid.to_string(), "<PID>")
+    let needle = pid.to_string();
+    let bytes = input.as_bytes();
+    let mut out = String::with_capacity(input.len());
+    let mut i = 0;
+    while i < input.len() {
+        let alnum = |j: usize| bytes.get(j).is_some_and(|b| b.is_ascii_alphanumeric());
+        if input[i..].starts_with(&needle) && (i == 0 || !alnum(i - 1)) && !alnum(i + needle.len())
+        {
+            out.push_str("<PID>");
+            i += needle.len();
+        } else {
+            let ch = input[i..].chars().next().expect("valid UTF-8 boundary");
+            out.push(ch);
+            i += ch.len_utf8();
+        }
+    }
+    out
 }
 
 pub fn replace_mkdtemp(input: &str) -> String {
@@ -39,7 +56,8 @@ pub fn replace_uuids(input: &str) -> String {
     while i < bytes.len() {
         if i + 36 <= bytes.len() && is_uuid(&bytes[i..i + 36]) {
             let id = input[i..i + 36].to_ascii_lowercase();
-            let token = ids.entry(id).or_insert_with(|| "<UUID>".to_owned());
+            let next = ids.len() + 1;
+            let token = ids.entry(id).or_insert_with(|| format!("<UUID{next}>"));
             out.push_str(token);
             i += 36;
         } else {
@@ -101,7 +119,7 @@ mod tests {
     #[test]
     fn uuid_replacement_preserves_correlation() {
         let id = "123e4567-e89b-42d3-a456-426614174000";
-        assert_eq!(replace_uuids(&format!("{id} {id}")), "<UUID> <UUID>");
+        assert_eq!(replace_uuids(&format!("{id} {id}")), "<UUID1> <UUID1>");
     }
     #[test]
     fn pid_is_replaced() {

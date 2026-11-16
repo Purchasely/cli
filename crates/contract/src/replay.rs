@@ -44,15 +44,15 @@ pub fn normalize_case(case: &Value) -> Value {
                 .as_str()
                 .filter(|v| !v.is_empty())
                 .unwrap_or("__NO_VERSION_MATCH__");
-            let text = step.to_string();
-            let text = crate::normalize::normalize(&text, "__NO_ROOT_MATCH__", pid, version)
-                .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
-            if let Ok(mut value) = serde_json::from_str::<Value>(&text) {
-                if let Some(obj) = value.as_object_mut() {
-                    obj.remove("pid");
-                }
-                *step = value;
+            let version = version.to_owned();
+            // The pid field goes first: "pid":<PID> is not valid JSON.
+            if let Some(obj) = step.as_object_mut() {
+                obj.remove("pid");
             }
+            let text = step.to_string();
+            let text = crate::normalize::normalize(&text, "__NO_ROOT_MATCH__", pid, &version)
+                .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
+            *step = serde_json::from_str::<Value>(&text).expect("normalized step is JSON");
         }
     }
     normalized

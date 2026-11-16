@@ -1,5 +1,4 @@
-#[path = "../src/inventory.rs"]
-mod inventory;
+use contract::inventory;
 
 use std::collections::BTreeSet;
 
@@ -11,7 +10,10 @@ fn inventory_file_parses_and_has_unique_ids() {
         inventory::Inventory::from_vitest(&serde_json::Value::Array(vec![]), "unused").unwrap();
     assert!(parsed.ids.is_empty());
     let ids = value["ids"].as_array().unwrap();
-    let unique = ids.iter().collect::<BTreeSet<_>>();
+    let unique = ids
+        .iter()
+        .map(|v| v.as_str().unwrap())
+        .collect::<BTreeSet<_>>();
     assert_eq!(ids.len(), unique.len());
     assert_eq!(value["base"], "c656c8fbd341f1eb5b793d2d584789b372fb4824");
 }

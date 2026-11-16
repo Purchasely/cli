@@ -22,7 +22,9 @@ pub fn replace_mkdtemp(input: &str) -> String {
         out.push_str(&rest[..index]);
         out.push_str("purchasely-cli-<MKDTEMP>");
         rest = &rest[index + "purchasely-cli-".len()..];
-        let end = rest.find(|c: char| !(c.is_ascii_alphanumeric() || c == '-' || c == '_')).unwrap_or(rest.len());
+        let end = rest
+            .find(|c: char| !(c.is_ascii_alphanumeric() || c == '-' || c == '_'))
+            .unwrap_or(rest.len());
         rest = &rest[end..];
     }
     out.push_str(rest);
@@ -50,20 +52,32 @@ pub fn replace_uuids(input: &str) -> String {
 }
 
 fn is_uuid(bytes: &[u8]) -> bool {
-    bytes.len() == 36 && bytes.iter().enumerate().all(|(i, b)| match i { 8 | 13 | 18 | 23 => *b == b'-', _ => b.is_ascii_hexdigit() })
+    bytes.len() == 36
+        && bytes.iter().enumerate().all(|(i, b)| match i {
+            8 | 13 | 18 | 23 => *b == b'-',
+            _ => b.is_ascii_hexdigit(),
+        })
 }
 
 pub fn replace_man_date(input: &str) -> String {
-    input.lines().map(|line| {
-        if line.starts_with(".TH ") {
-            let mut fields = line.splitn(4, ' ');
-            let first = fields.next().unwrap_or_default();
-            let second = fields.next().unwrap_or_default();
-            let _date = fields.next().unwrap_or_default();
-            let tail = fields.next().unwrap_or_default();
-            format!("{first} {second} <DATE> {tail}").trim_end().to_owned()
-        } else { line.to_owned() }
-    }).collect::<Vec<_>>().join("\n")
+    input
+        .lines()
+        .map(|line| {
+            if line.starts_with(".TH ") {
+                let mut fields = line.splitn(4, ' ');
+                let first = fields.next().unwrap_or_default();
+                let second = fields.next().unwrap_or_default();
+                let _date = fields.next().unwrap_or_default();
+                let tail = fields.next().unwrap_or_default();
+                format!("{first} {second} <DATE> {tail}")
+                    .trim_end()
+                    .to_owned()
+            } else {
+                line.to_owned()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[cfg(test)]
@@ -71,17 +85,46 @@ mod tests {
     use super::*;
 
     #[test]
-    fn root_path_is_replaced() { assert_eq!(normalize("/tmp/root/a", "/tmp/root", 77, "9.9.9"), "<ROOT>/a"); }
+    fn root_path_is_replaced() {
+        assert_eq!(
+            normalize("/tmp/root/a", "/tmp/root", 77, "9.9.9"),
+            "<ROOT>/a"
+        );
+    }
     #[test]
-    fn mkdtemp_suffix_is_replaced() { assert_eq!(replace_mkdtemp("/tmp/purchasely-cli-Ab_123/file"), "/tmp/purchasely-cli-<MKDTEMP>/file"); }
+    fn mkdtemp_suffix_is_replaced() {
+        assert_eq!(
+            replace_mkdtemp("/tmp/purchasely-cli-Ab_123/file"),
+            "/tmp/purchasely-cli-<MKDTEMP>/file"
+        );
+    }
     #[test]
-    fn uuid_replacement_preserves_correlation() { let id = "123e4567-e89b-42d3-a456-426614174000"; assert_eq!(replace_uuids(&format!("{id} {id}")), "<UUID> <UUID>"); }
+    fn uuid_replacement_preserves_correlation() {
+        let id = "123e4567-e89b-42d3-a456-426614174000";
+        assert_eq!(replace_uuids(&format!("{id} {id}")), "<UUID> <UUID>");
+    }
     #[test]
-    fn pid_is_replaced() { assert_eq!(replace_pid("pid=12345", 12345), "pid=<PID>"); }
+    fn pid_is_replaced() {
+        assert_eq!(replace_pid("pid=12345", 12345), "pid=<PID>");
+    }
     #[test]
-    fn man_date_is_replaced() { assert_eq!(replace_man_date(".TH FOO 20261116 x\ntext"), ".TH FOO <DATE> x\ntext"); }
+    fn man_date_is_replaced() {
+        assert_eq!(
+            replace_man_date(".TH FOO 20261116 x\ntext"),
+            ".TH FOO <DATE> x\ntext"
+        );
+    }
     #[test]
-    fn version_is_replaced() { assert_eq!(normalize("version 9.9.9", "/none", 1, "9.9.9"), "version <VERSION>"); }
+    fn version_is_replaced() {
+        assert_eq!(
+            normalize("version 9.9.9", "/none", 1, "9.9.9"),
+            "version <VERSION>"
+        );
+    }
     #[test]
-    fn pid_probe_answers_are_ordered() { let probes = [true, false]; assert_eq!(probes.iter().copied().next(), Some(true)); assert_eq!(probes.iter().copied().nth(1), Some(false)); }
+    fn pid_probe_answers_are_ordered() {
+        let probes = [true, false];
+        assert_eq!(probes.iter().copied().next(), Some(true));
+        assert_eq!(probes.iter().copied().nth(1), Some(false));
+    }
 }

@@ -23,5 +23,4 @@ pub struct Extension {
 }
 pub type Register = fn(&mut Command, &Runtime);
 pub struct SurfaceDef;
-#[derive(Debug)]
-pub struct CliError;
+pub use super::errors::CliError;

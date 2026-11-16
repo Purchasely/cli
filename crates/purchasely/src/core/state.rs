@@ -77,7 +77,15 @@ impl<'a> StateStore<'a> {
                 .is_ok_and(|now| (now.dev(), now.ino()) == (meta.dev(), meta.ino()))
             && fs::remove_file(lock).is_ok()
     }
-    pub fn with_lock<T>(&self, mut f: impl FnMut() -> T) -> Result<T, String> {
+    pub fn with_lock<T>(&self, f: impl FnMut() -> T) -> Result<T, String> {
+        self.with_lock_timeout(5000, f)
+    }
+    /// TS `withLock(fn, timeoutMs)`: `ai` waits 300,000 ms, and -1 tries once (background).
+    pub fn with_lock_timeout<T>(
+        &self,
+        timeout_ms: i64,
+        mut f: impl FnMut() -> T,
+    ) -> Result<T, String> {
         let lock = self.path("lock");
         let start = self.d.host.wall_now();
         loop {
@@ -103,7 +111,7 @@ impl<'a> StateStore<'a> {
                     if self.remove_stale(&lock) {
                         continue;
                     }
-                    if self.d.host.wall_now() - start > 5000 {
+                    if self.d.host.wall_now() - start > timeout_ms {
                         return Err("state lock timeout".into());
                     }
                     self.d.host.sleep(10)
@@ -235,6 +243,29 @@ mod tests {
         let store = StateStore::new(&dep, "t");
         assert_eq!(store.with_lock(|| 7).unwrap(), 7);
         assert!(!d.join("t.lock").exists());
+        let _ = fs::remove_dir_all(d);
+    }
+    #[test]
+    fn timeout_minus_one_tries_once_and_a_long_timeout_waits() {
+        let d = tempfile_dir();
+        // A live holder: this process.
+        fs::write(d.join("t.lock"), std::process::id().to_string()).unwrap();
+        let host = Fake::default();
+        let dep = deps_with(d.clone(), Box::new(host));
+        let store = StateStore::new(&dep, "t");
+        assert_eq!(
+            store.with_lock_timeout(-1, || 1),
+            Err("state lock timeout".into())
+        );
+        assert_eq!(dep.host.wall_now(), 0, "-1 must not sleep");
+        assert_eq!(
+            store.with_lock_timeout(300_000, || 1),
+            Err("state lock timeout".into())
+        );
+        assert!(
+            dep.host.wall_now() > 300_000,
+            "300,000 ms must wait past 5 s"
+        );
         let _ = fs::remove_dir_all(d);
     }
     #[test]

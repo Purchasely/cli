@@ -150,7 +150,8 @@ jobs:
           sh scripts/pack-release.sh --bridge --version 0.9.0 out/bridge
           bridge_bytes=$(wc -c < out/bridge/purchasely-0.9.0.tgz)
           test "$bridge_bytes" -le 25165824
-          if [ "$version" != 0.9.0 ] && [ "$((PREVIOUS_NATIVE_RELEASES + 1))" -le "$bridge_releases" ]; then
+          # A PR build has no VERSION: it packs only, the bridge window needs the published v0.9.0.
+          if [ -n "$VERSION" ] && [ "$version" != 0.9.0 ] && [ "$((${PREVIOUS_NATIVE_RELEASES:-0} + 1))" -le "$bridge_releases" ]; then
             gh release download v0.9.0 -p purchasely-0.9.0.tgz -D out/bridge
             count=$((PREVIOUS_NATIVE_RELEASES + 1))
             P12B_BRIDGE_ARCHIVE=out/bridge/purchasely-0.9.0.tgz sh scripts/pack-release.sh --version "$version" --native "$version" --native-release-count "$count" out/window

@@ -149,7 +149,10 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         let key = opt.key();
         if !out.options.contains_key(&key) {
             if let Some(v) = &opt.default {
-                out.options.entry(key).or_default().push(v.clone());
+                // The `[]` default of a repeated option (commander shows `(default: [])`) is an empty list.
+                if !(opt.repeat && v == "[]") {
+                    out.options.entry(key).or_default().push(v.clone());
+                }
             } else if opt.required {
                 return Err(CliError(format!(
                     "error: required option '{}' not specified",
@@ -217,6 +220,16 @@ mod tests {
             parse(&c, &[]).unwrap_err().0,
             "error: missing required argument 'shell'"
         );
+    }
+
+    #[test]
+    fn empty_list_default_of_a_repeated_option_gives_no_value() {
+        let c = Command::new("api").option(
+            OptionDef::value("--query <k=v>", "q")
+                .repeat()
+                .default("[]"),
+        );
+        assert!(!parse(&c, &[]).unwrap().options.contains_key("query"));
     }
 
     #[test]

@@ -3,7 +3,7 @@ use crate::{
     cli::{Command, OptionDef, Parsed},
     core::{
         config,
-        credentials::{self, credential_display, hint, remove_credential, store_credential, what},
+        credentials::{credential_display, hint, remove_credential, store_credential, what},
         errors::{CliError, EXIT, usage},
         json::Value,
         runtime::{Runtime, add_globals},
@@ -114,7 +114,8 @@ fn login(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
 
 fn status(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let env = rt.env(p.opt("env"))?;
-    let credential = credentials::resolve_credential(&rt.d, &env, "management")
+    let credential = rt
+        .credential(&env, "management")
         .map_err(|message| CliError::new(EXIT::GENERIC, "CREDENTIAL_READ_FAILED", vec![message]))?;
     let Some(credential) = credential else {
         return Err(CliError::new(

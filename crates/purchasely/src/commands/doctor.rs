@@ -3,7 +3,7 @@ use crate::{
     cli::{Command, Parsed},
     core::{
         ai,
-        credentials::{credential_display, resolve_credential},
+        credentials::credential_display,
         errors::{CliError, EXIT},
         http::{self, Ctx, HttpRequest},
         json::Value,
@@ -125,7 +125,7 @@ fn doctor(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         }
     }
 
-    let cred = resolve_credential(&rt.d, &env, "management").ok().flatten();
+    let cred = rt.credential(&env, "management").ok().flatten();
     if demo {
         checks.push(check("key", Status::Ok, "Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real"));
     } else if let Some(cred) = &cred {

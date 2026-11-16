@@ -285,24 +285,35 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
         let mut argv: Vec<String> =
             serde_json::from_value(step.get("argv").cloned().unwrap_or(json!([])))
                 .unwrap_or_default();
+        let root_text = root.to_string_lossy().into_owned();
+        let tmp = ts_tmp_roots(step);
+        let to_replay = |s: &str| {
+            let mut s = crate::normalize::map_ts_root(&expand_tokens(s, &roots), &root_text);
+            for (path, token) in &tmp {
+                s = s.replace(path, &expand_tokens(token, &roots));
+            }
+            s
+        };
         for arg in &mut argv {
-            *arg = expand_tokens(arg, &roots);
+            *arg = to_replay(arg);
         }
         let mut replay_step = step.clone();
         if let Some(env) = replay_step.get_mut("env").and_then(Value::as_object_mut) {
             for value in env.values_mut() {
                 if let Some(s) = value.as_str() {
-                    *value = json!(expand_tokens(s, &roots));
+                    *value = json!(to_replay(s));
                 }
             }
         }
         let host = FakeHost::with_root(&Value::Object(replay_step), root.clone());
         let deps = host.deps(argv.clone());
         let code = purchasely::run::run(argv, deps);
-        host.finish()?;
+        host.finish()
+            .map_err(|e| ReplayError(format!("{}; stderr was {:?}", e.0, host.stderr_text())))?;
         let files_after = snapshot_roots(&roots)?;
         let actual = json!({"code":code,"out":host.stdout_text(),"err":host.stderr_text(),"t_after":host.now(),"files_after":files_after,"keychain":keychain_after(step,&host)});
-        for key in ["code", "out", "err"] {
+        // stderr first: it holds the error that explains a wrong code or output.
+        for key in ["err", "out", "code"] {
             if let Some(expected) = step.get(key)
                 && normalize_transcript(&actual[key], &roots, step)
                     != normalize_transcript(expected, &[], step)
@@ -321,11 +332,15 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
                 host.now()
             )));
         }
-        if let Some(expected) = step.get("files_after")
-            && sort_files(normalize_transcript(&actual["files_after"], &roots, step))
-                != sort_files(normalize_transcript(expected, &[], step))
-        {
-            return Err(ReplayError("files_after differs".into()));
+        if let Some(expected) = step.get("files_after") {
+            let got = sort_files(normalize_transcript(&actual["files_after"], &roots, step));
+            let want = sort_files(normalize_transcript(expected, &[], step));
+            if got != want {
+                return Err(ReplayError(format!(
+                    "files_after differs: {}",
+                    files_diff(&want, &got)
+                )));
+            }
         }
         if step.get("keychain").is_some_and(|v| !v.is_null())
             && normalize_transcript(&actual["keychain"], &roots, step)
@@ -454,6 +469,36 @@ fn snapshot(root: &Path) -> Result<Value, ReplayError> {
     }
     Ok(json!(items))
 }
+/// The extra temp dirs of the TS run (`snapshotRoots` of `test/helpers.ts`): an absolute env value whose last
+/// component is a `mkdtemp` name (`cli-ai-home-AbC123`) is the dir of `<TMPn>`, in env order.
+pub(crate) fn ts_tmp_roots(step: &Map<String, Value>) -> Vec<(String, String)> {
+    let count = step
+        .get("files_before")
+        .and_then(Value::as_object)
+        .map_or(0, |m| m.keys().filter(|k| k.starts_with("<TMP")).count());
+    let mut out: Vec<(String, String)> = Vec::new();
+    for value in step
+        .get("env")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flat_map(|m| m.values())
+    {
+        let Some(path) = value
+            .as_str()
+            .filter(|p| p.starts_with('/') && !p.contains("purchasely-cli-"))
+        else {
+            continue;
+        };
+        let last = path.rsplit('/').next().unwrap_or_default();
+        let mkdtemp = last.rsplit_once('-').is_some_and(|(_, tail)| {
+            tail.len() == 6 && tail.chars().all(|c| c.is_ascii_alphanumeric())
+        });
+        if mkdtemp && out.len() < count && !out.iter().any(|(p, _)| p == path) {
+            out.push((path.to_owned(), format!("<TMP{}>", out.len())));
+        }
+    }
+    out
+}
 pub(crate) fn expand_tokens(value: &str, roots: &[(String, PathBuf)]) -> String {
     let mut result = value.to_owned();
     for (token, path) in roots {
@@ -467,7 +512,10 @@ fn normalize_transcript(
     step: &Map<String, Value>,
 ) -> Value {
     let mut serialized = value.to_string();
-    for (token, path) in roots {
+    // The longest path first: the root path is a prefix of the `<TMPn>` paths.
+    let mut roots = roots.to_vec();
+    roots.sort_by_key(|(_, path)| std::cmp::Reverse(path.as_os_str().len()));
+    for (token, path) in &roots {
         serialized = serialized.replace(&path.to_string_lossy().to_string(), token);
     }
     let pid = step
@@ -479,20 +527,92 @@ fn normalize_transcript(
         .and_then(Value::as_str)
         .filter(|v| !v.is_empty())
         .unwrap_or("__NO_VERSION_MATCH__");
+    for (path, token) in ts_tmp_roots(step) {
+        serialized = serialized.replace(&path, &token);
+    }
     let normalized = crate::normalize::normalize(&serialized, "__NO_ROOT_MATCH__", pid, version)
         .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
     serde_json::from_str(&normalized).unwrap_or(value.clone())
 }
 /// A snapshot lists entries in walk order; TS and Rust walk differently, so compare by path.
+/// `hex` is dropped when it is UTF-8: `text` then holds the same bytes, normalized (a UUID becomes `<UUIDn>`).
 fn sort_files(mut v: Value) -> Value {
     if let Some(roots) = v.as_object_mut() {
         for entries in roots.values_mut() {
             if let Some(list) = entries.as_array_mut() {
+                for entry in list.iter_mut() {
+                    let utf8 = entry["hex"]
+                        .as_str()
+                        .and_then(decode_hex)
+                        .is_some_and(|b| String::from_utf8(b).is_ok());
+                    if utf8 && let Some(o) = entry.as_object_mut() {
+                        o.remove("hex");
+                    }
+                }
                 list.sort_by(|a, b| a["path"].as_str().cmp(&b["path"].as_str()));
             }
         }
     }
     v
+}
+/// The entries that only one side has, or that differ, by root and path.
+fn files_diff(want: &Value, got: &Value) -> String {
+    let entries = |v: &Value| -> Vec<(String, Value)> {
+        let mut out = Vec::new();
+        for (root, list) in v.as_object().into_iter().flatten() {
+            for e in list.as_array().into_iter().flatten().cloned() {
+                out.push((
+                    format!("{root}/{}", e["path"].as_str().unwrap_or_default()),
+                    e,
+                ));
+            }
+        }
+        out
+    };
+    let (want, got) = (entries(want), entries(got));
+    let mut out = Vec::new();
+    for (path, w) in &want {
+        match got.iter().find(|(p, _)| p == path) {
+            None => out.push(format!("missing {path}")),
+            Some((_, g)) if g != w => {
+                let (wt, gt) = (
+                    w["text"].as_str().unwrap_or(""),
+                    g["text"].as_str().unwrap_or(""),
+                );
+                let at = wt
+                    .chars()
+                    .zip(gt.chars())
+                    .take_while(|(a, b)| a == b)
+                    .count();
+                let around = |t: &str| {
+                    t.chars()
+                        .skip(at.saturating_sub(60))
+                        .take(160)
+                        .collect::<String>()
+                };
+                out.push(format!(
+                    "{path}: mode {} vs {}; text differs at char {at}: expected {:?}, got {:?}",
+                    w["mode"],
+                    g["mode"],
+                    around(wt),
+                    around(gt)
+                ))
+            }
+            _ => {}
+        }
+    }
+    for (path, _) in got
+        .iter()
+        .filter(|(p, _)| !want.iter().any(|(w, _)| w == p))
+    {
+        out.push(format!("extra {path}"));
+    }
+    if out.is_empty() {
+        out.push(format!(
+            "same entries, other roots or order: {want:?} vs {got:?}"
+        ));
+    }
+    out.join("; ")
 }
 fn keychain_after(step: &Map<String, Value>, host: &FakeHost) -> Value {
     if step.get("keychain").is_none_or(Value::is_null) {
@@ -601,6 +721,23 @@ mod tests {
         assert_eq!(report.pending, 1);
         assert_eq!(report.run, 1);
         assert_eq!(report.filtered, 0);
+    }
+    #[test]
+    fn ts_root_maps_in_argv_and_json() {
+        assert_eq!(
+            crate::normalize::map_ts_root(
+                "--plan=/var/folders/x/T/purchasely-cli-nfbwWw/plan.json",
+                "/r"
+            ),
+            "--plan=/r/plan.json"
+        );
+        assert_eq!(
+            crate::normalize::map_ts_root(
+                r#"{"p":"/tmp/purchasely-cli-ab12/x","q":"purchasely-cli-<MKDTEMP>"}"#,
+                "<ROOT>"
+            ),
+            r#"{"p":"<ROOT>/x","q":"purchasely-cli-<MKDTEMP>"}"#
+        );
     }
     #[test]
     fn bless_writes_case() {

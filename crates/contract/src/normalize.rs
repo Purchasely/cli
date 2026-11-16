@@ -3,6 +3,8 @@ use std::collections::HashMap;
 /// Replaces machine-specific values in recorded transcripts while preserving correlations.
 pub fn normalize(input: &str, root: &str, pid: u32, version: &str) -> String {
     let mut value = input.replace(root, "<ROOT>");
+    value = map_ts_root(&value, "<ROOT>");
+    value = replace_release_dir(&value);
     value = replace_pid(&value, pid);
     value = replace_mkdtemp(&value);
     value = replace_uuids(&value);
@@ -29,6 +31,55 @@ pub fn replace_pid(input: &str, pid: u32) -> String {
             i += ch.len_utf8();
         }
     }
+    out
+}
+
+/// An absolute path that ends in the temp root of the TS run (`<tmpdir>/purchasely-cli-XXXXXX`, recorded
+/// verbatim in argv and in outputs) becomes `to`: the replay root, or `<ROOT>` in a comparison.
+pub fn map_ts_root(value: &str, to: &str) -> String {
+    const NAME: &str = "purchasely-cli-";
+    let path_char = |c: char| c.is_ascii_alphanumeric() || "/._-+".contains(c);
+    let mut out = String::with_capacity(value.len());
+    let mut rest = value;
+    while let Some(index) = rest.find(NAME) {
+        let start = rest[..index]
+            .char_indices()
+            .rev()
+            .take_while(|(_, c)| path_char(*c))
+            .last()
+            .map_or(index, |(i, _)| i);
+        let tail = &rest[index + NAME.len()..];
+        let end = tail
+            .find(|c: char| !(c.is_ascii_alphanumeric() || c == '_'))
+            .unwrap_or(tail.len());
+        if rest[start..].starts_with('/') && end > 0 {
+            out.push_str(&rest[..start]);
+            out.push_str(to);
+        } else {
+            out.push_str(&rest[..index + NAME.len() + end]);
+        }
+        rest = &tail[end..];
+    }
+    out.push_str(rest);
+    out
+}
+/// The `mkdtemp` dir of a plugin release (`ai.ts` `fetchPayload`): `cache/ai/release-XXXXXX`.
+pub fn replace_release_dir(input: &str) -> String {
+    const NAME: &str = "/ai/release-";
+    let mut out = String::with_capacity(input.len());
+    let mut rest = input;
+    while let Some(index) = rest.find(NAME) {
+        let tail = &rest[index + NAME.len()..];
+        let n = tail.chars().take_while(char::is_ascii_alphanumeric).count();
+        out.push_str(&rest[..index + NAME.len()]);
+        if n == 6 {
+            out.push_str("<MKDTEMP>");
+            rest = &tail[n..];
+        } else {
+            rest = tail;
+        }
+    }
+    out.push_str(rest);
     out
 }
 

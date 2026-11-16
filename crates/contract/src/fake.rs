@@ -253,7 +253,9 @@ impl FakeHost {
             || expected_args_value != actual_args_value
             || !opts_match
         {
-            self.fail(format!("exec differs: {file} {args:?} opts={opts:?}"));
+            self.fail(format!(
+                "exec differs: {file} {args:?} opts={opts:?}; expected {expected_file} {expected_args_value} opts={recorded_opts}"
+            ));
             return Err(ExecError::Other("exec transcript mismatch".into()));
         }
         if expected["run_child"] == true {
@@ -297,12 +299,25 @@ impl Host for FakeHost {
             .map(|(k, v)| (k.to_ascii_lowercase(), json!(v)))
             .collect();
         let actual_call = json!({"method":req.method,"url":req.url,"headers":actual_headers,"body":req.body.as_ref().map(|b|String::from_utf8_lossy(b).into_owned()),"refuse_redirect":req.refuse_redirect,"at":self.now()});
-        let mismatch = normalize_value(&expected_call, &self.inner.step, &self.inner.root)
-            != normalize_value(&actual_call, &self.inner.step, &self.inner.root);
-        if mismatch {
+        let expected_call = normalize_value(&expected_call, &self.inner.step, &self.inner.root);
+        let actual_call = normalize_value(&actual_call, &self.inner.step, &self.inner.root);
+        if expected_call != actual_call {
+            // Name each field that differs, with both values.
+            let fields = ["method", "url", "headers", "body", "refuse_redirect", "at"]
+                .iter()
+                .filter(|k| expected_call[**k] != actual_call[**k])
+                .map(|k| {
+                    format!(
+                        "{k}: expected {}, got {}",
+                        expected_call[*k], actual_call[*k]
+                    )
+                })
+                .collect::<Vec<_>>();
             self.fail(format!(
-                "fetch transcript mismatch for {} {}",
-                req.method, req.url
+                "fetch transcript mismatch for {} {}: {}",
+                req.method,
+                req.url,
+                fields.join("; ")
             ));
             return Err(NetError {
                 message: "fetch transcript mismatch".into(),
@@ -482,10 +497,19 @@ fn array(v: &Value, key: &str) -> Vec<Value> {
     v[key].as_array().cloned().unwrap_or_default()
 }
 fn normalize_text(text: &str, step: &Value, root: &Path) -> String {
-    let roots = crate::replay::execution_roots(step, root).unwrap_or_default();
+    let mut roots = crate::replay::execution_roots(step, root).unwrap_or_default();
+    // The longest path first: the root path is a prefix of the `<TMPn>` paths.
+    roots.sort_by_key(|(_, path)| std::cmp::Reverse(path.as_os_str().len()));
     let mut mapped = text.to_owned();
     for (token, path) in roots {
         mapped = mapped.replace(&path.to_string_lossy().to_string(), &token);
+    }
+    for (path, token) in step
+        .as_object()
+        .map(crate::replay::ts_tmp_roots)
+        .unwrap_or_default()
+    {
+        mapped = mapped.replace(&path, &token);
     }
     crate::normalize::normalize(
         &mapped,

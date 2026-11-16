@@ -139,7 +139,7 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
     if (!hadFakeTimers) vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(fakeWall);
     d.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
-      const call = { at: d.now(), url: String(input), method: init?.method ?? "GET", headers: init?.headers ?? {}, body: init?.body ?? null, refuse_redirect: false };
+      const call = { at: d.now(), url: String(input), method: init?.method ?? "GET", headers: init?.headers ?? {}, body: init?.body ?? null, refuse_redirect: init?.redirect === "manual" };
       try {
         const response = await original.fetch(input, init);
         const clone = response.clone();

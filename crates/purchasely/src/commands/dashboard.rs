@@ -423,17 +423,58 @@ fn list_value(name: &str) -> Value {
     Value::Array(rows)
 }
 
+fn print_list_only(output: Option<&str>, stdin_tty: bool, stdout_tty: bool) -> bool {
+    output == Some("json") || !(stdin_tty && stdout_tty)
+}
+
+fn validate_menu_dry_run(dry_run: bool, app: Option<&str>) -> Result<(), CliError> {
+    if dry_run && app.is_none() {
+        Err(errors::usage(
+            "--dry-run needs --app: the app menu sends a request.",
+        ))
+    } else {
+        Ok(())
+    }
+}
+
+fn app_menu_lines(apps: &[&Value]) -> Vec<String> {
+    let width = apps
+        .iter()
+        .map(|a| {
+            member(a, "name")
+                .and_then(Value::as_str)
+                .unwrap_or_default()
+                .chars()
+                .count()
+        })
+        .max()
+        .unwrap_or(0);
+    apps.iter()
+        .map(|a| {
+            let name = term::clean(
+                &member(a, "name")
+                    .and_then(Value::as_str)
+                    .unwrap_or_default(),
+            );
+            format!(
+                "{name:<width$}  {}",
+                member(a, "id").and_then(Value::as_str).unwrap_or_default()
+            )
+        })
+        .collect()
+}
+
+fn menu_output(p: &Parsed) -> &str {
+    p.opt("output").unwrap_or("table")
+}
+
 fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
-    if p.opt("output") == Some("json") || !(rt.d.is_tty && rt.d.stdout_tty) {
+    if print_list_only(p.opt("output"), rt.d.is_tty, rt.d.stdout_tty) {
         rt.d.host
             .stdout(&(json::stringify_pretty(&list_value(&rt.d.name)).unwrap_or_default() + "\n"));
         return Ok(());
     }
-    if p.flag("dry-run") && p.opt("app").is_none() {
-        return Err(errors::usage(
-            "--dry-run needs --app: the app menu sends a request.",
-        ));
-    }
+    validate_menu_dry_run(p.flag("dry-run"), p.opt("app"))?;
     let app = if let Some(app) = p.opt("app") {
         app.to_owned()
     } else {
@@ -474,31 +515,7 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
                 vec!["No application found for this key.".into()],
             ));
         }
-        let width = apps
-            .iter()
-            .map(|a| {
-                member(a, "name")
-                    .and_then(Value::as_str)
-                    .unwrap_or_default()
-                    .chars()
-                    .count()
-            })
-            .max()
-            .unwrap_or(0);
-        let lines = apps
-            .iter()
-            .map(|a| {
-                let name = term::clean(
-                    &member(a, "name")
-                        .and_then(Value::as_str)
-                        .unwrap_or_default(),
-                );
-                format!(
-                    "{name:<width$}  {}",
-                    member(a, "id").and_then(Value::as_str).unwrap_or_default()
-                )
-            })
-            .collect::<Vec<_>>();
+        let lines = app_menu_lines(&apps);
         let selected = term::choose(&lines, "Applications", "choose", rt.d.host.io(), &mut |s| {
             rt.d.host.stderr(s)
         });
@@ -565,7 +582,7 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
             String::new()
         },
         if daily { " --periodicity DAY" } else { "" },
-        p.opt("output").unwrap_or("table"),
+        menu_output(p),
         command_tail(p)
     ));
     let response = http::send(
@@ -794,6 +811,137 @@ mod tests {
             ),
             Some(1)
         );
+    }
+
+    #[test]
+    fn non_terminal_dashboard_list_is_json_with_summary_first() {
+        assert!(super::print_list_only(None, false, false));
+        let list = super::list_value("purchasely");
+        let rows = super::values(Some(&list));
+        assert_eq!(
+            super::member(rows[0], "command").and_then(crate::core::json::Value::as_str),
+            Some("purchasely dashboard summary".into())
+        );
+    }
+
+    #[test]
+    fn json_output_skips_the_menu_even_when_both_streams_are_tty() {
+        assert!(super::print_list_only(Some("json"), true, true));
+        assert!(!super::print_list_only(Some("table"), true, true));
+    }
+
+    #[test]
+    fn dashboard_rows_use_the_callers_program_name() {
+        let list = super::list_value("acme");
+        let rows = super::values(Some(&list));
+        assert_eq!(
+            super::member(rows[0], "command").and_then(crate::core::json::Value::as_str),
+            Some("acme dashboard summary".into())
+        );
+    }
+
+    #[test]
+    fn mau_dashboard_requires_no_date_range() {
+        let (item, flags) = super::dashboard_items("purchasely")
+            .into_iter()
+            .find(|(item, _)| item.action == "mau-reports")
+            .unwrap();
+        assert!(flags.is_empty());
+        assert!(
+            !item
+                .options
+                .iter()
+                .any(|option| option.name == "date_range")
+        );
+    }
+
+    #[test]
+    fn app_ids_stay_aligned_and_control_codes_are_cleaned() {
+        let apps = vec![
+            crate::core::json::parse(r#"{"name":"Short","id":"app_1"}"#).unwrap(),
+            crate::core::json::parse(r#"{"name":"Longer\u001b[2J name","id":"app_2"}"#).unwrap(),
+        ];
+        let refs = apps.iter().collect::<Vec<_>>();
+        let lines = super::app_menu_lines(&refs);
+        assert_eq!(lines[0].find("app_1"), lines[1].find("app_2"));
+        assert!(!lines[1].contains('\x1b'));
+    }
+
+    #[test]
+    fn menu_dry_run_without_app_is_refused_before_io() {
+        let error = super::validate_menu_dry_run(true, None).unwrap_err();
+        assert_eq!(error.exit, crate::core::errors::EXIT::USAGE);
+        assert!(error.message().contains("needs --app"));
+        assert!(super::validate_menu_dry_run(true, Some("app_1")).is_ok());
+    }
+
+    #[test]
+    fn interactive_menu_defaults_the_generated_command_to_table_output() {
+        assert_eq!(super::menu_output(&crate::cli::Parsed::default()), "table");
+    }
+
+    #[test]
+    fn interactive_command_preview_preserves_environment_and_quotes_reason() {
+        let parsed = crate::cli::Parsed {
+            options: std::collections::BTreeMap::from([
+                ("env".into(), vec!["staging".into()]),
+                ("reason".into(), vec!["look at it".into()]),
+            ]),
+            ..Default::default()
+        };
+        assert_eq!(
+            super::command_tail(&parsed),
+            " --env staging --reason \"look at it\""
+        );
+    }
+
+    #[test]
+    fn resize_closes_the_menu_with_a_message() {
+        struct ResizeIo;
+        impl crate::core::deps::Io for ResizeIo {
+            fn play(&self, _: &mut dyn crate::games::term::Game) -> Option<Result<String, String>> {
+                Some(Ok("The terminal changed size.".into()))
+            }
+        }
+        let mut said = Vec::new();
+        let result = crate::games::term::choose(
+            &["one".into()],
+            "Dashboards",
+            "run",
+            Some(&ResizeIo),
+            &mut |message: &str| said.push(message.to_owned()),
+        );
+        assert_eq!(result, None);
+        assert_eq!(said, vec!["The terminal changed size.\n"]);
+    }
+
+    #[test]
+    fn menu_scroll_can_select_the_last_dashboard() {
+        let mut menu = crate::games::term::Menu::new(
+            (0..40).map(|n| format!("dashboard {n}")).collect(),
+            "Dashboards",
+            "run",
+        );
+        for _ in 0..39 {
+            menu.key("down");
+        }
+        menu.key("return");
+        assert_eq!(menu.chosen(), Some(39));
+    }
+
+    #[test]
+    fn empty_menu_selection_does_not_invent_an_app() {
+        let io = FakeIo {
+            lines: std::cell::RefCell::new(Vec::new()),
+            selected: None,
+        };
+        let mut said = Vec::new();
+        let selected =
+            crate::games::term::choose(&[], "Applications", "choose", Some(&io), &mut |s: &str| {
+                said.push(s.to_owned())
+            });
+        assert_eq!(selected, None);
+        assert!(said.is_empty());
     }
 
     #[test]

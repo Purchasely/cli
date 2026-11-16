@@ -24,11 +24,11 @@ jobs:
           - target: darwin-arm64
             triple: aarch64-apple-darwin
             arch: arm64
-            runner: macos-14
+            runner: macos-latest
           - target: darwin-x64
             triple: x86_64-apple-darwin
             arch: x86_64
-            runner: macos-14
+            runner: macos-latest
           - target: linux-x64
             triple: x86_64-unknown-linux-musl
             arch: x86-64
@@ -80,9 +80,9 @@ jobs:
       matrix:
         include:
           - target: darwin-arm64
-            runner: macos-14
+            runner: macos-latest
           - target: darwin-x64
-            runner: macos-14
+            runner: macos-latest
           - target: linux-x64
             runner: ubuntu-latest
           - target: linux-arm64

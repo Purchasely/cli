@@ -37,6 +37,9 @@ jobs:
           components: rustfmt, clippy
       - run: cargo fmt --check
       - run: cargo clippy -p purchasely -- -D warnings
+      # The man page lint test needs mandoc; macOS ships it in /usr/bin.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y mandoc
       # The binary contract suite runs target/debug/purchasely: build it first.
       - run: cargo build -p purchasely --bins
       - run: cargo test --workspace

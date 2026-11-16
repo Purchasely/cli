@@ -197,10 +197,11 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
         });
         let _ = permit.release();
         let response = response.map_err(|e| {
-            let cause = match e.message.as_str() {
-                "ENOTFOUND" => "ENOTFOUND",
-                _ if e.timed_out => "Timeout",
-                _ => "Error",
+            // TS: `cause.code`, else the error name. The message is never echoed.
+            let cause = match &e.code {
+                Some(code) => code.as_str(),
+                None if e.timed_out => "Timeout",
+                None => "Error",
             };
             CliError::new(
                 EXIT::GENERIC,

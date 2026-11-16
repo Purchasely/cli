@@ -66,7 +66,7 @@ impl Host for RealHost {
             .body(req.body.unwrap_or_default())
             .map_err(|e| NetError {
                 message: e.to_string(),
-                timed_out: false,
+                ..NetError::default()
             })?;
         let response = agent.run(request).map_err(net_error)?;
         let (parts, body) = response.into_parts();
@@ -80,6 +80,7 @@ impl Host for RealHost {
             .read_to_end(&mut bytes)
             .map_err(|e| NetError {
                 timed_out: e.kind() == io::ErrorKind::TimedOut,
+                code: io_code(&e),
                 message: e.to_string(),
             })?;
         Ok(Response {
@@ -161,8 +162,23 @@ impl Host for RealHost {
 fn net_error(error: ureq::Error) -> NetError {
     NetError {
         timed_out: matches!(error, ureq::Error::Timeout(_)),
+        code: match &error {
+            ureq::Error::HostNotFound => Some("ENOTFOUND".into()),
+            ureq::Error::Io(e) => io_code(e),
+            _ => None,
+        },
         message: error.to_string(),
     }
+}
+
+/// The Node `cause.code` of a socket error.
+fn io_code(e: &io::Error) -> Option<String> {
+    let code = match e.kind() {
+        io::ErrorKind::ConnectionRefused => "ECONNREFUSED",
+        io::ErrorKind::ConnectionReset => "ECONNRESET",
+        _ => return None,
+    };
+    Some(code.into())
 }
 
 #[cfg(test)]

@@ -35,6 +35,8 @@ pub struct Response {
 pub struct NetError {
     pub message: String,
     pub timed_out: bool,
+    /// The system code of the TS `fetch` rejection (`cause.code`: `ENOTFOUND`, `ECONNREFUSED`).
+    pub code: Option<String>,
 }
 
 /// `opts` of TS `d.exec` (`types.ts:30`).

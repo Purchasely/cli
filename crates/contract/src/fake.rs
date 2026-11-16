@@ -291,7 +291,7 @@ impl Host for FakeHost {
             self.fail(format!("unexpected fetch call {} {}", req.method, req.url));
             return Err(NetError {
                 message: "unexpected fetch call".into(),
-                timed_out: false,
+                ..NetError::default()
             });
         };
         let expected_call = json!({"method":expected["method"],"url":expected["url"],"headers":lower_headers(&expected["headers"]),"body":expected["body"],"refuse_redirect":expected["refuse_redirect"],"at":expected["at"]});
@@ -323,7 +323,7 @@ impl Host for FakeHost {
             ));
             return Err(NetError {
                 message: "fetch transcript mismatch".into(),
-                timed_out: false,
+                ..NetError::default()
             });
         }
         let reply = &expected["reply"];
@@ -331,6 +331,7 @@ impl Host for FakeHost {
             return Err(NetError {
                 message: message.into(),
                 timed_out: message.to_lowercase().contains("timed out"),
+                code: reply["code"].as_str().map(str::to_owned),
             });
         }
         let body = if let Some(hex) = reply["hex"].as_str() {

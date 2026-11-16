@@ -190,7 +190,11 @@ pub fn parse_spec(source: &str) -> (usize, Vec<Op>) {
 }
 
 pub fn embedded_spec() -> (String, Vec<Op>) {
-    parse_spec_doc(SPEC).expect("valid embedded management spec")
+    // The spec is constant: parse it once per process (a replay runs thousands of commands).
+    static PARSED: std::sync::OnceLock<(String, Vec<Op>)> = std::sync::OnceLock::new();
+    PARSED
+        .get_or_init(|| parse_spec_doc(SPEC).expect("valid embedded management spec"))
+        .clone()
 }
 
 fn parse_schema(value: &Value) -> Schema {

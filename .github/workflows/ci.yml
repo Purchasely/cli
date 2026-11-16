@@ -24,3 +24,17 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+  rust:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@d1031067263f94b142dd6c0ce24c5eb9d02d52a0
+        with:
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+      - run: cargo fmt --check
+      - run: cargo clippy -p purchasely -- -D warnings
+      - run: cargo test --workspace

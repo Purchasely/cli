@@ -124,3 +124,24 @@ fn reference_man_page_passes_mandoc_lint() {
     );
     assert_eq!((lint.status.code(), text.as_str()), (Some(0), ""));
 }
+
+/// `docs/commands.md` is the header of `scripts/gen-docs.sh` and then `reference --format markdown`.
+#[test]
+fn docs_commands_md_is_the_generated_reference() {
+    let home = temp_home("docs");
+    let out = bin_command(&home, &["reference", "--format", "markdown"])
+        .output()
+        .unwrap();
+    let _ = std::fs::remove_dir_all(home);
+    assert_eq!(out.status.code(), Some(0));
+    let expected = format!(
+        "<!-- Generated from purchasely reference --format markdown. Do not edit. -->\n\n{}",
+        String::from_utf8_lossy(&out.stdout)
+    );
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/commands.md");
+    let file = std::fs::read_to_string(path).unwrap();
+    assert!(
+        file == expected,
+        "docs/commands.md is stale: run scripts/gen-docs.sh"
+    );
+}

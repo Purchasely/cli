@@ -1,1 +1,296 @@
-//! Owner: P0
+use super::{deps::*, exec};
+use std::{
+    collections::BTreeMap,
+    io::{self, Read, Write},
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
+
+pub struct RealHost {
+    env: BTreeMap<String, String>,
+}
+
+impl Default for RealHost {
+    fn default() -> Self {
+        Self::new(std::env::vars().collect())
+    }
+}
+
+impl RealHost {
+    pub fn new(env: BTreeMap<String, String>) -> Self {
+        Self { env }
+    }
+
+    fn write_stdout(&self, value: &str) {
+        if let Err(error) = io::stdout().write_all(value.as_bytes())
+            && error.kind() != io::ErrorKind::BrokenPipe
+        {
+            let _ = writeln!(io::stderr(), "{error}");
+        }
+    }
+}
+
+impl Host for RealHost {
+    fn fetch(&self, req: Request) -> Result<Response, NetError> {
+        let tls = super::tls::config(&self.env, |s| {
+            let _ = writeln!(io::stderr(), "{s}");
+        });
+        let agent = ureq::Agent::config_builder()
+            .http_status_as_error(false)
+            .max_redirects(if req.refuse_redirect { 0 } else { 20 })
+            .timeout_global(Some(Duration::from_millis(req.timeout_ms)))
+            .tls_config(tls)
+            .build()
+            .new_agent();
+        let mut request = ureq::http::Request::builder()
+            .method(req.method.as_str())
+            .uri(req.url.as_str());
+        for (name, value) in req.headers {
+            request = request.header(name, value);
+        }
+        let request = request
+            .body(req.body.unwrap_or_default())
+            .map_err(|e| NetError {
+                message: e.to_string(),
+                timed_out: false,
+            })?;
+        let response = agent.run(request).map_err(net_error)?;
+        let (parts, body) = response.into_parts();
+        let headers = parts
+            .headers
+            .iter()
+            .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
+            .collect();
+        let mut bytes = Vec::new();
+        body.into_reader()
+            .read_to_end(&mut bytes)
+            .map_err(|e| NetError {
+                timed_out: e.kind() == io::ErrorKind::TimedOut,
+                message: e.to_string(),
+            })?;
+        Ok(Response {
+            status: parts.status.as_u16(),
+            headers,
+            body: bytes,
+        })
+    }
+
+    fn exec(&self, file: &str, args: &[String], opts: ExecOpts) -> Result<ExecResult, ExecError> {
+        exec::run(file, args, opts)
+    }
+
+    fn prompt(&self, question: &str, hidden: bool) -> String {
+        let _ = io::stderr().write_all(question.as_bytes());
+        let _ = io::stderr().flush();
+        let fd = libc::STDIN_FILENO;
+        let mut old = std::mem::MaybeUninit::<libc::termios>::uninit();
+        let changed = hidden && unsafe { libc::tcgetattr(fd, old.as_mut_ptr()) == 0 };
+        if changed {
+            let mut new = unsafe { old.assume_init() };
+            new.c_lflag &= !libc::ECHO;
+            unsafe {
+                libc::tcsetattr(fd, libc::TCSAFLUSH, &new);
+            }
+        }
+        let mut answer = String::new();
+        let _ = io::stdin().read_line(&mut answer);
+        if changed {
+            unsafe {
+                libc::tcsetattr(fd, libc::TCSAFLUSH, old.as_ptr());
+            }
+            let _ = writeln!(io::stderr());
+        }
+        answer.trim_end_matches(['\r', '\n']).to_owned()
+    }
+
+    fn read_stdin(&self) -> String {
+        let mut value = String::new();
+        let _ = io::stdin().read_to_string(&mut value);
+        value
+    }
+    fn now(&self) -> i64 {
+        self.wall_now()
+    }
+    fn wall_now(&self) -> i64 {
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_millis()
+            .min(i64::MAX as u128) as i64
+    }
+    fn pid_alive(&self, pid: u32) -> bool {
+        pid != 0
+            && unsafe {
+                libc::kill(pid as i32, 0) == 0
+                    || io::Error::last_os_error().raw_os_error() == Some(libc::EPERM)
+            }
+    }
+    fn sleep(&self, ms: i64) {
+        if ms > 0 {
+            std::thread::sleep(Duration::from_millis(ms as u64));
+        }
+    }
+    fn stdout(&self, s: &str) {
+        self.write_stdout(s);
+    }
+    fn stderr(&self, s: &str) {
+        let _ = io::stderr().write_all(s.as_bytes());
+    }
+    fn keychain(&self) -> Option<&dyn Keychain> {
+        None
+    }
+    fn io(&self) -> Option<&dyn Io> {
+        None
+    }
+}
+
+fn net_error(error: ureq::Error) -> NetError {
+    NetError {
+        timed_out: matches!(error, ureq::Error::Timeout(_)),
+        message: error.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{net::TcpListener, thread};
+
+    fn server(response: Vec<u8>, delay: Duration) -> String {
+        server_requests(response, delay, 1)
+    }
+
+    fn server_requests(response: Vec<u8>, delay: Duration, requests: usize) -> String {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        thread::spawn(move || {
+            for _ in 0..requests {
+                let (mut stream, _) = listener.accept().unwrap();
+                let mut request = [0; 4096];
+                let _ = stream.read(&mut request);
+                thread::sleep(delay);
+                let _ = stream.write_all(&response);
+            }
+        });
+        format!("http://{addr}")
+    }
+
+    fn request(url: String) -> Request {
+        Request {
+            method: "GET".into(),
+            url,
+            ..Request::default()
+        }
+    }
+
+    #[test]
+    fn status_and_headers_are_preserved() {
+        let url = server(b"HTTP/1.1 201 Created\r\nX-Trace: abc\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok".to_vec(), Duration::ZERO);
+        let result = RealHost::default().fetch(request(url)).unwrap();
+        assert_eq!(result.status, 201);
+        assert!(
+            result
+                .headers
+                .iter()
+                .any(|(k, v)| k.eq_ignore_ascii_case("x-trace") && v == "abc")
+        );
+        assert_eq!(result.body, b"ok");
+    }
+
+    #[test]
+    fn gzip_body_is_decoded() {
+        let payload = b"hello";
+        let body = [
+            0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x03, 0xcb, 0x48, 0xcd, 0xc9,
+            0xc9, 0x07, 0x00, 0x86, 0xa6, 0x10, 0x36, 0x05, 0x00, 0x00, 0x00,
+        ];
+        let mut response = format!("HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Length: {}\r\nConnection: close\r\n\r\n", body.len()).into_bytes();
+        response.extend(body);
+        let result = RealHost::default()
+            .fetch(request(server(response, Duration::ZERO)))
+            .unwrap();
+        assert_eq!(result.body, payload);
+    }
+
+    #[test]
+    fn redirects_are_followed_unless_refused() {
+        let target = server(
+            b"HTTP/1.1 200 OK\r\nContent-Length: 4\r\nConnection: close\r\n\r\ndone".to_vec(),
+            Duration::ZERO,
+        );
+        let mut response = format!("HTTP/1.1 302 Found\r\nLocation: {target}\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").into_bytes();
+        let source = server_requests(std::mem::take(&mut response), Duration::ZERO, 2);
+        assert_eq!(
+            RealHost::default()
+                .fetch(request(source.clone()))
+                .unwrap()
+                .body,
+            b"done"
+        );
+        let result = RealHost::default()
+            .fetch(Request {
+                refuse_redirect: true,
+                ..request(source)
+            })
+            .unwrap();
+        assert_eq!(result.status, 302);
+    }
+
+    #[test]
+    fn timeout_covers_body_read() {
+        let url = server(
+            b"HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok".to_vec(),
+            Duration::from_millis(150),
+        );
+        let err = RealHost::default()
+            .fetch(Request {
+                timeout_ms: 20,
+                ..request(url)
+            })
+            .unwrap_err();
+        assert!(err.timed_out, "{err:?}");
+    }
+
+    #[test]
+    fn exec_maps_missing_program_and_spawn_error() {
+        assert_eq!(
+            RealHost::default().exec("/missing/purchasely-test", &[], ExecOpts::default()),
+            Err(ExecError::NotFound)
+        );
+        #[cfg(unix)]
+        assert!(matches!(
+            RealHost::default().exec("/", &[], ExecOpts::default()),
+            Err(ExecError::Other(_))
+        ));
+    }
+
+    #[test]
+    fn exec_kills_child_after_termination_grace() {
+        #[cfg(unix)]
+        {
+            let result = RealHost::default()
+                .exec(
+                    "sh",
+                    &["-c".into(), "trap '' TERM; while :; do :; done".into()],
+                    ExecOpts {
+                        timeout_ms: 20,
+                        ..ExecOpts::default()
+                    },
+                )
+                .unwrap();
+            assert!(result.timed_out);
+        }
+    }
+
+    #[test]
+    fn exec_rejects_output_above_limit() {
+        #[cfg(unix)]
+        assert!(matches!(
+            RealHost::default().exec(
+                "sh",
+                &["-c".into(), "head -c 268435457 /dev/zero".into()],
+                ExecOpts::default()
+            ),
+            Err(ExecError::Other(_))
+        ));
+    }
+}

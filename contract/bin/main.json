@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "test": "main::version",
+      "argv": ["--version"],
+      "env": {},
+      "stdin": "",
+      "code": 0,
+      "out": "0.7.2\n",
+      "err": ""
+    },
+    {
+      "test": "main::unknown_root_option",
+      "argv": ["--bogus"],
+      "env": {},
+      "stdin": "",
+      "code": 2,
+      "out": "",
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown option '--bogus'\"]}}\n"
+    },
+    {
+      "test": "main::unknown_command",
+      "argv": ["lst"],
+      "env": {},
+      "stdin": "",
+      "code": 2,
+      "out": "",
+      "err": "",
+      "pending": "P5b"
+    },
+    {
+      "test": "main::usage_error",
+      "argv": ["some", "command"],
+      "env": {},
+      "stdin": "",
+      "code": 2,
+      "out": "",
+      "err": "",
+      "pending": "P5b"
+    }
+  ]
+}

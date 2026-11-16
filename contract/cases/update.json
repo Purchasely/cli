@@ -673,8 +673,7 @@
                 "stdout": "",
                 "stderr": "",
                 "timedOut": false
-              },
-              "run_child": true
+              }
             }
           ],
           "prompts": [],
@@ -1960,7 +1959,27 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 1,
+                    "stdout": "",
+                    "stderr": "boom\n",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "error": "could not check the latest version"
+            }
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -2828,7 +2847,8 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ]
+      ],
+      "pending": "P7b"
     },
     {
       "test": "update::public channel > spawns the running bundle",
@@ -2889,8 +2909,7 @@
                 "stdout": "",
                 "stderr": "",
                 "timedOut": false
-              },
-              "run_child": true
+              }
             }
           ],
           "prompts": [],

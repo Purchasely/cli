@@ -584,7 +584,12 @@ fn files_diff(want: &Value, got: &Value) -> String {
                     .zip(gt.chars())
                     .take_while(|(a, b)| a == b)
                     .count();
+                // CONTRACT_FULL=1 prints the whole texts.
+                let full = std::env::var("CONTRACT_FULL").is_ok_and(|v| v == "1");
                 let around = |t: &str| {
+                    if full {
+                        return t.to_owned();
+                    }
                     t.chars()
                         .skip(at.saturating_sub(60))
                         .take(160)
@@ -683,7 +688,7 @@ pub fn bless_case(path: &Path, value: &Value) -> std::io::Result<()> {
     )
 }
 
-pub fn acme_extension(_recorded: &Value) -> Extension {
+pub fn acme_extension(recorded: &Value) -> Extension {
     Extension {
         modules: vec![register_acme],
         surface: "extra",
@@ -691,9 +696,49 @@ pub fn acme_extension(_recorded: &Value) -> Extension {
         surface_defs: vec![],
         identity: true,
         section: ("More commands", "Only in acme."),
-        latest: None,
-        npm_update: None,
+        latest: (!recorded["latest"].is_null())
+            .then_some(acme_latest as purchasely::core::ext::LatestFn),
+        // The harness lives for one test run: leaking the recorded text gives the &'static str of the type.
+        npm_update: recorded["npm_update"]
+            .as_str()
+            .map(|s| &*Box::leak(s.to_owned().into_boxed_str())),
     }
+}
+
+/// `ACME.latest` of `test/update.test.ts`, the only recorded extension with a channel: `gh release view`
+/// (replayed from the recorded execs), then the stable version of its tag.
+fn acme_latest(
+    d: &purchasely::core::deps::Deps,
+) -> Result<Option<String>, purchasely::core::errors::CliError> {
+    use purchasely::core::{
+        deps::ExecOpts,
+        errors::{CliError, EXIT},
+    };
+    let fail = || {
+        CliError::new(
+            EXIT::AUTH,
+            "UPDATE_CHECK_FAILED",
+            vec!["could not check the latest version".into()],
+        )
+    };
+    let r = d
+        .host
+        .exec(
+            "gh",
+            &["release".into(), "view".into()],
+            ExecOpts {
+                timeout_ms: 15_000,
+                ..ExecOpts::default()
+            },
+        )
+        .map_err(|_| fail())?;
+    if r.code != 0 {
+        return Err(fail());
+    }
+    let tag = r.stdout.trim();
+    Ok(purchasely::core::update::stable_version(
+        tag.strip_prefix('v').unwrap_or(tag),
+    ))
 }
 fn register_acme(parent: &mut Command, _: &mut Runtime) {
     parent.commands.push(

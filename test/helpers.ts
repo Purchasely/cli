@@ -155,10 +155,14 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       const self = file === process.execPath && args[0] === process.argv[1];
       const rec: Record<string, unknown> = { file: self ? "<SELF>" : file, args: self ? args.slice(1) : args, opts: execOpts };
       execCalls.push(rec);
+      // A test fake may run the detached child in process, or not: the child writes its status line, so a
+      // change of the output or of the calls tells that it ran.
+      const seen = () => out.length + err.length + fetchCalls.length + execCalls.length;
+      const seenBefore = seen();
       try {
         const result = await original.exec(file, args, execOpts);
         rec.result = result;
-        if (self && execOpts.detach) rec.run_child = true;
+        if (self && execOpts.detach && seen() !== seenBefore) rec.run_child = true;
         return result;
       } catch (error) {
         rec.error = error instanceof Error ? (error as NodeJS.ErrnoException).code ?? error.message : String(error);
@@ -169,9 +173,15 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       const latest = original.ext.latest;
       d.ext = { ...original.ext, latest: async (deps) => {
         const start = execCalls.length;
-        const result = await latest(deps);
-        latestData = { execs: execCalls.slice(start), result };
-        return result;
+        try {
+          const result = await latest(deps);
+          latestData = { execs: execCalls.slice(start), result };
+          return result;
+        } catch (error) {
+          // A failed channel is still a channel: record it, or the replay falls back to latest.json.
+          latestData = { execs: execCalls.slice(start), error: error instanceof Error ? error.message : String(error) };
+          throw error;
+        }
       } };
     }
     d.prompt = async (question, promptOpts) => {

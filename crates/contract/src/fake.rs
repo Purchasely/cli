@@ -204,11 +204,13 @@ impl FakeHost {
         opts: ExecOpts,
     ) -> Result<ExecResult, ExecError> {
         let Some(expected) = self.inner.execs.borrow_mut().pop_front() else {
-            self.fail("unexpected exec call");
+            self.fail(format!("unexpected exec call {file} {args:?}"));
             return Err(ExecError::Other("unexpected exec call".into()));
         };
         let expected_file = expected["file"].as_str().unwrap_or_default();
-        let actual_args = if expected_file == "<SELF>" {
+        // TS runs `node <script> args` and records args without the script. Rust runs its own binary (the
+        // `self_exe` of the fake deps, `<SELF>`) with the args alone.
+        let actual_args = if expected_file == "<SELF>" && file != "<SELF>" {
             args.get(1..).unwrap_or_default()
         } else {
             args
@@ -286,7 +288,7 @@ impl FakeHost {
 impl Host for FakeHost {
     fn fetch(&self, req: Request) -> Result<Response, NetError> {
         let Some(expected) = self.inner.calls.borrow_mut().pop_front() else {
-            self.fail("unexpected fetch call");
+            self.fail(format!("unexpected fetch call {} {}", req.method, req.url));
             return Err(NetError {
                 message: "unexpected fetch call".into(),
                 timed_out: false,

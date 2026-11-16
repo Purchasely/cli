@@ -1,0 +1,17 @@
+name: Contract drift
+on:
+  pull_request:
+  push:
+    branches: [feat/rust-cli]
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm ci
+      - run: CONTRACT_RECORD=$RUNNER_TEMP/cases npx vitest run
+      - run: CONTRACT_DRIFT_DIR=$RUNNER_TEMP/cases cargo test -p contract --test drift

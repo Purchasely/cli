@@ -416,7 +416,8 @@ mod tests {
     fn tempfile_dir() -> PathBuf {
         static N: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
         let n = N.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-        let p = std::env::temp_dir().join(format!("ply-state-{}-{n}", std::process::id()));
+        let p =
+            std::env::temp_dir().join(format!("purchasely-state-test-{}-{n}", std::process::id()));
         let _ = fs::remove_dir_all(&p);
         fs::create_dir_all(&p).unwrap();
         p

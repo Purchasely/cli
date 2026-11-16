@@ -715,7 +715,7 @@ thread_local! {
 
 static EXTENSION: std::sync::OnceLock<fn(&Value) -> Extension> = std::sync::OnceLock::new();
 
-/// Installs the extension that a step with a recorded `ext` replays with. The staff workspace calls it
+/// Installs the extension that a step with a recorded `ext` replays with. A workspace with its own extension calls it
 /// once with its own builder; without a call, the replay uses the `acme` test extension.
 pub fn set_extension(build: fn(&Value) -> Extension) {
     let _ = EXTENSION.set(build);

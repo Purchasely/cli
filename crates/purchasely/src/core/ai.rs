@@ -139,20 +139,7 @@ fn plugin(d: &Deps) -> Value {
     )
 }
 fn state_store(d: &Deps) -> super::state::StateStore<'_> {
-    #[cfg(unix)]
-    let previous_mode = {
-        use std::os::unix::fs::PermissionsExt;
-        fs::metadata(&d.state_dir)
-            .ok()
-            .map(|m| m.permissions().mode() & 0o777)
-    };
-    let store = super::state::StateStore::new(d, "ai");
-    #[cfg(unix)]
-    if let Some(mode) = previous_mode {
-        use std::os::unix::fs::PermissionsExt;
-        let _ = fs::set_permissions(&d.state_dir, fs::Permissions::from_mode(mode));
-    }
-    store
+    super::state::StateStore::new(d, "ai")
 }
 fn agent_map(v: &Value) -> Value {
     prop(v, "agents")
@@ -165,6 +152,14 @@ fn registration(d: &Deps, agent: &str) -> Option<Value> {
         None
     }
 }
+/// JS `{ ...o, key: value }`: an existing key keeps its place, a new key goes last.
+fn set(fields: &mut Vec<(String, Value)>, key: &str, value: Value) {
+    match fields.iter_mut().find(|(k, _)| k == key) {
+        Some(slot) => slot.1 = value,
+        None => fields.push((key.into(), value)),
+    }
+}
+/// TS `Session.put`: re-read, change the one agent, set `latest` when known, write.
 fn write_registration(d: &Deps, agent: &str, value: Option<Value>, latest: Option<&str>) {
     let old = plugin(d);
     let mut entries = if let Value::Object(xs) = agent_map(&old) {
@@ -172,25 +167,18 @@ fn write_registration(d: &Deps, agent: &str, value: Option<Value>, latest: Optio
     } else {
         vec![]
     };
-    entries.retain(|(k, _)| k != agent);
-    if let Some(v) = value {
-        entries.push((agent.into(), v));
+    match value {
+        Some(v) => set(&mut entries, agent, v),
+        None => entries.retain(|(k, _)| k != agent),
     }
     let mut root = if let Value::Object(xs) = old {
         xs
     } else {
         vec![]
     };
-    let existing_latest = root
-        .iter()
-        .find(|(k, _)| k == "latest")
-        .map(|(_, v)| v.clone());
-    root.retain(|(k, _)| k != "agents" && k != "latest");
-    root.push(("agents".into(), Value::Object(entries)));
+    set(&mut root, "agents", Value::Object(entries));
     if let Some(tag) = latest {
-        root.push(("latest".into(), Value::from(tag.to_owned())));
-    } else if let Some(value) = existing_latest {
-        root.push(("latest".into(), value));
+        set(&mut root, "latest", Value::from(tag.to_owned()));
     }
     let store = state_store(d);
     let _ = store.write("plugin", &Value::Object(root));
@@ -538,6 +526,8 @@ pub fn command_result(
     agent: Option<&str>,
     dry_run: bool,
 ) -> Result<Value, CliError> {
+    // TS `new Session(...)` comes first: its StateStore creates the state dir, also before a refusal.
+    state_store(&rt.d);
     let selected = validate_request(&rt.d, verb, agent, dry_run)?;
     if verb == Verb::Status {
         return Ok(Value::Array(
@@ -853,18 +843,23 @@ fn process_agent(
         } else {
             vec![]
         };
-        fields.retain(|(k, _)| {
-            k != "probe" && k != "scope" && k != "version" && k != "updated_at" && k != "last_error"
-        });
-        if let Some(scope) = get_string(&probe, "scope") {
-            fields.push(("scope".into(), Value::from(scope)));
+        // TS `{ ...reg, scope: probe.scope, probe, version, updated_at, last_error: undefined }`.
+        fields.retain(|(k, _)| k != "last_error");
+        match get_string(&probe, "scope") {
+            Some(scope) => set(&mut fields, "scope", Value::from(scope)),
+            None => fields.retain(|(k, _)| k != "scope"),
         }
-        fields.push(("probe".into(), probe));
-        fields.push((
-            "version".into(),
+        set(&mut fields, "probe", probe);
+        set(
+            &mut fields,
+            "version",
             Value::from(tag.unwrap_or_default().to_owned()),
-        ));
-        fields.push(("updated_at".into(), Value::Number(d.host.now() as f64)));
+        );
+        set(
+            &mut fields,
+            "updated_at",
+            Value::Number(d.host.now() as f64),
+        );
         write_registration(d, agent, Some(Value::Object(fields)), tag);
     } else {
         let (dir, src) = match payload {
@@ -1135,8 +1130,11 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
             } else {
                 vec![]
             };
-            fields.retain(|(key, _)| key != "checked_at");
-            fields.push(("checked_at".into(), Value::Number(rt.d.host.now() as f64)));
+            set(
+                &mut fields,
+                "checked_at",
+                Value::Number(rt.d.host.now() as f64),
+            );
             store.write("plugin", &Value::Object(fields)).is_ok()
         });
         if !reserved.unwrap_or(false) {
@@ -1155,9 +1153,12 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
             } else {
                 vec![]
             };
-            fields.retain(|(key, _)| key != "latest" && key != "checked_at");
-            fields.push(("latest".into(), Value::from(tag.to_owned())));
-            fields.push(("checked_at".into(), Value::Number(rt.d.host.now() as f64)));
+            set(&mut fields, "latest", Value::from(tag.to_owned()));
+            set(
+                &mut fields,
+                "checked_at",
+                Value::Number(rt.d.host.now() as f64),
+            );
             store.write("plugin", &Value::Object(fields)).is_ok()
         })
         .unwrap_or(false)

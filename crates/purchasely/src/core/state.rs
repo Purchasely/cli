@@ -16,12 +16,12 @@ pub struct StateStore<'a> {
 }
 impl<'a> StateStore<'a> {
     pub fn new(d: &'a Deps, key: impl Into<String>) -> Self {
-        let _ = fs::create_dir_all(&d.state_dir);
+        // TS `mkdirSync(stateDir, { recursive: true, mode: 0o700 })`: the mode applies to a new dir only.
+        let mut builder = fs::DirBuilder::new();
+        builder.recursive(true);
         #[cfg(unix)]
-        {
-            use std::os::unix::fs::PermissionsExt;
-            let _ = fs::set_permissions(&d.state_dir, fs::Permissions::from_mode(0o700));
-        }
+        std::os::unix::fs::DirBuilderExt::mode(&mut builder, 0o700);
+        let _ = builder.create(&d.state_dir);
         Self { d, key: key.into() }
     }
     fn path(&self, n: &str) -> PathBuf {

@@ -30,4 +30,4 @@ A hand-written command may take over a generated name: register it before the su
 
 - Tests call `run(argv, deps)` with a fake `fetch`, keychain, clock and prompt. Do not call the network. Do not use real time in limiter tests.
 - `test/helpers.ts`: `setup()` gives the fakes. `EXT` is a small example extension (`acme`) for the tests of the extension seam.
-- `docs/commands.md` is generated from the command tree: `npx vitest run test/docs.test.ts -t "commands.md is generated" -u`.
+- `docs/commands.md` is generated from the command tree: `scripts/gen-docs.sh`.

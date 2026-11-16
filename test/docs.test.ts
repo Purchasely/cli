@@ -40,7 +40,7 @@ describe("docs", () => {
 
   const generated = () => {
     const rt = new Runtime(setup().d);
-    return "<!-- Generated from the command tree. Do not edit. Run: npx vitest run test/docs.test.ts -t \"commands.md is generated\" -u -->\n\n" + markdown(collect(build(rt), rt));
+    return "<!-- Generated from purchasely reference --format markdown. Do not edit. -->\n\n" + markdown(collect(build(rt), rt));
   };
 
   it("every documented row is in the tree", () => {

@@ -44,7 +44,7 @@ See [docs/exit-codes.md](docs/exit-codes.md). The short rule: 7 means stop, 9 me
 
 - The commands come from `spec/management.json` at runtime. Do not edit that file by hand.
 - Layout and rules: [docs/development.md](docs/development.md).
-- `docs/commands.md` is generated from the command tree. Change the help text of the command, not the file, then run `npx vitest run test/docs.test.ts -t "commands.md is generated" -u`.
+- `docs/commands.md` is generated from the command tree. Change the help text of the command, not the file, then run `scripts/gen-docs.sh`.
 - A hand-written command may take over a generated name: register it before the surface and add `resource action` to `rt.taken`.
 - Tests call `run(argv, deps)` with a fake `fetch`, keychain, clock and prompt. Do not call the network. Do not use real time in limiter tests.
 - Commits: atomic. Use Conventional Commits. The full suite runs in CI: locally run `npm run typecheck` and the tests of your change.

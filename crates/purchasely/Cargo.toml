@@ -16,4 +16,5 @@ ureq = { version = "=3.1.4", default-features = false, features = ["rustls", "gz
 sha2 = "0.10"
 getrandom = "0.3"
 libc = "0.2"
+webpki-roots = "=1.0.12"
 rustls-pki-types = { version = "1", features = ["std"] }

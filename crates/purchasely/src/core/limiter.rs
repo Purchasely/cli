@@ -287,6 +287,6 @@ mod tests {
             pid: 8,
             at: 3,
         };
-        assert_eq!(slots(&value(4, 5, &[s.clone()]))[0].id, s.id)
+        assert_eq!(slots(&value(4, 5, std::slice::from_ref(&s)))[0].id, s.id)
     }
 }

@@ -85,14 +85,13 @@ impl Sandbox {
         ]
     }
     fn run(&self, args: &[&str], extra: &[(&str, &str)]) -> Output {
-        if let Some(i) = args.iter().position(|a| *a == "--version") {
-            if let Some(version) = args
+        if let Some(i) = args.iter().position(|a| *a == "--version")
+            && let Some(version) = args
                 .get(i + 1)
                 .filter(|v| v.chars().next().is_some_and(|c| c.is_ascii_digit()))
             {
                 self.latest(&format!("{{\"version\":\"{version}\"}}"));
             }
-        }
         let mut c = Command::new("/bin/sh");
         c.arg(&self.script)
             .args(args)

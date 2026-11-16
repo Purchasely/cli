@@ -22,5 +22,5 @@ pub struct Extension {
     pub npm_update: Option<&'static str>,
 }
 pub type Register = fn(&mut Command, &Runtime);
-pub struct SurfaceDef;
+pub use super::credentials::SurfaceDef;
 pub use super::errors::CliError;

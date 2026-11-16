@@ -1,0 +1,243 @@
+{
+  "cases": [
+    {
+      "test": "auth-status::auth status prints its result once > with no key: nothing on stdout, one error JSON on stderr, exit 3",
+      "steps": [
+        {
+          "argv": [
+            "auth",
+            "status"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56369,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 3,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=-\n{\"error\":{\"code\":\"UNAUTHORIZED\",\"messages\":[\"No Management API key. Run `purchasely auth login` or set PURCHASELY_API_KEY.\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "auth-status::auth status prints its result once > with a key: one JSON object on stdout, exit 0",
+      "steps": [
+        {
+          "argv": [
+            "auth",
+            "status"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56369,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\"env\":\"prod\",\"surface\":\"management\",\"source\":\"env\",\"key\":\"…T123\",\"identity\":null}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "auth-status::one key label in auth status and usage > labels the current key with the label of auth status and an older key with its hash",
+      "steps": [
+        {
+          "argv": [
+            "auth",
+            "status"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56369,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"64a08fa3f374\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22363461303866613366333734222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"64a08fa3f374\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22363461303866613366333734222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\"env\":\"prod\",\"surface\":\"management\",\"source\":\"env\",\"key\":\"…T123\",\"identity\":null}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56369,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"64a08fa3f374\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22363461303866613366333734222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"64a08fa3f374\",\"method\":\"GET\",\"path\":\"/x\",\"status\":200,\"rate_limited\":false,\"request_id\":\"r\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22363461303866613366333734222c226d6574686f64223a22474554222c2270617468223a222f78222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2272227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"requests\": 1,\n      \"rejections\": 0\n    },\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"64a08fa3f374\",\n      \"label\": \"hash:64a08fa3f374\",\n      \"requests\": 1,\n      \"rejections\": 0\n    }\n  ],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    }
+  ]
+}

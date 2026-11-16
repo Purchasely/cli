@@ -1,0 +1,589 @@
+{
+  "cases": [
+    {
+      "test": "doctor::doctor > checks the version, the key and the API, and never prints the key",
+      "steps": [
+        {
+          "argv": [
+            "doctor"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56368,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"004cfa11-6d1e-4cf9-bc6b-c36f3076ff0d\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230303463666131312d366431652d346366392d626336622d633336663330373666663064227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"version\":\"9.9.9\"}"
+              }
+            },
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications?per_page=1",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; doctor; script)",
+                "X-Request-Id": "004cfa11-6d1e-4cf9-bc6b-c36f3076ff0d"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"data\":[]}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"checks\": [\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"ok\",\n      \"detail\": \"9.9.9, the latest\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"prod key …T123 from env\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"The Management API of prod accepts the key\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Writes allowed\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ],
+      "expected_ts": {
+        "test": "doctor::doctor > checks the version, the key and the API, and never prints the key",
+        "steps": [
+          {
+            "argv": [
+              "doctor"
+            ],
+            "env": {
+              "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+              "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+            },
+            "is_tty": false,
+            "stdin": "",
+            "answers": [],
+            "name": "purchasely",
+            "pid": 56368,
+            "version": "9.9.9",
+            "host": "https://cli.test",
+            "platform": "darwin",
+            "columns": null,
+            "ext": null,
+            "t_before": 1700000000000,
+            "t_after": 1700000000000,
+            "wall": "2026-01-15T12:00:00.000Z",
+            "pid_probes": [],
+            "files_before": {
+              "<ROOT>": []
+            },
+            "files_after": {
+              "<ROOT>": [
+                {
+                  "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                  "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+                },
+                {
+                  "path": "state/usage.jsonl",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"004cfa11-6d1e-4cf9-bc6b-c36f3076ff0d\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230303463666131312d366431652d346366392d626336622d633336663330373666663064227d0a"
+                },
+                {
+                  "path": "state",
+                  "mode": 448,
+                  "directory": true
+                }
+              ]
+            },
+            "keychain": {
+              "before": {},
+              "after": {},
+              "ops": []
+            },
+            "calls": [
+              {
+                "at": 1700000000000,
+                "url": "https://cli.test/latest.json",
+                "method": "GET",
+                "headers": {},
+                "body": null,
+                "refuse_redirect": false,
+                "reply": {
+                  "status": 200,
+                  "headers": {
+                    "content-type": "text/plain;charset=UTF-8"
+                  },
+                  "text": "{\"version\":\"9.9.9\"}"
+                }
+              },
+              {
+                "at": 1700000000000,
+                "url": "https://api.purchasely.io/management/v1/applications?per_page=1",
+                "method": "GET",
+                "headers": {
+                  "Accept": "application/json",
+                  "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                  "User-Agent": "purchasely-cli/9.9.9 (-; -; doctor; script)",
+                  "X-Request-Id": "004cfa11-6d1e-4cf9-bc6b-c36f3076ff0d"
+                },
+                "body": null,
+                "refuse_redirect": false,
+                "reply": {
+                  "status": 200,
+                  "headers": {
+                    "content-type": "text/plain;charset=UTF-8"
+                  },
+                  "text": "{\"data\":[]}"
+                }
+              }
+            ],
+            "execs": [],
+            "prompts": [],
+            "code": 0,
+            "out": "{\n  \"checks\": [\n    {\n      \"check\": \"node\",\n      \"status\": \"ok\",\n      \"detail\": \"Node 26.10.0\"\n    },\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"ok\",\n      \"detail\": \"9.9.9, the latest\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"prod key …T123 from env\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"The Management API of prod accepts the key\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Writes allowed\"\n    }\n  ]\n}\n",
+            "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          }
+        ]
+      },
+      "intended_diff": "doctor omits the node runtime check for the native CLI"
+    },
+    {
+      "test": "doctor::doctor > fails when the API refuses the key, warns on a newer version",
+      "steps": [
+        {
+          "argv": [
+            "doctor"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56368,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":401,\"rate_limited\":false,\"request_id\":\"ea22efac-99cb-4028-a551-79ff2de5ad65\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3430312c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265613232656661632d393963622d343032382d613535312d373966663264653561643635227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"version\":\"10.0.0\"}"
+              }
+            },
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications?per_page=1",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; doctor; script)",
+                "X-Request-Id": "ea22efac-99cb-4028-a551-79ff2de5ad65"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 401,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "{\n  \"checks\": [\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9, and 10.0.0 is available. Run `purchasely update`\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"prod key …T123 from env\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"fail\",\n      \"detail\": \"The Management API of prod refuses the key (HTTP 401). Check the key and the env\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Writes allowed\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"DOCTOR_FAILED\",\"messages\":[\"api: The Management API of prod refuses the key (HTTP 401). Check the key and the env\"]}}\n"
+        }
+      ],
+      "expected_ts": {
+        "test": "doctor::doctor > fails when the API refuses the key, warns on a newer version",
+        "steps": [
+          {
+            "argv": [
+              "doctor"
+            ],
+            "env": {
+              "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+              "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+            },
+            "is_tty": false,
+            "stdin": "",
+            "answers": [],
+            "name": "purchasely",
+            "pid": 56368,
+            "version": "9.9.9",
+            "host": "https://cli.test",
+            "platform": "darwin",
+            "columns": null,
+            "ext": null,
+            "t_before": 1700000000000,
+            "t_after": 1700000000000,
+            "wall": "2026-01-15T12:00:00.000Z",
+            "pid_probes": [],
+            "files_before": {
+              "<ROOT>": []
+            },
+            "files_after": {
+              "<ROOT>": [
+                {
+                  "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                  "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+                },
+                {
+                  "path": "state/usage.jsonl",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":401,\"rate_limited\":false,\"request_id\":\"ea22efac-99cb-4028-a551-79ff2de5ad65\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3430312c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265613232656661632d393963622d343032382d613535312d373966663264653561643635227d0a"
+                },
+                {
+                  "path": "state",
+                  "mode": 448,
+                  "directory": true
+                }
+              ]
+            },
+            "keychain": {
+              "before": {},
+              "after": {},
+              "ops": []
+            },
+            "calls": [
+              {
+                "at": 1700000000000,
+                "url": "https://cli.test/latest.json",
+                "method": "GET",
+                "headers": {},
+                "body": null,
+                "refuse_redirect": false,
+                "reply": {
+                  "status": 200,
+                  "headers": {
+                    "content-type": "text/plain;charset=UTF-8"
+                  },
+                  "text": "{\"version\":\"10.0.0\"}"
+                }
+              },
+              {
+                "at": 1700000000000,
+                "url": "https://api.purchasely.io/management/v1/applications?per_page=1",
+                "method": "GET",
+                "headers": {
+                  "Accept": "application/json",
+                  "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                  "User-Agent": "purchasely-cli/9.9.9 (-; -; doctor; script)",
+                  "X-Request-Id": "ea22efac-99cb-4028-a551-79ff2de5ad65"
+                },
+                "body": null,
+                "refuse_redirect": false,
+                "reply": {
+                  "status": 401,
+                  "headers": {
+                    "content-type": "text/plain;charset=UTF-8"
+                  },
+                  "text": "{}"
+                }
+              }
+            ],
+            "execs": [],
+            "prompts": [],
+            "code": 1,
+            "out": "{\n  \"checks\": [\n    {\n      \"check\": \"node\",\n      \"status\": \"ok\",\n      \"detail\": \"Node 26.10.0\"\n    },\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9, and 10.0.0 is available. Run `purchasely update`\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"prod key …T123 from env\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"fail\",\n      \"detail\": \"The Management API of prod refuses the key (HTTP 401). Check the key and the env\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Writes allowed\"\n    }\n  ]\n}\n",
+            "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"DOCTOR_FAILED\",\"messages\":[\"api: The Management API of prod refuses the key (HTTP 401). Check the key and the env\"]}}\n"
+          }
+        ]
+      },
+      "intended_diff": "doctor omits the node runtime check for the native CLI"
+    },
+    {
+      "test": "doctor::doctor > with no key and offline, it sends nothing and names the fix",
+      "steps": [
+        {
+          "argv": [
+            "doctor",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_OFFLINE": "1",
+            "PURCHASELY_READ_ONLY": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56368,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+              },
+              {
+                "path": "config",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+              },
+              {
+                "path": "config",
+                "mode": 448,
+                "directory": true
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "check      status  detail\ninstall    ok      npm install, automatic update off\nversion    warn    9.9.9. PURCHASELY_OFFLINE=1 is set: no check of the latest version\nkey        fail    No Management API key for prod. Run `purchasely auth login` or set PURCHASELY_API_KEY\napi        warn    Not checked: no key\nai plugin  warn    Not installed with the CLI. Run `purchasely ai install`\nwrites     ok      Read-only mode, write_allowlist.prod: app_test\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n{\"error\":{\"code\":\"DOCTOR_FAILED\",\"messages\":[\"key: No Management API key for prod. Run `purchasely auth login` or set PURCHASELY_API_KEY\"]}}\n"
+        }
+      ],
+      "expected_ts": {
+        "test": "doctor::doctor > with no key and offline, it sends nothing and names the fix",
+        "steps": [
+          {
+            "argv": [
+              "doctor",
+              "--output",
+              "table"
+            ],
+            "env": {
+              "PURCHASELY_API_KEY": "",
+              "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+              "PURCHASELY_OFFLINE": "1",
+              "PURCHASELY_READ_ONLY": "1"
+            },
+            "is_tty": false,
+            "stdin": "",
+            "answers": [],
+            "name": "purchasely",
+            "pid": 56368,
+            "version": "9.9.9",
+            "host": "https://cli.test",
+            "platform": "darwin",
+            "columns": null,
+            "ext": null,
+            "t_before": 1700000000000,
+            "t_after": 1700000000000,
+            "wall": "2026-01-15T12:00:00.000Z",
+            "pid_probes": [],
+            "files_before": {
+              "<ROOT>": [
+                {
+                  "path": "config/config.json",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                  "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+                },
+                {
+                  "path": "config",
+                  "mode": 448,
+                  "directory": true
+                }
+              ]
+            },
+            "files_after": {
+              "<ROOT>": [
+                {
+                  "path": "config/config.json",
+                  "mode": 384,
+                  "directory": false,
+                  "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                  "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+                },
+                {
+                  "path": "config",
+                  "mode": 448,
+                  "directory": true
+                },
+                {
+                  "path": "state",
+                  "mode": 448,
+                  "directory": true
+                }
+              ]
+            },
+            "keychain": {
+              "before": {},
+              "after": {},
+              "ops": [
+                {
+                  "op": "get",
+                  "args": [
+                    "purchasely-cli",
+                    "prod:management"
+                  ],
+                  "result": null
+                }
+              ]
+            },
+            "calls": [],
+            "execs": [],
+            "prompts": [],
+            "code": 1,
+            "out": "check      status  detail\nnode       ok      Node 26.10.0\ninstall    ok      npm install, automatic update off\nversion    warn    9.9.9. PURCHASELY_OFFLINE=1 is set: no check of the latest version\nkey        fail    No Management API key for prod. Run `purchasely auth login` or set PURCHASELY_API_KEY\napi        warn    Not checked: no key\nai plugin  warn    Not installed with the CLI. Run `purchasely ai install`\nwrites     ok      Read-only mode, write_allowlist.prod: app_test\n",
+            "err": "purchasely env=prod surface=management identity=- key=-\n{\"error\":{\"code\":\"DOCTOR_FAILED\",\"messages\":[\"key: No Management API key for prod. Run `purchasely auth login` or set PURCHASELY_API_KEY\"]}}\n"
+          }
+        ]
+      },
+      "intended_diff": "doctor omits the node runtime check for the native CLI"
+    }
+  ]
+}

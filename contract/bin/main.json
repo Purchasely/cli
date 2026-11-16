@@ -2,7 +2,9 @@
   "cases": [
     {
       "test": "main::version",
-      "argv": ["--version"],
+      "argv": [
+        "--version"
+      ],
       "env": {},
       "stdin": "",
       "code": 0,
@@ -11,7 +13,9 @@
     },
     {
       "test": "main::unknown_root_option",
-      "argv": ["--bogus"],
+      "argv": [
+        "--bogus"
+      ],
       "env": {},
       "stdin": "",
       "code": 2,
@@ -20,23 +24,26 @@
     },
     {
       "test": "main::unknown_command",
-      "argv": ["lst"],
+      "argv": [
+        "lst"
+      ],
       "env": {},
       "stdin": "",
       "code": 2,
       "out": "",
-      "err": "",
-      "pending": "P5b"
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'lst'\"]}}\n"
     },
     {
       "test": "main::usage_error",
-      "argv": ["some", "command"],
+      "argv": [
+        "some",
+        "command"
+      ],
       "env": {},
       "stdin": "",
       "code": 2,
       "out": "",
-      "err": "",
-      "pending": "P5b"
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'some'\"]}}\n"
     }
   ]
 }

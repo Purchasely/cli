@@ -160,6 +160,10 @@ jobs:
       - name: Verify bridge with the frozen installer and real binaries
         if: inputs.version == '0.9.0' || inputs.version == ''
         run: |
+          # The bridge runs the native binary, which prints its crate version; the old installer wants 0.9.0.
+          # Before the crate is 0.9.0, the test release::bridge_tgz_accepted_by_old_installer covers this with fakes.
+          crate=$(grep '^version =' crates/purchasely/Cargo.toml | head -1 | cut -d'"' -f2)
+          if [ "$crate" != 0.9.0 ]; then echo "skip: crate version $crate is not the bridge version 0.9.0"; exit 0; fi
           mkdir -p out/old-site "$RUNNER_TEMP/bridge-home" "$RUNNER_TEMP/bridge-root" "$RUNNER_TEMP/bridge-bin"
           cp out/bridge/purchasely-0.9.0.tgz out/bridge/latest.json out/bridge/SHA256SUMS out/old-site/
           sed 's|^HOST=$|HOST=https://cli.test|' crates/contract/tests/fixtures/old-install.sh > "$RUNNER_TEMP/old-install.sh"

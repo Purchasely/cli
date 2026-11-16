@@ -129,11 +129,15 @@ fn is_uuid(bytes: &[u8]) -> bool {
 }
 
 pub fn replace_man_date(input: &str) -> String {
+    // split_inclusive keeps every newline, so the function is idempotent and keeps a trailing one.
     input
-        .lines()
+        .split_inclusive('\n')
         .map(|line| {
             if line.starts_with(".TH ") {
-                let mut fields = line.splitn(4, ' ');
+                let (body, end) = line
+                    .strip_suffix('\n')
+                    .map_or((line, ""), |body| (body, "\n"));
+                let mut fields = body.splitn(4, ' ');
                 let first = fields.next().unwrap_or_default();
                 let second = fields.next().unwrap_or_default();
                 let _date = fields.next().unwrap_or_default();
@@ -141,17 +145,24 @@ pub fn replace_man_date(input: &str) -> String {
                 format!("{first} {second} <DATE> {tail}")
                     .trim_end()
                     .to_owned()
+                    + end
             } else {
                 line.to_owned()
             }
         })
-        .collect::<Vec<_>>()
-        .join("\n")
+        .collect()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn man_date_keeps_newlines_and_is_idempotent() {
+        let once = replace_man_date(".TH X 2026-01-02 \"x 1\"\nbody\n\n");
+        assert_eq!(once, ".TH X <DATE> \"x 1\"\nbody\n\n");
+        assert_eq!(replace_man_date(&once), once);
+    }
 
     #[test]
     fn root_path_is_replaced() {

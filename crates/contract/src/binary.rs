@@ -285,8 +285,9 @@ pub fn record_path(directory: &Path, name: &str, result: &BinaryResult) -> std::
         serde_json::to_vec_pretty(&val).map_err(std::io::Error::other)?,
     )
 }
+/// `actual` comes normalized from the runner (`normalize_bytes`): only the expected side is normalized here.
 pub fn compare_recorded(expected: &Value, actual: &BinaryResult) -> Result<(), String> {
-    let got = json!({"code":actual.code,"stdout":normalize_binary_text(&String::from_utf8_lossy(&actual.stdout),None),"stderr":normalize_binary_text(&String::from_utf8_lossy(&actual.stderr),None)});
+    let got = json!({"code":actual.code,"stdout":String::from_utf8_lossy(&actual.stdout),"stderr":String::from_utf8_lossy(&actual.stderr)});
     for (key, alias) in [("code", "code"), ("stdout", "out"), ("stderr", "err")] {
         let expected_value = expected
             .get(key)

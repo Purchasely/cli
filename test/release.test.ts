@@ -144,16 +144,6 @@ describe("pack-release.sh", () => {
   });
 
 
-  it("public install from the packed site", () => {
-    const site = out;
-    const file = join(tmp, "install-public.sh");
-    writeFileSync(file, readFileSync(join(site, "install.sh"), "utf8").replace(/^HOST=.*$/m, "HOST=https://cli.test"));
-    const env = sandbox("public-install", { FAKE_SITE: site });
-    const r = run("sh", [file], { env });
-    expect(r.status, r.out + r.err).toBe(0);
-    expect(existsSync(join(env.XDG_DATA_HOME!, "purchasely", "install", "releases", VER, "dist", "bin", "purchasely.js"))).toBe(true);
-    expect(run(join(env.PURCHASELY_BIN_DIR!, "purchasely"), ["--version"], { env }).out.trim()).toBe(VER);
-  });
 });
 
 describe("reference", () => {

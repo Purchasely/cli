@@ -301,6 +301,32 @@ pub fn cut(text: &str, width: usize) -> String {
     format!("{}...", text.chars().take(prefix).collect::<String>())
 }
 
+/// A menu of lines in the alternate screen: the selected line index, or `None` when the user quits.
+pub fn choose(
+    lines: &[String],
+    title: &str,
+    verb: &str,
+    io_adapter: Option<&dyn crate::core::deps::Io>,
+    say: &mut dyn FnMut(&str),
+) -> Option<usize> {
+    let (cols, rows) = io_adapter.map_or_else(terminal_dimensions, |io| io.dimensions());
+    let width = cols.saturating_sub(8);
+    let mut menu = Menu::new(
+        lines.iter().map(|line| cut(&clean(line), width)).collect(),
+        title,
+        verb,
+    );
+    menu.set_dimensions(cols, rows);
+    let result = match io_adapter.and_then(|io| io.play(&mut menu)) {
+        Some(result) => result.unwrap_or_else(|error| error),
+        None => play(&mut menu, false).unwrap_or_else(|error| error.to_string()),
+    };
+    if menu.chosen().is_none() && result != "Bye." {
+        say(&format!("{result}\n"));
+    }
+    menu.chosen()
+}
+
 pub fn strip_ansi(text: &str) -> String {
     let mut chars = text.chars().peekable();
     let mut out = String::new();

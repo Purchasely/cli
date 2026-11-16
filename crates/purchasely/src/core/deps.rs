@@ -74,8 +74,16 @@ pub trait Keychain {
     fn set(&self, service: &str, account: &str, secret: &str) -> Result<(), KeychainError>;
     fn delete(&self, service: &str, account: &str) -> Result<(), KeychainError>;
 }
-/// Terminal of menus and games (`games/term.ts:104`). Owner of the methods: P11a.
-pub trait Io {}
+/// Optional terminal adapter for deterministic menus and games.
+pub trait Io {
+    /// A host can handle a game itself; `None` uses the real terminal implementation.
+    fn play(&self, _game: &mut dyn crate::games::term::Game) -> Option<Result<String, String>> {
+        None
+    }
+    fn dimensions(&self) -> (usize, usize) {
+        (80, 24)
+    }
+}
 
 pub trait Host {
     fn fetch(&self, req: Request) -> Result<Response, NetError>;

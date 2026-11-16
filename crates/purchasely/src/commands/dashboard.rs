@@ -1,6 +1,849 @@
-//! Owner: P0
+//! Owner: P10
+use crate::{
+    cli::{Command, Parsed},
+    core::{
+        errors::{self, CliError, EXIT},
+        http::{self, Ctx, HttpRequest},
+        json::{self, Value},
+        output::{self, EmitOptions},
+        runtime::{self, Runtime},
+        time,
+    },
+    games::term,
+    management::{request, spec},
+};
+use std::collections::BTreeMap;
 
-use crate::{cli::Command, core::runtime::Runtime};
+const DAY: i64 = 86_400_000;
+const BLOCKS: [char; 7] = ['▁', '▂', '▃', '▄', '▅', '▆', '▇'];
 
-/// Not ported yet: registers nothing.
-pub fn register(_: &mut Command, _: &mut Runtime) {}
+pub fn sparkline(values: &[f64]) -> String {
+    let min = values.iter().copied().fold(f64::INFINITY, f64::min);
+    let max = values.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    let span = max - min;
+    values
+        .iter()
+        .map(|v| {
+            let index = if span.is_finite() && span != 0.0 {
+                (((*v - min) / span) * 6.0).round() as usize
+            } else {
+                0
+            };
+            BLOCKS[index.min(6)]
+        })
+        .collect()
+}
+
+fn date_range(now: i64, days: u32) -> (String, String) {
+    (
+        time::iso_date(now - i64::from(days.saturating_sub(1)) * DAY),
+        time::iso_date(now),
+    )
+}
+
+fn member<'a>(v: &'a Value, key: &str) -> Option<&'a Value> {
+    if let Value::Object(fields) = v {
+        fields
+            .iter()
+            .find(|(name, _)| name == key)
+            .map(|(_, value)| value)
+    } else {
+        None
+    }
+}
+fn number(v: Option<&Value>) -> f64 {
+    if let Some(Value::Number(n)) = v {
+        *n
+    } else {
+        0.0
+    }
+}
+fn values(v: Option<&Value>) -> Vec<&Value> {
+    if let Some(Value::Array(items)) = v {
+        items.iter().collect()
+    } else {
+        Vec::new()
+    }
+}
+fn series(root: &Value, path: &[&str], key: &str) -> Vec<(String, f64)> {
+    let mut at = root;
+    for part in path {
+        let Some(next) = member(at, part) else {
+            return Vec::new();
+        };
+        at = next;
+    }
+    values(Some(at))
+        .into_iter()
+        .map(|row| {
+            (
+                member(row, "period")
+                    .and_then(Value::as_str)
+                    .unwrap_or_default(),
+                number(member(row, key)),
+            )
+        })
+        .collect()
+}
+
+fn generated(resource: &str, action: &str) -> Result<spec::Command, CliError> {
+    let (_, ops) = spec::embedded_spec();
+    spec::derive_commands(&ops).into_iter().find(|c| c.resource == resource && c.action == action)
+        .ok_or_else(|| errors::usage(format!("dashboard summary needs dashboard {action}, which this version of the API spec does not have. Run purchasely update.")))
+}
+
+fn values_for(app: &str, range: &[String], periodicity: &str) -> BTreeMap<String, Value> {
+    BTreeMap::from([
+        ("application_id".into(), Value::from(app.to_owned())),
+        (
+            "date_range".into(),
+            Value::Array(range.iter().cloned().map(Value::from).collect()),
+        ),
+        ("periodicity".into(), Value::from(periodicity.to_owned())),
+    ])
+}
+
+fn context<'a>(rt: &'a Runtime, p: &Parsed) -> Result<Ctx<'a>, CliError> {
+    let env = rt.env(p.opt("env"))?;
+    let key = rt
+        .credential(&env, "management")
+        .map_err(|e| CliError::new(EXIT::GENERIC, "CREDENTIAL_ERROR", vec![e]))?
+        .map(|c| c.key);
+    Ok(Ctx {
+        d: &rt.d,
+        env,
+        surface: "management".into(),
+        key,
+        identity: rt.cfg.identity_email.clone(),
+        reason: p.opt("reason").map(str::to_owned),
+        command: rt.command.clone(),
+        rate: rt.rate("management", p.opt("rate"), p.flag("i-asked-backend"))?,
+        headers: Vec::new(),
+        read_only: rt.read_only(),
+    })
+}
+
+fn read(
+    ctx: &Ctx<'_>,
+    action: &str,
+    app: &str,
+    range: &[String],
+    periodicity: &str,
+) -> Result<Value, CliError> {
+    let cmd = generated("dashboard", action)?;
+    let built = request::build_request(
+        &cmd,
+        &values_for(app, range, periodicity),
+        &ctx.env,
+        None,
+        None,
+    )?;
+    let response = http::send(
+        ctx,
+        &HttpRequest {
+            method: "GET".into(),
+            url: built.url,
+            path_template: built.op.path,
+            body: None,
+            write: Some(false),
+            refuse_redirect: false,
+        },
+    )?;
+    if !(200..300).contains(&response.status) {
+        let body = json::parse(&response.text).unwrap_or(Value::Null);
+        let code = member(member(&body, "error").unwrap_or(&Value::Null), "code")
+            .and_then(Value::as_str)
+            .unwrap_or_else(|| format!("HTTP_{}", response.status));
+        let messages = values(member(
+            member(&body, "error").unwrap_or(&Value::Null),
+            "messages",
+        ))
+        .into_iter()
+        .filter_map(Value::as_str)
+        .collect::<Vec<_>>();
+        let mut error = CliError::new(
+            errors::exit_for(Some(&code), response.status),
+            code,
+            if messages.is_empty() {
+                vec![format!("HTTP {}", response.status)]
+            } else {
+                messages
+            },
+        );
+        error.status = Some(response.status);
+        if response.status == 404 {
+            error
+                .messages
+                .insert(0, format!("application \"{app}\" not found"));
+        }
+        return Err(error);
+    }
+    Ok(if response.text.trim().is_empty() {
+        Value::Object(Vec::new())
+    } else {
+        json::parse(&response.text).unwrap_or(Value::Null)
+    })
+}
+
+fn summary(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
+    let app = p
+        .opt("app")
+        .ok_or_else(|| errors::usage("dashboard summary needs --app <app_id>."))?;
+    let days_text = p.opt("days").unwrap_or("30");
+    let days = days_text
+        .parse::<u32>()
+        .ok()
+        .filter(|n| (2..=730).contains(n))
+        .ok_or_else(|| errors::usage("--days must be a whole number from 2 to 730."))?;
+    let (from, to) = date_range(rt.d.host.now(), days);
+    let periodicity = if days <= 60 {
+        "DAY"
+    } else if days <= 183 {
+        "WEEK"
+    } else {
+        "MONTH"
+    };
+    let ctx = context(rt, p)?;
+    let range = vec![from.clone(), to.clone()];
+    let mut requests = vec![
+        ("mrr-evolution-live", range.clone(), periodicity),
+        ("subscription-evolution", range.clone(), periodicity),
+        ("conversion", range, periodicity),
+    ];
+    if periodicity != "DAY" {
+        requests.push(("mrr-evolution-live", vec![to.clone(), to.clone()], "DAY"));
+    }
+    if p.flag("dry-run") {
+        let previews = requests
+            .iter()
+            .map(|(action, range, period)| {
+                let cmd = generated("dashboard", action)?;
+                let built = request::build_request(
+                    &cmd,
+                    &values_for(app, range, period),
+                    &ctx.env,
+                    None,
+                    None,
+                )?;
+                Ok(Value::Object(vec![
+                    ("method".into(), Value::from("GET".to_owned())),
+                    ("url".into(), Value::from(built.url)),
+                    (
+                        "headers".into(),
+                        Value::Object(vec![
+                            (
+                                "Authorization".into(),
+                                Value::from("Bearer <redacted>".to_owned()),
+                            ),
+                            ("Accept".into(), Value::from("application/json".to_owned())),
+                            ("User-Agent".into(), Value::from(http::ctx_user_agent(&ctx))),
+                        ]),
+                    ),
+                ]))
+            })
+            .collect::<Result<Vec<_>, CliError>>()?;
+        rt.d.host
+            .stdout(&(json::stringify_pretty(&Value::Array(previews)).unwrap_or_default() + "\n"));
+        return Ok(());
+    }
+    let mut bodies = Vec::new();
+    for (action, range, period) in requests {
+        bodies.push(read(&ctx, action, app, &range, period)?);
+    }
+    let mrr = series(
+        &bodies[0],
+        &["mrr_evolution_live", "data", "mrr", "values", "by_day"],
+        "value",
+    );
+    let subs = series(&bodies[1], &["subscription_evolution"], "count");
+    let viewers = series(
+        &bodies[2],
+        &["conversion", "primary_metric_by_period"],
+        "unique_viewers_count",
+    );
+    let conversions = series(
+        &bodies[2],
+        &["conversion", "secondary_metric_by_period"],
+        "total_conversions_count",
+    );
+    let today_mrr = if bodies.len() == 4 {
+        series(
+            &bodies[3],
+            &["mrr_evolution_live", "data", "mrr", "values", "by_day"],
+            "value",
+        )
+    } else {
+        Vec::new()
+    };
+    let kpi = values(member(
+        member(&bodies[2], "conversion").unwrap_or(&Value::Null),
+        "kpi",
+    ))
+    .first()
+    .copied()
+    .map(|v| number(member(v, "unique_viewers_count")))
+    .unwrap_or(0.0);
+    let last = |s: &[(String, f64)]| s.last().map_or(0.0, |v| v.1);
+    let sum = |s: &[(String, f64)]| s.iter().map(|v| v.1).sum::<f64>();
+    let panels = vec![
+        (
+            "MRR",
+            if today_mrr.is_empty() {
+                last(&mrr)
+            } else {
+                last(&today_mrr)
+            },
+            &mrr,
+        ),
+        ("Active subscriptions", last(&subs), &subs),
+        ("Paywall unique viewers", kpi, &viewers),
+        ("Conversions", sum(&conversions), &conversions),
+    ];
+    let output = p.opt("output").unwrap_or("json");
+    if output == "table" {
+        let name_width = panels
+            .iter()
+            .map(|(name, _, _)| name.len())
+            .max()
+            .unwrap_or(0);
+        let value_width = panels
+            .iter()
+            .map(|(_, value, _)| fmt(if *value == 0.0 { 0.0 } else { *value }).len())
+            .max()
+            .unwrap_or(0);
+        let mut out = format!("{app}  {from} to {to}  ({periodicity})\n\n");
+        for (name, value, series) in &panels {
+            let line = if series.is_empty() {
+                "(no data)".into()
+            } else {
+                sparkline(&series.iter().map(|v| v.1).collect::<Vec<_>>())
+            };
+            let value = if *value == 0.0 { 0.0 } else { *value };
+            out.push_str(&format!(
+                "{name:<name_width$}  {:>value_width$}  {line}\n",
+                fmt(value)
+            ));
+        }
+        rt.d.host.stdout(&out);
+    } else {
+        let json_panels = panels
+            .iter()
+            .map(|(name, value, values)| {
+                Value::Object(vec![
+                    ("name".into(), Value::from((*name).to_owned())),
+                    ("value".into(), Value::Number(*value)),
+                    (
+                        "series".into(),
+                        Value::Array(
+                            values
+                                .iter()
+                                .map(|(period, value)| {
+                                    Value::Object(vec![
+                                        ("period".into(), Value::from(period.clone())),
+                                        ("value".into(), Value::Number(*value)),
+                                    ])
+                                })
+                                .collect(),
+                        ),
+                    ),
+                ])
+            })
+            .collect();
+        let value = Value::Object(vec![
+            ("app".into(), Value::from(app.to_owned())),
+            ("from".into(), Value::from(from)),
+            ("to".into(), Value::from(to)),
+            ("periodicity".into(), Value::from(periodicity.to_owned())),
+            ("panels".into(), Value::Array(json_panels)),
+        ]);
+        output::emit(
+            &rt.d,
+            &value,
+            &EmitOptions {
+                width: rt.d.columns.unwrap_or(120) as usize,
+                ..EmitOptions::default()
+            },
+        );
+    }
+    Ok(())
+}
+fn fmt(value: f64) -> String {
+    if value.fract() == 0.0 {
+        format!("{value:.0}")
+    } else {
+        format!("{value:.2}")
+    }
+}
+
+fn dashboard_items(name: &str) -> Vec<(spec::Command, Vec<String>)> {
+    let (_, ops) = spec::embedded_spec();
+    spec::derive_commands(&ops)
+        .into_iter()
+        .filter(|c| c.resource == "dashboard")
+        .map(|c| {
+            let op = c.app_op.as_ref().or(c.global_op.as_ref()).unwrap();
+            let mut required: Vec<String> = if c.global_op.is_some() {
+                Vec::new()
+            } else {
+                vec!["--app".into()]
+            };
+            required.extend(
+                op.params
+                    .iter()
+                    .filter(|p| {
+                        p.required && p.name != "application_id" && p.name != "confirm_token"
+                    })
+                    .map(|p| format!("--{}", p.name.replace('_', "-"))),
+            );
+            let _ = name;
+            (c, required)
+        })
+        .collect()
+}
+
+fn list_value(name: &str) -> Value {
+    let mut rows = vec![Value::Object(vec![
+        ("command".into(), Value::from(format!("{name} dashboard summary"))),
+        ("description".into(), Value::from("Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts".to_owned())),
+        ("required_flags".into(), Value::Array(vec![Value::from("--app".to_owned())])),
+    ])];
+    rows.extend(dashboard_items(name).into_iter().map(|(c, flags)| {
+        Value::Object(vec![
+            (
+                "command".into(),
+                Value::from(format!("{name} dashboard {}", c.action)),
+            ),
+            ("description".into(), Value::from(c.summary)),
+            (
+                "required_flags".into(),
+                Value::Array(flags.into_iter().map(Value::from).collect()),
+            ),
+        ])
+    }));
+    Value::Array(rows)
+}
+
+fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
+    if p.opt("output") == Some("json") || !(rt.d.is_tty && rt.d.stdout_tty) {
+        rt.d.host
+            .stdout(&(json::stringify_pretty(&list_value(&rt.d.name)).unwrap_or_default() + "\n"));
+        return Ok(());
+    }
+    if p.flag("dry-run") && p.opt("app").is_none() {
+        return Err(errors::usage(
+            "--dry-run needs --app: the app menu sends a request.",
+        ));
+    }
+    let app = if let Some(app) = p.opt("app") {
+        app.to_owned()
+    } else {
+        let ctx = context(rt, p)?;
+        let ops = spec::derive_commands(&spec::embedded_spec().1);
+        let cmd = ops
+            .into_iter()
+            .find(|c| c.resource == "applications" && c.action == "list")
+            .ok_or_else(|| errors::usage("applications list is missing from the API spec"))?;
+        let vals = BTreeMap::from([
+            (
+                "fields".into(),
+                Value::Array(vec![Value::from("id".into()), Value::from("name".into())]),
+            ),
+            ("per_page".into(), Value::Number(100.0)),
+        ]);
+        let built = request::build_request(&cmd, &vals, &ctx.env, None, None)?;
+        let response = http::send(
+            &ctx,
+            &HttpRequest {
+                method: "GET".into(),
+                url: built.url,
+                path_template: built.op.path,
+                body: None,
+                write: Some(false),
+                refuse_redirect: false,
+            },
+        )?;
+        if !(200..300).contains(&response.status) {
+            return Err(api_error(&response));
+        }
+        let body = json::parse(&response.text).unwrap_or(Value::Null);
+        let apps = values(member(&body, "mobile_applications"));
+        if apps.is_empty() {
+            return Err(CliError::new(
+                EXIT::NOT_FOUND,
+                "NOT_FOUND",
+                vec!["No application found for this key.".into()],
+            ));
+        }
+        let width = apps
+            .iter()
+            .map(|a| {
+                member(a, "name")
+                    .and_then(Value::as_str)
+                    .unwrap_or_default()
+                    .chars()
+                    .count()
+            })
+            .max()
+            .unwrap_or(0);
+        let lines = apps
+            .iter()
+            .map(|a| {
+                let name = term::clean(
+                    &member(a, "name")
+                        .and_then(Value::as_str)
+                        .unwrap_or_default(),
+                );
+                format!(
+                    "{name:<width$}  {}",
+                    member(a, "id").and_then(Value::as_str).unwrap_or_default()
+                )
+            })
+            .collect::<Vec<_>>();
+        let selected = term::choose(&lines, "Applications", "choose", rt.d.host.io(), &mut |s| {
+            rt.d.host.stderr(s)
+        });
+        let Some(index) = selected else { return Ok(()) };
+        member(apps[index], "id")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+    };
+    let items = dashboard_items(&rt.d.name);
+    let fillable = items
+        .iter()
+        .filter(|(_, required)| {
+            required
+                .iter()
+                .all(|f| ["--app", "--date-range", "--periodicity"].contains(&f.as_str()))
+        })
+        .collect::<Vec<_>>();
+    let lines = fillable
+        .iter()
+        .map(|(c, _)| format!("dashboard {}  {}", c.action, c.summary))
+        .collect::<Vec<_>>();
+    let selected = term::choose(&lines, "Dashboards", "run", rt.d.host.io(), &mut |s| {
+        rt.d.host.stderr(s)
+    });
+    let Some(index) = selected else { return Ok(()) };
+    let (item, _) = fillable[index];
+    let now = rt.d.host.now();
+    let (from, to) = date_range(now, 30);
+    if item.action == "summary" {
+        rt.d.host.stderr(&format!(
+            "{} dashboard summary --app {app} --days 30 --output table{}\n",
+            rt.d.name,
+            command_tail(p)
+        ));
+        let mut args = p.clone();
+        args.options.insert("app".into(), vec![app]);
+        args.options.insert("days".into(), vec!["30".into()]);
+        args.options.insert("output".into(), vec!["table".into()]);
+        return summary(rt, &args);
+    }
+    let ctx = context(rt, p)?;
+    let dated = item.options.iter().any(|o| o.name == "date_range");
+    let daily = item.options.iter().any(|o| o.name == "periodicity");
+    let mut vals = BTreeMap::from([("application_id".into(), Value::from(app.clone()))]);
+    if dated {
+        vals.insert(
+            "date_range".into(),
+            Value::Array(vec![Value::from(from.clone()), Value::from(to.clone())]),
+        );
+    }
+    if daily {
+        vals.insert("periodicity".into(), Value::from("DAY".to_owned()));
+    }
+    let cmd = item.clone();
+    let built = request::build_request(&cmd, &vals, &ctx.env, None, None)?;
+    rt.d.host.stderr(&format!(
+        "{} dashboard {} --app {}{}{} --output {}{}\n",
+        rt.d.name,
+        item.action,
+        app,
+        if dated {
+            format!(" --date-range {from},{to}")
+        } else {
+            String::new()
+        },
+        if daily { " --periodicity DAY" } else { "" },
+        p.opt("output").unwrap_or("table"),
+        command_tail(p)
+    ));
+    let response = http::send(
+        &ctx,
+        &HttpRequest {
+            method: "GET".into(),
+            url: built.url,
+            path_template: built.op.path,
+            body: None,
+            write: Some(false),
+            refuse_redirect: false,
+        },
+    )?;
+    if !(200..300).contains(&response.status) {
+        return Err(api_error(&response));
+    }
+    let value = if response.text.trim().is_empty() {
+        Value::Object(Vec::new())
+    } else {
+        json::parse(&response.text).unwrap_or(Value::Null)
+    };
+    output::emit(
+        &rt.d,
+        &value,
+        &EmitOptions {
+            table: p.opt("output").unwrap_or("table") == "table",
+            width: rt.d.columns.unwrap_or(120) as usize,
+            ..EmitOptions::default()
+        },
+    );
+    Ok(())
+}
+
+fn command_tail(p: &Parsed) -> String {
+    let mut tail = String::new();
+    if let Some(env) = p.opt("env") {
+        tail.push_str(&format!(" --env {env}"));
+    }
+    if let Some(reason) = p.opt("reason") {
+        let quoted = json::stringify(&Value::from(reason.to_owned()), None).unwrap_or_default();
+        tail.push_str(&format!(" --reason {quoted}"));
+    }
+    tail
+}
+
+fn api_error(response: &http::HttpResponse) -> CliError {
+    let body = json::parse(&response.text).unwrap_or(Value::Null);
+    let code = member(member(&body, "error").unwrap_or(&Value::Null), "code")
+        .and_then(Value::as_str)
+        .unwrap_or_else(|| format!("HTTP_{}", response.status));
+    let messages = values(member(
+        member(&body, "error").unwrap_or(&Value::Null),
+        "messages",
+    ))
+    .into_iter()
+    .filter_map(Value::as_str)
+    .collect::<Vec<_>>();
+    let mut error = CliError::new(
+        errors::exit_for(Some(&code), response.status),
+        code,
+        if messages.is_empty() {
+            vec![format!("HTTP {}", response.status)]
+        } else {
+            messages
+        },
+    );
+    error.status = Some(response.status);
+    error
+}
+
+pub fn register(program: &mut Command, rt: &mut Runtime) {
+    rt.taken.insert("dashboard summary".into());
+    let mut group = runtime::group(program, "dashboard").clone().description(
+        "Analytics dashboards. Start with: dashboard summary --app <app_id> --output table",
+    );
+    runtime::add_globals(&mut group);
+    group = group.option(crate::cli::OptionDef::value(
+        "--app <app_id>",
+        "application public id",
+    ));
+    let mut summary_command = Command::new("summary")
+        .description("Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts")
+        .option(crate::cli::OptionDef::value("--app <app_id>", "application public id (required)"))
+        .option(crate::cli::OptionDef::value("--days <n>", "number of days up to today, from 2 to 730").default("30"));
+    runtime::add_globals(&mut summary_command);
+    group
+        .commands
+        .push(summary_command.action(|p, rt| summary(rt, p)));
+    group = group.action(|p, rt| menu(rt, p));
+    if let Some(existing) = program.commands.iter_mut().find(|c| c.name == "dashboard") {
+        *existing = group;
+    } else {
+        program.commands.push(group);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn sparkline_scales_values_and_keeps_flat_series_low() {
+        assert_eq!(super::sparkline(&[1.0, 2.0, 3.0]), "▁▄▇");
+        assert_eq!(super::sparkline(&[7.0, 7.0]), "▁▁");
+    }
+
+    #[test]
+    fn dashboard_dates_are_computed_in_utc() {
+        assert_eq!(
+            super::date_range(1_700_000_000_000, 30),
+            ("2023-10-16".into(), "2023-11-14".into())
+        );
+    }
+
+    #[test]
+    fn dashboard_menu_list_has_summary_and_all_generated_actions() {
+        let list = super::list_value("acme");
+        let rows = super::values(Some(&list));
+        assert_eq!(rows.len(), 23);
+        assert_eq!(
+            super::member(rows[0], "command")
+                .and_then(crate::core::json::Value::as_str)
+                .as_deref(),
+            Some("acme dashboard summary")
+        );
+        assert!(rows.iter().any(|row| {
+            super::member(row, "command")
+                .and_then(crate::core::json::Value::as_str)
+                .as_deref()
+                == Some("acme dashboard header-live")
+        }));
+    }
+
+    #[test]
+    fn dashboard_menu_required_flags_keep_global_operations_optional_for_app() {
+        let (_, flags) = super::dashboard_items("purchasely")
+            .into_iter()
+            .find(|(item, _)| item.action == "mau-reports")
+            .unwrap();
+        assert!(flags.is_empty());
+        let (_, flags) = super::dashboard_items("purchasely")
+            .into_iter()
+            .find(|(item, _)| item.action == "conversion")
+            .unwrap();
+        assert_eq!(flags, vec!["--app", "--date-range"]);
+    }
+
+    #[test]
+    fn dashboard_menu_hides_dashboards_that_need_an_unfilled_flag() {
+        let fillable = super::dashboard_items("purchasely")
+            .into_iter()
+            .filter(|(_, flags)| {
+                flags
+                    .iter()
+                    .all(|f| ["--app", "--date-range", "--periodicity"].contains(&f.as_str()))
+            })
+            .map(|(c, _)| c.action)
+            .collect::<Vec<_>>();
+        assert!(!fillable.contains(&"funnel".into()));
+        assert!(!fillable.contains(&"flow-paths".into()));
+        assert!(fillable.contains(&"conversion".into()));
+    }
+
+    #[test]
+    fn old_dashboard_v2_names_are_not_created_as_a_separate_resource() {
+        let names = super::dashboard_items("purchasely")
+            .into_iter()
+            .map(|(item, _)| item.action)
+            .collect::<Vec<_>>();
+        assert_eq!(names.len(), 22);
+        assert_eq!(
+            names
+                .iter()
+                .collect::<std::collections::BTreeSet<_>>()
+                .len(),
+            names.len()
+        );
+        assert!(names.contains(&"paid-subscription-retention".into()));
+    }
+
+    #[test]
+    fn dashboard_menu_quit_returns_no_selection_and_restores_without_a_message() {
+        let io = FakeIo {
+            lines: std::cell::RefCell::new(Vec::new()),
+            selected: None,
+        };
+        let mut said = Vec::new();
+        assert_eq!(
+            crate::games::term::choose(
+                &["summary".into()],
+                "Dashboards",
+                "run",
+                Some(&io),
+                &mut |s: &str| said.push(s.to_owned())
+            ),
+            None
+        );
+        assert!(said.is_empty());
+    }
+
+    #[test]
+    fn dashboard_menu_strips_control_codes_and_cuts_to_terminal_width() {
+        let io = FakeIo::selected(0);
+        let mut said = Vec::new();
+        crate::games::term::choose(
+            &["Bad\x1b[2J application name".into()],
+            "Applications",
+            "choose",
+            Some(&io),
+            &mut |s: &str| said.push(s.to_owned()),
+        );
+        let display = crate::games::term::strip_ansi(&io.lines.borrow().join("\n"));
+        assert!(display.contains("B..."));
+        assert!(!display.contains("\x1b[2J"));
+    }
+
+    #[test]
+    fn equal_menu_labels_keep_the_selected_index() {
+        let io = FakeIo::selected(1);
+        let mut said = Vec::new();
+        assert_eq!(
+            crate::games::term::choose(
+                &["same".into(), "same".into()],
+                "Dashboards",
+                "run",
+                Some(&io),
+                &mut |s: &str| said.push(s.to_owned())
+            ),
+            Some(1)
+        );
+    }
+
+    #[test]
+    fn choose_cleans_and_cuts_menu_lines_before_playback() {
+        let io = FakeIo::selected(1);
+        let mut said = Vec::new();
+        let result = crate::games::term::choose(
+            &["first\nline".into(), "second".into()],
+            "Dashboards",
+            "run",
+            Some(&io),
+            &mut |message| said.push(message.to_owned()),
+        );
+        assert_eq!(result, Some(1));
+        let display = crate::games::term::strip_ansi(&io.lines.borrow().join("\n"));
+        assert!(display.contains("f..."));
+        assert!(display.contains("s..."));
+        assert!(said.is_empty());
+    }
+
+    struct FakeIo {
+        lines: std::cell::RefCell<Vec<String>>,
+        selected: Option<usize>,
+    }
+
+    impl FakeIo {
+        fn selected(selected: usize) -> Self {
+            Self {
+                lines: std::cell::RefCell::new(Vec::new()),
+                selected: Some(selected),
+            }
+        }
+    }
+
+    impl crate::core::deps::Io for FakeIo {
+        fn play(&self, game: &mut dyn crate::games::term::Game) -> Option<Result<String, String>> {
+            let rows = game.draw();
+            self.lines.borrow_mut().extend(rows);
+            if let Some(selected) = self.selected {
+                for _ in 0..selected {
+                    game.key("down");
+                }
+                game.key("return");
+                Some(Ok(String::new()))
+            } else {
+                Some(Ok("Bye.".into()))
+            }
+        }
+        fn dimensions(&self) -> (usize, usize) {
+            (12, 24)
+        }
+    }
+}

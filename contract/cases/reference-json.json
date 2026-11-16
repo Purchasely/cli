@@ -17,7 +17,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -64,7 +64,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -111,7 +111,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -196,7 +196,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -238,7 +238,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -251,26 +251,7 @@
               "note": "Only in `acme`."
             },
             "npm_update": null,
-            "latest": null,
-            "commands": [
-              {
-                "name": "extra",
-                "description": "Added commands",
-                "hidden": false,
-                "action": false,
-                "options": [],
-                "commands": [
-                  {
-                    "name": "run",
-                    "description": "Run it",
-                    "hidden": false,
-                    "action": true,
-                    "options": [],
-                    "commands": []
-                  }
-                ]
-              }
-            ]
+            "latest": null
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -312,7 +293,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -354,7 +335,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 2891,
+          "pid": 17711,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",

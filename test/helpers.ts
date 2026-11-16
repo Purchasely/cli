@@ -270,10 +270,13 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
 
 function extensionData(ext?: Extension, latest: unknown = null) {
   if (!ext) return null;
-  return { surfaces: ext.surfaces ?? {}, identity: ext.identity ?? false, section: ext.section ?? null, npm_update: ext.npmUpdate ?? null, latest, commands: extensionCommands(ext) };
+  return { surfaces: ext.surfaces ?? {}, identity: ext.identity ?? false, section: ext.section ?? null, npm_update: ext.npmUpdate ?? null, latest, ...(ext.modules === EXT.modules ? {} : { commands: extensionCommands(ext) }) };
 }
 
-/** The commands that the extension modules add, so a replay can build the same tree. null when a module needs the runtime. */
+/**
+ * The commands that custom extension modules add, so a replay can build the same tree (the replay knows the
+ * `extra run` of EXT). null when a module needs the runtime.
+ */
 function extensionCommands(ext: Extension): unknown {
   type Raw = Command & { _hidden?: boolean; _actionHandler?: unknown };
   const shape = (c: Raw): unknown => ({

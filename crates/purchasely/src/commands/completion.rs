@@ -1,7 +1,7 @@
 //! Owner: P7a
 use crate::{
     cli::{Argument, Command, Parsed},
-    core::{errors::usage, reference::Node, runtime::Runtime},
+    core::{reference::Node, runtime::Runtime},
 };
 
 #[derive(Clone)]
@@ -35,7 +35,15 @@ fn sq(s: &str) -> String {
     format!("'{}'", one_line(s).replace('\'', "'\\''"))
 }
 fn fq(s: &str) -> String {
-    format!("'{}'", one_line(s).replace(['\\', '\''], "\\$&"))
+    let mut out = String::from("'");
+    for c in one_line(s).chars() {
+        if c == '\\' || c == '\'' {
+            out.push('\\');
+        }
+        out.push(c);
+    }
+    out.push('\'');
+    out
 }
 fn render_bash(name: &str, es: &[Entry]) -> String {
     let cases = |pick: &dyn Fn(&Entry) -> Vec<String>| {
@@ -83,7 +91,7 @@ fn render_zsh(name: &str, es: &[Entry]) -> String {
         .collect::<Vec<_>>()
         .join("\n");
     format!(
-        "#compdef {name}\n_{name}_node() {{\n  case \"$1\" in\n{cases}\n  esac\n}}\n_{name}() {{\n  local cpath=\"\" w i\n  local -a names subs opts\n  _{name}_node \"\"\n  for ((i = 2; i < CURRENT; i++)); do\n    w=$words[i]\n    if (( ${{names[(Ie)$w]}} )); then\n      cpath=\"${{cpath:+$cpath }}$w\"\n      _{name}_node \"$cpath\"\n    fi\n  done\n  _describe -t commands 'command' subs\n  _describe -t options 'option' opts\n}}\nif [ \"$funcstack[1]\" = \"_{name}\" ]; then _{name} \"$@\"; else compdef _{name} {name}; fi\n"
+        "#compdef {name}\n# zsh completion for {name}. Add to ~/.zshrc, after compinit: source <({name} completion zsh)\n_{name}_node() {{\n  case \"$1\" in\n{cases}\n  esac\n}}\n_{name}() {{\n  local cpath=\"\" w i\n  local -a names subs opts\n  _{name}_node \"\"\n  for ((i = 2; i < CURRENT; i++)); do\n    w=$words[i]\n    if (( ${{names[(Ie)$w]}} )); then\n      cpath=\"${{cpath:+$cpath }}$w\"\n      _{name}_node \"$cpath\"\n    fi\n  done\n  _describe -t commands 'command' subs\n  _describe -t options 'option' opts\n}}\nif [ \"$funcstack[1]\" = \"_{name}\" ]; then _{name} \"$@\"; else compdef _{name} {name}; fi\n"
     )
 }
 fn render_fish(name: &str, es: &[Entry]) -> String {
@@ -147,12 +155,8 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
         .argument(shell)
         .after_help(format!("\nIt prints the script and installs nothing. Put one line in the startup file of the shell:\n  bash  source <({name} completion bash)     in ~/.bashrc\n  zsh   source <({name} completion zsh)      in ~/.zshrc, after compinit\n  fish  {name} completion fish | source      in ~/.config/fish/config.fish\nThe script holds the commands, the subcommands and the long options of this version. It makes no request.\n"));
     program.commands.push(command.action(move |p: &Parsed, rt| {
+        // The parser checked the choices.
         let shell = p.arguments.first().map(String::as_str).unwrap_or("");
-        if !["bash", "zsh", "fish"].contains(&shell) {
-            return Err(usage(format!(
-                "Unknown shell: {shell}. Choose bash, zsh or fish."
-            )));
-        }
         let tree = rt
             .command_tree
             .as_ref()

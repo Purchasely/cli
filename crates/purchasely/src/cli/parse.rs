@@ -15,7 +15,7 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         if !literal && (arg == "-h" || arg == "--help") {
             return Err(CliError(format!("HELP:{}", command.name)));
         }
-        if !literal && arg == "help" && command.help_command {
+        if !literal && arg == "help" && super::help::has_help_command(command) {
             let mut node = command;
             for name in argv.iter().skip(i + 1) {
                 let Some(sub) = node
@@ -124,7 +124,24 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         if spec.required && out.arguments.get(idx).is_none() {
             return Err(CliError(format!(
                 "error: missing required argument '{}'",
-                spec.syntax
+                spec.syntax.trim_matches(['<', '>', '[', ']', '.'])
+            )));
+        }
+    }
+    // commander `Argument.choices()`: the message names the argument without its brackets.
+    for (idx, value) in out.arguments.iter().enumerate() {
+        let Some(spec) = command
+            .arguments
+            .get(idx)
+            .or_else(|| command.arguments.last().filter(|a| a.variadic))
+        else {
+            continue;
+        };
+        if !spec.choices.is_empty() && !spec.choices.contains(value) {
+            let name = spec.syntax.trim_matches(['<', '>', '[', ']', '.']);
+            return Err(CliError(format!(
+                "error: command-argument value '{value}' is invalid for argument '{name}'. Allowed choices are {}.",
+                spec.choices.join(", ")
             )));
         }
     }
@@ -185,6 +202,20 @@ mod tests {
                 .unwrap_err()
                 .0
                 .contains("Allowed choices")
+        );
+    }
+
+    #[test]
+    fn argument_choices_and_missing_argument_use_commander_text() {
+        let c = Command::new("completion")
+            .argument(crate::cli::Argument::required("<shell>", "shell").choices(&["bash", "zsh"]));
+        assert_eq!(
+            parse(&c, &["fish".into()]).unwrap_err().0,
+            "error: command-argument value 'fish' is invalid for argument 'shell'. Allowed choices are bash, zsh."
+        );
+        assert_eq!(
+            parse(&c, &[]).unwrap_err().0,
+            "error: missing required argument 'shell'"
         );
     }
 

@@ -72,6 +72,12 @@ const OFFLINE: [&str; 6] = ["games", "play", "completion", "reference", "demo", 
 /// built-in top-level commands: the ones after it come from the extension and use its surface.
 pub fn build(rt: &mut Runtime) -> (Command, usize) {
     let mut root = root_command(&rt.d.name, &rt.d.version);
+    // TS defineSurface() of an extension: its surfaces exist before any command runs.
+    if let Some(ext) = &rt.d.ext {
+        for (id, def) in &ext.surface_defs {
+            crate::core::credentials::define_surface(*id, *def);
+        }
+    }
     for register in MODULES {
         register(&mut root, rt);
     }

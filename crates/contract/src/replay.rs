@@ -308,8 +308,8 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
             )));
         }
         if let Some(expected) = step.get("files_after")
-            && normalize_transcript(&actual["files_after"], &roots, step)
-                != normalize_transcript(expected, &[], step)
+            && sort_files(normalize_transcript(&actual["files_after"], &roots, step))
+                != sort_files(normalize_transcript(expected, &[], step))
         {
             return Err(ReplayError("files_after differs".into()));
         }
@@ -468,6 +468,17 @@ fn normalize_transcript(
     let normalized = crate::normalize::normalize(&serialized, "__NO_ROOT_MATCH__", pid, version)
         .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
     serde_json::from_str(&normalized).unwrap_or(value.clone())
+}
+/// A snapshot lists entries in walk order; TS and Rust walk differently, so compare by path.
+fn sort_files(mut v: Value) -> Value {
+    if let Some(roots) = v.as_object_mut() {
+        for entries in roots.values_mut() {
+            if let Some(list) = entries.as_array_mut() {
+                list.sort_by(|a, b| a["path"].as_str().cmp(&b["path"].as_str()));
+            }
+        }
+    }
+    v
 }
 fn keychain_after(step: &Map<String, Value>, host: &FakeHost) -> Value {
     if step.get("keychain").is_none_or(Value::is_null) {

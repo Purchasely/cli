@@ -14,12 +14,16 @@ fn binary_transcript_compares_stdout_stderr_and_status() {
 #[test]
 fn binary_contract_directory_supports_record_replay_and_bless() {
     let directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../contract/bin");
-    let command = std::env::var("CONTRACT_BIN").unwrap_or_else(|_| {
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../target/debug/purchasely")
-            .to_string_lossy()
-            .into_owned()
-    });
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    // A relative CONTRACT_BIN (the plan's Run lines) is relative to the workspace root.
+    let command = std::env::var("CONTRACT_BIN")
+        .map(|c| root.join(c).to_string_lossy().into_owned())
+        .unwrap_or_else(|_| {
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../target/debug/purchasely")
+                .to_string_lossy()
+                .into_owned()
+        });
     assert!(
         std::path::Path::new(&command).exists(),
         "missing {command}: run `cargo build -p purchasely --bins` first"

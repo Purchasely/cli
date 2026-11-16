@@ -15,7 +15,8 @@ pub struct Extension {
     pub modules: Vec<Register>,
     pub surface: &'static str,
     pub surfaces: Vec<(&'static str, &'static str)>,
-    pub surface_defs: Vec<SurfaceDef>,
+    /// TS defineSurface(): surface id and its definition.
+    pub surface_defs: Vec<(&'static str, SurfaceDef)>,
     pub identity: bool,
     pub section: (&'static str, &'static str),
     pub latest: Option<LatestFn>,

@@ -258,6 +258,22 @@ mod tests {
         let _ = fs::remove_dir_all(d);
     }
     #[test]
+    fn stale_takeover_waits_for_a_takeover_in_progress() {
+        let d = tempfile_dir();
+        let lock = d.join("t.lock");
+        fs::write(&lock, DEAD.to_string()).unwrap();
+        // Another process is in the middle of the takeover: it holds the OS lock.
+        let other = fs::File::open(&lock).unwrap();
+        other.try_lock().unwrap();
+        let dep = deps_with(d.clone(), Box::new(Fake::default()));
+        let mut ran = false;
+        let result = StateStore::new(&dep, "t").with_lock(|| ran = true);
+        assert_eq!(result, Err("state lock timeout".into()));
+        assert!(!ran);
+        assert_eq!(fs::read_to_string(&lock).unwrap(), DEAD.to_string());
+        let _ = fs::remove_dir_all(d);
+    }
+    #[test]
     fn stale_lock_that_cannot_be_removed_times_out() {
         let d = tempfile_dir();
         // A directory stands for a stale lock that `unlink` cannot remove.

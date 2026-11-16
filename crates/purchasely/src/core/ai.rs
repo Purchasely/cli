@@ -298,69 +298,102 @@ pub fn command_result(
     }
     let mut rows = Vec::new();
     for a in agents {
-        if verb == Verb::Install && !dry_run && matches!(a, "claude" | "codex" | "copilot") {
-            let m = ["plugin", "marketplace", "add", REPO];
-            let args = m.iter().map(|x| (*x).to_owned()).collect::<Vec<_>>();
-            if is_good(&rt.d, a, &args).is_none() {
-                let message = format!(
-                    "{a}: the plugin marketplace add failed (exit 1). Run \"{}\" yourself to see why.",
-                    m.join(" ")
-                );
-                rows.push(Value::Object(vec![
-                    ("agent".into(), Value::from(a.to_owned())),
-                    ("action".into(), Value::from("failed".to_owned())),
-                    ("version".into(), Value::Null),
-                    ("follows".into(), Value::from(follows(a).to_owned())),
-                    ("message".into(), Value::from(message)),
-                    ("ops".into(), Value::Array(vec![])),
-                ]));
-                continue;
-            }
-        }
-        let args = agent_args(a, verb);
         if dry_run {
-            let ops = args
-                .iter()
-                .map(|x| format!("{a} {}", x.join(" ")))
-                .collect::<Vec<_>>();
-            rows.push(Value::Object(vec![
-                ("agent".into(), Value::from(a.to_owned())),
-                ("action".into(), Value::from("planned".to_owned())),
-                ("version".into(), Value::Null),
-                ("follows".into(), Value::from(follows(a).to_owned())),
-                ("message".into(), Value::Null),
-                ("ops".into(), arr_str(&ops)),
-            ]));
-        } else if is_good(&rt.d, a, args.first().unwrap_or(&vec![])).is_some() {
-            rows.push(Value::Object(vec![
-                ("agent".into(), Value::from(a.to_owned())),
-                (
-                    "action".into(),
-                    Value::from(match verb {
-                        Verb::Install => "installed".to_owned(),
-                        Verb::Update => "updated".to_owned(),
-                        Verb::Uninstall => "removed".to_owned(),
-                        Verb::Status => "status".to_owned(),
-                    }),
-                ),
-                ("version".into(), Value::Null),
-                ("follows".into(), Value::from(follows(a).to_owned())),
-                ("message".into(), Value::Null),
-                ("ops".into(), Value::Array(vec![])),
-            ]));
+            rows.push(process_agent(&rt.d, a, verb, true));
         } else {
-            let message = format!("{a}: the plugin operation failed (exit 1).");
-            rows.push(Value::Object(vec![
-                ("agent".into(), Value::from(a.to_owned())),
-                ("action".into(), Value::from("failed".to_owned())),
-                ("version".into(), Value::Null),
-                ("follows".into(), Value::from(follows(a).to_owned())),
-                ("message".into(), Value::from(message)),
-                ("ops".into(), Value::Array(vec![])),
-            ]));
+            let store = super::state::StateStore::new(&rt.d, "ai");
+            let result = store.with_lock_timeout(300_000, || process_agent(&rt.d, a, verb, false));
+            rows.push(match result {
+                Ok(value) => value,
+                Err(_) => agent_row(
+                    a,
+                    "refused",
+                    None,
+                    Some(format!(
+                        "{a}: another ai command is running. Nothing was changed."
+                    )),
+                    vec![],
+                ),
+            });
         }
     }
     Ok(Value::Array(rows))
+}
+
+fn agent_row(
+    agent: &str,
+    action: &str,
+    version: Option<String>,
+    message: Option<String>,
+    ops: Vec<String>,
+) -> Value {
+    Value::Object(vec![
+        ("agent".into(), Value::from(agent.to_owned())),
+        ("action".into(), Value::from(action.to_owned())),
+        (
+            "version".into(),
+            version.map(Value::from).unwrap_or(Value::Null),
+        ),
+        ("follows".into(), Value::from(follows(agent).to_owned())),
+        (
+            "message".into(),
+            message.map(Value::from).unwrap_or(Value::Null),
+        ),
+        ("ops".into(), arr_str(&ops)),
+    ])
+}
+
+fn process_agent(d: &Deps, agent: &str, verb: Verb, dry_run: bool) -> Value {
+    if verb == Verb::Install && !dry_run && matches!(agent, "claude" | "codex" | "copilot") {
+        let marketplace = ["plugin", "marketplace", "add", REPO];
+        let args = marketplace
+            .iter()
+            .map(|x| (*x).to_owned())
+            .collect::<Vec<_>>();
+        if is_good(d, agent, &args).is_none() {
+            return agent_row(
+                agent,
+                "failed",
+                None,
+                Some(format!(
+                    "{agent}: the plugin marketplace add failed (exit 1). Run \"{}\" yourself to see why.",
+                    marketplace.join(" ")
+                )),
+                vec![],
+            );
+        }
+    }
+    let steps = agent_args(agent, verb);
+    if dry_run {
+        let ops = steps
+            .iter()
+            .map(|x| format!("{agent} {}", x.join(" ")))
+            .collect();
+        return agent_row(agent, "planned", None, None, ops);
+    }
+    for args in &steps {
+        if is_good(d, agent, args).is_none() {
+            return agent_row(
+                agent,
+                "failed",
+                None,
+                Some(format!("{agent}: the plugin operation failed (exit 1).")),
+                vec![],
+            );
+        }
+    }
+    agent_row(
+        agent,
+        match verb {
+            Verb::Install => "installed",
+            Verb::Update => "updated",
+            Verb::Uninstall => "removed",
+            Verb::Status => "status",
+        },
+        None,
+        None,
+        vec![],
+    )
 }
 
 /// Validates the agent selection and network policy before any mutation.
@@ -392,13 +425,58 @@ pub fn validate_request(
 
 /// Update plugins that have a newer release. Native agent updates do not need the tarball.
 pub fn update_plugins(rt: &Runtime, background: bool) {
-    if offline(&rt.d) {
+    if offline(&rt.d)
+        || !matches!(agent_map(&plugin(&rt.d)), Value::Object(ref values) if !values.is_empty())
+    {
         return;
+    }
+    let store = super::state::StateStore::new(&rt.d, "ai");
+    let timeout = if background { -1 } else { 300_000 };
+    if background {
+        let reserved = store.with_lock_timeout(timeout, || {
+            let current = plugin(&rt.d);
+            let checked = match prop(&current, "checked_at") {
+                Value::Number(value) => value as i64,
+                _ => 0,
+            };
+            if rt.d.host.now() - checked < 24 * 60 * 60 * 1000 {
+                return false;
+            }
+            let mut fields = if let Value::Object(fields) = current {
+                fields
+            } else {
+                vec![]
+            };
+            fields.retain(|(key, _)| key != "checked_at");
+            fields.push(("checked_at".into(), Value::Number(rt.d.host.now() as f64)));
+            store.write("plugin", &Value::Object(fields)).is_ok()
+        });
+        if !reserved.unwrap_or(false) {
+            return;
+        }
     }
     let Ok(raw_tag) = latest_tag(&rt.d) else {
         return;
     };
     let tag = version_tag(&raw_tag);
+    if store
+        .with_lock_timeout(timeout, || {
+            let current = plugin(&rt.d);
+            let mut fields = if let Value::Object(fields) = current {
+                fields
+            } else {
+                vec![]
+            };
+            fields.retain(|(key, _)| key != "latest" && key != "checked_at");
+            fields.push(("latest".into(), Value::from(tag.to_owned())));
+            fields.push(("checked_at".into(), Value::Number(rt.d.host.now() as f64)));
+            store.write("plugin", &Value::Object(fields)).is_ok()
+        })
+        .unwrap_or(false)
+        == false
+    {
+        return;
+    }
     for agent in AGENTS {
         let Some(mut record) = registration(&rt.d, agent) else {
             continue;

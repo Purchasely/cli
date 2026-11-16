@@ -137,15 +137,14 @@ pub fn replace_man_date(input: &str) -> String {
                 let (body, end) = line
                     .strip_suffix('\n')
                     .map_or((line, ""), |body| (body, "\n"));
-                let mut fields = body.splitn(4, ' ');
-                let first = fields.next().unwrap_or_default();
-                let second = fields.next().unwrap_or_default();
-                let _date = fields.next().unwrap_or_default();
-                let tail = fields.next().unwrap_or_default();
-                format!("{first} {second} <DATE> {tail}")
-                    .trim_end()
-                    .to_owned()
-                    + end
+                // `.TH NAME [SECTION] DATE ...`: the first date-like field after the name.
+                let mut fields: Vec<&str> = body.splitn(5, ' ').collect();
+                let is_date =
+                    |f: &str| f.len() >= 8 && f.chars().all(|c| c.is_ascii_digit() || c == '-');
+                if let Some(date) = fields.iter_mut().skip(2).take(2).find(|f| is_date(f)) {
+                    *date = "<DATE>";
+                }
+                fields.join(" ").trim_end().to_owned() + end
             } else {
                 line.to_owned()
             }
@@ -159,8 +158,8 @@ mod tests {
 
     #[test]
     fn man_date_keeps_newlines_and_is_idempotent() {
-        let once = replace_man_date(".TH X 2026-01-02 \"x 1\"\nbody\n\n");
-        assert_eq!(once, ".TH X <DATE> \"x 1\"\nbody\n\n");
+        let once = replace_man_date(".TH X 1 2026-01-02 \"x 1\"\nbody\n\n");
+        assert_eq!(once, ".TH X 1 <DATE> \"x 1\"\nbody\n\n");
         assert_eq!(replace_man_date(&once), once);
     }
 

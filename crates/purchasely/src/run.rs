@@ -132,7 +132,7 @@ fn default_deps(program: Program) -> Deps {
             .join("purchasely")
     };
     let host: Box<dyn Host> = Box::new(RealHost::new(env.clone()));
-    let columns = env.get("COLUMNS").and_then(|s| s.parse::<u16>().ok());
+    let columns = terminal_columns();
     let platform = if cfg!(target_os = "macos") {
         "darwin"
     } else {
@@ -155,6 +155,15 @@ fn default_deps(program: Program) -> Deps {
         stdout_tty: io::stdout().is_terminal(),
         columns,
     }
+}
+
+fn terminal_columns() -> Option<u16> {
+    let mut size = std::mem::MaybeUninit::<libc::winsize>::zeroed();
+    if unsafe { libc::ioctl(libc::STDOUT_FILENO, libc::TIOCGWINSZ, size.as_mut_ptr()) } != 0 {
+        return None;
+    }
+    let columns = unsafe { size.assume_init().ws_col };
+    (columns > 0).then_some(columns)
 }
 
 pub fn main(program: Program) {

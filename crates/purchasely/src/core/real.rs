@@ -1,12 +1,15 @@
+//! Owner: P5a
 use super::{deps::*, exec};
 use std::{
     collections::BTreeMap,
     io::{self, Read, Write},
+    sync::atomic::{AtomicBool, Ordering},
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
 pub struct RealHost {
     env: BTreeMap<String, String>,
+    warned_tls: AtomicBool,
 }
 
 impl Default for RealHost {
@@ -17,7 +20,10 @@ impl Default for RealHost {
 
 impl RealHost {
     pub fn new(env: BTreeMap<String, String>) -> Self {
-        Self { env }
+        Self {
+            env,
+            warned_tls: AtomicBool::new(false),
+        }
     }
 
     fn write_stdout(&self, value: &str) {
@@ -32,7 +38,9 @@ impl RealHost {
 impl Host for RealHost {
     fn fetch(&self, req: Request) -> Result<Response, NetError> {
         let tls = super::tls::config(&self.env, |s| {
-            let _ = writeln!(io::stderr(), "{s}");
+            if !self.warned_tls.swap(true, Ordering::Relaxed) {
+                let _ = writeln!(io::stderr(), "{s}");
+            }
         });
         let agent = ureq::Agent::config_builder()
             .http_status_as_error(false)

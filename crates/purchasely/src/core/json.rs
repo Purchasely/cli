@@ -153,7 +153,15 @@ impl Parser<'_> {
                 }
                 0..=31 => return Err(self.err("control character in string")),
                 _ => {
-                    let tail = std::str::from_utf8(&self.b[self.i..])
+                    // Decode one character only: validating the whole tail per character was quadratic.
+                    let width = match c {
+                        0x00..=0x7f => 1,
+                        0xc0..=0xdf => 2,
+                        0xe0..=0xef => 3,
+                        _ => 4,
+                    };
+                    let end = (self.i + width).min(self.b.len());
+                    let tail = std::str::from_utf8(&self.b[self.i..end])
                         .map_err(|_| self.err("invalid UTF-8"))?;
                     let ch = tail
                         .chars()
@@ -418,6 +426,11 @@ fn write_value(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn strings_decode_multibyte_characters() {
+        let text = "[\"a\u{e9}\u{20ac}\u{1f600}z\"]";
+        assert_eq!(stringify(&parse(text).unwrap(), None).unwrap(), text);
+    }
     #[test]
     fn js_number_formatting() {
         assert_eq!(stringify(&parse("1.0").unwrap(), None).unwrap(), "1")

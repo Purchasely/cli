@@ -10,7 +10,7 @@ use crate::{
         time,
     },
     games::term,
-    management::{request, spec},
+    management::{exec, request, spec},
 };
 use std::collections::BTreeMap;
 
@@ -124,6 +124,7 @@ fn context<'a>(rt: &'a Runtime, p: &Parsed) -> Result<Ctx<'a>, CliError> {
 }
 
 fn read(
+    rt: &Runtime,
     ctx: &Ctx<'_>,
     action: &str,
     app: &str,
@@ -138,7 +139,8 @@ fn read(
         None,
         None,
     )?;
-    let response = http::send(
+    let response = exec::read_request(
+        rt,
         ctx,
         &HttpRequest {
             method: "GET".into(),
@@ -248,7 +250,7 @@ fn summary(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
     }
     let mut bodies = Vec::new();
     for (action, range, period) in requests {
-        bodies.push(read(&ctx, action, app, &range, period)?);
+        bodies.push(read(rt, &ctx, action, app, &range, period)?);
     }
     let mrr = series(
         &bodies[0],
@@ -368,11 +370,28 @@ fn summary(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
     Ok(())
 }
 fn fmt(value: f64) -> String {
-    if value.fract() == 0.0 {
+    let raw = if value.fract() == 0.0 {
         format!("{value:.0}")
     } else {
         format!("{value:.2}")
+            .trim_end_matches('0')
+            .trim_end_matches('.')
+            .to_owned()
+    };
+    let (integer, fraction) = raw.split_once('.').unwrap_or((&raw, ""));
+    let mut grouped = String::new();
+    for (index, digit) in integer.chars().rev().enumerate() {
+        if index > 0 && index % 3 == 0 {
+            grouped.push(',');
+        }
+        grouped.push(digit);
     }
+    let mut result: String = grouped.chars().rev().collect();
+    if !fraction.is_empty() {
+        result.push('.');
+        result.push_str(fraction);
+    }
+    result
 }
 
 fn dashboard_items(name: &str) -> Vec<(spec::Command, Vec<String>)> {
@@ -661,7 +680,11 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
     runtime::add_globals(&mut group);
     group = group.option(crate::cli::OptionDef::value(
         "--app <app_id>",
-        "application public id",
+        "application public id. Without it, a menu shows the apps of the key",
+    ));
+    group = group.after_help(format!(
+        "\nWithout a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days, as a table.\nThe menu leaves out the dashboards that need another flag (funnel, flow-paths): run them by name.\nWith --output json, or without a terminal, it prints the list of all the dashboards as JSON, with their required flags, and sends no request.\n\nExample:\n  {} dashboard --output json | jq -r '.[].command'\n",
+        rt.d.name
     ));
     let mut summary_command = Command::new("summary")
         .description("Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts")
@@ -857,7 +880,7 @@ mod tests {
 
     #[test]
     fn app_ids_stay_aligned_and_control_codes_are_cleaned() {
-        let apps = vec![
+        let apps = [
             crate::core::json::parse(r#"{"name":"Short","id":"app_1"}"#).unwrap(),
             crate::core::json::parse(r#"{"name":"Longer\u001b[2J name","id":"app_2"}"#).unwrap(),
         ];

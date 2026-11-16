@@ -479,10 +479,10 @@ fn dashboard(path: &str, url: &str, wall_now: i64) -> Option<Value> {
             "mrr_evolution_live",
             obj(vec![(
                 "data",
-                obj(vec![
-                    (
-                        "mrr",
-                        obj(vec![(
+                obj(vec![(
+                    "mrr",
+                    obj(vec![
+                        (
                             "values",
                             obj(vec![
                                 (
@@ -502,10 +502,10 @@ fn dashboard(path: &str, url: &str, wall_now: i64) -> Option<Value> {
                                 ),
                                 ("by_month", array(vec![])),
                             ]),
-                        )]),
-                    ),
-                    ("variations", array(vec![])),
-                ]),
+                        ),
+                        ("variations", array(vec![])),
+                    ]),
+                )]),
             )]),
         )]),
         "dashboard_v2/subscription_evolution" => obj(vec![(
@@ -681,7 +681,12 @@ fn dashboard(path: &str, url: &str, wall_now: i64) -> Option<Value> {
                 }
                 Value::Object(fields)
             });
-            let refunds = values(url, "MONTH", |_| obj(vec![("percent", number(1.5))]));
+            let refunds = values(url, "MONTH", |b| {
+                obj(vec![
+                    ("period", text(b.period.clone())),
+                    ("percent", number(1.5)),
+                ])
+            });
             obj(vec![(
                 "one_time_purchases_stats",
                 obj(vec![(

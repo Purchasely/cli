@@ -164,73 +164,116 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
             .filter(|n| *n > 0)
             .ok_or_else(|| usage("--limit must be a positive integer."))?;
         let task = p.arguments.first().map(String::as_str).unwrap_or("");
-        let mut found = search_tree(&snapshot, task, usize::MAX);
-        // API commands are sourced from the embedded Management description; skip a generated name already
-        // represented by a handwritten leaf.
+        let found = search_tree(&snapshot, task, usize::MAX);
+        // API search entries use the same generated flags and operation metadata as help.
         let (_, ops) = crate::management::spec::embedded_spec();
         let generated = crate::management::spec::derive_commands(&ops);
-        let existing: BTreeSet<_> = found.iter().map(|m| m.command.clone()).collect();
-        let taken: BTreeSet<_> = rt.taken.iter().cloned().collect();
-        let mut candidates = std::mem::take(&mut found);
-        for g in generated {
-            if taken.contains(&format!("{} {}", g.resource, g.action)) {
+        let mut candidates: Vec<Item> = found
+            .into_iter()
+            .map(|m| {
+                let resource = m.command.split_whitespace().nth(1).unwrap_or("").to_owned();
+                let action = m
+                    .command
+                    .split_whitespace()
+                    .skip(2)
+                    .collect::<Vec<_>>()
+                    .join(" ");
+                Item {
+                    command: m.command,
+                    resource,
+                    action,
+                    summary: m.summary.clone(),
+                    description: m.summary,
+                    method: m.method,
+                    path: m.path,
+                    scope: m.scope,
+                }
+            })
+            .collect();
+        // These commands register after search, but the TypeScript command walk runs at search time.
+        for (command, summary) in [
+            ("purge", "Delete the cached client data"),
+            (
+                "doctor",
+                "Check the install, the key, the network and the version",
+            ),
+        ] {
+            let full_command = format!("{} {command}", rt.d.name);
+            if candidates.iter().any(|item| item.command == full_command) {
                 continue;
             }
-            let command = format!("{} {} {}", rt.d.name, g.resource, g.action);
+            candidates.push(Item {
+                command: full_command,
+                resource: command.into(),
+                action: String::new(),
+                summary: summary.into(),
+                description: summary.into(),
+                method: "-".into(),
+                path: "-".into(),
+                scope: "cli".into(),
+            });
+        }
+        let existing: BTreeSet<_> = candidates.iter().map(|m| m.command.clone()).collect();
+        let taken: BTreeSet<_> = rt.taken.iter().cloned().collect();
+
+        // The summary command is handwritten and carries its own index entry in the TS runtime.
+        if taken.contains("dashboard summary") {
+            candidates.push(Item {
+                command: format!("{} dashboard summary --app app_xxx --output table", rt.d.name),
+                resource: "dashboard".into(),
+                action: "summary".into(),
+                summary: "Analytics dashboard of an app: key metrics with trend charts".into(),
+                description: "Dashboard of one app in the terminal: MRR, active subscriptions, paywall unique viewers and conversions over the last days, with a sparkline chart per metric (--output table). Overview of revenue, subscriptions, conversion and stats".into(),
+                method: "GET".into(),
+                path: "-".into(),
+                scope: "analytics.dashboards:view".into(),
+            });
+        }
+        for g in generated {
+            let command = crate::management::help::usage_string(&g, &rt.d.name);
             if existing.contains(&command) {
                 continue;
             }
             let op = g.app_op.as_ref().or(g.global_op.as_ref());
-            candidates.push(Match {
+            let Some(op) = op else { continue };
+            candidates.push(Item {
                 command,
+                resource: g.resource,
+                action: g.action,
                 summary: g.summary,
-                method: op.map(|o| o.method.clone()).unwrap_or_else(|| "-".into()),
-                path: op.map(|o| o.path.clone()).unwrap_or_else(|| "-".into()),
-                scope: op
-                    .map(|o| o.scope.clone())
-                    .unwrap_or_else(|| "management".into()),
+                description: op.description.clone(),
+                method: op.method.clone(),
+                path: op.path.clone(),
+                scope: op.scope.clone(),
             });
         }
-        let q = tokens(task);
-        candidates.retain(|m| {
-            let item = Item {
-                command: m.command.clone(),
-                resource: m.command.split_whitespace().nth(1).unwrap_or("").into(),
-                action: m
-                    .command
-                    .split_whitespace()
-                    .skip(2)
-                    .collect::<Vec<_>>()
-                    .join(" "),
-                summary: m.summary.clone(),
-                description: m.summary.clone(),
-                method: m.method.clone(),
-                path: m.path.clone(),
-                scope: m.scope.clone(),
-            };
-            score(&q, &item) > 0
+        let demo = "Try the CLI with no key: sample data of a fictional app, for a first test";
+        candidates.push(Item {
+            command: format!("{} demo", rt.d.name),
+            resource: "demo".into(),
+            action: String::new(),
+            summary: demo.into(),
+            description: demo.into(),
+            method: "-".into(),
+            path: "-".into(),
+            scope: "cli".into(),
         });
-        candidates.sort_by_key(|m| {
-            let item = Item {
-                command: m.command.clone(),
-                resource: m.command.split_whitespace().nth(1).unwrap_or("").into(),
-                action: m
-                    .command
-                    .split_whitespace()
-                    .skip(2)
-                    .collect::<Vec<_>>()
-                    .join(" "),
-                summary: m.summary.clone(),
-                description: m.summary.clone(),
-                method: m.method.clone(),
-                path: m.path.clone(),
-                scope: m.scope.clone(),
-            };
-            std::cmp::Reverse(score(&q, &item))
+        let q = tokens(task);
+        candidates.retain(|m| score(&q, m) > 0);
+        candidates.sort_by(|left, right| {
+            score(&q, right)
+                .cmp(&score(&q, left))
+                .then_with(|| (left.scope == "cli").cmp(&(right.scope == "cli")))
         });
         candidates.truncate(limit);
         let env = p.opt("env").unwrap_or("prod").to_owned();
-        let value = result_value(candidates);
+        let value = result_value(candidates.into_iter().map(|m| Match {
+            command: m.command,
+            summary: m.summary,
+            method: m.method,
+            path: m.path,
+            scope: m.scope,
+        }).collect());
         output::emit(
             &rt.d,
             &value,

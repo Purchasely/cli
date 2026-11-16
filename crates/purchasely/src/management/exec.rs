@@ -53,6 +53,27 @@ pub struct Meta {
     pub not_found: Option<String>,
 }
 
+/// Execute a read through the normal HTTP path or the local demo fixture.
+pub fn read_request(
+    rt: &Runtime,
+    ctx: &Ctx<'_>,
+    req: &HttpRequest,
+) -> Result<HttpResponse, CliError> {
+    if demo::enabled(&rt.d) {
+        if req.method != "GET" {
+            return Err(demo::write_error());
+        }
+        let (status, value) = demo::response(req, &rt.d.name, rt.d.host.wall_now());
+        Ok(HttpResponse {
+            status,
+            headers: vec![("content-type".into(), "application/json".into())],
+            text: json::stringify(&value, None).unwrap_or_else(|_| "null".into()),
+        })
+    } else {
+        http::send(ctx, req)
+    }
+}
+
 pub fn execute(
     rt: &mut Runtime,
     p: &Parsed,
@@ -210,19 +231,7 @@ pub(crate) fn perform(
             write: None,
             refuse_redirect,
         };
-        let res = if demo::enabled(&rt.d) {
-            if req.method != "GET" {
-                return Err(demo::write_error());
-            }
-            let (status, value) = demo::response(&req, &rt.d.name, rt.d.host.wall_now());
-            HttpResponse {
-                status,
-                headers: vec![("content-type".into(), "application/json".into())],
-                text: json::stringify(&value, None).unwrap_or_else(|_| "null".into()),
-            }
-        } else {
-            http::send(&ctx, &req)?
-        };
+        let res = read_request(rt, &ctx, &req)?;
         if (200..300).contains(&res.status) {
             return Ok(if res.text.trim().is_empty() {
                 Value::Object(vec![])

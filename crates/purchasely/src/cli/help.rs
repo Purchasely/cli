@@ -93,7 +93,7 @@ pub fn help(command: &Command, ancestors: &[&str], width: usize) -> String {
 /// commander `_getHelpCommand`: a group with subcommands and no action lists `help [command]`.
 fn has_help_command(command: &Command) -> bool {
     !command.commands.is_empty()
-        && command.action.is_none()
+        && (command.help_command || command.action.is_none())
         && !command.commands.iter().any(|c| c.name == "help")
 }
 

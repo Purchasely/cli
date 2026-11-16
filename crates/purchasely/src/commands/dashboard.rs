@@ -694,7 +694,8 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
     group
         .commands
         .push(summary_command.action(|p, rt| summary(rt, p)));
-    group = group.action(|p, rt| menu(rt, p));
+    // TS `.helpCommand(true)`: a group with an action loses the implicit `help summary`.
+    group = group.action(|p, rt| menu(rt, p)).help_command(true);
     if let Some(existing) = program.commands.iter_mut().find(|c| c.name == "dashboard") {
         *existing = group;
     } else {

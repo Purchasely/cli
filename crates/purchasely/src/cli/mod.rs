@@ -29,9 +29,16 @@ pub struct Command {
     pub commands: Vec<Command>,
     pub after_help: String,
     pub action: Option<Action>,
+    /// commander `.helpCommand(true)`: list `help [command]` even when the group has an action.
+    pub help_command: bool,
 }
 
 impl Command {
+    pub fn help_command(mut self, value: bool) -> Self {
+        self.help_command = value;
+        self
+    }
+
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),

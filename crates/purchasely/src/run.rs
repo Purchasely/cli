@@ -221,7 +221,7 @@ fn dispatch(
                 vec!["--output must be json or table.".into()],
             ));
         }
-        // shortcut: no autoUpdate call (run.ts) while core/update.rs is a stub; P5b adds it here.
+        crate::core::update::auto_update(rt, top);
         let from_ext = root
             .commands
             .iter()

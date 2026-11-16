@@ -2,7 +2,7 @@
 use crate::{
     cli::{Command, Parsed},
     core::{
-        credentials::{credential_display, key_hash, resolve_credential},
+        credentials::{credential_display, key_hash},
         errors::CliError,
         json::Value,
         output::{EmitOptions, emit},
@@ -35,7 +35,8 @@ fn number(value: &Value, key: &str) -> f64 {
 }
 fn usage(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let env = rt.env(p.opt("env"))?;
-    let credential = resolve_credential(&rt.d, &env, "management")
+    let credential = rt
+        .credential(&env, "management")
         .map_err(|message| CliError::new(1, "CREDENTIAL_READ_FAILED", vec![message]))?;
     let hash = credential
         .as_ref()

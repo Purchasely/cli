@@ -6,13 +6,18 @@ use super::{
     errors::{self, usage},
 };
 use crate::cli::{Command, OptionDef};
-use std::collections::BTreeSet;
+use std::{
+    cell::RefCell,
+    collections::{BTreeMap, BTreeSet},
+};
 
 pub struct Runtime {
     pub d: Deps,
     pub cfg: Config,
     pub taken: BTreeSet<String>,
     pub command: Option<String>,
+    /// One resolution per `env:surface` and run (TS `Runtime.creds`), errors included.
+    creds: RefCell<BTreeMap<String, Result<Option<Credential>, String>>>,
 }
 
 impl Runtime {
@@ -56,6 +61,7 @@ impl Runtime {
             cfg,
             taken: BTreeSet::new(),
             command: None,
+            creds: RefCell::default(),
         }
     }
 
@@ -91,7 +97,15 @@ impl Runtime {
     }
 
     pub fn credential(&self, env: &str, surface: &str) -> Result<Option<Credential>, String> {
-        credentials::resolve_credential(&self.d, env, surface)
+        // Demo mode uses no key, even when one is set: nothing reads the keychain.
+        if self.d.env.get("PURCHASELY_DEMO").is_some_and(|v| v == "1") {
+            return Ok(None);
+        }
+        self.creds
+            .borrow_mut()
+            .entry(format!("{env}:{surface}"))
+            .or_insert_with(|| credentials::resolve_credential(&self.d, env, surface))
+            .clone()
     }
 
     pub fn read_only(&self) -> bool {
@@ -169,4 +183,96 @@ pub fn add_globals(command: &mut Command) {
         ),
         OptionDef::value("--app <id>", "application id"),
     ]);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::deps::*;
+    use std::{cell::Cell, collections::BTreeMap, path::PathBuf};
+
+    struct CountingKeychain(Cell<u32>);
+    impl Keychain for CountingKeychain {
+        fn get(&self, _: &str, _: &str) -> Result<Option<String>, KeychainError> {
+            self.0.set(self.0.get() + 1);
+            Ok(Some(format!("key{}", self.0.get())))
+        }
+        fn set(&self, _: &str, _: &str, _: &str) -> Result<(), KeychainError> {
+            Ok(())
+        }
+        fn delete(&self, _: &str, _: &str) -> Result<(), KeychainError> {
+            Ok(())
+        }
+    }
+    struct H(CountingKeychain);
+    impl Host for H {
+        fn fetch(&self, _: Request) -> Result<Response, NetError> {
+            Ok(Response::default())
+        }
+        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            Ok(ExecResult::default())
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            0
+        }
+        fn wall_now(&self) -> i64 {
+            0
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            false
+        }
+        fn sleep(&self, _: i64) {}
+        fn stdout(&self, _: &str) {}
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            Some(&self.0)
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+
+    fn runtime(env: &[(&str, &str)]) -> Runtime {
+        Runtime::new(Deps {
+            host: Box::new(H(CountingKeychain(Cell::new(0)))),
+            env: env
+                .iter()
+                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+                .collect::<BTreeMap<_, _>>(),
+            is_tty: false,
+            config_dir: PathBuf::from("/nonexistent"),
+            state_dir: PathBuf::from("/nonexistent"),
+            cache_dir: PathBuf::from("/nonexistent"),
+            version: "1.0.0".into(),
+            pid: 1,
+            name: "purchasely".into(),
+            host_url: String::new(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
+        })
+    }
+
+    #[test]
+    fn credential_is_resolved_once_per_env_and_surface() {
+        let rt = runtime(&[]);
+        let key = |env| rt.credential(env, "management").unwrap().unwrap().key;
+        assert_eq!(key("prod"), "key1");
+        assert_eq!(key("prod"), "key1");
+        assert_eq!(key("staging"), "key2");
+    }
+
+    #[test]
+    fn demo_mode_reads_no_credential() {
+        let rt = runtime(&[("PURCHASELY_DEMO", "1"), ("PURCHASELY_API_KEY", "pk_x")]);
+        assert_eq!(rt.credential("prod", "management"), Ok(None));
+    }
 }

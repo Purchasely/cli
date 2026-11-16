@@ -90,7 +90,7 @@ impl<'a> StateStore<'a> {
             }
             match o.open(&lock) {
                 Ok(mut fd) => {
-                    writeln!(fd, "{}", self.d.pid).map_err(|e| e.to_string())?;
+                    write!(fd, "{}", self.d.pid).map_err(|e| e.to_string())?;
                     drop(fd);
                     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(&mut f));
                     let _ = fs::remove_file(&lock);

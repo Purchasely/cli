@@ -1,16 +1,24 @@
-use serde_json::Value;
-use std::{fs, path::Path};
+use contract::{
+    normalize::normalize,
+    replay::{compare_dirs, compare_drift_case, normalize_case},
+};
+use serde_json::json;
+use std::path::Path;
 
-fn normalized_case(path: &Path) -> Option<Value> {
-    let text = fs::read_to_string(path).ok()?;
-    let mut value: Value = serde_json::from_str(&text).ok()?;
-    if value.get("intended_diff").is_some() {
-        value = value.get("expected_ts")?.clone();
-    }
-    if let Some(obj) = value.as_object_mut() {
-        obj.remove("pid");
-    }
-    Some(value)
+#[test]
+fn normalizes_pid_without_losing_uuid_correlation() {
+    let id = "123e4567-e89b-42d3-a456-426614174000";
+    let input = format!("{{\"pid\":42,\"header\":\"{id}\",\"file\":\"{id}\",\"lock\":\"pid=42\"}}");
+    let output = normalize(&input, "__unused_root__", 42, "9.9.9");
+    assert!(output.contains("<UUID>\",\"file\":\"<UUID>"));
+    assert!(output.contains("pid=<PID>"));
+}
+
+#[test]
+fn intended_diff_uses_expected_ts_recording() {
+    let committed = json!({"test":"api::x","intended_diff":"approved","expected_ts":{"test":"api::x","steps":[{"code":0}]},"steps":[{"code":10}]});
+    let fresh = json!({"test":"api::x","steps":[{"code":0}]});
+    assert!(compare_drift_case(&committed, &fresh).is_ok());
 }
 
 #[test]
@@ -20,39 +28,16 @@ fn committed_cases_match_fresh_recordings() {
         return;
     };
     let committed = Path::new("contract/cases");
-    if !committed.exists() {
-        return;
-    }
-    let mut checked = 0usize;
-    let mut skipped = 0usize;
-    for entry in fs::read_dir(committed).unwrap() {
-        let path = entry.unwrap().path();
-        if path.extension().and_then(|v| v.to_str()) != Some("json") {
-            continue;
-        }
-        let Some(expected) = normalized_case(&path) else {
-            continue;
-        };
-        let Some(name) = path.file_name() else {
-            continue;
-        };
-        let fresh = dir.join(name);
-        if !fresh.exists() {
-            if expected.get("unit").is_some() {
-                skipped += 1;
-                continue;
-            } else {
-                eprintln!("no fresh recording: {}", path.display());
-                continue;
-            }
-        }
-        assert_eq!(
-            normalized_case(&fresh).unwrap(),
-            expected,
-            "drift in {}",
-            path.display()
-        );
-        checked += 1;
-    }
-    eprintln!("drift checked {checked}, skipped {skipped}");
+    let (checked, skipped, new_files) = compare_dirs(committed, &dir).unwrap();
+    eprintln!("drift checked {checked}, skipped {skipped}, new files {new_files}");
+}
+
+#[test]
+fn normalized_json_keeps_test_id_and_removes_runtime_pid() {
+    let value = json!({"test":"network::sample","steps":[{"pid":123,"lock":"pid=123","headers":{"X-Request-Id":"123e4567-e89b-42d3-a456-426614174000"}}]});
+    let actual = normalize_case(&value);
+    assert_eq!(actual["test"], "network::sample");
+    assert!(actual.to_string().contains("<UUID>"));
+    assert!(actual.to_string().contains("pid=<PID>"));
+    assert!(actual["steps"][0].get("pid").is_none());
 }

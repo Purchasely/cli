@@ -339,7 +339,23 @@ pub fn interactive() -> bool {
 }
 
 struct Terminal {
-    original: libc::termios,
+    _cleanup: Cleanup,
+}
+
+struct Cleanup(Option<Box<dyn FnOnce()>>);
+
+impl Cleanup {
+    fn new(action: impl FnOnce() + 'static) -> Self {
+        Self(Some(Box::new(action)))
+    }
+}
+
+impl Drop for Cleanup {
+    fn drop(&mut self) {
+        if let Some(action) = self.0.take() {
+            action();
+        }
+    }
 }
 
 impl Terminal {
@@ -356,15 +372,13 @@ impl Terminal {
         if unsafe { libc::tcsetattr(libc::STDIN_FILENO, libc::TCSAFLUSH, &raw) } != 0 {
             return Err(io::Error::last_os_error());
         }
-        Ok(Self { original })
-    }
-}
-
-impl Drop for Terminal {
-    fn drop(&mut self) {
-        let _ = unsafe { libc::tcsetattr(libc::STDIN_FILENO, libc::TCSAFLUSH, &self.original) };
-        let _ = io::stdout().write_all(b"\x1b[0m\x1b[?25h\x1b[?1049l");
-        let _ = io::stdout().flush();
+        Ok(Self {
+            _cleanup: Cleanup::new(move || {
+                let _ = unsafe { libc::tcsetattr(libc::STDIN_FILENO, libc::TCSAFLUSH, &original) };
+                let _ = io::stdout().write_all(b"\x1b[0m\x1b[?25h\x1b[?1049l");
+                let _ = io::stdout().flush();
+            }),
+        })
     }
 }
 
@@ -595,6 +609,28 @@ mod tests {
         let mut state = PlayState::default();
         state.key(&mut game, Key::Quit);
         assert_eq!(state.result.as_deref(), Some("Bye."));
+    }
+
+    fn cleanup_runs_when_unwinding(body: impl FnOnce()) -> bool {
+        use std::{cell::Cell, rc::Rc};
+        let restored = Rc::new(Cell::new(false));
+        let flag = Rc::clone(&restored);
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let _cleanup = Cleanup::new(move || flag.set(true));
+            body();
+        }));
+        assert!(result.is_err());
+        restored.get()
+    }
+
+    #[test]
+    fn restores_the_terminal_when_a_step_throws() {
+        assert!(cleanup_runs_when_unwinding(|| panic!("step failed")));
+    }
+
+    #[test]
+    fn restores_the_terminal_when_the_first_draw_throws() {
+        assert!(cleanup_runs_when_unwinding(|| panic!("draw failed")));
     }
 
     #[test]

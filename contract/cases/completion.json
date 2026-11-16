@@ -16,7 +16,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -57,7 +57,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -98,7 +98,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -144,7 +144,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -190,7 +190,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -230,7 +230,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -276,7 +276,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -289,7 +289,42 @@
               "note": "Only in `acme`."
             },
             "npm_update": null,
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "secret-cmd",
+                "description": "x",
+                "hidden": true,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--secret-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "visible-cmd",
+                "description": "A visible one",
+                "hidden": false,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--visible-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  },
+                  {
+                    "flags": "--gone-opt <x>",
+                    "description": "x",
+                    "hidden": true
+                  }
+                ],
+                "commands": []
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -326,7 +361,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -339,7 +374,42 @@
               "note": "Only in `acme`."
             },
             "npm_update": null,
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "secret-cmd",
+                "description": "x",
+                "hidden": true,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--secret-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "visible-cmd",
+                "description": "A visible one",
+                "hidden": false,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--visible-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  },
+                  {
+                    "flags": "--gone-opt <x>",
+                    "description": "x",
+                    "hidden": true
+                  }
+                ],
+                "commands": []
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -376,7 +446,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -389,7 +459,42 @@
               "note": "Only in `acme`."
             },
             "npm_update": null,
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "secret-cmd",
+                "description": "x",
+                "hidden": true,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--secret-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "visible-cmd",
+                "description": "A visible one",
+                "hidden": false,
+                "action": false,
+                "options": [
+                  {
+                    "flags": "--visible-opt <x>",
+                    "description": "x",
+                    "hidden": false
+                  },
+                  {
+                    "flags": "--gone-opt <x>",
+                    "description": "x",
+                    "hidden": true
+                  }
+                ],
+                "commands": []
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -431,7 +536,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -472,7 +577,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -485,7 +590,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": null,
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -527,7 +651,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -573,7 +697,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -619,7 +743,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 73215,
+          "pid": 2890,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",

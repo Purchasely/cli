@@ -4,6 +4,7 @@ import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { defineSurface } from "../src/core/credentials.js";
 import type { Deps, Extension, Keychain } from "../src/core/types.js";
 import { run } from "../src/run.js";
+import { Command } from "commander";
 import { afterEach, expect, vi } from "vitest";
 
 const recordedSteps: Record<string, unknown>[] = [];
@@ -259,7 +260,24 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
 
 function extensionData(ext?: Extension, latest: unknown = null) {
   if (!ext) return null;
-  return { surfaces: ext.surfaces ?? {}, identity: ext.identity ?? false, section: ext.section ?? null, npm_update: ext.npmUpdate ?? null, latest };
+  return { surfaces: ext.surfaces ?? {}, identity: ext.identity ?? false, section: ext.section ?? null, npm_update: ext.npmUpdate ?? null, latest, commands: extensionCommands(ext) };
+}
+
+/** The commands that the extension modules add, so a replay can build the same tree. null when a module needs the runtime. */
+function extensionCommands(ext: Extension): unknown {
+  type Raw = Command & { _hidden?: boolean; _actionHandler?: unknown };
+  const shape = (c: Raw): unknown => ({
+    name: c.name(), description: c.description(), hidden: Boolean(c._hidden), action: Boolean(c._actionHandler),
+    options: c.options.map((o) => ({ flags: o.flags, description: o.description, hidden: o.hidden })),
+    commands: c.commands.map((s) => shape(s as Raw)),
+  });
+  const program = new Command();
+  try {
+    for (const m of ext.modules ?? []) m(program, {} as never);
+  } catch {
+    return null;
+  }
+  return program.commands.map((c) => shape(c as Raw));
 }
 
 function snapshotRoots(argv: string[], env: Record<string, string | undefined>, root: string): string[] {

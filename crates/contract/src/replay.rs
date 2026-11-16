@@ -688,21 +688,45 @@ pub fn bless_case(path: &Path, value: &Value) -> std::io::Result<()> {
     )
 }
 
+thread_local! {
+    /// The commands of the recorded extension modules (`ext.commands` of `test/helpers.ts`), for `register_recorded`.
+    static RECORDED_COMMANDS: std::cell::RefCell<Value> = const { std::cell::RefCell::new(Value::Null) };
+}
+
 pub fn acme_extension(recorded: &Value) -> Extension {
+    let commands = recorded["commands"].clone();
+    let modules: Vec<fn(&mut Command, &mut Runtime)> = if commands.is_array() {
+        RECORDED_COMMANDS.with(|c| *c.borrow_mut() = commands);
+        vec![register_recorded]
+    } else {
+        vec![register_acme]
+    };
     Extension {
-        modules: vec![register_acme],
+        modules,
         surface: "extra",
         surfaces: vec![("extra", "extra")],
         surface_defs: vec![],
         identity: true,
-        section: ("More commands", "Only in acme."),
+        section: (
+            leak(
+                recorded["section"]["title"]
+                    .as_str()
+                    .unwrap_or("More commands"),
+            ),
+            leak(
+                recorded["section"]["note"]
+                    .as_str()
+                    .unwrap_or("Only in `acme`."),
+            ),
+        ),
         latest: (!recorded["latest"].is_null())
             .then_some(acme_latest as purchasely::core::ext::LatestFn),
         // The harness lives for one test run: leaking the recorded text gives the &'static str of the type.
-        npm_update: recorded["npm_update"]
-            .as_str()
-            .map(|s| &*Box::leak(s.to_owned().into_boxed_str())),
+        npm_update: recorded["npm_update"].as_str().map(leak),
     }
+}
+fn leak(s: &str) -> &'static str {
+    Box::leak(s.to_owned().into_boxed_str())
 }
 
 /// `ACME.latest` of `test/update.test.ts`, the only recorded extension with a channel: `gh release view`
@@ -739,6 +763,39 @@ fn acme_latest(
     Ok(purchasely::core::update::stable_version(
         tag.strip_prefix('v').unwrap_or(tag),
     ))
+}
+/// Build the commands that the TS extension modules added, as the recorder saw them.
+fn register_recorded(parent: &mut Command, _: &mut Runtime) {
+    fn build(v: &Value) -> Command {
+        let text = |k: &str| v[k].as_str().unwrap_or_default().to_owned();
+        let mut c = Command::new(text("name")).description(text("description"));
+        for o in v["options"].as_array().into_iter().flatten() {
+            let flags = o["flags"].as_str().unwrap_or_default();
+            let description = o["description"].as_str().unwrap_or_default();
+            let mut option = if flags.contains(['<', '[']) {
+                purchasely::cli::OptionDef::value(flags, description)
+            } else {
+                purchasely::cli::OptionDef::boolean(flags, description)
+            };
+            option.hidden = o["hidden"].as_bool().unwrap_or(false);
+            c = c.option(option);
+        }
+        for sub in v["commands"].as_array().into_iter().flatten() {
+            c = c.command(build(sub));
+        }
+        if v["hidden"].as_bool().unwrap_or(false) {
+            c = c.hide();
+        }
+        if v["action"].as_bool().unwrap_or(false) {
+            c = c.action(|_, _| Ok(()));
+        }
+        c
+    }
+    RECORDED_COMMANDS.with(|recorded| {
+        for v in recorded.borrow().as_array().into_iter().flatten() {
+            parent.commands.push(build(v));
+        }
+    });
 }
 fn register_acme(parent: &mut Command, _: &mut Runtime) {
     parent.commands.push(

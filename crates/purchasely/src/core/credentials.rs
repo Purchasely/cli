@@ -148,8 +148,6 @@ pub fn resolve_credential(
     let account = format!("{env}:{surface}");
     let from_keychain = if let Some(kc) = d.host.keychain() {
         kc.get("purchasely-cli", &account)
-    } else if let Some(kc) = default_keychain(d.platform) {
-        kc.get("purchasely-cli", &account)
     } else {
         Ok(None)
     };
@@ -174,8 +172,6 @@ pub fn store_credential(d: &Deps, env: &str, surface: &str, key: &str) -> Result
     let account = format!("{env}:{surface}");
     let stored = if let Some(kc) = d.host.keychain() {
         kc.set("purchasely-cli", &account, key)
-    } else if let Some(kc) = default_keychain(d.platform) {
-        kc.set("purchasely-cli", &account, key)
     } else {
         Err(KeychainError("keychain unavailable".into()))
     };
@@ -193,8 +189,6 @@ pub fn store_credential(d: &Deps, env: &str, surface: &str, key: &str) -> Result
 pub fn remove_credential(d: &Deps, env: &str, surface: &str) -> Result<(), String> {
     let account = format!("{env}:{surface}");
     if let Some(kc) = d.host.keychain() {
-        let _ = kc.delete("purchasely-cli", &account);
-    } else if let Some(kc) = default_keychain(d.platform) {
         let _ = kc.delete("purchasely-cli", &account);
     }
     let path = credentials_path(&d.config_dir);

@@ -13,7 +13,7 @@ use crate::{
 fn json_output(rt: &Runtime, value: Value) {
     rt.d.host.stdout(&format!(
         "{}\n",
-        crate::core::json::stringify_pretty(&value).unwrap_or_else(|_| "{}".into())
+        crate::core::json::stringify(&value, None).unwrap_or_else(|_| "{}".into())
     ));
 }
 

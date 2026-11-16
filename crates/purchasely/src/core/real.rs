@@ -10,6 +10,8 @@ use std::{
 pub struct RealHost {
     env: BTreeMap<String, String>,
     warned_tls: AtomicBool,
+    /// TS `main.ts` `keychain: defaultKeychain()`: the real keychain belongs to the real host only.
+    keychain: Option<super::credentials::SecurityKeychain>,
 }
 
 impl Default for RealHost {
@@ -23,6 +25,11 @@ impl RealHost {
         Self {
             env,
             warned_tls: AtomicBool::new(false),
+            keychain: super::credentials::default_keychain(if cfg!(target_os = "macos") {
+                "darwin"
+            } else {
+                "linux"
+            }),
         }
     }
 
@@ -144,7 +151,7 @@ impl Host for RealHost {
         let _ = io::stderr().write_all(s.as_bytes());
     }
     fn keychain(&self) -> Option<&dyn Keychain> {
-        None
+        self.keychain.as_ref().map(|k| k as &dyn Keychain)
     }
     fn io(&self) -> Option<&dyn Io> {
         None

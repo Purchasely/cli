@@ -459,7 +459,7 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
         return;
     };
     let tag = version_tag(&raw_tag);
-    if store
+    if !store
         .with_lock_timeout(timeout, || {
             let current = plugin(&rt.d);
             let mut fields = if let Value::Object(fields) = current {
@@ -473,7 +473,6 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
             store.write("plugin", &Value::Object(fields)).is_ok()
         })
         .unwrap_or(false)
-        == false
     {
         return;
     }

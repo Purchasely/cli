@@ -5,8 +5,9 @@ use super::request::Built;
 use crate::{
     cli::Parsed,
     core::{
+        demo,
         errors::{self, CliError, EXIT, usage},
-        http::{self, Ctx, HttpRequest},
+        http::{self, Ctx, HttpRequest, HttpResponse},
         json::{self, Value},
         output::{self, EmitOptions},
         runtime::Runtime,
@@ -209,7 +210,19 @@ pub(crate) fn perform(
             write: None,
             refuse_redirect,
         };
-        let res = http::send(&ctx, &req)?;
+        let res = if demo::enabled(&rt.d) {
+            if req.method != "GET" {
+                return Err(demo::write_error());
+            }
+            let (status, value) = demo::response(&req, &rt.d.name, rt.d.host.wall_now());
+            HttpResponse {
+                status,
+                headers: vec![("content-type".into(), "application/json".into())],
+                text: json::stringify(&value, None).unwrap_or_else(|_| "null".into()),
+            }
+        } else {
+            http::send(&ctx, &req)?
+        };
         if (200..300).contains(&res.status) {
             return Ok(if res.text.trim().is_empty() {
                 Value::Object(vec![])

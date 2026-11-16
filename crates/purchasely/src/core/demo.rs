@@ -184,9 +184,7 @@ pub fn response(req: &HttpRequest, name: &str, wall_now: i64) -> (u16, Value) {
                 series(2400.0)
             )));
         }
-        if let Some((key, value)) = lists.iter().find(|(key, _)| {
-            endpoint == format!("/{key}") || endpoint.ends_with(&format!("/{key}"))
-        }) {
+        if let Some((key, value)) = lists.iter().find(|(key, _)| endpoint == format!("/{key}")) {
             let _ = key;
             body = Some(value.clone());
         }

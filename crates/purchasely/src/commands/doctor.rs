@@ -4,6 +4,7 @@ use crate::{
     core::{
         ai,
         credentials::credential_display,
+        demo,
         errors::{CliError, EXIT},
         http::{self, Ctx, HttpRequest},
         json::Value,
@@ -57,7 +58,7 @@ fn allowlist_text(value: &Value, env: &str) -> String {
 
 fn doctor(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let env = rt.env(p.opt("env"))?;
-    let demo = rt.d.env.get("PURCHASELY_DEMO").is_some_and(|v| v == "1");
+    let demo = demo::enabled(&rt.d);
     let offline = ai::offline(&rt.d);
     let kind = update::install_kind_for(&rt.d);
     let auto_off = rt.d.env.contains_key("CI")

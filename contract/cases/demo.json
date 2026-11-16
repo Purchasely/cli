@@ -441,8 +441,7 @@
           "out": "{\n  \"mobile_applications\": [\n    {\n      \"id\": \"app_demo\",\n      \"name\": \"Sample Meditation App (demo)\",\n      \"client_id\": \"cli_demo\",\n      \"default_language\": \"en\",\n      \"default_dashboard_currency\": \"USD\",\n      \"default_integration_currency\": \"USD\",\n      \"default_screen_id\": \"pres_demo_onboarding\",\n      \"redeem_presentation_id\": null,\n      \"icon_url\": null,\n      \"show_purchasely\": true,\n      \"has_mocked_data\": true,\n      \"client_webhook_url\": null,\n      \"s2s_notifications_endpoints\": [],\n      \"ios_platform\": {\n        \"bundle_id\": \"com.example.meditation.demo\"\n      },\n      \"android_platform\": {\n        \"package_name\": \"com.example.meditation.demo\"\n      },\n      \"stripe_platform\": null,\n      \"platforms_configured\": {\n        \"ios\": true,\n        \"android\": true,\n        \"stripe\": false\n      },\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
-      ],
-      "pending": "P6b"
+      ]
     },
     {
       "test": "demo::demo mode > wins over a real key: still no request",
@@ -491,8 +490,7 @@
           "out": "{\n  \"placements\": [\n    {\n      \"id\": \"plc_demo_onboarding\",\n      \"vendor_id\": \"onboarding\",\n      \"name\": \"Onboarding\",\n      \"description\": \"Shown at the end of the first launch\",\n      \"is_default\": true,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_onboarding\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_home\",\n      \"vendor_id\": \"home\",\n      \"name\": \"Home banner\",\n      \"description\": \"The upgrade button of the home screen\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [\n        {\n          \"id\": \"aud_demo_churned\",\n          \"is_in_ab_test\": false,\n          \"priority\": 1,\n          \"presentable_id\": \"pres_demo_winback\"\n        }\n      ],\n      \"active_campaigns\": [\n        {\n          \"id\": \"cmp_demo_winback\",\n          \"name\": \"Winback after a cancellation\",\n          \"audience_id\": \"aud_demo_churned\",\n          \"presentable_id\": \"pres_demo_winback\",\n          \"starts_at\": \"2026-09-01T00:00:00Z\",\n          \"ends_at\": null,\n          \"position\": 1,\n          \"is_in_ab_test\": false,\n          \"ab_test_id\": null,\n          \"presentation_views\": null,\n          \"unique_views\": null\n        }\n      ],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_settings\",\n      \"vendor_id\": \"settings\",\n      \"name\": \"Settings\",\n      \"description\": \"The subscription row of the settings\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
-      ],
-      "pending": "P6b"
+      ]
     },
     {
       "test": "demo::demo mode > prints one header line that says the data is not real",
@@ -541,8 +539,7 @@
           "out": "{\n  \"screens\": [\n    {\n      \"id\": \"pres_demo_onboarding\",\n      \"name\": \"Onboarding paywall\",\n      \"vendor_id\": \"onboarding_paywall\",\n      \"status\": \"published\",\n      \"is_default\": true,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_upsell\",\n      \"name\": \"Home upsell\",\n      \"vendor_id\": \"home_upsell\",\n      \"status\": \"published\",\n      \"is_default\": false,\n      \"template_identifier\": \"bottom_sheet\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_winback\",\n      \"name\": \"Winback offer\",\n      \"vendor_id\": \"winback_offer\",\n      \"status\": \"draft\",\n      \"is_default\": false,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
-      ],
-      "pending": "P6b"
+      ]
     },
     {
       "test": "demo::demo mode > dashboard summary renders the sample dashboard",
@@ -2850,8 +2847,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Demo mode (PURCHASELY_DEMO=1) has no sample data for GET /management/v1/applications/{application_id}/placements. The sample app is app_demo. Run `purchasely demo` for the commands to try.\"],\"status\":404}}\n"
         }
-      ],
-      "pending": "P6b"
+      ]
     },
     {
       "test": "demo::demo mode > refuses a write with exit 10 and sends nothing; --dry-run and --plan still work",
@@ -3076,8 +3072,7 @@
           "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-update\",\n    \"error\": {\n      \"code\": \"REFUSED\",\n      \"messages\": [\n        \"Demo mode (PURCHASELY_DEMO=1) never sends a write, so the CLI sent nothing. --dry-run and --plan still show the request.\"\n      ]\n    }\n  }\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n#1 staging PATCH https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Demo mode (PURCHASELY_DEMO=1) never sends a write, so the CLI sent nothing. --dry-run and --plan still show the request.\"]}}\n"
         }
-      ],
-      "pending": "P6b"
+      ]
     },
     {
       "test": "demo::demo mode > doctor reports demo mode instead of a missing key",
@@ -3126,11 +3121,63 @@
           "execs": [],
           "prompts": [],
           "code": 0,
-          "out": "{\n  \"checks\": [\n    {\n      \"check\": \"node\",\n      \"status\": \"ok\",\n      \"detail\": \"Node 26.10.0\"\n    },\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9. PURCHASELY_DEMO=1 is set: no check of the latest version\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"Not checked: demo mode sends no request\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode: every write is refused\"\n    }\n  ]\n}\n",
+          "out": "{\n  \"checks\": [\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9. PURCHASELY_DEMO=1 is set: no check of the latest version\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"Not checked: demo mode sends no request\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode: every write is refused\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
       ],
-      "pending": "P5b"
+      "expected_ts": {
+        "test": "demo::demo mode > doctor reports demo mode instead of a missing key",
+        "steps": [
+          {
+            "argv": [
+              "doctor"
+            ],
+            "env": {
+              "PURCHASELY_API_KEY": "",
+              "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+              "PURCHASELY_DEMO": "1"
+            },
+            "is_tty": false,
+            "stdin": "",
+            "answers": [],
+            "name": "purchasely",
+            "pid": 50077,
+            "version": "9.9.9",
+            "host": "https://cli.test",
+            "platform": "darwin",
+            "columns": null,
+            "ext": null,
+            "t_before": 1700000000000,
+            "t_after": 1700000000000,
+            "wall": "2026-01-15T12:00:00.000Z",
+            "pid_probes": [],
+            "files_before": {
+              "<ROOT>": []
+            },
+            "files_after": {
+              "<ROOT>": [
+                {
+                  "path": "state",
+                  "mode": 448,
+                  "directory": true
+                }
+              ]
+            },
+            "keychain": {
+              "before": {},
+              "after": {},
+              "ops": []
+            },
+            "calls": [],
+            "execs": [],
+            "prompts": [],
+            "code": 0,
+            "out": "{\n  \"checks\": [\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9. PURCHASELY_DEMO=1 is set: no check of the latest version\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"Not checked: demo mode sends no request\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode: every write is refused\"\n    }\n  ]\n}\n",
+            "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+          }
+        ]
+      },
+      "intended_diff": "doctor omits the node runtime check for the native CLI"
     },
     {
       "test": "demo::purchasely demo > prints how to start, as JSON, with no key and no header line",

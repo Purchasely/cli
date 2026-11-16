@@ -195,7 +195,7 @@ impl FakeHost {
             pid: step["pid"].as_u64().unwrap_or(1) as u32,
             name: step["name"].as_str().unwrap_or("purchasely").into(),
             host_url: step["host"].as_str().unwrap_or("https://cli.test").into(),
-            ext: (!step["ext"].is_null()).then(|| crate::replay::acme_extension(&step["ext"])),
+            ext: (!step["ext"].is_null()).then(|| crate::replay::recorded_extension(&step["ext"])),
             self_exe: PathBuf::from("<SELF>"),
             platform: match step["platform"].as_str().unwrap_or("linux") {
                 "darwin" => "darwin",

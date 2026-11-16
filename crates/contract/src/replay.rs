@@ -713,6 +713,21 @@ thread_local! {
     static RECORDED_COMMANDS: std::cell::RefCell<Value> = const { std::cell::RefCell::new(Value::Null) };
 }
 
+static EXTENSION: std::sync::OnceLock<fn(&Value) -> Extension> = std::sync::OnceLock::new();
+
+/// Installs the extension that a step with a recorded `ext` replays with. The staff workspace calls it
+/// once with its own builder; without a call, the replay uses the `acme` test extension.
+pub fn set_extension(build: fn(&Value) -> Extension) {
+    let _ = EXTENSION.set(build);
+}
+
+/// The extension of a recorded step: the installed builder, else `acme`.
+pub fn recorded_extension(recorded: &Value) -> Extension {
+    EXTENSION
+        .get()
+        .map_or_else(|| acme_extension(recorded), |build| build(recorded))
+}
+
 pub fn acme_extension(recorded: &Value) -> Extension {
     let commands = recorded["commands"].clone();
     let modules: Vec<fn(&mut Command, &mut Runtime)> = if commands.is_array() {

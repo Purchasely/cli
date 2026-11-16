@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "argv": [
+        "api",
+        "POST",
+        "/applications/app_1/placements",
+        "--env",
+        "staging",
+        "--data",
+        "{\"name\":\"x\"}",
+        "--dry-run"
+      ],
+      "code": 0,
+      "env": {
+        "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123"
+      },
+      "stderr": "purchasely env=staging surface=management identity=- key=\u2026T123",
+      "stdout": "{\n  \"method\": \"POST\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_1/placements\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/<VERSION> (-; -; api; script)\",\n    \"Content-Type\": \"application/json\"\n  },\n  \"body\": {\n    \"name\": \"x\"\n  }\n}",
+      "test": "dryrun::api raw dry-run"
+    }
+  ]
+}

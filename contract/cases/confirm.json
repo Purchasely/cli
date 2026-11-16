@@ -1,0 +1,870 @@
+{
+  "cases": [
+    {
+      "test": "confirm::confirm token flow > --yes resends once with the token in the query",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"5f5d970a-2d94-4e4e-9d46-2b4685e05531\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"427a74b5-a4ec-4bdf-a109-3c348e2cda59\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235663564393730612d326439342d346534652d396434362d326234363835653035353331227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2234323761373462352d613465632d346264662d613130392d336333343865326364613539227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "5f5d970a-2d94-4e4e-9d46-2b4685e05531"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_1\"}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id&confirm_token=tok_1",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "427a74b5-a4ec-4bdf-a109-3c348e2cda59"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"deleted\":true}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"deleted\": true\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > puts the token in the body for PUT webhooks, rest unchanged",
+      "steps": [
+        {
+          "argv": [
+            "webhooks",
+            "update",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--data",
+            "{ \"events\": {\"a\": {\"enabled\": true}} }",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":422,\"rate_limited\":false,\"request_id\":\"629aa64d-ccac-4375-91d4-7747be959929\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":200,\"rate_limited\":false,\"request_id\":\"736b76c0-49ec-4473-965d-19a230ac457e\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236323961613634642d636361632d343337352d393164342d373734376265393539393239227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237333662373663302d343965632d343437332d393635642d313961323330616334353765227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/webhooks",
+              "method": "PUT",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; webhooks update; script)",
+                "X-Request-Id": "629aa64d-ccac-4375-91d4-7747be959929",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"events\":{\"a\":{\"enabled\":true}}}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_1\"}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/webhooks",
+              "method": "PUT",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; webhooks update; script)",
+                "X-Request-Id": "736b76c0-49ec-4473-965d-19a230ac457e",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"events\":{\"a\":{\"enabled\":true}},\"confirm_token\":\"tok_1\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"deleted\":true}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"deleted\": true\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > exits 8 without --yes when not interactive, with the token on stderr",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"0b8c7aa5-14fb-41f2-b9d9-05294eea59e3\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230623863376161352d313466622d343166322d623964392d303532393465656135396533227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "0b8c7aa5-14fb-41f2-b9d9-05294eea59e3"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_9\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 8,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_9\"}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > an agent can resend with --confirm-token",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id",
+            "--confirm-token",
+            "tok_9"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e3c96646-c2f7-401a-a46a-380d65478771\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265336339363634362d633266372d343031612d613436612d333830643635343738373731227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id&confirm_token=tok_9",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "e3c96646-c2f7-401a-a46a-380d65478771"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"deleted\":true}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"deleted\": true\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > asks on a TTY: y resends, n exits 8",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "y"
+          ],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"32c16763-6b6e-473b-9e86-954d87847f05\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"6e1f86a8-9c0c-4781-92ce-ed71bb8f602a\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2233326331363736332d366236652d343733622d396538362d393534643837383437663035227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236653166383661382d396330632d343738312d393263652d656437316262386636303261227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; tty)",
+                "X-Request-Id": "32c16763-6b6e-473b-9e86-954d87847f05"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_1\"}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id&confirm_token=tok_1",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; tty)",
+                "X-Request-Id": "6e1f86a8-9c0c-4781-92ce-ed71bb8f602a"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"deleted\":true}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [
+            {
+              "question": "Apply this change? [y/N] ",
+              "hidden": false,
+              "answer": "y"
+            }
+          ],
+          "code": 0,
+          "out": "{\n  \"deleted\": true\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "n"
+          ],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"7fbde875-bb31-480c-b5ae-d1e2f6d747af\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237666264653837352d626233312d343830632d623561652d643165326636643734376166227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; tty)",
+                "X-Request-Id": "7fbde875-bb31-480c-b5ae-d1e2f6d747af"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_1\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [
+            {
+              "question": "Apply this change? [y/N] ",
+              "hidden": false,
+              "answer": "n"
+            }
+          ],
+          "code": 8,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_1\"}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > a second CONFIRMATION_REQUIRED exits 8 after two calls",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"3c0e3df5-bf50-4b03-8ae3-11a14a966dab\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":403,\"rate_limited\":false,\"request_id\":\"63ec8176-7d7a-41f9-a82e-7cd4ebb204e3\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2233633065336466352d626635302d346230332d386165332d313161313461393636646162227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430332c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236336563383137362d376437612d343166392d613832652d376364346562623230346533227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "3c0e3df5-bf50-4b03-8ae3-11a14a966dab"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"a\"}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id&confirm_token=a",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "63ec8176-7d7a-41f9-a82e-7cd4ebb204e3"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 403,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"stale\"]},\"confirm_token\":\"b\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 8,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"stale\"],\"status\":403},\"confirm_token\":\"b\"}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "confirm::confirm token flow > does not loop when the user passed a token that is refused",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--fields",
+            "id",
+            "--confirm-token",
+            "old",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56042,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"518dd991-826c-4e88-b70d-556f37e5fbef\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235313864643939312d383236632d346538382d623730642d353536663337653566626566227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1?fields[]=id&confirm_token=old",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements delete; script)",
+                "X-Request-Id": "518dd991-826c-4e88-b70d-556f37e5fbef"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"new\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 8,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"new\"}\n"
+        }
+      ],
+      "pending": "P6a"
+    }
+  ]
+}

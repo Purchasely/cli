@@ -1,0 +1,2269 @@
+{
+  "cases": [
+    {
+      "test": "apply::plan, then apply > --plan records the write and sends nothing, also in read-only mode with no key",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nfbwWw/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_READ_ONLY": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nfbwWw/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_2",
+            "--data",
+            "{\"name\":\"plc_2\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nfbwWw/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_READ_ONLY": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nfbwWw/plan.json\",\n  \"number\": 2,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n  \"body\": {\n    \"name\": \"plc_2\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > --plan needs --env, keeps the allow-list, and refuses --dry-run and a GET",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{}",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vcoCHD/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"A write needs --env prod or --env staging. Add it, also with --dry-run.\"]}}\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vcoCHD/plan.json",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"Use --plan or --dry-run, not both.\"]}}\n"
+        },
+        {
+          "argv": [
+            "api",
+            "GET",
+            "/applications/app_1/placements",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vcoCHD/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--plan records a write. Run a GET without it.\"]}}\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vcoCHD/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+              },
+              {
+                "path": "config",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"write_allowlist\": {\n    \"prod\": [\n      \"app_test\"\n    ]\n  }\n}\n",
+                "hex": "7b0a20202277726974655f616c6c6f776c697374223a207b0a202020202270726f64223a205b0a202020202020226170705f74657374220a202020205d0a20207d0a7d0a"
+              },
+              {
+                "path": "config",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"app_1 is not in write_allowlist.prod of the config. Writes go to the listed apps only.\"]}}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > apply lists the writes, asks once, sends them, and marks each one",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "y"
+          ],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_2",
+            "--data",
+            "{\"name\":\"plc_2\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "y"
+          ],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json\",\n  \"number\": 2,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n  \"body\": {\n    \"name\": \"plc_2\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "y"
+          ],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:27.000Z\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32372e3030305a220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"ca1713c1-25ee-48cf-a1e7-c48cca1acb65\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"23bbe840-dbcf-4d08-821a-4d063cbf59b1\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263613137313363312d323565652d343863662d613165372d633438636361316163623635227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232336262653834302d646263662d346430382d383231612d346430363363626635396231227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; tty)",
+                "X-Request-Id": "ca1713c1-25ee-48cf-a1e7-c48cca1acb65",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_1\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"id\":\"plc_1\"}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; tty)",
+                "X-Request-Id": "23bbe840-dbcf-4d08-821a-4d063cbf59b1",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_2\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"id\":\"plc_2\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [
+            {
+              "question": "Apply 2 writes? [y/N] ",
+              "hidden": false,
+              "answer": "y"
+            }
+          ],
+          "code": 0,
+          "out": "{\n  \"applied\": [\n    {\n      \"number\": 1,\n      \"command\": \"placements-update\",\n      \"response\": {\n        \"id\": \"plc_1\"\n      }\n    },\n    {\n      \"number\": 2,\n      \"command\": \"placements-update\",\n      \"response\": {\n        \"id\": \"plc_2\"\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n#2 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-v4vFBS/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": true,
+          "stdin": "",
+          "answers": [
+            "y"
+          ],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000007000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:27.000Z\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32372e3030305a220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"ca1713c1-25ee-48cf-a1e7-c48cca1acb65\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"23bbe840-dbcf-4d08-821a-4d063cbf59b1\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263613137313363312d323565652d343863662d613165372d633438636361316163623635227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232336262653834302d646263662d346430382d383231612d346430363363626635396231227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:27.000Z\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32372e3030305a220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"ca1713c1-25ee-48cf-a1e7-c48cca1acb65\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"23bbe840-dbcf-4d08-821a-4d063cbf59b1\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263613137313363312d323565652d343863662d613165372d633438636361316163623635227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232336262653834302d646263662d346430382d383231612d346430363363626635396231227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"pending\": []\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > apply without a terminal needs --yes, and --dry-run only lists",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nae52P/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nae52P/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nae52P/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 8,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"The plan has 1 writes to apply. Read them (apply --dry-run), then run again with --yes, or answer y in a terminal.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nae52P/plan.json",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"pending\": [\n    {\n      \"number\": 1,\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"body\": {\n        \"name\": \"plc_1\"\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nae52P/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"d6e29966-fc2b-424d-93ac-826cdd9dc28e\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264366532393936362d666332622d343234642d393361632d383236636464396463323865227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "d6e29966-fc2b-424d-93ac-826cdd9dc28e",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_1\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"applied\": [\n    {\n      \"number\": 1,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > apply stops at the first error with exit 9, and a second run sends only the rest",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_2",
+            "--data",
+            "{\"name\":\"plc_2\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json\",\n  \"number\": 2,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n  \"body\": {\n    \"name\": \"plc_2\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_3",
+            "--data",
+            "{\"name\":\"plc_3\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_3\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f33222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f335c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json\",\n  \"number\": 3,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n  \"body\": {\n    \"name\": \"plc_3\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000007000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_3\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f33222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f335c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_3\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f33222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f335c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e4a8f12e-1747-4d2c-a08e-1125caf2bca5\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":404,\"rate_limited\":false,\"request_id\":\"2a649532-3626-4d56-9306-a83f74ad7f32\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265346138663132652d313734372d346432632d613038652d313132356361663262636135227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232613634393533322d333632362d346435362d393330362d613833663734616437663332227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "e4a8f12e-1747-4d2c-a08e-1125caf2bca5",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_1\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            },
+            {
+              "at": 1700000007000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "2a649532-3626-4d56-9306-a83f74ad7f32",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_2\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 404,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"no\"]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 9,
+          "out": "{\n  \"applied\": [\n    {\n      \"number\": 1,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    }\n  ],\n  \"failed\": {\n    \"number\": 2,\n    \"command\": \"placements-update\",\n    \"error\": {\n      \"code\": \"NOT_FOUND\",\n      \"messages\": [\n        \"no\"\n      ],\n      \"status\": 404\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n#2 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\n#3 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Request #2 of the plan failed. 1 applied, 2 left.\",\"no\"],\"status\":404}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-5cxwKG/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000007000,
+          "t_after": 1700000021000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_3\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f33222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f335c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000008250,\"next_write_at\":1700000014000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030383235302c226e6578745f77726974655f6174223a313730303030303031343030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e4a8f12e-1747-4d2c-a08e-1125caf2bca5\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":404,\"rate_limited\":false,\"request_id\":\"2a649532-3626-4d56-9306-a83f74ad7f32\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265346138663132652d313734372d346432632d613038652d313132356361663262636135227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232613634393533322d333632362d346435362d393330362d613833663734616437663332227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:20.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_2\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:34.000Z\"\n    },\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_3\\\"}\",\n      \"applied_at\": \"2023-11-14T22:13:41.000Z\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a32302e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f32222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f325c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a33342e3030305a220a202020207d2c0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f33222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f335c227d222c0a202020202020226170706c6965645f6174223a2022323032332d31312d31345432323a31333a34312e3030305a220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000022250,\"next_write_at\":1700000028000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303032323235302c226e6578745f77726974655f6174223a313730303030303032383030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e4a8f12e-1747-4d2c-a08e-1125caf2bca5\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":404,\"rate_limited\":false,\"request_id\":\"2a649532-3626-4d56-9306-a83f74ad7f32\"}\n{\"ts\":\"2023-11-14T22:13:34.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"68c7a6ca-211a-48b1-82d3-8497b0d0962d\"}\n{\"ts\":\"2023-11-14T22:13:41.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PATCH\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"476a919e-6f14-42f5-bc24-94276aa8a37c\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265346138663132652d313734372d346432632d613038652d313132356361663262636135227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232613634393533322d333632362d346435362d393330362d613833663734616437663332227d0a7b227473223a22323032332d31312d31345432323a31333a33342e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236386337613663612d323131612d343862312d383264332d383439376230643039363264227d0a7b227473223a22323032332d31312d31345432323a31333a34312e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a225041544348222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2234373661393139652d366631342d343266352d626332342d393432373661613861333763227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000014000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "68c7a6ca-211a-48b1-82d3-8497b0d0962d",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_2\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            },
+            {
+              "at": 1700000021000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3",
+              "method": "PATCH",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "476a919e-6f14-42f5-bc24-94276aa8a37c",
+                "Content-Type": "application/json"
+              },
+              "body": "{\"name\":\"plc_3\"}",
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"applied\": [\n    {\n      \"number\": 2,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    },\n    {\n      \"number\": 3,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#2 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\n#3 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > --yes approves the plan, not a risky change",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-yQVCPQ/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-delete\",\n      \"env\": \"prod\",\n      \"method\": \"DELETE\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"confirm\": \"query\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d64656c657465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a202244454c455445222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022636f6e6669726d223a20227175657279220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-yQVCPQ/plan.json\",\n  \"number\": 1,\n  \"method\": \"DELETE\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": null\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-yQVCPQ/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-delete\",\n      \"env\": \"prod\",\n      \"method\": \"DELETE\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"confirm\": \"query\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d64656c657465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a202244454c455445222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022636f6e6669726d223a20227175657279220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-delete\",\n      \"env\": \"prod\",\n      \"method\": \"DELETE\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"confirm\": \"query\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d64656c657465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a202244454c455445222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022636f6e6669726d223a20227175657279220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":1700000007000,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a313730303030303030373030302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"7917ed8e-b0e3-406b-b9df-6174cd60ec33\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237393137656438652d623065332d343036622d623964662d363137346364363065633333227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1",
+              "method": "DELETE",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; apply; script)",
+                "X-Request-Id": "7917ed8e-b0e3-406b-b9df-6174cd60ec33"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 422,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"]},\"confirm_token\":\"tok_1\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 8,
+          "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-delete\",\n    \"error\": {\n      \"code\": \"CONFIRMATION_REQUIRED\",\n      \"messages\": [\n        \"Used by 3 live campaigns\"\n      ],\n      \"status\": 422\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod DELETE https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_1\"}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > apply sends the key only to the Management API of the env of each entry",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json.bad",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://evil.example/management/v1/x\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6576696c2e6578616d706c652f6d616e6167656d656e742f76312f78222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://evil.example/management/v1/x\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6576696c2e6578616d706c652f6d616e6167656d656e742f76312f78222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan goes to https://evil.example/management/v1/x, not to the Management API of prod. The CLI sent nothing.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json.bad",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io.evil.example/management/v1/x\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2e6576696c2e6578616d706c652f6d616e6167656d656e742f76312f78222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io.evil.example/management/v1/x\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2e6576696c2e6578616d706c652f6d616e6167656d656e742f76312f78222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan goes to https://api.purchasely.io.evil.example/management/v1/x, not to the Management API of prod. The CLI sent nothing.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json.bad",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"staging\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2273746167696e67222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"staging\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2273746167696e67222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan goes to https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1, not to the Management API of staging. The CLI sent nothing.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json.bad",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"GET\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a22474554222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"GET\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{\\\"name\\\":\\\"plc_1\\\"}\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a22474554222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b5c226e616d655c223a5c22706c635f315c227d227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan has method \\\"GET\\\", not a write. The CLI sent nothing.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/plan.json.bad",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{bad\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b626164227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{bad\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b626164227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan has a body that is not a JSON string. The CLI sent nothing.\"]}}\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/missing.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{bad\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b626164227d5d7d"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "plan.json.bad",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"version\":1,\"requests\":[{\"command\":\"placements-update\",\"env\":\"prod\",\"method\":\"PATCH\",\"url\":\"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\"pathTemplate\":\"/management/v1/applications/{application_id}/placements/{id}\",\"body\":\"{bad\"}]}",
+                "hex": "7b2276657273696f6e223a312c227265717565737473223a5b7b22636f6d6d616e64223a22706c6163656d656e74732d757064617465222c22656e76223a2270726f64222c226d6574686f64223a225041544348222c2275726c223a2268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c227061746854656d706c617465223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22626f6479223a227b626164227d5d7d"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/missing.json is not a readable plan file (JSON).\"]}}\n"
+        }
+      ],
+      "pending": "P6a"
+    },
+    {
+      "test": "apply::plan, then apply > apply keeps read-only mode",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"plc_1\"}",
+            "--env",
+            "prod",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-FnmR9O/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_READ_ONLY": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-FnmR9O/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"body\": {\n    \"name\": \"plc_1\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-FnmR9O/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_READ_ONLY": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 55995,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"prod\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"plc_1\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202270726f64222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f312f706c6163656d656e74732f706c635f31222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22706c635f315c227d220a202020207d0a20205d0a7d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-update\",\n    \"error\": {\n      \"code\": \"REFUSED\",\n      \"messages\": [\n        \"Read-only mode: PURCHASELY_READ_ONLY=1 is set. This command writes, so the CLI sent nothing.\"\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Read-only mode: PURCHASELY_READ_ONLY=1 is set. This command writes, so the CLI sent nothing.\"]}}\n"
+        }
+      ],
+      "pending": "P6a"
+    }
+  ]
+}

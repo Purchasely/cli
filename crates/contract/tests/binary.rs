@@ -20,6 +20,10 @@ fn binary_contract_directory_supports_record_replay_and_bless() {
             .to_string_lossy()
             .into_owned()
     });
+    assert!(
+        std::path::Path::new(&command).exists(),
+        "missing {command}: run `cargo build -p purchasely --bins` first"
+    );
     let record = std::env::var("CONTRACT_RECORD").is_ok_and(|v| v == "1");
     let bless = std::env::var("CONTRACT_BLESS").is_ok_and(|v| v == "1");
     let filter = std::env::var("CONTRACT_FILTER").ok();

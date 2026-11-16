@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-const HELP: &str = "\nDemo mode answers every read from the built-in sample data of one fictional app (app_demo).\nIt needs no key and sends no request. The data is not real. A write exits 10; --dry-run and --plan still work.\nEach run prints demo=on in the stderr header line.\n\nExample:\n  export PURCHASELY_DEMO=1\n  purchasely dashboard summary --app app_demo --output table\n  unset PURCHASELY_DEMO\n";
+const HELP: &str = "\nDemo mode answers every read from the built-in sample data of one fictional app (app_demo).\nIt needs no key and sends no request. The data is not real. A write exits 10; --dry-run and --plan still work.\nEach run prints demo=on in the stderr header line.\n\nExample:\n  export PURCHASELY_DEMO=1\n  purchasely dashboard summary --app app_demo --output table\n  unset PURCHASELY_DEMO";
 
 pub fn register(program: &mut Command, rt: &mut Runtime) {
     let name = rt.d.name.clone();

@@ -90,6 +90,13 @@ pub fn build(rt: &mut Runtime) -> (Command, usize) {
     for register in ext {
         register(&mut root, rt);
     }
+    // TS `rt.extTop`: the top-level commands that an extension module added.
+    rt.extension_top = root.commands[builtin..]
+        .iter()
+        .map(|c| c.name.clone())
+        .collect();
+    // TS reads the live `program` in an action: the tree holds every module, the extension ones too.
+    rt.command_tree = Some(root.clone());
     (root, builtin)
 }
 
@@ -142,7 +149,8 @@ fn fail(rt: &Runtime, error: &CliError) -> i32 {
 pub fn run(argv: Vec<String>, d: Deps) -> i32 {
     let mut rt = Runtime::new(d);
     let (root, builtin) = build(&mut rt);
-    let width = if rt.d.is_tty {
+    // commander `getOutHelpWidth`: the columns of stdout when stdout is a terminal, else 80.
+    let width = if rt.d.stdout_tty {
         rt.d.columns.unwrap_or(80) as usize
     } else {
         80

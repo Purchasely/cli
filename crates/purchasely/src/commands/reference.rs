@@ -23,7 +23,8 @@ fn collect(root: &Command, rt: &Runtime) -> Reference {
             leaves,
         });
     }
-    groups.sort_by(|left, right| left.name.cmp(&right.name));
+    // Built-in groups first, then the extension ones, each by name.
+    groups.sort_by(|a, b| (a.extension, &a.name).cmp(&(b.extension, &b.name)));
     Reference {
         name: rt.d.name.clone(),
         version: rt.d.version.clone(),
@@ -37,33 +38,6 @@ fn collect(root: &Command, rt: &Runtime) -> Reference {
             .as_ref()
             .map(|e| (e.section.0.into(), e.section.1.into())),
     }
-}
-fn completed_tree(rt: &mut Runtime) -> Command {
-    let mut root = rt
-        .command_tree
-        .clone()
-        .expect("the command tree is finalized before dispatch");
-    let Some(modules) = rt.d.ext.as_ref().map(|extension| extension.modules.clone()) else {
-        return root;
-    };
-    let before: std::collections::BTreeSet<_> =
-        root.commands.iter().map(|c| c.name.clone()).collect();
-    let taken = rt.taken.clone();
-    let search_index = rt.search_index.clone();
-    let search_extra = rt.search_extra.clone();
-    for register in modules {
-        register(&mut root, rt);
-    }
-    rt.extension_top = root
-        .commands
-        .iter()
-        .filter(|command| !before.contains(&command.name))
-        .map(|command| command.name.clone())
-        .collect();
-    rt.taken = taken;
-    rt.search_index = search_index;
-    rt.search_extra = search_extra;
-    root
 }
 fn collect_leaves(node: &Command, path: Vec<String>, root_name: &str, out: &mut Vec<Leaf>) {
     let mut ancestors = vec![root_name.to_owned()];
@@ -112,7 +86,10 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
         if !["markdown", "man", "html", "json"].contains(&format) {
             return Err(usage("--format must be markdown, man, html or json."));
         }
-        let tree = completed_tree(rt);
+        let tree = rt
+            .command_tree
+            .clone()
+            .expect("the command tree is finalized before dispatch");
         let text = if format == "json" {
             crate::core::json::stringify_pretty(&reference::json(
                 &tree,

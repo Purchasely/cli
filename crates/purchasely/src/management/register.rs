@@ -47,7 +47,6 @@ pub fn register(program: &mut Command, runtime: &mut Runtime) {
             add_leaf(group, &generated, &name);
         }
     }
-    runtime.command_tree = Some(program.clone());
 }
 
 fn find_or_create_hidden_group<'a>(program: &'a mut Command, name: &str) -> &'a mut Command {

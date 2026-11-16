@@ -264,13 +264,19 @@ pub fn man(r: &Reference, date: &str) -> String {
         ".SH DESCRIPTION".into(),
     ];
     lines.extend(block(&r.root));
-    for (extension, heading) in [(false, "COMMANDS"), (true, "MORE COMMANDS")] {
+    // TS `man`: COMMANDS always, then the extension section under the quoted, upper-case title.
+    let title = r
+        .section
+        .as_ref()
+        .map_or("More commands", |(t, _)| t.as_str());
+    let ext_heading = format!("\"{}\"", title.to_uppercase());
+    for (extension, heading) in [(false, "COMMANDS"), (true, ext_heading.as_str())] {
         let groups: Vec<_> = r
             .groups
             .iter()
             .filter(|g| g.extension == extension)
             .collect();
-        if groups.is_empty() {
+        if extension && groups.is_empty() {
             continue;
         }
         lines.push(format!(".SH {heading}"));

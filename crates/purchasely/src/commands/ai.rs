@@ -3,6 +3,7 @@ use crate::{
     cli::Command,
     core::{
         ai::{Verb, command_result},
+        errors::{CliError, EXIT},
         json::Value,
         output::{EmitOptions, emit},
         runtime::{Runtime, add_globals},
@@ -44,6 +45,20 @@ const MORE: [(&str, &str); 4] = [
     ("uninstall", "A marketplace is never removed."),
 ];
 
+fn field<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
+    if let Value::Object(fields) = value {
+        fields
+            .iter()
+            .find(|(name, _)| name == key)
+            .map(|(_, value)| value)
+    } else {
+        None
+    }
+}
+fn text_field(value: &Value, key: &str) -> Option<String> {
+    field(value, key).and_then(Value::as_str)
+}
+
 /// Adds the four leaf commands and reserves their generated command names.
 pub fn register(program: &mut Command, rt: &mut Runtime) {
     let mut ai =
@@ -72,6 +87,32 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
             .action(move |p, rt| {
                 let env = rt.env(p.opt("env"))?;
                 let rows = command_result(rt, kind, p.opt("agent"), p.flag("dry-run"))?;
+                let failed = if let Value::Array(ref agents) = rows {
+                    agents
+                        .iter()
+                        .filter(|r| {
+                            matches!(
+                                text_field(r, "action").as_deref(),
+                                Some("failed" | "refused")
+                            )
+                        })
+                        .filter_map(|r| text_field(r, "message"))
+                        .collect::<Vec<_>>()
+                } else {
+                    vec![]
+                };
+                let installed = if let Value::Array(ref agents) = rows {
+                    agents
+                        .iter()
+                        .filter(|r| {
+                            text_field(r, "action").as_deref() == Some("installed")
+                                || text_field(r, "action").as_deref() == Some("updated")
+                        })
+                        .map(|r| text_field(r, "agent").unwrap_or_default())
+                        .collect::<Vec<_>>()
+                } else {
+                    vec![]
+                };
                 let value = Value::Object(vec![("agents".into(), rows)]);
                 emit(
                     &rt.d,
@@ -84,6 +125,16 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
                         ..EmitOptions::default()
                     },
                 );
+                if !p.flag("dry-run") && installed.iter().any(|a| a == "claude") {
+                    rt.d.host
+                        .stderr("Restart Claude Code to load the new plugin.\n");
+                }
+                if !p.flag("dry-run") && installed.iter().any(|a| a == "cursor") {
+                    rt.d.host.stderr("Reload the Cursor window.\n");
+                }
+                if !failed.is_empty() {
+                    return Err(CliError::new(EXIT::GENERIC, "AI_FAILED", failed));
+                }
                 Ok(())
             });
         ai.commands.push(leaf);

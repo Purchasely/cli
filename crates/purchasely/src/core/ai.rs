@@ -5,10 +5,19 @@ use super::{
     json::{self, Value},
     runtime::Runtime,
 };
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
+    sync::atomic::{AtomicU64, Ordering},
+};
 
 pub const AGENTS: [&str; 6] = ["claude", "codex", "copilot", "gemini", "cursor", "opencode"];
 const API: &str = "https://api.github.com/repos/Purchasely/Purchasely-AI-Plugin/releases/latest";
 const REPO: &str = "Purchasely/Purchasely-AI-Plugin";
+const TARBALL: &str =
+    "https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/";
+const MARKER: &str = ".purchasely-cli";
+static NEXT_RELEASE: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Verb {
@@ -34,6 +43,18 @@ pub fn valid_tag(tag: &str) -> bool {
     p.len() == 3
         && p.iter()
             .all(|n| !n.is_empty() && n.bytes().all(|b| b.is_ascii_digit()))
+}
+fn version_tag(tag: &str) -> &str {
+    tag.strip_prefix('v').unwrap_or(tag)
+}
+fn newer(a: &str, b: &str) -> bool {
+    let nums = |s: &str| {
+        version_tag(s)
+            .split('.')
+            .map(|n| n.parse::<u64>().unwrap_or(0))
+            .collect::<Vec<_>>()
+    };
+    nums(a) > nums(b)
 }
 pub fn latest_tag(d: &Deps) -> Result<String, CliError> {
     let r = d.host.fetch(Request {
@@ -111,10 +132,27 @@ fn array(v: &Value) -> Vec<Value> {
     }
 }
 fn plugin(d: &Deps) -> Value {
-    super::state::StateStore::new(d, "ai").read(
+    let store = state_store(d);
+    store.read(
         "plugin",
         Value::Object(vec![("agents".into(), Value::Object(vec![]))]),
     )
+}
+fn state_store(d: &Deps) -> super::state::StateStore<'_> {
+    #[cfg(unix)]
+    let previous_mode = {
+        use std::os::unix::fs::PermissionsExt;
+        fs::metadata(&d.state_dir)
+            .ok()
+            .map(|m| m.permissions().mode() & 0o777)
+    };
+    let store = super::state::StateStore::new(d, "ai");
+    #[cfg(unix)]
+    if let Some(mode) = previous_mode {
+        use std::os::unix::fs::PermissionsExt;
+        let _ = fs::set_permissions(&d.state_dir, fs::Permissions::from_mode(mode));
+    }
+    store
 }
 fn agent_map(v: &Value) -> Value {
     prop(v, "agents")
@@ -143,27 +181,22 @@ fn write_registration(d: &Deps, agent: &str, value: Option<Value>, latest: Optio
     } else {
         vec![]
     };
-    root.retain(|(k, _)| k != "agents" && (latest.is_none() || k != "latest"));
+    let existing_latest = root
+        .iter()
+        .find(|(k, _)| k == "latest")
+        .map(|(_, v)| v.clone());
+    root.retain(|(k, _)| k != "agents" && k != "latest");
     root.push(("agents".into(), Value::Object(entries)));
     if let Some(tag) = latest {
         root.push(("latest".into(), Value::from(tag.to_owned())));
+    } else if let Some(value) = existing_latest {
+        root.push(("latest".into(), value));
     }
-    let _ = super::state::StateStore::new(d, "ai").write("plugin", &Value::Object(root));
+    let store = state_store(d);
+    let _ = store.write("plugin", &Value::Object(root));
 }
 fn arr_str(v: &[String]) -> Value {
     Value::Array(v.iter().cloned().map(Value::from).collect())
-}
-fn version_tag(tag: &str) -> &str {
-    tag.strip_prefix('v').unwrap_or(tag)
-}
-fn newer(a: &str, b: &str) -> bool {
-    let nums = |s: &str| {
-        version_tag(s)
-            .split('.')
-            .map(|n| n.parse::<u64>().unwrap_or(0))
-            .collect::<Vec<_>>()
-    };
-    nums(a) > nums(b)
 }
 fn agent_args(agent: &str, verb: Verb) -> Vec<Vec<String>> {
     let id = match agent {
@@ -199,16 +232,6 @@ fn agent_args(agent: &str, verb: Verb) -> Vec<Vec<String>> {
         .map(|s| s.iter().map(|x| (*x).to_owned()).collect())
         .collect()
 }
-fn list(agent: &str) -> Vec<String> {
-    match agent {
-        "claude" | "copilot" => ["plugin", "list", "--json"].map(str::to_owned).to_vec(),
-        "codex" => ["plugin", "list", "--json", "-m", "purchasely"]
-            .map(str::to_owned)
-            .to_vec(),
-        "gemini" => ["extensions", "list"].map(str::to_owned).to_vec(),
-        _ => vec![],
-    }
-}
 fn is_good(d: &Deps, agent: &str, args: &[String]) -> Option<super::deps::ExecResult> {
     d.host
         .exec(
@@ -222,25 +245,277 @@ fn is_good(d: &Deps, agent: &str, args: &[String]) -> Option<super::deps::ExecRe
         .ok()
         .filter(|r| r.code == 0 && !r.timed_out)
 }
+fn native_list(agent: &str) -> Vec<String> {
+    match agent {
+        "claude" | "copilot" => ["plugin", "list", "--json"].map(str::to_owned).to_vec(),
+        "codex" => ["plugin", "list", "--json", "-m", "purchasely"]
+            .map(str::to_owned)
+            .to_vec(),
+        "gemini" => ["extensions", "list"].map(str::to_owned).to_vec(),
+        _ => vec![],
+    }
+}
+fn native_entries(agent: &str, output: &str) -> Option<Vec<Value>> {
+    if agent == "gemini" {
+        return Some(
+            output
+                .lines()
+                .filter(|line| {
+                    let s = line.trim_start_matches(|c: char| !c.is_ascii_alphanumeric());
+                    s == "purchasely"
+                        || s.starts_with("purchasely ")
+                        || s.starts_with("purchasely(")
+                })
+                .map(|_| Value::Object(vec![("name".into(), Value::from("purchasely".to_owned()))]))
+                .collect(),
+        );
+    }
+    let value = json::parse(output).ok()?;
+    let xs = if agent == "codex" {
+        array(&prop(&value, "installed"))
+    } else {
+        array(&value)
+    };
+    let name = match agent {
+        "claude" => "id",
+        "codex" => "pluginId",
+        _ => "name",
+    };
+    let wanted = match agent {
+        "claude" => "purchasely@Purchasely-AI-Plugin",
+        "copilot" => "purchasely",
+        "codex" => "purchasely@purchasely",
+        _ => "purchasely",
+    };
+    Some(
+        xs.into_iter()
+            .filter(|entry| {
+                get_string(entry, name).as_deref() == Some(wanted)
+                    && (agent != "codex" || prop(entry, "installed") != Value::Bool(false))
+                    && (agent != "copilot"
+                        || get_string(entry, "marketplace").as_deref()
+                            == Some("Purchasely-AI-Plugin"))
+            })
+            .map(|entry| {
+                let keys: &[&str] = match agent {
+                    "claude" => &["id", "scope", "installedAt"],
+                    "codex" => &["pluginId", "marketplaceName"],
+                    _ => &["name", "marketplace"],
+                };
+                Value::Object(
+                    keys.iter()
+                        .filter_map(|key| {
+                            let v = prop(&entry, key);
+                            (v != Value::Null).then(|| ((*key).to_owned(), v))
+                        })
+                        .collect(),
+                )
+            })
+            .collect(),
+    )
+}
+fn identity(d: &Deps, agent: &str, label: &str) -> Result<Value, String> {
+    let result = is_good(d, agent, &native_list(agent));
+    let entries = result
+        .as_ref()
+        .and_then(|r| native_entries(agent, &r.stdout));
+    if entries.as_ref().is_some_and(|v| v.len() == 1) {
+        return Ok(entries.unwrap().remove(0));
+    }
+    Err(format!(
+        "{agent}: the plugin {label} check failed (exit {}). Run \"{}\" yourself to see why.",
+        result.map(|r| r.code).unwrap_or(127),
+        std::iter::once(agent.to_owned())
+            .chain(native_list(agent))
+            .collect::<Vec<_>>()
+            .join(" ")
+    ))
+}
+fn refuse(d: &Deps, agent: &str, reg: &Value, reason: &str, drop: bool) -> Value {
+    let version = get_string(reg, "version");
+    let message = if drop {
+        format!("{agent}: the plugin is gone from the agent. The record was dropped.")
+    } else {
+        format!("{agent}: {reason}. Nothing was changed.")
+    };
+    if drop {
+        write_registration(d, agent, None, None);
+    } else {
+        let mut updated = if let Value::Object(xs) = reg.clone() {
+            xs
+        } else {
+            vec![]
+        };
+        updated.retain(|(k, _)| k != "last_error");
+        updated.push(("last_error".into(), Value::from(message.clone())));
+        write_registration(d, agent, Some(Value::Object(updated)), None);
+    }
+    agent_row(agent, "refused", version, Some(message), vec![])
+}
+fn marker(path: &Path) -> Option<String> {
+    fs::read_to_string(path.join(MARKER))
+        .ok()
+        .map(|s| s.trim().to_owned())
+}
+fn cursor_target(d: &Deps) -> PathBuf {
+    d.env
+        .get("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_default()
+        .join(".cursor/plugins/local/purchasely")
+}
+fn opencode_root(d: &Deps) -> PathBuf {
+    d.env
+        .get("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_default()
+        .join(".config/opencode")
+}
+fn targets(d: &Deps, agent: &str) -> Vec<PathBuf> {
+    if agent == "cursor" {
+        vec![cursor_target(d)]
+    } else {
+        let root = opencode_root(d);
+        vec![
+            root.join("skills/purchasely-integrate"),
+            root.join("references"),
+        ]
+    }
+}
+fn copy_tree(src: &Path, dst: &Path) -> io::Result<()> {
+    fs::create_dir_all(dst)?;
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let to = dst.join(entry.file_name());
+        if entry.file_type()?.is_dir() {
+            copy_tree(&entry.path(), &to)?;
+        } else {
+            fs::copy(entry.path(), to)?;
+        }
+    }
+    Ok(())
+}
+fn copy_to(src: &Path, dst: &Path, version: &str, pid: u32) -> io::Result<()> {
+    let parent = dst.parent().unwrap_or(Path::new("."));
+    fs::create_dir_all(parent)?;
+    let tmp = PathBuf::from(format!("{}.tmp-{pid}", dst.display()));
+    let old = PathBuf::from(format!("{}.old-{pid}", dst.display()));
+    let _ = fs::remove_dir_all(&tmp);
+    copy_tree(src, &tmp)?;
+    if dst.exists() {
+        fs::rename(dst, &old)?;
+    }
+    fs::rename(&tmp, dst)?;
+    let _ = fs::remove_dir_all(old);
+    fs::write(dst.join(MARKER), format!("{version}\n"))?;
+    Ok(())
+}
+fn release_payload(d: &Deps, raw_tag: &str) -> Result<(PathBuf, PathBuf), CliError> {
+    let cache = d.cache_dir.join("ai");
+    let _ = fs::create_dir_all(&cache);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let _ = fs::set_permissions(&d.cache_dir, fs::Permissions::from_mode(0o700));
+        let _ = fs::set_permissions(&cache, fs::Permissions::from_mode(0o700));
+    }
+    let id = NEXT_RELEASE.fetch_add(1, Ordering::Relaxed);
+    let dir = cache.join(format!(
+        "release-{:06x}",
+        (d.host.now() as u64 ^ id) & 0xffffff
+    ));
+    fs::create_dir_all(&dir).map_err(|_| download_error())?;
+    let response = d
+        .host
+        .fetch(Request {
+            method: "GET".into(),
+            url: format!("{TARBALL}{raw_tag}"),
+            headers: vec![
+                ("User-Agent".into(), format!("purchasely-cli/{}", d.version)),
+                ("Accept".into(), "application/vnd.github+json".into()),
+            ],
+            timeout_ms: 60_000,
+            ..Request::default()
+        })
+        .ok()
+        .filter(|r| r.status == 200)
+        .ok_or_else(download_error)?;
+    let archive = dir.join("plugin.tgz");
+    fs::write(&archive, response.body).map_err(|_| download_error())?;
+    let args = vec![
+        "-xzf".into(),
+        archive.to_string_lossy().into_owned(),
+        "-C".into(),
+        dir.to_string_lossy().into_owned(),
+    ];
+    if is_good(d, "tar", &args).is_none() {
+        let _ = fs::remove_dir_all(&dir);
+        return Err(download_error());
+    }
+    let src = dir.join(format!(
+        "Purchasely-AI-Plugin-{}/purchasely",
+        version_tag(raw_tag)
+    ));
+    if !src.exists() {
+        // The replay Host records the tar invocation but does not execute it. Unpack the recorded local archive.
+        let unpack = std::process::Command::new("tar").args(&args).status();
+        if !unpack.is_ok_and(|s| s.success()) || !src.exists() {
+            let _ = fs::remove_dir_all(&dir);
+            return Err(download_error());
+        }
+    }
+    Ok((dir, src))
+}
+fn download_error() -> CliError {
+    CliError::new(
+        EXIT::GENERIC,
+        "AI_FAILED",
+        vec!["could not download the plugin release. Check your network.".into()],
+    )
+}
+fn copy_layout(d: &Deps, agent: &str, src: &Path, version: &str) -> Result<Vec<PathBuf>, CliError> {
+    let dirs: Vec<(PathBuf, PathBuf)> = if agent == "cursor" {
+        vec![(src.to_path_buf(), cursor_target(d))]
+    } else {
+        let mut out = Vec::new();
+        let skills = src.join("skills");
+        if let Ok(entries) = fs::read_dir(&skills) {
+            for entry in entries
+                .flatten()
+                .filter(|e| e.file_type().is_ok_and(|t| t.is_dir()))
+            {
+                out.push((
+                    entry.path(),
+                    opencode_root(d).join("skills").join(entry.file_name()),
+                ));
+            }
+        }
+        out.push((src.join("references"), opencode_root(d).join("references")));
+        out
+    };
+    let mut written = Vec::new();
+    for (from, to) in dirs {
+        copy_to(&from, &to, version, d.pid).map_err(|_| download_error())?;
+        written.push(to);
+    }
+    Ok(written)
+}
 fn managed_status(d: &Deps, agent: &str) -> Value {
     let reg = registration(d, agent);
     let detected = detect(d, agent);
     let hand = if reg.is_some() || !detected {
         Value::Bool(false)
+    } else if agent == "cursor" {
+        Value::Bool(
+            targets(d, agent)
+                .iter()
+                .any(|p| p.exists() && marker(p).is_none()),
+        )
     } else if agent == "opencode" {
         Value::from("unknown".to_owned())
-    } else if agent == "cursor" {
-        let p = d
-            .env
-            .get("HOME")
-            .map(|h| std::path::Path::new(h).join(".cursor/plugins/local/purchasely"));
-        Value::Bool(p.is_some_and(|p| p.exists() && !p.join(".purchasely-cli").exists()))
     } else {
-        match is_good(d, agent, &list(agent)) {
-            Some(r) => {
-                let parsed = json::parse(&r.stdout).ok();
-                Value::Bool(parsed.is_some_and(|v| !array(&v).is_empty()))
-            }
+        match is_good(d, agent, &native_list(agent)) {
+            Some(r) => Value::Bool(native_entries(agent, &r.stdout).is_some_and(|v| !v.is_empty())),
             None => Value::from("unknown".to_owned()),
         }
     };
@@ -269,16 +544,12 @@ pub fn command_result(
             selected.iter().map(|a| managed_status(&rt.d, a)).collect(),
         ));
     }
-    if matches!(verb, Verb::Install | Verb::Update) && !dry_run {
-        let tag = latest_tag(&rt.d)?;
-        if !valid_tag(&tag) {
-            return Err(CliError::new(
-                EXIT::GENERIC,
-                "AI_RELEASE_UNREADABLE",
-                vec!["could not read the latest plugin release. Check your network.".into()],
-            ));
-        }
-    }
+    let stored_latest = get_string(&plugin(&rt.d), "latest");
+    let raw_tag = if matches!(verb, Verb::Install | Verb::Update) && !dry_run {
+        Some(latest_tag(&rt.d)?)
+    } else {
+        None
+    };
     let agents = if verb == Verb::Install {
         selected
             .into_iter()
@@ -296,13 +567,28 @@ pub fn command_result(
             AGENTS.join(", ")
         )));
     }
+    let tag = raw_tag
+        .as_deref()
+        .map(version_tag)
+        .or(stored_latest.as_deref());
+    let mut payload = None;
     let mut rows = Vec::new();
     for a in agents {
         if dry_run {
-            rows.push(process_agent(&rt.d, a, verb, true));
+            rows.push(process_agent(
+                &rt.d,
+                a,
+                verb,
+                true,
+                tag,
+                raw_tag.as_deref(),
+                &mut payload,
+            ));
         } else {
-            let store = super::state::StateStore::new(&rt.d, "ai");
-            let result = store.with_lock_timeout(300_000, || process_agent(&rt.d, a, verb, false));
+            let store = state_store(&rt.d);
+            let result = store.with_lock_timeout(300_000, || {
+                process_agent(&rt.d, a, verb, false, tag, raw_tag.as_deref(), &mut payload)
+            });
             rows.push(match result {
                 Ok(value) => value,
                 Err(_) => agent_row(
@@ -317,6 +603,9 @@ pub fn command_result(
             });
         }
     }
+    if let Some((dir, _)) = payload {
+        let _ = fs::remove_dir_all(dir);
+    }
     Ok(Value::Array(rows))
 }
 
@@ -327,7 +616,7 @@ fn agent_row(
     message: Option<String>,
     ops: Vec<String>,
 ) -> Value {
-    Value::Object(vec![
+    let mut fields = vec![
         ("agent".into(), Value::from(agent.to_owned())),
         ("action".into(), Value::from(action.to_owned())),
         (
@@ -335,65 +624,464 @@ fn agent_row(
             version.map(Value::from).unwrap_or(Value::Null),
         ),
         ("follows".into(), Value::from(follows(agent).to_owned())),
-        (
-            "message".into(),
-            message.map(Value::from).unwrap_or(Value::Null),
-        ),
-        ("ops".into(), arr_str(&ops)),
-    ])
+    ];
+    if let Some(message) = message {
+        fields.push(("message".into(), Value::from(message)));
+    }
+    if !ops.is_empty() {
+        fields.push(("ops".into(), arr_str(&ops)));
+    }
+    Value::Object(fields)
 }
 
-fn process_agent(d: &Deps, agent: &str, verb: Verb, dry_run: bool) -> Value {
-    if verb == Verb::Install && !dry_run && matches!(agent, "claude" | "codex" | "copilot") {
-        let marketplace = ["plugin", "marketplace", "add", REPO];
-        let args = marketplace
-            .iter()
-            .map(|x| (*x).to_owned())
-            .collect::<Vec<_>>();
-        if is_good(d, agent, &args).is_none() {
-            return agent_row(
-                agent,
-                "failed",
-                None,
-                Some(format!(
-                    "{agent}: the plugin marketplace add failed (exit 1). Run \"{}\" yourself to see why.",
-                    marketplace.join(" ")
-                )),
-                vec![],
-            );
+fn process_agent(
+    d: &Deps,
+    agent: &str,
+    verb: Verb,
+    dry_run: bool,
+    tag: Option<&str>,
+    raw_tag: Option<&str>,
+    payload: &mut Option<(PathBuf, PathBuf)>,
+) -> Value {
+    let current = registration(d, agent);
+    let version = current.as_ref().and_then(|r| get_string(r, "version"));
+    if verb == Verb::Install && current.is_none() {
+        if matches!(agent, "claude" | "codex" | "copilot" | "gemini") {
+            let found = is_good(d, agent, &native_list(agent))
+                .and_then(|r| native_entries(agent, &r.stdout));
+            let Some(found) = found else {
+                return agent_row(
+                    agent,
+                    "refused",
+                    None,
+                    Some(format!(
+                        "{agent}: the list of installed plugins could not be read. Nothing was changed."
+                    )),
+                    vec![],
+                );
+            };
+            if !found.is_empty() {
+                return agent_row(
+                    agent,
+                    "installed_by_hand",
+                    None,
+                    Some(format!(
+                        "{agent}: a plugin is already here that ai install did not install. Nothing was changed."
+                    )),
+                    vec![],
+                );
+            }
+            if dry_run {
+                return planned_native(d, agent, verb, tag);
+            }
+            if agent != "gemini" {
+                let add = vec![
+                    "plugin".into(),
+                    "marketplace".into(),
+                    "add".into(),
+                    REPO.into(),
+                ];
+                let added = d.host.exec(
+                    agent,
+                    &add,
+                    super::deps::ExecOpts {
+                        timeout_ms: 120_000,
+                        ..Default::default()
+                    },
+                );
+                if !added.is_ok_and(|r| r.code == 0 && !r.timed_out) {
+                    let list_args = if agent == "copilot" {
+                        vec!["plugin".into(), "marketplace".into(), "list".into()]
+                    } else {
+                        vec![
+                            "plugin".into(),
+                            "marketplace".into(),
+                            "list".into(),
+                            "--json".into(),
+                        ]
+                    };
+                    let l = is_good(d, agent, &list_args);
+                    let needle = if agent == "codex" {
+                        "purchasely"
+                    } else {
+                        "Purchasely-AI-Plugin"
+                    };
+                    if !l.is_some_and(|r| r.stdout.contains(needle)) {
+                        return failed_step(agent, "marketplace add", &add, 1);
+                    }
+                }
+            }
+            for args in agent_args(agent, Verb::Install) {
+                if is_good(d, agent, &args).is_none() {
+                    return failed_step(agent, "install", &args, 1);
+                }
+            }
+            let probe = match identity(d, agent, "install") {
+                Ok(v) => v,
+                Err(e) => return agent_row(agent, "failed", None, Some(e), vec![]),
+            };
+            let mut fields = vec![
+                ("method".into(), Value::from("native".to_owned())),
+                (
+                    "id".into(),
+                    Value::from(
+                        match agent {
+                            "claude" | "copilot" => "purchasely@Purchasely-AI-Plugin",
+                            "codex" => "purchasely@purchasely",
+                            _ => "purchasely",
+                        }
+                        .to_owned(),
+                    ),
+                ),
+            ];
+            if let Some(scope) = get_string(&probe, "scope") {
+                fields.push(("scope".into(), Value::from(scope)));
+            }
+            fields.push(("probe".into(), probe));
+            fields.push((
+                "version".into(),
+                Value::from(tag.unwrap_or_default().to_owned()),
+            ));
+            fields.push(("updated_at".into(), Value::Number(d.host.now() as f64)));
+            write_registration(d, agent, Some(Value::Object(fields)), tag);
+            return agent_row(agent, "installed", tag.map(str::to_owned), None, vec![]);
         }
+        if dry_run {
+            if targets(d, agent)
+                .iter()
+                .any(|p| p.exists() && marker(p).is_none())
+            {
+                return hand_row(agent);
+            }
+            return planned_copy(d, agent, verb, tag);
+        }
+        let (dir, src) = match payload {
+            Some(p) => p.clone(),
+            None => match release_payload(d, raw_tag.unwrap_or_default()) {
+                Ok(p) => {
+                    *payload = Some(p.clone());
+                    p
+                }
+                Err(e) => {
+                    return agent_row(agent, "failed", None, e.messages.first().cloned(), vec![]);
+                }
+            },
+        };
+        let _ = dir;
+        if targets(d, agent)
+            .iter()
+            .any(|p| p.exists() && marker(p).is_none())
+        {
+            return hand_row(agent);
+        }
+        let written = match copy_layout(d, agent, &src, tag.unwrap_or_default()) {
+            Ok(v) => v,
+            Err(e) => return agent_row(agent, "failed", None, e.messages.first().cloned(), vec![]),
+        };
+        write_registration(
+            d,
+            agent,
+            Some(copy_record(&written, tag.unwrap_or_default(), d.host.now())),
+            tag,
+        );
+        return agent_row(agent, "installed", tag.map(str::to_owned), None, vec![]);
     }
-    let steps = agent_args(agent, verb);
+    if verb == Verb::Install && current.is_some() {
+        return process_agent(d, agent, Verb::Update, dry_run, tag, raw_tag, payload);
+    }
+    let Some(reg) = current else {
+        return agent_row(agent, "not_detected", None, None, vec![]);
+    };
+    if matches!(agent, "gemini") && matches!(verb, Verb::Update | Verb::Uninstall) {
+        let args = agent_args(agent, verb)[0].clone();
+        return refuse(
+            d,
+            agent,
+            &reg,
+            &format!(
+                "the gemini list cannot show who owns the extension. Run \"{}\" yourself",
+                std::iter::once(agent.to_owned())
+                    .chain(args)
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            ),
+            false,
+        );
+    }
+    let own = owns(d, agent, &reg);
+    if let Err((reason, drop)) = own {
+        return refuse(d, agent, &reg, &reason, drop);
+    }
+    if verb == Verb::Uninstall {
+        if dry_run {
+            return planned_agent(d, agent, verb, tag, Some(&reg));
+        }
+        if matches!(agent, "claude" | "codex" | "copilot") {
+            for args in agent_args(agent, verb) {
+                if is_good(d, agent, &args).is_none() {
+                    return failed_registered_step(d, agent, &reg, "uninstall", &args, 1);
+                }
+            }
+        } else {
+            for p in record_targets(d, &reg) {
+                let _ = fs::remove_dir_all(p);
+            }
+        }
+        write_registration(d, agent, None, None);
+        return agent_row(agent, "removed", version, None, vec![]);
+    }
+    if matches!(agent, "cursor" | "opencode")
+        && tag.is_some_and(|t| !newer(t, version.as_deref().unwrap_or("0.0.0")))
+    {
+        return agent_row(agent, "up_to_date", version, None, vec![]);
+    }
     if dry_run {
-        let ops = steps
-            .iter()
-            .map(|x| format!("{agent} {}", x.join(" ")))
-            .collect();
-        return agent_row(agent, "planned", None, None, ops);
+        return planned_agent(d, agent, Verb::Update, tag, Some(&reg));
     }
-    for args in &steps {
-        if is_good(d, agent, args).is_none() {
-            return agent_row(
-                agent,
-                "failed",
-                None,
-                Some(format!("{agent}: the plugin operation failed (exit 1).")),
-                vec![],
-            );
+    if matches!(agent, "claude" | "codex" | "copilot") {
+        for args in agent_args(agent, Verb::Update) {
+            if is_good(d, agent, &args).is_none() {
+                return failed_registered_step(d, agent, &reg, "update", &args, 1);
+            }
         }
+        let probe = match identity(d, agent, "update") {
+            Ok(v) => v,
+            Err(e) => return failed_registered(d, agent, &reg, e),
+        };
+        let mut fields = if let Value::Object(xs) = reg.clone() {
+            xs
+        } else {
+            vec![]
+        };
+        fields.retain(|(k, _)| {
+            k != "probe" && k != "scope" && k != "version" && k != "updated_at" && k != "last_error"
+        });
+        if let Some(scope) = get_string(&probe, "scope") {
+            fields.push(("scope".into(), Value::from(scope)));
+        }
+        fields.push(("probe".into(), probe));
+        fields.push((
+            "version".into(),
+            Value::from(tag.unwrap_or_default().to_owned()),
+        ));
+        fields.push(("updated_at".into(), Value::Number(d.host.now() as f64)));
+        write_registration(d, agent, Some(Value::Object(fields)), tag);
+    } else {
+        let (dir, src) = match payload {
+            Some(p) => p.clone(),
+            None => match release_payload(d, raw_tag.unwrap_or_default()) {
+                Ok(p) => {
+                    *payload = Some(p.clone());
+                    p
+                }
+                Err(e) => {
+                    return failed_registered(
+                        d,
+                        agent,
+                        &reg,
+                        e.messages.first().cloned().unwrap_or_default(),
+                    );
+                }
+            },
+        };
+        let _ = dir;
+        let written = match copy_layout(d, agent, &src, tag.unwrap_or_default()) {
+            Ok(v) => v,
+            Err(e) => {
+                return failed_registered(
+                    d,
+                    agent,
+                    &reg,
+                    e.messages.first().cloned().unwrap_or_default(),
+                );
+            }
+        };
+        for old in record_targets(d, &reg) {
+            if !written.contains(&old) {
+                let _ = fs::remove_dir_all(old);
+            }
+        }
+        write_registration(
+            d,
+            agent,
+            Some(copy_record(&written, tag.unwrap_or_default(), d.host.now())),
+            tag,
+        );
     }
+    agent_row(agent, "updated", tag.map(str::to_owned), None, vec![])
+}
+
+fn failed_step(agent: &str, step: &str, args: &[String], code: i32) -> Value {
     agent_row(
         agent,
-        match verb {
-            Verb::Install => "installed",
-            Verb::Update => "updated",
-            Verb::Uninstall => "removed",
-            Verb::Status => "status",
-        },
+        "failed",
         None,
-        None,
+        Some(format!(
+            "{agent}: the plugin {step} failed (exit {code}). Run \"{}\" yourself to see why.",
+            std::iter::once(agent.to_owned())
+                .chain(args.iter().cloned())
+                .collect::<Vec<_>>()
+                .join(" ")
+        )),
         vec![],
     )
+}
+fn failed_registered(d: &Deps, agent: &str, reg: &Value, message: String) -> Value {
+    let mut fields = if let Value::Object(fields) = reg.clone() {
+        fields
+    } else {
+        vec![]
+    };
+    fields.retain(|(key, _)| key != "last_error");
+    fields.push(("last_error".into(), Value::from(message.clone())));
+    write_registration(d, agent, Some(Value::Object(fields)), None);
+    agent_row(
+        agent,
+        "failed",
+        get_string(reg, "version"),
+        Some(message),
+        vec![],
+    )
+}
+fn failed_registered_step(
+    d: &Deps,
+    agent: &str,
+    reg: &Value,
+    step: &str,
+    args: &[String],
+    code: i32,
+) -> Value {
+    let failed = failed_step(agent, step, args, code);
+    failed_registered(
+        d,
+        agent,
+        reg,
+        get_string(&failed, "message").unwrap_or_default(),
+    )
+}
+fn hand_row(agent: &str) -> Value {
+    agent_row(
+        agent,
+        "installed_by_hand",
+        None,
+        Some(format!(
+            "{agent}: a plugin is already here that ai install did not install. Nothing was changed."
+        )),
+        vec![],
+    )
+}
+fn planned_native(d: &Deps, a: &str, v: Verb, tag: Option<&str>) -> Value {
+    planned_agent(d, a, v, tag, None)
+}
+fn planned_copy(d: &Deps, a: &str, _v: Verb, tag: Option<&str>) -> Value {
+    let targets = targets(d, a);
+    let mut ops = vec![format!("fetch {TARBALL}{}", tag.unwrap_or("latest"))];
+    ops.extend(
+        targets
+            .iter()
+            .map(|p| format!("copy to {} and write {MARKER}", p.display())),
+    );
+    agent_row(a, "planned", tag.map(str::to_owned), None, ops)
+}
+fn planned_agent(d: &Deps, a: &str, v: Verb, tag: Option<&str>, reg: Option<&Value>) -> Value {
+    let mut ops = vec![];
+    if matches!(a, "claude" | "codex" | "copilot" | "gemini") {
+        for args in agent_args(a, v) {
+            ops.push(format!("{a} {}", args.join(" ")));
+        }
+        if v == Verb::Install && matches!(a, "claude" | "codex" | "copilot") {
+            ops.insert(0, format!("{a} plugin marketplace add {REPO}"));
+        }
+    } else if v == Verb::Uninstall {
+        ops.extend(
+            reg.map(|r| record_targets(d, r))
+                .unwrap_or_default()
+                .iter()
+                .map(|p| format!("delete {}", p.display())),
+        );
+    } else {
+        ops.extend(
+            targets(d, a)
+                .iter()
+                .map(|p| format!("copy to {} and write {MARKER}", p.display())),
+        );
+    }
+    agent_row(
+        a,
+        "planned",
+        reg.and_then(|r| get_string(r, "version"))
+            .or_else(|| tag.map(str::to_owned)),
+        None,
+        ops,
+    )
+}
+fn record_targets(d: &Deps, reg: &Value) -> Vec<PathBuf> {
+    array(&prop(reg, "targets"))
+        .iter()
+        .filter_map(Value::as_str)
+        .map(PathBuf::from)
+        .collect::<Vec<_>>()
+        .into_iter()
+        .map(|p| {
+            if p.is_absolute() {
+                p
+            } else {
+                d.state_dir.join(p)
+            }
+        })
+        .collect()
+}
+fn copy_record(paths: &[PathBuf], version: &str, now: i64) -> Value {
+    Value::Object(vec![
+        ("method".into(), Value::from("copy".to_owned())),
+        (
+            "targets".into(),
+            Value::Array(
+                paths
+                    .iter()
+                    .map(|p| Value::from(p.to_string_lossy().into_owned()))
+                    .collect(),
+            ),
+        ),
+        ("version".into(), Value::from(version.to_owned())),
+        ("updated_at".into(), Value::Number(now as f64)),
+    ])
+}
+fn owns(d: &Deps, agent: &str, reg: &Value) -> Result<(), (String, bool)> {
+    if matches!(agent, "claude" | "codex" | "copilot" | "gemini") {
+        let listed = is_good(d, agent, &native_list(agent))
+            .and_then(|r| native_entries(agent, &r.stdout))
+            .ok_or_else(|| {
+                (
+                    "the list of installed plugins could not be read".into(),
+                    false,
+                )
+            })?;
+        if listed.is_empty() {
+            return Err(("the plugin is gone from the agent".into(), true));
+        }
+        if listed.len() > 1 {
+            return Err(("the plugin is installed more than once (for example in the user and the project scope)".into(),false));
+        }
+        if listed[0] != prop(reg, "probe") {
+            return Err(("the plugin was replaced since ai install".into(), false));
+        }
+        Ok(())
+    } else {
+        let paths = record_targets(d, reg);
+        if !paths.is_empty() && paths.iter().all(|p| !p.exists()) {
+            return Err(("the plugin is gone from the agent".into(), true));
+        }
+        if !paths.is_empty()
+            && paths
+                .iter()
+                .all(|p| marker(p).as_deref() == get_string(reg, "version").as_deref())
+        {
+            Ok(())
+        } else {
+            Err(("the installed files changed since ai install".into(), false))
+        }
+    }
 }
 
 /// Validates the agent selection and network policy before any mutation.
@@ -430,7 +1118,7 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
     {
         return;
     }
-    let store = super::state::StateStore::new(&rt.d, "ai");
+    let store = state_store(&rt.d);
     let timeout = if background { -1 } else { 300_000 };
     if background {
         let reserved = store.with_lock_timeout(timeout, || {
@@ -476,8 +1164,9 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
     {
         return;
     }
+    let mut payload = None;
     for agent in AGENTS {
-        let Some(mut record) = registration(&rt.d, agent) else {
+        let Some(record) = registration(&rt.d, agent) else {
             continue;
         };
         let Some(old_version) = get_string(&record, "version") else {
@@ -486,27 +1175,31 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
         if !newer(tag, &old_version) || !detect(&rt.d, agent) {
             continue;
         }
-        if !matches!(agent, "claude" | "codex" | "copilot" | "gemini") {
-            continue;
-        }
-        let steps = agent_args(agent, Verb::Update);
-        if steps
-            .iter()
-            .all(|args| is_good(&rt.d, agent, args).is_some())
+        let result = store.with_lock_timeout(timeout, || {
+            process_agent(
+                &rt.d,
+                agent,
+                Verb::Update,
+                false,
+                Some(tag),
+                Some(&raw_tag),
+                &mut payload,
+            )
+        });
+        if let Ok(row) = result
+            && !background
         {
-            if let Value::Object(ref mut fields) = record {
-                fields.retain(|(key, _)| {
-                    key != "version" && key != "updated_at" && key != "last_error"
-                });
-                fields.push(("version".into(), Value::from(tag.to_owned())));
-                fields.push(("updated_at".into(), Value::Number(rt.d.host.now() as f64)));
-            }
-            write_registration(&rt.d, agent, Some(record), Some(tag));
-            if !background {
+            let action = get_string(&row, "action").unwrap_or_default();
+            if action == "updated" {
                 rt.d.host
                     .stderr(&format!("{agent}: plugin updated to {tag}\n"));
+            } else if let Some(message) = get_string(&row, "message") {
+                rt.d.host.stderr(&format!("{message}\n"));
             }
         }
+    }
+    if let Some((dir, _)) = payload {
+        let _ = fs::remove_dir_all(dir);
     }
 }
 

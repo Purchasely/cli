@@ -413,8 +413,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"codex\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"copilot\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > install with no detected agent is a usage error",
@@ -539,8 +538,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"No coding agent found. Supported agents: claude, codex, copilot, gemini, cursor, opencode.\"]}}\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > a failed marketplace add needs a registered marketplace",
@@ -944,8 +942,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"failed\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin marketplace add failed (exit 1). Run \\\"claude plugin marketplace add Purchasely/Purchasely-AI-Plugin\\\" yourself to see why.\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin marketplace add failed (exit 1). Run \\\"claude plugin marketplace add Purchasely/Purchasely-AI-Plugin\\\" yourself to see why.\"]}}\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > a v-prefixed release tag keeps the raw tag in the tarball URL and strips it for the version",
@@ -1181,7 +1178,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P1b"
     },
     {
       "test": "ai::ai > copy agents keep the skill references",
@@ -1479,7 +1476,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P1b"
     },
     {
       "test": "ai::ai > a plugin installed by hand is never touched",
@@ -1975,7 +1972,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P5b"
     },
     {
       "test": "ai::ai > update and uninstall re-check ownership",
@@ -5280,7 +5277,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P1b"
     },
     {
       "test": "ai::ai > copy agents update to a newer release and uninstall",
@@ -5977,7 +5974,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P5b"
     },
     {
       "test": "ai::ai > status lists detected and managed agents",
@@ -6132,8 +6129,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": true,\n      \"installed_by_hand\": false,\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"last_error\": \"claude: the plugin update failed (exit 1). Run \\\"x\\\" yourself to see why.\"\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > status shows a plugin installed by hand, per agent, and changes nothing",
@@ -6322,8 +6318,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": true,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": \"unknown\",\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > status: an agent that ai install registered is not by hand, and a failed probe is unknown",
@@ -6478,8 +6473,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": true,\n      \"installed_by_hand\": false,\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": \"unknown\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > status finds a Cursor directory without the marker",
@@ -6910,7 +6904,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P1b"
     },
     {
       "test": "ai::ai > dry-run changes nothing",
@@ -7631,8 +7625,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin uninstall purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    }\n  ]\n}\n",
           "err": "acme env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > daily update runs only for registered agents",
@@ -8110,7 +8103,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P5b"
     },
     {
       "test": "ai::ai > no network when PURCHASELY_OFFLINE=1",
@@ -8667,7 +8660,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P5b"
     },
     {
       "test": "ai::ai > agent errors use fixed messages",
@@ -9033,7 +9026,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ],
-      "pending": "P9b"
+      "pending": "P5b"
     },
     {
       "test": "ai::ai > a bad release tag is refused",
@@ -9200,8 +9193,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_RELEASE_UNREADABLE\",\"messages\":[\"could not read the latest plugin release. Check your network.\"]}}\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     },
     {
       "test": "ai::ai > gemini update and uninstall name the native command (B7)",
@@ -9547,8 +9539,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"]}}\n"
         }
-      ],
-      "pending": "P9b"
+      ]
     }
   ]
 }

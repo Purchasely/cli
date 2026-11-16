@@ -212,10 +212,13 @@ pub fn remove_credential(d: &Deps, env: &str, surface: &str) -> Result<(), Strin
     }
     Ok(())
 }
-pub struct SecurityKeychain;
+/// The macOS keychain through `/usr/bin/security` (D3). `program` is `security`; tests give a fake.
+pub struct SecurityKeychain {
+    pub program: std::path::PathBuf,
+}
 impl SecurityKeychain {
-    fn call(args: &[&str], input: Option<&[u8]>) -> Result<String, KeychainError> {
-        let mut c = Command::new("security");
+    fn call(&self, args: &[&str], input: Option<&[u8]>) -> Result<String, KeychainError> {
+        let mut c = Command::new(&self.program);
         c.args(args).stdout(Stdio::piped()).stderr(Stdio::null());
         if input.is_some() {
             c.stdin(Stdio::piped());
@@ -238,7 +241,7 @@ impl SecurityKeychain {
 }
 impl Keychain for SecurityKeychain {
     fn get(&self, s: &str, a: &str) -> Result<Option<String>, KeychainError> {
-        let o = Self::call(&["find-generic-password", "-s", s, "-a", a, "-w"], None)?;
+        let o = self.call(&["find-generic-password", "-s", s, "-a", a, "-w"], None)?;
         Ok((!o.is_empty()).then_some(o))
     }
     fn set(&self, s: &str, a: &str, k: &str) -> Result<(), KeychainError> {
@@ -247,25 +250,27 @@ impl Keychain for SecurityKeychain {
             .iter()
             .map(|b| format!("{b:02x}"))
             .collect::<String>();
-        Self::call(
+        self.call(
             &["-i"],
             Some(format!("add-generic-password -U -s {s} -a {a} -X {hex}\n").as_bytes()),
         )
         .map(|_| ())
     }
     fn delete(&self, s: &str, a: &str) -> Result<(), KeychainError> {
-        Self::call(&["delete-generic-password", "-s", s, "-a", a], None).map(|_| ())
+        self.call(&["delete-generic-password", "-s", s, "-a", a], None)
+            .map(|_| ())
     }
 }
 pub fn default_keychain(platform: &str) -> Option<SecurityKeychain> {
-    (platform == "darwin").then_some(SecurityKeychain)
+    (platform == "darwin").then(|| SecurityKeychain {
+        program: "security".into(),
+    })
 }
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::core::deps::*;
-    use std::{collections::BTreeMap, path::PathBuf, sync::Mutex};
-    static PATH_LOCK: Mutex<()> = Mutex::new(());
+    use std::{collections::BTreeMap, path::PathBuf};
     struct H {
         kc: Option<Box<dyn Keychain>>,
     }
@@ -322,7 +327,6 @@ mod tests {
     }
     #[test]
     fn keychain_via_fake_security() {
-        let _guard = PATH_LOCK.lock().unwrap();
         let root = std::env::temp_dir().join(format!("fake-security-{}", std::process::id()));
         let bin = root.join("bin");
         std::fs::create_dir_all(&bin).unwrap();
@@ -330,28 +334,13 @@ mod tests {
         std::fs::write(&script,"#!/bin/sh\nif [ \"$1\" = find-generic-password ]; then echo keychain-secret; exit 0; fi\nexit 0\n").unwrap();
         use std::os::unix::fs::PermissionsExt;
         std::fs::set_permissions(&script, std::fs::Permissions::from_mode(0o755)).unwrap();
-        let old = std::env::var_os("PATH");
-        unsafe {
-            std::env::set_var(
-                "PATH",
-                format!(
-                    "{}:{}",
-                    bin.display(),
-                    old.as_deref().unwrap_or_default().to_string_lossy()
-                ),
-            );
-        }
+        let kc = SecurityKeychain { program: script };
         assert_eq!(
-            SecurityKeychain::get(&SecurityKeychain, "purchasely-cli", "prod:management")
+            kc.get("purchasely-cli", "prod:management")
                 .unwrap()
                 .as_deref(),
             Some("keychain-secret")
         );
-        if let Some(v) = old {
-            unsafe { std::env::set_var("PATH", v) }
-        } else {
-            unsafe { std::env::remove_var("PATH") }
-        }
         let _ = std::fs::remove_dir_all(root);
     }
     struct BrokenKeychain;

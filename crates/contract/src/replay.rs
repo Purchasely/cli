@@ -595,7 +595,9 @@ mod tests {
     fn acme_extension_registers_extra_run() {
         let ext = acme_extension(&Value::Null);
         let mut root = Command::new("acme");
-        (ext.modules[0])(&mut root, &Runtime);
+        let host = crate::fake::FakeHost::from_step(&json!({"argv":[],"env":{}}));
+        let rt = Runtime::new(host.deps(vec![]));
+        (ext.modules[0])(&mut root, &rt);
         assert_eq!(root.commands[0].name, "extra");
         assert_eq!(root.commands[0].commands[0].name, "run");
     }

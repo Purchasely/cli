@@ -166,17 +166,25 @@ mod tests {
     fn two_processes() {
         let exe = std::env::current_exe().unwrap();
         let dir = tempfile_dir();
-        let mut children = (0..2)
+        let children = (0..2)
             .map(|_| {
                 Command::new(&exe)
                     .args(["--exact", "core::state::tests::lock_child", "--nocapture"])
                     .env("P4_STATE_DIR", &dir)
+                    .stdout(std::process::Stdio::piped())
+                    .stderr(std::process::Stdio::piped())
                     .spawn()
                     .unwrap()
             })
             .collect::<Vec<_>>();
-        for child in &mut children {
-            assert!(child.wait().unwrap().success());
+        for child in children {
+            let out = child.wait_with_output().unwrap();
+            assert!(
+                out.status.success(),
+                "{}{}",
+                String::from_utf8_lossy(&out.stdout),
+                String::from_utf8_lossy(&out.stderr)
+            );
         }
         let value = fs::read_to_string(dir.join("child.counter.json")).unwrap();
         assert_eq!(json::parse(&value).unwrap(), Value::Number(2.0));
@@ -203,11 +211,9 @@ mod tests {
         .unwrap();
     }
     fn tempfile_dir() -> PathBuf {
-        let p = std::env::temp_dir().join(format!(
-            "ply-state-{}-{}",
-            std::process::id(),
-            super::super::deps::Request::default().timeout_ms
-        ));
+        static N: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+        let n = N.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+        let p = std::env::temp_dir().join(format!("ply-state-{}-{n}", std::process::id()));
         let _ = fs::remove_dir_all(&p);
         fs::create_dir_all(&p).unwrap();
         p

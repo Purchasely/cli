@@ -1,49 +1,49 @@
 {
   "cases": [
     {
-      "test": "main::version",
       "argv": [
         "--version"
       ],
-      "env": {},
-      "stdin": "",
       "code": 0,
-      "out": "0.7.2\n",
-      "err": ""
+      "env": {},
+      "err": "",
+      "out": "<VERSION>\n",
+      "stdin": "",
+      "test": "main::version"
     },
     {
-      "test": "main::unknown_root_option",
       "argv": [
         "--bogus"
       ],
-      "env": {},
-      "stdin": "",
       "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown option '--bogus'\"]}}\n",
       "out": "",
-      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown option '--bogus'\"]}}\n"
+      "stdin": "",
+      "test": "main::unknown_root_option"
     },
     {
-      "test": "main::unknown_command",
       "argv": [
         "lst"
       ],
-      "env": {},
-      "stdin": "",
       "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'lst'\"]}}\n",
       "out": "",
-      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'lst'\"]}}\n"
+      "stdin": "",
+      "test": "main::unknown_command"
     },
     {
-      "test": "main::usage_error",
       "argv": [
         "some",
         "command"
       ],
-      "env": {},
-      "stdin": "",
       "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'some'\"]}}\n",
       "out": "",
-      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'some'\"]}}\n"
+      "stdin": "",
+      "test": "main::usage_error"
     }
   ]
 }

@@ -15,6 +15,21 @@ pub struct BinaryResult {
     pub stdout: Vec<u8>,
     pub stderr: Vec<u8>,
 }
+/// The User-Agent runner reads these (`core::http::runner`): the recording was made without them.
+const RUNNER_ENV: [&str; 5] = [
+    "CLAUDECODE",
+    "CODEX_THREAD_ID",
+    "GEMINI_CLI",
+    "CURSOR_AGENT",
+    "CI",
+];
+
+fn clear_runner_env(cmd: &mut Command) {
+    for name in RUNNER_ENV {
+        cmd.env_remove(name);
+    }
+}
+
 pub fn run_binary(
     binary: &Path,
     argv: &[String],
@@ -23,6 +38,7 @@ pub fn run_binary(
 ) -> std::io::Result<BinaryResult> {
     let mut cmd = Command::new(binary);
     cmd.args(argv);
+    clear_runner_env(&mut cmd);
     for (k, v) in env {
         cmd.env(k, v);
     }
@@ -193,6 +209,7 @@ fn run_binary_with_prefix(
         cmd.args(prefix);
         let argv: Vec<String> = serde_json::from_value(case["argv"].clone()).unwrap_or_default();
         cmd.args(argv);
+        clear_runner_env(&mut cmd);
         if let Some(env) = case["env"].as_object() {
             for (k, v) in env {
                 if let Some(v) = v.as_str() {

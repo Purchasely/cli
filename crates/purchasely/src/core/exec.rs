@@ -6,6 +6,21 @@ use std::{
     time::{Duration, Instant},
 };
 const MAX_OUTPUT: usize = 256 * 1024 * 1024;
+
+/// `Command::spawn` that tries again on ETXTBSY: a script that was just written can still be
+/// open for write in a child that another thread forked at the same time.
+pub fn spawn(c: &mut Command) -> std::io::Result<std::process::Child> {
+    let mut tries = 0;
+    loop {
+        match c.spawn() {
+            Err(e) if e.raw_os_error() == Some(libc::ETXTBSY) && tries < 20 => {
+                tries += 1;
+                std::thread::sleep(Duration::from_millis(10));
+            }
+            other => return other,
+        }
+    }
+}
 pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult, ExecError> {
     let mut c = Command::new(file);
     c.args(args);
@@ -28,8 +43,7 @@ pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult
                 });
             }
         }
-        return c
-            .spawn()
+        return spawn(&mut c)
             .map(|_| ExecResult {
                 code: 0,
                 ..ExecResult::default()
@@ -43,7 +57,7 @@ pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult
     })
     .stdout(Stdio::piped())
     .stderr(Stdio::piped());
-    let mut child = c.spawn().map_err(exec_error)?;
+    let mut child = spawn(&mut c).map_err(exec_error)?;
     let input = opts.input.take();
     let mut stdout = child
         .stdout

@@ -1,4 +1,4 @@
-import { mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, readlinkSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { defineSurface } from "../src/core/credentials.js";
@@ -14,6 +14,7 @@ if (contractRecordDir) {
     const state = expect.getState();
     const testPath = state.testPath ?? "test/unknown.test.ts";
     const stem = testPath.split(/[\\/]/).pop()!.replace(/\.test\.ts$/, "");
+    mkdirSync(contractRecordDir, { recursive: true });
     const destination = join(contractRecordDir, `${stem}.json`);
     const existing = exists(destination) ? JSON.parse(readFileSync(destination, "utf8")) as { cases?: unknown[] } : { cases: [] };
     const cases = existing.cases ?? [];
@@ -243,7 +244,9 @@ function snapshotRoots(argv: string[], env: Record<string, string | undefined>, 
     const value = token.startsWith("@") ? token.slice(1) : token;
     if (isAbsolute(value)) roots.add(dirname(resolve(value)));
   }
-  return [...roots];
+  // Only the temporary directories of the tests: an env path like /usr/bin/git must not snapshot /usr/bin.
+  const tmp = resolve(tmpdir());
+  return [...roots].filter((r) => r === root || r.startsWith(tmp + "/"));
 }
 
 function snapshot(dir: string): unknown {
@@ -252,9 +255,10 @@ function snapshot(dir: string): unknown {
   const walk = (current: string) => {
     for (const name of readdirSync(current).sort()) {
       const path = join(current, name);
-      const st = statSync(path);
+      const st = lstatSync(path);
       const item: Record<string, unknown> = { path: relative(dir, path), mode: st.mode & 0o777, directory: st.isDirectory() };
-      if (st.isDirectory()) walk(path);
+      if (st.isSymbolicLink()) item.link = readlinkSync(path);
+      else if (st.isDirectory()) walk(path);
       else { const bytes = readFileSync(path); item.text = bytes.toString("utf8"); item.hex = bytes.toString("hex"); }
       entries.push(item);
     }

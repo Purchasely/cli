@@ -220,7 +220,7 @@ impl SecurityKeychain {
         if input.is_some() {
             c.stdin(Stdio::piped());
         }
-        let mut p = c.spawn().map_err(|e| KeychainError(e.to_string()))?;
+        let mut p = super::exec::spawn(&mut c).map_err(|e| KeychainError(e.to_string()))?;
         if let Some(bytes) = input
             && let Some(mut s) = p.stdin.take()
         {

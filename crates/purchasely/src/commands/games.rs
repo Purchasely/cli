@@ -105,18 +105,27 @@ pub fn commands(name: &str) -> (Command, Command) {
         "\nGames: {}.\nKeys: arrows or WASD move, space acts, q, Esc or Ctrl-C quits.\nIt needs an interactive terminal. It uses no key and sends no request.\nExample:\n  {name} games snake\n",
         GAMES.join(", ")
     );
+    let action = |label: &'static str| {
+        move |p: &crate::cli::Parsed, rt: &mut Runtime| {
+            let result = play(p.arguments.first().map(String::as_str), label)?;
+            rt.d.host.stdout(&format!("{result}\n"));
+            Ok(())
+        }
+    };
     let visible = Command::new("games")
         .description("Play a game in the terminal")
         .argument(arg.clone())
-        .after_help(after_help);
+        .after_help(after_help)
+        .action(action("games"));
     let hidden = Command::new("play")
         .description("Play a game in the terminal")
         .argument(arg)
-        .hide();
+        .hide()
+        .action(action("play"));
     (visible, hidden)
 }
 
-pub fn register(program: &mut Command, rt: &Runtime) {
+pub fn register(program: &mut Command, rt: &mut Runtime) {
     let (visible, hidden) = commands(&rt.d.name);
     program.commands.push(visible);
     program.commands.push(hidden);

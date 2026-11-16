@@ -3,7 +3,19 @@ pub mod help;
 pub mod parse;
 pub mod suggest;
 
-use std::collections::BTreeMap;
+use crate::core::runtime::Runtime;
+use std::{collections::BTreeMap, rc::Rc};
+
+/// The handler of a command: it gets the parsed argv and the runtime. A closure may capture data (an operation id).
+pub type Handler = dyn Fn(&Parsed, &mut Runtime) -> Result<(), crate::core::errors::CliError>;
+
+#[derive(Clone)]
+pub struct Action(pub Rc<Handler>);
+impl std::fmt::Debug for Action {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("Action")
+    }
+}
 
 #[derive(Clone, Debug, Default)]
 pub struct Command {
@@ -16,6 +28,7 @@ pub struct Command {
     pub options: Vec<OptionDef>,
     pub commands: Vec<Command>,
     pub after_help: String,
+    pub action: Option<Action>,
 }
 
 impl Command {
@@ -56,6 +69,19 @@ impl Command {
     pub fn after_help(mut self, value: impl Into<String>) -> Self {
         self.after_help = value.into();
         self
+    }
+    pub fn action(
+        mut self,
+        f: impl Fn(&Parsed, &mut Runtime) -> Result<(), crate::core::errors::CliError> + 'static,
+    ) -> Self {
+        self.action = Some(Action(Rc::new(f)));
+        self
+    }
+    /// The command at the end of a parsed path (`Parsed::command`), by name.
+    pub fn find(&self, path: &[String]) -> Option<&Command> {
+        path.iter().try_fold(self, |c, name| {
+            c.commands.iter().find(|sub| sub.name == *name)
+        })
     }
 }
 
@@ -179,6 +205,17 @@ impl std::fmt::Display for CliError {
     }
 }
 impl std::error::Error for CliError {}
+
+impl Parsed {
+    /// The first value of an option, as a handler reads `--env` or `--agent`.
+    pub fn opt(&self, key: &str) -> Option<&str> {
+        self.options.get(key)?.first().map(String::as_str)
+    }
+    /// A boolean option given on the command line (`--dry-run`).
+    pub fn flag(&self, key: &str) -> bool {
+        self.opt(key) == Some("true")
+    }
+}
 
 pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
     parse::parse(command, argv)

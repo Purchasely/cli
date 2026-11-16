@@ -9,7 +9,7 @@ use crate::{
     core::runtime::Runtime,
 };
 
-pub fn register(program: &mut Command, runtime: &Runtime) {
+pub fn register(program: &mut Command, runtime: &mut Runtime) {
     let (_, ops) = spec::embedded_spec();
     for generated in spec::derive_commands(&ops) {
         if runtime

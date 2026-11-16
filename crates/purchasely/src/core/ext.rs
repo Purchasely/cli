@@ -21,6 +21,7 @@ pub struct Extension {
     pub latest: Option<LatestFn>,
     pub npm_update: Option<&'static str>,
 }
-pub type Register = fn(&mut Command, &Runtime);
+/// `&mut Runtime`: a module reserves its names in `rt.taken`. Handlers get the runtime again at dispatch.
+pub type Register = fn(&mut Command, &mut Runtime);
 pub use super::credentials::SurfaceDef;
 pub use super::errors::CliError;

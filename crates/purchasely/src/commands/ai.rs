@@ -1,7 +1,12 @@
-//! AI plugin command definitions. Runtime dispatch is connected by the command-tree owner.
+//! AI plugin commands.
 use crate::{
     cli::Command,
-    core::runtime::{Runtime, add_globals},
+    core::{
+        ai::{Verb, command_result},
+        json::Value,
+        output::{EmitOptions, emit},
+        runtime::{Runtime, add_globals},
+    },
 };
 
 const VERBS: [(&str, &str); 4] = [
@@ -56,7 +61,31 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
             .find(|(name, _)| *name == verb)
             .map(|(_, text)| *text)
             .unwrap_or("");
-        leaf = leaf.after_help(format!("\n{detail}\n"));
+        let kind = match verb {
+            "install" => Verb::Install,
+            "update" => Verb::Update,
+            "status" => Verb::Status,
+            _ => Verb::Uninstall,
+        };
+        leaf = leaf
+            .after_help(format!("\n{detail}\n"))
+            .action(move |p, rt| {
+                let env = rt.env(p.opt("env"))?;
+                let rows = command_result(rt, kind, p.opt("agent"), p.flag("dry-run"))?;
+                let value = Value::Object(vec![("agents".into(), rows)]);
+                emit(
+                    &rt.d,
+                    &value,
+                    &EmitOptions {
+                        table: p.opt("output") == Some("table"),
+                        out: p.opt("out").map(str::to_owned),
+                        env,
+                        name: format!("ai-{verb}"),
+                        ..EmitOptions::default()
+                    },
+                );
+                Ok(())
+            });
         ai.commands.push(leaf);
     }
     program.commands.push(ai);

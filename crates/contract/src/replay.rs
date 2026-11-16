@@ -550,7 +550,7 @@ pub fn acme_extension(_recorded: &Value) -> Extension {
         npm_update: None,
     }
 }
-fn register_acme(parent: &mut Command, _: &Runtime) {
+fn register_acme(parent: &mut Command, _: &mut Runtime) {
     parent.commands.push(
         Command::new("extra")
             .description("Added commands")
@@ -596,8 +596,8 @@ mod tests {
         let ext = acme_extension(&Value::Null);
         let mut root = Command::new("acme");
         let host = crate::fake::FakeHost::from_step(&json!({"argv":[],"env":{}}));
-        let rt = Runtime::new(host.deps(vec![]));
-        (ext.modules[0])(&mut root, &rt);
+        let mut rt = Runtime::new(host.deps(vec![]));
+        (ext.modules[0])(&mut root, &mut rt);
         assert_eq!(root.commands[0].name, "extra");
         assert_eq!(root.commands[0].commands[0].name, "run");
     }

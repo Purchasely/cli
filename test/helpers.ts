@@ -1,9 +1,26 @@
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { defineSurface } from "../src/core/credentials.js";
 import type { Deps, Extension, Keychain } from "../src/core/types.js";
 import { run } from "../src/run.js";
+import { afterEach, expect, vi } from "vitest";
+
+const recordedSteps: Record<string, unknown>[] = [];
+const contractRecordDir = process.env.CONTRACT_RECORD;
+if (contractRecordDir) {
+  afterEach(() => {
+    if (!recordedSteps.length) return;
+    const state = expect.getState();
+    const testPath = state.testPath ?? "test/unknown.test.ts";
+    const stem = testPath.split(/[\\/]/).pop()!.replace(/\.test\.ts$/, "");
+    const destination = join(contractRecordDir, `${stem}.json`);
+    const existing = exists(destination) ? JSON.parse(readFileSync(destination, "utf8")) as { cases?: unknown[] } : { cases: [] };
+    const cases = existing.cases ?? [];
+    cases.push({ test: `${stem}::${state.currentTestName ?? "unknown"}`, steps: recordedSteps.splice(0) });
+    writeFileSync(destination, `${JSON.stringify({ cases }, null, 2)}\n`);
+  });
+}
 
 export interface Reply {
   status?: number;
@@ -93,11 +110,158 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
     host: "https://cli.test",
     ext: opts.ext,
   };
+  const recordDir = process.env.CONTRACT_RECORD;
   const exec = async (...argv: string[]) => {
     out.length = 0;
     err.length = 0;
-    const code = await run(argv, d);
+    const code = recordDir ? await recordedStep(argv) : await run(argv, d);
     return { code, out: out.join(""), err: err.join(""), json: () => JSON.parse(out.join("")), errJson: () => JSON.parse(err.join("").trim().split("\n").pop()!) };
   };
+  async function recordedStep(argv: string[]): Promise<number> {
+    const before = new Map<string, unknown>();
+    const roots = snapshotRoots(argv, d.env, root);
+    for (const dir of roots) before.set(dir, snapshot(dir));
+    const callsBefore = calls.length;
+    const promptsBefore = prompts.length;
+    const tBefore = d.now();
+    const wall = (vi.getMockedSystemTime() ?? new Date("2026-01-15T12:00:00Z")).toISOString();
+    const original = { fetch: d.fetch, exec: d.exec, prompt: d.prompt, now: d.now, sleep: d.sleep, keychain: d.keychain, ext: d.ext };
+    const fetchCalls: unknown[] = [];
+    const execCalls: unknown[] = [];
+    const promptCalls: unknown[] = [];
+    const keyOps: unknown[] = [];
+    const pidProbes: unknown[] = [];
+    let latestData: unknown = null;
+    let fakeWall = Date.parse(wall);
+    const hadFakeTimers = vi.isFakeTimers();
+    const previousSystemTime = vi.getMockedSystemTime();
+    if (!hadFakeTimers) vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(fakeWall);
+    d.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const call = { at: d.now(), url: String(input), method: init?.method ?? "GET", headers: init?.headers ?? {}, body: init?.body ?? null, refuse_redirect: false };
+      try {
+        const response = await original.fetch(input, init);
+        const clone = response.clone();
+        const text = await clone.text();
+        fetchCalls.push({ ...call, reply: { status: response.status, headers: Object.fromEntries(response.headers), text } });
+        return response;
+      } catch (error) {
+        fetchCalls.push({ ...call, reply: { error: error instanceof Error ? error.message : String(error) } });
+        throw error;
+      }
+    }) as typeof d.fetch;
+    d.exec = async (file, args, execOpts) => {
+      const self = file === process.execPath && args[0] === process.argv[1];
+      const rec: Record<string, unknown> = { file: self ? "<SELF>" : file, args: self ? args.slice(1) : args, opts: execOpts };
+      execCalls.push(rec);
+      try {
+        const result = await original.exec(file, args, execOpts);
+        rec.result = result;
+        if (self && execOpts.detach) rec.run_child = true;
+        return result;
+      } catch (error) {
+        rec.error = error instanceof Error ? (error as NodeJS.ErrnoException).code ?? error.message : String(error);
+        throw error;
+      }
+    };
+    if (original.ext?.latest) {
+      const latest = original.ext.latest;
+      d.ext = { ...original.ext, latest: async (deps) => {
+        const start = execCalls.length;
+        const result = await latest(deps);
+        latestData = { execs: execCalls.slice(start), result };
+        return result;
+      } };
+    }
+    d.prompt = async (question, promptOpts) => {
+      const answer = await original.prompt(question, promptOpts);
+      promptCalls.push({ question, hidden: promptOpts?.hidden ?? false, answer });
+      return answer;
+    };
+    d.now = original.now;
+    d.sleep = async (ms) => {
+      await original.sleep(ms);
+      fakeWall += ms;
+      vi.setSystemTime(fakeWall);
+    };
+    const keychain = d.keychain;
+    const initialKeychain = keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {};
+    if (keychain) {
+      const proxy = new Proxy(keychain, { get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver);
+        if (!["get", "set", "delete"].includes(String(prop)) || typeof value !== "function") return value;
+        return async (...args: unknown[]) => {
+          try { const result = await value.apply(target, args); keyOps.push({ op: String(prop), args, result: result ?? null }); return result; }
+          catch (error) { keyOps.push({ op: String(prop), args, error: error instanceof Error ? error.message : String(error) }); throw error; }
+        };
+      } });
+      d.keychain = proxy;
+    }
+    // Keep the native function available to the spy's call-through implementation.
+    const realKill = process.kill.bind(process);
+    const killSpy = vi.spyOn(process, "kill").mockImplementation(((pid: number, signal?: number | NodeJS.Signals) => {
+      try { const result = realKill(pid, signal as NodeJS.Signals); pidProbes.push({ pid: pid === process.pid ? "<PID>" : pid, alive: true }); return result; }
+      catch (error) { pidProbes.push({ pid: pid === process.pid ? "<PID>" : pid, alive: false }); throw error; }
+    }) as typeof process.kill);
+    let stepCode = 0;
+    try {
+      stepCode = await run(argv, d);
+      return stepCode;
+    } finally {
+      const after = new Map<string, unknown>();
+      for (const dir of roots) after.set(dir, snapshot(dir));
+      const filesBefore = Object.fromEntries([...before].map(([dir, value]) => [dirToken(dir, roots, root), value]));
+      const filesAfter = Object.fromEntries([...after].map(([dir, value]) => [dirToken(dir, roots, root), value]));
+      recordedSteps.push({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join("") });
+      Object.assign(d, original);
+      killSpy.mockRestore();
+      if (hadFakeTimers) {
+        if (previousSystemTime) vi.setSystemTime(previousSystemTime);
+      } else {
+        vi.useRealTimers();
+      }
+    }
+  }
   return { d, exec, calls, keychain, root, prompts, tick: () => t };
 }
+
+function extensionData(ext?: Extension, latest: unknown = null) {
+  if (!ext) return null;
+  return { surfaces: ext.surfaces ?? {}, identity: ext.identity ?? false, section: ext.section ?? null, npm_update: ext.npmUpdate ?? null, latest };
+}
+
+function snapshotRoots(argv: string[], env: Record<string, string | undefined>, root: string): string[] {
+  const roots = new Set<string>([root]);
+  for (const raw of Object.values(env)) {
+    if (!raw) continue;
+    if (isAbsolute(raw)) {
+      const candidate = resolve(raw);
+      roots.add(exists(candidate) && statSync(candidate).isDirectory() ? candidate : dirname(candidate));
+    }
+  }
+  for (const token of argv) {
+    const value = token.startsWith("@") ? token.slice(1) : token;
+    if (isAbsolute(value)) roots.add(dirname(resolve(value)));
+  }
+  return [...roots];
+}
+
+function snapshot(dir: string): unknown {
+  if (!exists(dir)) return [];
+  const entries: unknown[] = [];
+  const walk = (current: string) => {
+    for (const name of readdirSync(current).sort()) {
+      const path = join(current, name);
+      const st = statSync(path);
+      const item: Record<string, unknown> = { path: relative(dir, path), mode: st.mode & 0o777, directory: st.isDirectory() };
+      if (st.isDirectory()) walk(path);
+      else { const bytes = readFileSync(path); item.text = bytes.toString("utf8"); item.hex = bytes.toString("hex"); }
+      entries.push(item);
+    }
+  };
+  walk(dir);
+  return entries;
+}
+
+function exists(path: string): boolean { try { statSync(path); return true; } catch { return false; } }
+function dirToken(dir: string, roots: string[], root: string): string { return dir === root ? "<ROOT>" : `<TMP${roots.indexOf(dir) - 1}>`; }

@@ -16,5 +16,7 @@ fn replay_contract_directory_honors_filter_and_bless_mode() {
     let directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../contract/cases");
     let filter = std::env::var("CONTRACT_FILTER").ok();
     let bless = std::env::var("CONTRACT_BLESS").is_ok_and(|v| v == "1");
-    run_case_directory(&directory, filter.as_deref(), bless).unwrap();
+    if let Err(failures) = run_case_directory(&directory, filter.as_deref(), bless) {
+        panic!("{failures}");
+    }
 }

@@ -202,9 +202,12 @@ pub fn run_case_directory(
         ..ReplayReport::default()
     };
     let mut updated = flat.clone();
+    // CONTRACT_PENDING=1 also replays the pending cases, to find the ones that pass now.
+    let with_pending = std::env::var("CONTRACT_PENDING").is_ok_and(|v| v == "1");
+    let mut failures = Vec::<String>::new();
     for old in selected {
         let index = flat.iter().position(|c| std::ptr::eq(c, old)).unwrap();
-        if old.get("pending").is_some() {
+        if old.get("pending").is_some() && !with_pending {
             report.pending += 1;
             continue;
         }
@@ -226,8 +229,12 @@ pub fn run_case_directory(
                 if !step["keychain"].is_null() {
                     step["keychain"] = actual["keychain"].clone();
                 }
-            } else {
-                replay_step(data).map_err(|e| format!("{}: {}", old["test"], e.0))?;
+            } else if let Err(e) = replay_step(data) {
+                let tag = old
+                    .get("pending")
+                    .map_or(String::new(), |p| format!(" [pending {p}]"));
+                failures.push(format!("{}{tag}: {}", old["test"], e.0));
+                break;
             }
             report.run += 1;
         }
@@ -252,9 +259,16 @@ pub fn run_case_directory(
         }
     }
     eprintln!(
-        "run {}, pending {}, filtered {}",
-        report.run, report.pending, report.filtered
+        "run {}, pending {}, filtered {}, failed {}",
+        report.run,
+        report.pending,
+        report.filtered,
+        failures.len()
     );
+    // Every failing case, not only the first one.
+    if !failures.is_empty() {
+        return Err(failures.join("\n"));
+    }
     Ok(report)
 }
 

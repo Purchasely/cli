@@ -1,3 +1,8 @@
 [
-  {"test":"pack-release.sh > public install from the packed site","steps":[],"unit":"install::packed_site_install"}
+  {"test":"release::pack-release.sh > public install from the packed site","steps":[],"unit":"install::packed_site_install"},
+  {"test":"release::pack-release.sh > public tarball holds only the public files","steps":[],"unit":"release::public_tarball_holds_only_public_files"},
+  {"test":"release::pack-release.sh > public artifact runs","steps":[],"unit":"release::public_artifact_runs"},
+  {"test":"release::pack-release.sh > site holds the landing page and the release files","steps":[],"unit":"release::site_holds_landing_and_release_files"},
+  {"test":"release::pack-release.sh > pack refuses a site _headers","steps":[],"unit":"release::pack_refuses_site_headers"},
+  {"test":"release::reference > reference page and man page come from the command tree","steps":[],"unit":"release::reference_page_and_man_page_are_bundled"}
 ]

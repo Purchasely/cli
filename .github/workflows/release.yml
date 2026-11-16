@@ -8,49 +8,125 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-    # A signed provenance for the tarball and the installer: `gh attestation verify <file> -R Purchasely/cli`.
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      native_count: ${{ steps.release.outputs.native_count }}
+      prerelease: ${{ steps.release.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          bridge_releases=$(sed -n 's/^BRIDGE_RELEASES=//p' packaging/bridge.env)
+          echo "bridge_releases=$bridge_releases" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" == *-* ]]; then echo 'prerelease=true' >> "$GITHUB_OUTPUT"; else echo 'prerelease=false' >> "$GITHUB_OUTPUT"; fi
+          count=$(gh api repos/${GITHUB_REPOSITORY}/releases --paginate --jq '[.[] | select(.draft == false and .prerelease == false and .tag_name != "v0.9.0" and (.tag_name | ltrimstr("v") | split(".")[0] | tonumber) >= 1)] | length')
+          echo "native_count=$count" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      native_release_count: ${{ needs.prepare.outputs.native_count }}
+
+  github-release:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          node-version: 22
-          cache: npm
-      - run: sudo apt-get update && sudo apt-get install -y mandoc
-      - run: npm ci
-      - name: Tag matches package.json version
-        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-      - run: sh scripts/pack-release.sh out
+          name: release-files
+          path: out
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: |
-            out/purchasely-*.tgz
+            out/purchasely-*
             out/install.sh
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: site
-          path: out/
+      - name: Publish immutable release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          if [ "$VERSION" = 0.9.0 ]; then
+            gh release create "v$VERSION" "out/purchasely-0.9.0.tgz" "out/SHA256SUMS" --title "Purchasely $VERSION" --notes "Bridge release."
+          else
+            assets=(out/purchasely-"$VERSION"-*.tar.gz out/SHA256SUMS)
+            if [[ "$VERSION" == *-* ]]; then
+              gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes --prerelease
+            else
+              gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes
+            fi
+          fi
 
-  # The site: a pre-release tag (with a dash) never deploys.
   deploy:
-    needs: build
-    if: ${{ !contains(github.ref_name, '-') }}
+    needs: [prepare, github-release, build]
+    if: needs.prepare.outputs.prerelease == 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: site
+          name: release-files
           path: out
-      - name: Deploy to Cloudflare Pages
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Deploy Pages snapshot
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx --yes wrangler@4.148.0 pages deploy out --project-name=purchasely-cli --branch=main
+
+  formula:
+    needs: [prepare, github-release, deploy]
+    if: needs.prepare.outputs.prerelease == 'false' && needs.prepare.outputs.version != '0.9.0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - name: Verify immutable assets and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          mkdir -p out
+          gh release download "v$VERSION" -p SHA256SUMS -D out
+          for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
+            file="purchasely-$VERSION-$target.tar.gz"
+            gh release download "v$VERSION" -p "$file" -D out
+            (cd out && sha256sum -c SHA256SUMS --ignore-missing)
+          done
+          for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
+            grep -q "  purchasely-$VERSION-$target.tar.gz$" out/SHA256SUMS
+          done
+      - run: sh scripts/update-formula.sh '${{ needs.prepare.outputs.version }}' out/SHA256SUMS > Formula/purchasely.rb
+      - run: ruby -c Formula/purchasely.rb
+      - name: Commit formula to main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Formula/purchasely.rb
+          git commit -m "chore(formula): purchasely $VERSION"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort || true
+          done
+          exit 1

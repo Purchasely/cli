@@ -3,18 +3,18 @@
 The installer is `install.sh`. Its line `HOST=` is set by `scripts/pack-release.sh` to the public host.
 
 - Bootstrap: `curl -fsSL https://cli.purchasely.io/install.sh | sh`
-- Prerequisites: Node 22.12 or newer, `curl`, `tar` and `gzip`.
+- Prerequisites: `curl`, `tar`, `gzip`, `uname`, and `sha256sum` or `shasum`. No Node.js runtime is required.
 - Install root: `${XDG_DATA_HOME:-~/.local/share}/purchasely/install`.
-- Versions: the latest only (the site holds one snapshot).
+- Versions: the latest only (the site holds the latest release snapshot).
 
 `PURCHASELY_INSTALL_ROOT` or `--root <dir>` changes the root. The root must be an absolute path without a single quote.
 
 ## Layout of a root
 
 ```
-<root>/releases/<version>/   one directory per version (dist/, spec/, package.json, ...)
+<root>/releases/<version>/   one directory per version with a native `bin/purchasely`
 <root>/current-version       the active version
-<root>/bin/<name>            launcher: sets PURCHASELY_MANAGED_INSTALL_ROOT, runs node on the active release
+<root>/bin/<name>            launcher: sets PURCHASELY_MANAGED_INSTALL_ROOT, runs the active native binary
 <root>/staging/              download area and lock
 ```
 
@@ -36,7 +36,7 @@ A fresh install and a repeat install (not `--upgrade-only`) check that `man` fin
 
 ## `install.sh` arguments and exits
 
-`install.sh [--version <ver>] [--keep <ver>] [--log <file>] [--root <dir>] [--upgrade-only]`. `PURCHASELY_VERSION` also sets the version.
+`install.sh [--version <ver>] [--keep <ver>] [--log <file>] [--root <dir>] [--upgrade-only] [--relaunch]`. `PURCHASELY_VERSION` also sets the version.
 
 | Exit | Meaning |
 |---|---|
@@ -49,7 +49,7 @@ The script prints fixed messages only. It never prints the output of `curl`. The
 
 ## Site files (public host)
 
-The Cloudflare Pages project `purchasely-cli` serves: the landing page, `install.sh`, `latest.json` (`{"version","sha256"}`), `purchasely-<ver>.tgz`, `SHA256SUMS` and `_headers`. The host value lives in `package.json` `config.host` only.
+The Cloudflare Pages project `purchasely-cli` serves the landing page, `install.sh`, `latest.json`, target archives, `SHA256SUMS` and `_headers`. The 0.9.0 bridge tarball remains available during the first two stable native releases. The host value lives in `package.json` `config.host` only.
 
 ## Update mechanics
 
@@ -80,9 +80,8 @@ Config `~/.config/purchasely`, state `~/.local/state/purchasely`, cache `~/.cach
 
 ## Troubleshooting
 
-- First run `purchasely doctor`. It checks Node, the install, the version, the key, the Management API and the AI plugin, and never prints the key. Send its output to support.
+- First run `purchasely doctor`. It checks the install, the version, the key, the Management API and the AI plugin, and never prints the key. Send its output to support.
 - `command not found`: open a new terminal. With fish, add `~/.local/bin` to PATH by hand.
-- `Node 22.12 or newer is required`: install Node (`brew install node`).
 - `only the latest version ... is published`: do not pass `--version`.
 - `<name> exists but is incomplete`: remove that release directory and run again.
 - An old npm copy comes first on PATH: uninstall it (`npm uninstall -g @purchasely/cli`).

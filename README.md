@@ -8,7 +8,7 @@ The `purchasely` command line tool for the Purchasely Management API. It reads a
 curl -fsSL https://cli.purchasely.io/install.sh | sh
 ```
 
-You need Node 22.12 or newer. The installer puts the program in `~/.local/share/purchasely/install` and links `purchasely` into a bin directory that is already on your `PATH` (`~/.local/bin` or `~/bin`). If there is none, it creates `~/.local/bin` and adds one line to the profile of your login shell. It never uses sudo. Open a new terminal if the command is not found.
+The native installer needs `curl`, `tar`, `gzip` and a SHA-256 utility. It puts the program in `~/.local/share/purchasely/install` and links `purchasely` into a bin directory that is already on your `PATH` (`~/.local/bin` or `~/bin`). If there is none, it creates `~/.local/bin` and adds one line to the profile of your login shell. It never uses sudo. Open a new terminal if the command is not found.
 
 ## Update
 
@@ -18,7 +18,7 @@ The CLI checks for a new version once a day and updates itself in the background
 purchasely update
 ```
 
-To stop the daily check, set `PURCHASELY_DISABLE_AUTOUPDATE=1` or `PURCHASELY_OFFLINE=1`, or put `"auto_update": false` in `~/.config/purchasely/config.json`. The check also stays off when `CI` is set. Homebrew will come later.
+To stop the daily check, set `PURCHASELY_DISABLE_AUTOUPDATE=1` or `PURCHASELY_OFFLINE=1`, or put `"auto_update": false` in `~/.config/purchasely/config.json`. The check also stays off when `CI` is set. Install with Homebrew by tapping `purchasely/cli` and running `brew install purchasely`.
 
 ## Use with your AI agent
 

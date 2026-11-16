@@ -1040,7 +1040,6 @@
     },
     {
       "test": "dashboard-one::one dashboard group > dashboard-v2 is hidden from help, the reference, search and completion",
-      "pending": "P7a",
       "steps": [
         {
           "argv": [
@@ -1742,7 +1741,6 @@
     },
     {
       "test": "dashboard-one::one dashboard group > the help of a dashboard action names no internal system",
-      "pending": "P7a",
       "steps": [
         {
           "argv": [

@@ -636,8 +636,7 @@
           "out": "app_demo  2023-08-17 to 2023-11-14  (WEEK)\n\nMRR                     18,006  ▁▁▂▂▃▃▄▄▅▅▆▆▇\nActive subscriptions     2,237  ▁▁▂▂▃▃▄▄▅▅▆▇▇\nPaywall unique viewers  61,184  ▇▇▇▇▇▇▇▇▇▇▇▇▁\nConversions              2,697  ▇▇▇▇▇▆▇▇▇▇▇▇▁\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
-      ],
-      "pending": "P10"
+      ]
     },
     {
       "test": "demo::demo mode > every dashboard of the menu has sample data, as JSON and as a table",
@@ -2753,8 +2752,7 @@
           "out": "key   value\ndata  {\"steps\":[{\"screen_id\":\"pres_demo_onboarding\",\"views\":700,\"next\":[{\"screen_id\":\"pres_demo_upsell\",\"count\":260}]...\n",
           "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
         }
-      ],
-      "pending": "P10"
+      ]
     },
     {
       "test": "demo::demo mode > an unknown read is a 404 that says demo mode has no data for it",
@@ -3268,8 +3266,7 @@
           "out": "[\n  {\n    \"command\": \"purchasely demo\",\n    \"summary\": \"Try the CLI with no key: sample data of a fictional app, for a first test\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely purge\",\n    \"summary\": \"Delete the cached client data\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely doctor\",\n    \"summary\": \"Check the install, the key, the network and the version\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely dashboard summary --app app_xxx --output table\",\n    \"summary\": \"Analytics dashboard of an app: key metrics with trend charts\",\n    \"method\": \"GET\",\n    \"path\": \"-\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-today --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Today's key figures\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_today\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard mau-reports --app app_xxx\",\n    \"summary\": \"Monthly active users\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/mau_reports\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a custom event property\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:create\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a custom event property\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties/{id}\",\n    \"scope\": \"setup.custom_events:edit\"\n  },\n  {\n    \"command\": \"purchasely custom-properties create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a custom property\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:create\"\n  }\n]\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P7a"
+      ]
     }
   ]
 }

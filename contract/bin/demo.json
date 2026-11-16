@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "argv": [
+        "demo"
+      ],
+      "code": 0,
+      "env": {},
+      "stderr": "",
+      "stdin": "",
+      "stdout": "{\n  \"demo\": \"Demo mode answers every read from the sample data of one fictional app (app_demo). No key, no request. The data is not real. A write exits 10.\",\n  \"start\": \"export PURCHASELY_DEMO=1\",\n  \"app\": \"app_demo\",\n  \"try\": [\n    \"purchasely applications list\",\n    \"purchasely placements list --app app_demo\",\n    \"purchasely dashboard summary --app app_demo --output table\"\n  ],\n  \"stop\": \"unset PURCHASELY_DEMO\"\n}",
+      "test": "demo::purchasely demo"
+    }
+  ]
+}

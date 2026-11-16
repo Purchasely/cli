@@ -1,0 +1,3228 @@
+{
+  "cases": [
+    {
+      "test": "demo::demo mode > answers the first reads from the sample data, with no key and no request",
+      "steps": [
+        {
+          "argv": [
+            "applications",
+            "list"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"mobile_applications\": [\n    {\n      \"id\": \"app_demo\",\n      \"name\": \"Sample Meditation App (demo)\",\n      \"client_id\": \"cli_demo\",\n      \"default_language\": \"en\",\n      \"default_dashboard_currency\": \"USD\",\n      \"default_integration_currency\": \"USD\",\n      \"default_screen_id\": \"pres_demo_onboarding\",\n      \"redeem_presentation_id\": null,\n      \"icon_url\": null,\n      \"show_purchasely\": true,\n      \"has_mocked_data\": true,\n      \"client_webhook_url\": null,\n      \"s2s_notifications_endpoints\": [],\n      \"ios_platform\": {\n        \"bundle_id\": \"com.example.meditation.demo\"\n      },\n      \"android_platform\": {\n        \"package_name\": \"com.example.meditation.demo\"\n      },\n      \"stripe_platform\": null,\n      \"platforms_configured\": {\n        \"ios\": true,\n        \"android\": true,\n        \"stripe\": false\n      },\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "apps",
+            "get",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"mobile_application\": {\n    \"id\": \"app_demo\",\n    \"name\": \"Sample Meditation App (demo)\",\n    \"client_id\": \"cli_demo\",\n    \"default_language\": \"en\",\n    \"default_dashboard_currency\": \"USD\",\n    \"default_integration_currency\": \"USD\",\n    \"default_screen_id\": \"pres_demo_onboarding\",\n    \"redeem_presentation_id\": null,\n    \"icon_url\": null,\n    \"show_purchasely\": true,\n    \"has_mocked_data\": true,\n    \"client_webhook_url\": null,\n    \"s2s_notifications_endpoints\": [],\n    \"ios_platform\": {\n      \"bundle_id\": \"com.example.meditation.demo\"\n    },\n    \"android_platform\": {\n      \"package_name\": \"com.example.meditation.demo\"\n    },\n    \"stripe_platform\": null,\n    \"platforms_configured\": {\n      \"ios\": true,\n      \"android\": true,\n      \"stripe\": false\n    },\n    \"created_at\": \"2026-01-12T09:30:00Z\",\n    \"updated_at\": \"2026-09-28T14:05:00Z\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"placements\": [\n    {\n      \"id\": \"plc_demo_onboarding\",\n      \"vendor_id\": \"onboarding\",\n      \"name\": \"Onboarding\",\n      \"description\": \"Shown at the end of the first launch\",\n      \"is_default\": true,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_onboarding\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_home\",\n      \"vendor_id\": \"home\",\n      \"name\": \"Home banner\",\n      \"description\": \"The upgrade button of the home screen\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [\n        {\n          \"id\": \"aud_demo_churned\",\n          \"is_in_ab_test\": false,\n          \"priority\": 1,\n          \"presentable_id\": \"pres_demo_winback\"\n        }\n      ],\n      \"active_campaigns\": [\n        {\n          \"id\": \"cmp_demo_winback\",\n          \"name\": \"Winback after a cancellation\",\n          \"audience_id\": \"aud_demo_churned\",\n          \"presentable_id\": \"pres_demo_winback\",\n          \"starts_at\": \"2026-09-01T00:00:00Z\",\n          \"ends_at\": null,\n          \"position\": 1,\n          \"is_in_ab_test\": false,\n          \"ab_test_id\": null,\n          \"presentation_views\": null,\n          \"unique_views\": null\n        }\n      ],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_settings\",\n      \"vendor_id\": \"settings\",\n      \"name\": \"Settings\",\n      \"description\": \"The subscription row of the settings\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "get",
+            "--app",
+            "app_demo",
+            "--id",
+            "home"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"placement\": {\n    \"id\": \"plc_demo_home\",\n    \"vendor_id\": \"home\",\n    \"name\": \"Home banner\",\n    \"description\": \"The upgrade button of the home screen\",\n    \"is_default\": false,\n    \"has_running_ab_test\": false,\n    \"default_presentable_id\": \"pres_demo_upsell\",\n    \"category_tag_ids\": [],\n    \"audiences\": [\n      {\n        \"id\": \"aud_demo_churned\",\n        \"is_in_ab_test\": false,\n        \"priority\": 1,\n        \"presentable_id\": \"pres_demo_winback\"\n      }\n    ],\n    \"active_campaigns\": [\n      {\n        \"id\": \"cmp_demo_winback\",\n        \"name\": \"Winback after a cancellation\",\n        \"audience_id\": \"aud_demo_churned\",\n        \"presentable_id\": \"pres_demo_winback\",\n        \"starts_at\": \"2026-09-01T00:00:00Z\",\n        \"ends_at\": null,\n        \"position\": 1,\n        \"is_in_ab_test\": false,\n        \"ab_test_id\": null,\n        \"presentation_views\": null,\n        \"unique_views\": null\n      }\n    ],\n    \"created_at\": \"2026-01-12T09:30:00Z\",\n    \"updated_at\": \"2026-09-28T14:05:00Z\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"placements\": [\n    {\n      \"id\": \"plc_demo_onboarding\",\n      \"vendor_id\": \"onboarding\",\n      \"name\": \"Onboarding\",\n      \"description\": \"Shown at the end of the first launch\",\n      \"is_default\": true,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_onboarding\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_home\",\n      \"vendor_id\": \"home\",\n      \"name\": \"Home banner\",\n      \"description\": \"The upgrade button of the home screen\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [\n        {\n          \"id\": \"aud_demo_churned\",\n          \"is_in_ab_test\": false,\n          \"priority\": 1,\n          \"presentable_id\": \"pres_demo_winback\"\n        }\n      ],\n      \"active_campaigns\": [\n        {\n          \"id\": \"cmp_demo_winback\",\n          \"name\": \"Winback after a cancellation\",\n          \"audience_id\": \"aud_demo_churned\",\n          \"presentable_id\": \"pres_demo_winback\",\n          \"starts_at\": \"2026-09-01T00:00:00Z\",\n          \"ends_at\": null,\n          \"position\": 1,\n          \"is_in_ab_test\": false,\n          \"ab_test_id\": null,\n          \"presentation_views\": null,\n          \"unique_views\": null\n        }\n      ],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_settings\",\n      \"vendor_id\": \"settings\",\n      \"name\": \"Settings\",\n      \"description\": \"The subscription row of the settings\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "screens",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"screens\": [\n    {\n      \"id\": \"pres_demo_onboarding\",\n      \"name\": \"Onboarding paywall\",\n      \"vendor_id\": \"onboarding_paywall\",\n      \"status\": \"published\",\n      \"is_default\": true,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_upsell\",\n      \"name\": \"Home upsell\",\n      \"vendor_id\": \"home_upsell\",\n      \"status\": \"published\",\n      \"is_default\": false,\n      \"template_identifier\": \"bottom_sheet\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_winback\",\n      \"name\": \"Winback offer\",\n      \"vendor_id\": \"winback_offer\",\n      \"status\": \"draft\",\n      \"is_default\": false,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "products",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"products\": [\n    {\n      \"id\": \"prd_demo_premium\",\n      \"name\": \"Premium\",\n      \"vendor_id\": \"premium\",\n      \"description\": \"All the guided sessions\",\n      \"icon_url\": null,\n      \"default_screen_id\": \"pres_demo_onboarding\",\n      \"application_id\": \"app_demo\",\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "plans",
+            "list",
+            "--app",
+            "app_demo",
+            "--product-id",
+            "prd_demo_premium"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"plans\": [\n    {\n      \"id\": \"pln_demo_monthly\",\n      \"name\": \"Premium monthly\",\n      \"vendor_id\": \"premium_monthly\",\n      \"product_type\": \"RENEWING_SUBSCRIPTION\",\n      \"level\": 1,\n      \"period_type\": \"normal\",\n      \"commitment_billing_type\": null,\n      \"promo_offers\": [],\n      \"internal_notes\": null,\n      \"default_screen_id\": null,\n      \"product_id\": \"prd_demo_premium\",\n      \"application_id\": \"app_demo\",\n      \"stores\": {\n        \"app_store\": {\n          \"platform_name\": \"ios\",\n          \"store_product_id\": \"com.example.meditation.demo.monthly\"\n        },\n        \"play_store\": {\n          \"platform_name\": \"android\",\n          \"store_product_id\": \"com.example.meditation.demo.monthly\"\n        },\n        \"stripe\": []\n      },\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pln_demo_yearly\",\n      \"name\": \"Premium yearly\",\n      \"vendor_id\": \"premium_yearly\",\n      \"product_type\": \"RENEWING_SUBSCRIPTION\",\n      \"level\": 2,\n      \"period_type\": \"normal\",\n      \"commitment_billing_type\": null,\n      \"promo_offers\": [\n        {\n          \"id\": \"off_demo_trial\",\n          \"name\": \"7-day free trial\",\n          \"vendor_id\": \"yearly_trial\",\n          \"appstore_offer_id\": null,\n          \"playstore_offer_id\": \"trial-7d\",\n          \"stripe_trial_days\": null,\n          \"stripe_coupon_id\": null,\n          \"commitment_billing_type\": null\n        }\n      ],\n      \"internal_notes\": null,\n      \"default_screen_id\": null,\n      \"product_id\": \"prd_demo_premium\",\n      \"application_id\": \"app_demo\",\n      \"stores\": {\n        \"app_store\": {\n          \"platform_name\": \"ios\",\n          \"store_product_id\": \"com.example.meditation.demo.yearly\"\n        },\n        \"play_store\": {\n          \"platform_name\": \"android\",\n          \"store_product_id\": \"com.example.meditation.demo.yearly\"\n        },\n        \"stripe\": []\n      },\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "campaigns",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"campaigns\": [\n    {\n      \"id\": \"cmp_demo_winback\",\n      \"name\": \"Winback after a cancellation\",\n      \"vendor_id\": \"winback\",\n      \"status\": \"running\",\n      \"position\": 1,\n      \"application_id\": \"app_demo\",\n      \"audience_id\": \"aud_demo_churned\",\n      \"ab_test_id\": null,\n      \"presentable_id\": \"pres_demo_winback\",\n      \"placement_ids\": [\n        \"plc_demo_home\"\n      ],\n      \"category_tag_ids\": [],\n      \"config\": {},\n      \"starts_at\": \"2026-09-01T00:00:00Z\",\n      \"ends_at\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "applications",
+            "list"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"mobile_applications\": [\n    {\n      \"id\": \"app_demo\",\n      \"name\": \"Sample Meditation App (demo)\",\n      \"client_id\": \"cli_demo\",\n      \"default_language\": \"en\",\n      \"default_dashboard_currency\": \"USD\",\n      \"default_integration_currency\": \"USD\",\n      \"default_screen_id\": \"pres_demo_onboarding\",\n      \"redeem_presentation_id\": null,\n      \"icon_url\": null,\n      \"show_purchasely\": true,\n      \"has_mocked_data\": true,\n      \"client_webhook_url\": null,\n      \"s2s_notifications_endpoints\": [],\n      \"ios_platform\": {\n        \"bundle_id\": \"com.example.meditation.demo\"\n      },\n      \"android_platform\": {\n        \"package_name\": \"com.example.meditation.demo\"\n      },\n      \"stripe_platform\": null,\n      \"platforms_configured\": {\n        \"ios\": true,\n        \"android\": true,\n        \"stripe\": false\n      },\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P6b"
+    },
+    {
+      "test": "demo::demo mode > wins over a real key: still no request",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"placements\": [\n    {\n      \"id\": \"plc_demo_onboarding\",\n      \"vendor_id\": \"onboarding\",\n      \"name\": \"Onboarding\",\n      \"description\": \"Shown at the end of the first launch\",\n      \"is_default\": true,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_onboarding\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_home\",\n      \"vendor_id\": \"home\",\n      \"name\": \"Home banner\",\n      \"description\": \"The upgrade button of the home screen\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [\n        {\n          \"id\": \"aud_demo_churned\",\n          \"is_in_ab_test\": false,\n          \"priority\": 1,\n          \"presentable_id\": \"pres_demo_winback\"\n        }\n      ],\n      \"active_campaigns\": [\n        {\n          \"id\": \"cmp_demo_winback\",\n          \"name\": \"Winback after a cancellation\",\n          \"audience_id\": \"aud_demo_churned\",\n          \"presentable_id\": \"pres_demo_winback\",\n          \"starts_at\": \"2026-09-01T00:00:00Z\",\n          \"ends_at\": null,\n          \"position\": 1,\n          \"is_in_ab_test\": false,\n          \"ab_test_id\": null,\n          \"presentation_views\": null,\n          \"unique_views\": null\n        }\n      ],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"plc_demo_settings\",\n      \"vendor_id\": \"settings\",\n      \"name\": \"Settings\",\n      \"description\": \"The subscription row of the settings\",\n      \"is_default\": false,\n      \"has_running_ab_test\": false,\n      \"default_presentable_id\": \"pres_demo_upsell\",\n      \"category_tag_ids\": [],\n      \"audiences\": [],\n      \"active_campaigns\": [],\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P6b"
+    },
+    {
+      "test": "demo::demo mode > prints one header line that says the data is not real",
+      "steps": [
+        {
+          "argv": [
+            "screens",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"screens\": [\n    {\n      \"id\": \"pres_demo_onboarding\",\n      \"name\": \"Onboarding paywall\",\n      \"vendor_id\": \"onboarding_paywall\",\n      \"status\": \"published\",\n      \"is_default\": true,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_upsell\",\n      \"name\": \"Home upsell\",\n      \"vendor_id\": \"home_upsell\",\n      \"status\": \"published\",\n      \"is_default\": false,\n      \"template_identifier\": \"bottom_sheet\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    },\n    {\n      \"id\": \"pres_demo_winback\",\n      \"name\": \"Winback offer\",\n      \"vendor_id\": \"winback_offer\",\n      \"status\": \"draft\",\n      \"is_default\": false,\n      \"template_identifier\": \"full_screen\",\n      \"category_tag_ids\": [],\n      \"web_enabled\": false,\n      \"web_slug\": null,\n      \"web_slug_sandbox\": null,\n      \"created_at\": \"2026-01-12T09:30:00Z\",\n      \"updated_at\": \"2026-09-28T14:05:00Z\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P6b"
+    },
+    {
+      "test": "demo::demo mode > dashboard summary renders the sample dashboard",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"app\": \"app_demo\",\n  \"from\": \"2023-10-16\",\n  \"to\": \"2023-11-14\",\n  \"periodicity\": \"DAY\",\n  \"panels\": [\n    {\n      \"name\": \"MRR\",\n      \"value\": 18006,\n      \"series\": [\n        {\n          \"period\": \"2023-10-16\",\n          \"value\": 17621\n        },\n        {\n          \"period\": \"2023-10-17\",\n          \"value\": 17524\n        },\n        {\n          \"period\": \"2023-10-18\",\n          \"value\": 17520\n        },\n        {\n          \"period\": \"2023-10-19\",\n          \"value\": 17628\n        },\n        {\n          \"period\": \"2023-10-20\",\n          \"value\": 17777\n        },\n        {\n          \"period\": \"2023-10-21\",\n          \"value\": 17867\n        },\n        {\n          \"period\": \"2023-10-22\",\n          \"value\": 17842\n        },\n        {\n          \"period\": \"2023-10-23\",\n          \"value\": 17735\n        },\n        {\n          \"period\": \"2023-10-24\",\n          \"value\": 17643\n        },\n        {\n          \"period\": \"2023-10-25\",\n          \"value\": 17650\n        },\n        {\n          \"period\": \"2023-10-26\",\n          \"value\": 17765\n        },\n        {\n          \"period\": \"2023-10-27\",\n          \"value\": 17913\n        },\n        {\n          \"period\": \"2023-10-28\",\n          \"value\": 17994\n        },\n        {\n          \"period\": \"2023-10-29\",\n          \"value\": 17959\n        },\n        {\n          \"period\": \"2023-10-30\",\n          \"value\": 17849\n        },\n        {\n          \"period\": \"2023-10-31\",\n          \"value\": 17763\n        },\n        {\n          \"period\": \"2023-11-01\",\n          \"value\": 17781\n        },\n        {\n          \"period\": \"2023-11-02\",\n          \"value\": 17903\n        },\n        {\n          \"period\": \"2023-11-03\",\n          \"value\": 18049\n        },\n        {\n          \"period\": \"2023-11-04\",\n          \"value\": 18120\n        },\n        {\n          \"period\": \"2023-11-05\",\n          \"value\": 18075\n        },\n        {\n          \"period\": \"2023-11-06\",\n          \"value\": 17964\n        },\n        {\n          \"period\": \"2023-11-07\",\n          \"value\": 17884\n        },\n        {\n          \"period\": \"2023-11-08\",\n          \"value\": 17913\n        },\n        {\n          \"period\": \"2023-11-09\",\n          \"value\": 18041\n        },\n        {\n          \"period\": \"2023-11-10\",\n          \"value\": 18184\n        },\n        {\n          \"period\": \"2023-11-11\",\n          \"value\": 18245\n        },\n        {\n          \"period\": \"2023-11-12\",\n          \"value\": 18191\n        },\n        {\n          \"period\": \"2023-11-13\",\n          \"value\": 18078\n        },\n        {\n          \"period\": \"2023-11-14\",\n          \"value\": 18006\n        }\n      ]\n    },\n    {\n      \"name\": \"Active subscriptions\",\n      \"value\": 2231,\n      \"series\": [\n        {\n          \"period\": \"2023-10-16\",\n          \"value\": 2191\n        },\n        {\n          \"period\": \"2023-10-17\",\n          \"value\": 2178\n        },\n        {\n          \"period\": \"2023-10-18\",\n          \"value\": 2177\n        },\n        {\n          \"period\": \"2023-10-19\",\n          \"value\": 2191\n        },\n        {\n          \"period\": \"2023-10-20\",\n          \"value\": 2210\n        },\n        {\n          \"period\": \"2023-10-21\",\n          \"value\": 2222\n        },\n        {\n          \"period\": \"2023-10-22\",\n          \"value\": 2218\n        },\n        {\n          \"period\": \"2023-10-23\",\n          \"value\": 2203\n        },\n        {\n          \"period\": \"2023-10-24\",\n          \"value\": 2191\n        },\n        {\n          \"period\": \"2023-10-25\",\n          \"value\": 2191\n        },\n        {\n          \"period\": \"2023-10-26\",\n          \"value\": 2206\n        },\n        {\n          \"period\": \"2023-10-27\",\n          \"value\": 2226\n        },\n        {\n          \"period\": \"2023-10-28\",\n          \"value\": 2236\n        },\n        {\n          \"period\": \"2023-10-29\",\n          \"value\": 2231\n        },\n        {\n          \"period\": \"2023-10-30\",\n          \"value\": 2216\n        },\n        {\n          \"period\": \"2023-10-31\",\n          \"value\": 2204\n        },\n        {\n          \"period\": \"2023-11-01\",\n          \"value\": 2206\n        },\n        {\n          \"period\": \"2023-11-02\",\n          \"value\": 2222\n        },\n        {\n          \"period\": \"2023-11-03\",\n          \"value\": 2241\n        },\n        {\n          \"period\": \"2023-11-04\",\n          \"value\": 2250\n        },\n        {\n          \"period\": \"2023-11-05\",\n          \"value\": 2244\n        },\n        {\n          \"period\": \"2023-11-06\",\n          \"value\": 2228\n        },\n        {\n          \"period\": \"2023-11-07\",\n          \"value\": 2217\n        },\n        {\n          \"period\": \"2023-11-08\",\n          \"value\": 2221\n        },\n        {\n          \"period\": \"2023-11-09\",\n          \"value\": 2237\n        },\n        {\n          \"period\": \"2023-11-10\",\n          \"value\": 2256\n        },\n        {\n          \"period\": \"2023-11-11\",\n          \"value\": 2264\n        },\n        {\n          \"period\": \"2023-11-12\",\n          \"value\": 2256\n        },\n        {\n          \"period\": \"2023-11-13\",\n          \"value\": 2241\n        },\n        {\n          \"period\": \"2023-11-14\",\n          \"value\": 2231\n        }\n      ]\n    },\n    {\n      \"name\": \"Paywall unique viewers\",\n      \"value\": 20283,\n      \"series\": [\n        {\n          \"period\": \"2023-10-16\",\n          \"value\": 845\n        },\n        {\n          \"period\": \"2023-10-17\",\n          \"value\": 752\n        },\n        {\n          \"period\": \"2023-10-18\",\n          \"value\": 735\n        },\n        {\n          \"period\": \"2023-10-19\",\n          \"value\": 807\n        },\n        {\n          \"period\": \"2023-10-20\",\n          \"value\": 912\n        },\n        {\n          \"period\": \"2023-10-21\",\n          \"value\": 969\n        },\n        {\n          \"period\": \"2023-10-22\",\n          \"value\": 935\n        },\n        {\n          \"period\": \"2023-10-23\",\n          \"value\": 835\n        },\n        {\n          \"period\": \"2023-10-24\",\n          \"value\": 747\n        },\n        {\n          \"period\": \"2023-10-25\",\n          \"value\": 738\n        },\n        {\n          \"period\": \"2023-10-26\",\n          \"value\": 816\n        },\n        {\n          \"period\": \"2023-10-27\",\n          \"value\": 920\n        },\n        {\n          \"period\": \"2023-10-28\",\n          \"value\": 970\n        },\n        {\n          \"period\": \"2023-10-29\",\n          \"value\": 928\n        },\n        {\n          \"period\": \"2023-10-30\",\n          \"value\": 825\n        },\n        {\n          \"period\": \"2023-10-31\",\n          \"value\": 742\n        },\n        {\n          \"period\": \"2023-11-01\",\n          \"value\": 742\n        },\n        {\n          \"period\": \"2023-11-02\",\n          \"value\": 825\n        },\n        {\n          \"period\": \"2023-11-03\",\n          \"value\": 927\n        },\n        {\n          \"period\": \"2023-11-04\",\n          \"value\": 970\n        },\n        {\n          \"period\": \"2023-11-05\",\n          \"value\": 920\n        },\n        {\n          \"period\": \"2023-11-06\",\n          \"value\": 816\n        },\n        {\n          \"period\": \"2023-11-07\",\n          \"value\": 738\n        },\n        {\n          \"period\": \"2023-11-08\",\n          \"value\": 747\n        },\n        {\n          \"period\": \"2023-11-09\",\n          \"value\": 835\n        },\n        {\n          \"period\": \"2023-11-10\",\n          \"value\": 935\n        },\n        {\n          \"period\": \"2023-11-11\",\n          \"value\": 969\n        },\n        {\n          \"period\": \"2023-11-12\",\n          \"value\": 912\n        },\n        {\n          \"period\": \"2023-11-13\",\n          \"value\": 807\n        },\n        {\n          \"period\": \"2023-11-14\",\n          \"value\": 735\n        }\n      ]\n    },\n    {\n      \"name\": \"Conversions\",\n      \"value\": 891,\n      \"series\": [\n        {\n          \"period\": \"2023-10-16\",\n          \"value\": 30\n        },\n        {\n          \"period\": \"2023-10-17\",\n          \"value\": 25\n        },\n        {\n          \"period\": \"2023-10-18\",\n          \"value\": 24\n        },\n        {\n          \"period\": \"2023-10-19\",\n          \"value\": 28\n        },\n        {\n          \"period\": \"2023-10-20\",\n          \"value\": 33\n        },\n        {\n          \"period\": \"2023-10-21\",\n          \"value\": 36\n        },\n        {\n          \"period\": \"2023-10-22\",\n          \"value\": 34\n        },\n        {\n          \"period\": \"2023-10-23\",\n          \"value\": 29\n        },\n        {\n          \"period\": \"2023-10-24\",\n          \"value\": 25\n        },\n        {\n          \"period\": \"2023-10-25\",\n          \"value\": 24\n        },\n        {\n          \"period\": \"2023-10-26\",\n          \"value\": 28\n        },\n        {\n          \"period\": \"2023-10-27\",\n          \"value\": 33\n        },\n        {\n          \"period\": \"2023-10-28\",\n          \"value\": 36\n        },\n        {\n          \"period\": \"2023-10-29\",\n          \"value\": 34\n        },\n        {\n          \"period\": \"2023-10-30\",\n          \"value\": 29\n        },\n        {\n          \"period\": \"2023-10-31\",\n          \"value\": 25\n        },\n        {\n          \"period\": \"2023-11-01\",\n          \"value\": 25\n        },\n        {\n          \"period\": \"2023-11-02\",\n          \"value\": 29\n        },\n        {\n          \"period\": \"2023-11-03\",\n          \"value\": 34\n        },\n        {\n          \"period\": \"2023-11-04\",\n          \"value\": 36\n        },\n        {\n          \"period\": \"2023-11-05\",\n          \"value\": 33\n        },\n        {\n          \"period\": \"2023-11-06\",\n          \"value\": 28\n        },\n        {\n          \"period\": \"2023-11-07\",\n          \"value\": 24\n        },\n        {\n          \"period\": \"2023-11-08\",\n          \"value\": 25\n        },\n        {\n          \"period\": \"2023-11-09\",\n          \"value\": 29\n        },\n        {\n          \"period\": \"2023-11-10\",\n          \"value\": 34\n        },\n        {\n          \"period\": \"2023-11-11\",\n          \"value\": 36\n        },\n        {\n          \"period\": \"2023-11-12\",\n          \"value\": 33\n        },\n        {\n          \"period\": \"2023-11-13\",\n          \"value\": 28\n        },\n        {\n          \"period\": \"2023-11-14\",\n          \"value\": 24\n        }\n      ]\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_demo",
+            "--days",
+            "90",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "app_demo  2023-08-17 to 2023-11-14  (WEEK)\n\nMRR                     18,006  ▁▁▂▂▃▃▄▄▅▅▆▆▇\nActive subscriptions     2,237  ▁▁▂▂▃▃▄▄▅▅▆▇▇\nPaywall unique viewers  61,184  ▇▇▇▇▇▇▇▇▇▇▇▇▁\nConversions              2,697  ▇▇▇▇▇▆▇▇▇▇▇▇▁\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P10"
+    },
+    {
+      "test": "demo::demo mode > every dashboard of the menu has sample data, as JSON and as a table",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "--output",
+            "json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely dashboard summary\",\n    \"description\": \"Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts\",\n    \"required_flags\": [\n      \"--app\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard composition-live\",\n    \"description\": \"Subscription composition\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard events\",\n    \"description\": \"Event counts by period\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard flow-paths\",\n    \"description\": \"Flow paths funnel\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\",\n      \"--flow-id\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard funnel\",\n    \"description\": \"Conversion funnel\",\n    \"required_flags\": [\n      \"--date-range\",\n      \"--dimension\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard header-live\",\n    \"description\": \"Live subscription and user status\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard header-today\",\n    \"description\": \"Today's key figures\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard mrr-evolution-live\",\n    \"description\": \"MRR evolution\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-revenues\",\n    \"description\": \"One-time purchase revenue by period\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-stats\",\n    \"description\": \"One-time purchase sales and refunds\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard subscriptions-revenues\",\n    \"description\": \"Subscription revenue by period\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard subscriptions-stats\",\n    \"description\": \"Subscription counts, churn and refunds\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard trials-live\",\n    \"description\": \"Trials and intro offers\",\n    \"required_flags\": [\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard conversion\",\n    \"description\": \"Paywall conversion\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard mau-reports\",\n    \"description\": \"Monthly active users\",\n    \"required_flags\": []\n  },\n  {\n    \"command\": \"purchasely dashboard paid-subscription-movements\",\n    \"description\": \"Paid subscription movements\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard paid-subscription-retention\",\n    \"description\": \"Paid-subscription retention cohort matrix for a single application\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard paywall-latency\",\n    \"description\": \"Paywall latency\",\n    \"required_flags\": []\n  },\n  {\n    \"command\": \"purchasely dashboard sdk-evolution\",\n    \"description\": \"SDK version adoption over time\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard sdk-versions\",\n    \"description\": \"SDK versions in use\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-activations\",\n    \"description\": \"Subscription activations\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-evolution\",\n    \"description\": \"Active subscription base\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-reactivations\",\n    \"description\": \"Subscription reactivations\",\n    \"required_flags\": [\n      \"--app\",\n      \"--date-range\"\n    ]\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "composition-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"composition_live\": {\n    \"data\": {\n      \"composition_plan\": {\n        \"values\": [\n          {\n            \"name\": \"Premium monthly\",\n            \"value\": 2600\n          },\n          {\n            \"name\": \"Premium yearly\",\n            \"value\": 1800\n          }\n        ]\n      },\n      \"composition_platform\": {\n        \"values\": [\n          {\n            \"name\": \"ios\",\n            \"value\": 2200\n          },\n          {\n            \"name\": \"android\",\n            \"value\": 1900\n          },\n          {\n            \"name\": \"stripe\",\n            \"value\": 300\n          }\n        ]\n      },\n      \"composition_product\": {\n        \"values\": [\n          {\n            \"name\": \"Premium\",\n            \"value\": 4400\n          }\n        ]\n      },\n      \"subscription_state\": {\n        \"active\": 3700,\n        \"active_intro\": 60,\n        \"active_trial\": 240,\n        \"canceled_intro\": 10,\n        \"canceled_trial\": 90,\n        \"churners\": 300\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "composition-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"composition_plan\":{\"values\":[{\"name\":\"Premium monthly\",\"value\":2600},{\"name\":\"Premium yearly\",\"value\":1800}]}...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "events",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"events\": {\n    \"data\": {\n      \"2026-10-07\": {\n        \"period\": \"2026-10-07\",\n        \"PRESENTATION_VIEWED\": 25334,\n        \"SUBSCRIPTION_STARTED\": 892\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "events",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"2026-10-07\":{\"period\":\"2026-10-07\",\"PRESENTATION_VIEWED\":25334,\"SUBSCRIPTION_STARTED\":892}}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "header-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"header_live\": {\n    \"data\": [\n      {\n        \"title\": \"Active subscriptions statuses\",\n        \"category\": \"active_subscriptions_statuses\",\n        \"total\": \"4400 - 100.0%\",\n        \"downloadable\": false,\n        \"with_link\": false,\n        \"data\": [\n          {\n            \"title_key\": \"active_renewing\",\n            \"subcategory\": \"active_renewing\",\n            \"val\": 3500,\n            \"percentage\": 79.5,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"active_not_renewing\",\n            \"subcategory\": \"active_not_renewing\",\n            \"val\": 420,\n            \"percentage\": 9.5,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"active_grace_period\",\n            \"subcategory\": \"active_grace_period\",\n            \"val\": 60,\n            \"percentage\": 1.4,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"trial_renewing\",\n            \"subcategory\": \"trial_renewing\",\n            \"val\": 180,\n            \"percentage\": 4.1,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"trial_not_renewing\",\n            \"subcategory\": \"trial_not_renewing\",\n            \"val\": 70,\n            \"percentage\": 1.6,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"trial_grace_period\",\n            \"subcategory\": \"trial_grace_period\",\n            \"val\": 5,\n            \"percentage\": 0.1,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"intro_period_renewing\",\n            \"subcategory\": \"intro_period_renewing\",\n            \"val\": 50,\n            \"percentage\": 1.1,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"intro_period_not_renewing\",\n            \"subcategory\": \"intro_period_not_renewing\",\n            \"val\": 10,\n            \"percentage\": 0.2,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"intro_period_grace_period\",\n            \"subcategory\": \"intro_period_grace_period\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promo_code_renewing\",\n            \"subcategory\": \"promo_code_renewing\",\n            \"val\": 80,\n            \"percentage\": 1.8,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promo_code_not_renewing\",\n            \"subcategory\": \"promo_code_not_renewing\",\n            \"val\": 15,\n            \"percentage\": 0.3,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promo_code_grace_period\",\n            \"subcategory\": \"promo_code_grace_period\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promotional_offer_renewing\",\n            \"subcategory\": \"promotional_offer_renewing\",\n            \"val\": 10,\n            \"percentage\": 0.2,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promotional_offer_not_renewing\",\n            \"subcategory\": \"promotional_offer_not_renewing\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"promotional_offer_grace_period\",\n            \"subcategory\": \"promotional_offer_grace_period\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          }\n        ]\n      },\n      {\n        \"title\": \"Inactive subscriptions causes\",\n        \"category\": \"inactive_subscriptions_causes\",\n        \"total\": \"2067 - 100.0%\",\n        \"downloadable\": false,\n        \"with_link\": false,\n        \"data\": [\n          {\n            \"title_key\": \"terminated\",\n            \"subcategory\": \"terminated\",\n            \"val\": 1900,\n            \"percentage\": 91.9,\n            \"color\": \"red\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"refunded\",\n            \"subcategory\": \"refunded\",\n            \"val\": 40,\n            \"percentage\": 1.9,\n            \"color\": \"red\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"unpaid\",\n            \"subcategory\": \"unpaid\",\n            \"val\": 25,\n            \"percentage\": 1.2,\n            \"color\": \"red\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"paused\",\n            \"subcategory\": \"paused\",\n            \"val\": 12,\n            \"percentage\": 0.6,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"billing_retry\",\n            \"subcategory\": \"billing_retry\",\n            \"val\": 90,\n            \"percentage\": 4.4,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"fraud_attemps_blocked\",\n            \"subcategory\": \"fraud_attemps_blocked\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"red\",\n            \"with_link\": false,\n            \"downloadable\": false\n          }\n        ]\n      }\n    ]\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "header-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  [{\"title\":\"Active subscriptions statuses\",\"category\":\"active_subscriptions_statuses\",\"total\":\"4400 - 100.0%\",\"d...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "header-today",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"header_today\": {\n    \"data\": [\n      {\n        \"title\": \"Today\",\n        \"category\": \"today\",\n        \"total\": \"142 - 100.0%\",\n        \"downloadable\": false,\n        \"with_link\": false,\n        \"data\": [\n          {\n            \"title_key\": \"subscribed_with_free_trial\",\n            \"subcategory\": \"subscribed_with_free_trial\",\n            \"val\": 9,\n            \"percentage\": 6.3,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"subscribed_with_intro\",\n            \"subcategory\": \"subscribed_with_intro\",\n            \"val\": 2,\n            \"percentage\": 1.4,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"subscribed_with_promo_code\",\n            \"subcategory\": \"subscribed_with_promo_code\",\n            \"val\": 1,\n            \"percentage\": 0.7,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"subscribed_with_promotional_offer\",\n            \"subcategory\": \"subscribed_with_promotional_offer\",\n            \"val\": 0,\n            \"percentage\": 0,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"subscribed_paying\",\n            \"subcategory\": \"subscribed_paying\",\n            \"val\": 18,\n            \"percentage\": 12.7,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"renewed\",\n            \"subcategory\": \"renewed\",\n            \"val\": 95,\n            \"percentage\": 66.9,\n            \"color\": \"green\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"entered_grace_period\",\n            \"subcategory\": \"entered_grace_period\",\n            \"val\": 3,\n            \"percentage\": 2.1,\n            \"color\": \"orange\",\n            \"with_link\": false,\n            \"downloadable\": false\n          },\n          {\n            \"title_key\": \"churned\",\n            \"subcategory\": \"churned\",\n            \"val\": 14,\n            \"percentage\": 9.9,\n            \"color\": \"red\",\n            \"with_link\": false,\n            \"downloadable\": false\n          }\n        ]\n      }\n    ]\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "header-today",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  [{\"title\":\"Today\",\"category\":\"today\",\"total\":\"142 - 100.0%\",\"downloadable\":false,\"with_link\":false,\"data\":[{\"ti...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "mrr-evolution-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"mrr_evolution_live\": {\n    \"data\": {\n      \"mrr\": {\n        \"values\": {\n          \"by_day\": [\n            {\n              \"period\": \"2026-10-07\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37047\n            },\n            {\n              \"period\": \"2026-10-08\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37145\n            },\n            {\n              \"period\": \"2026-10-09\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37294\n            },\n            {\n              \"period\": \"2026-10-10\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37394\n            },\n            {\n              \"period\": \"2026-10-11\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37382\n            },\n            {\n              \"period\": \"2026-10-12\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37280\n            },\n            {\n              \"period\": \"2026-10-13\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37181\n            },\n            {\n              \"period\": \"2026-10-14\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37176\n            },\n            {\n              \"period\": \"2026-10-15\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37282\n            },\n            {\n              \"period\": \"2026-10-16\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37431\n            },\n            {\n              \"period\": \"2026-10-17\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37523\n            },\n            {\n              \"period\": \"2026-10-18\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37499\n            },\n            {\n              \"period\": \"2026-10-19\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37394\n            },\n            {\n              \"period\": \"2026-10-20\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37300\n            },\n            {\n              \"period\": \"2026-10-21\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37305\n            },\n            {\n              \"period\": \"2026-10-22\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37419\n            },\n            {\n              \"period\": \"2026-10-23\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37567\n            },\n            {\n              \"period\": \"2026-10-24\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37650\n            },\n            {\n              \"period\": \"2026-10-25\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37617\n            },\n            {\n              \"period\": \"2026-10-26\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37508\n            },\n            {\n              \"period\": \"2026-10-27\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37420\n            },\n            {\n              \"period\": \"2026-10-28\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37436\n            },\n            {\n              \"period\": \"2026-10-29\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37557\n            },\n            {\n              \"period\": \"2026-10-30\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37703\n            },\n            {\n              \"period\": \"2026-10-31\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37776\n            },\n            {\n              \"period\": \"2026-11-01\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37733\n            },\n            {\n              \"period\": \"2026-11-02\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37622\n            },\n            {\n              \"period\": \"2026-11-03\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37541\n            },\n            {\n              \"period\": \"2026-11-04\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37568\n            },\n            {\n              \"period\": \"2026-11-05\",\n              \"date_kinds\": [\n                \"date_period\"\n              ],\n              \"value\": 37695\n            }\n          ],\n          \"by_month\": []\n        },\n        \"variations\": []\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "mrr-evolution-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2026-10-07\",\"date_kinds\":[\"date_period\"],\"value\":37047},{\"period\":\"2026-...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "one-time-purchases-revenues",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"one_time_purchases_revenues\": {\n    \"data\": {\n      \"revenue\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"google\": 761,\n            \"apple\": 952,\n            \"stripe\": 190\n          }\n        ]\n      },\n      \"revenue_by_country\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"United States\": 856,\n            \"France\": 476,\n            \"United Kingdom\": 381,\n            \"Germany\": 190\n          }\n        ]\n      },\n      \"revenue_by_plan\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"200 coins\": 1332,\n            \"1000 coins\": 571\n          }\n        ]\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "one-time-purchases-revenues",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"revenue\":{\"values\":[{\"period\":\"2026-10-07\",\"google\":761,\"apple\":952,\"stripe\":190}]},\"revenue_by_country\":{\"va...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "one-time-purchases-stats",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"one_time_purchases_stats\": {\n    \"data\": {\n      \"otp_by_store\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"google\": 37,\n            \"apple\": 46,\n            \"stripe\": 9\n          }\n        ]\n      },\n      \"otp_by_plan\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"200 coins\": 64,\n            \"1000 coins\": 28\n          }\n        ]\n      },\n      \"otp_refunds\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"percent\": 1.5\n          }\n        ]\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "one-time-purchases-stats",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"otp_by_store\":{\"values\":[{\"period\":\"2026-10-07\",\"google\":37,\"apple\":46,\"stripe\":9}]},\"otp_by_plan\":{\"values\":...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscriptions-revenues",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"subscriptions_revenues\": {\n    \"data\": {\n      \"revenue\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"google\": 14318,\n            \"apple\": 17898,\n            \"stripe\": 3580\n          }\n        ]\n      },\n      \"revenue_by_country\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"United States\": 16108,\n            \"France\": 8949,\n            \"United Kingdom\": 7159,\n            \"Germany\": 3580\n          }\n        ]\n      },\n      \"revenue_by_plan\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"Premium monthly\": 21477,\n            \"Premium yearly\": 14318\n          }\n        ]\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscriptions-revenues",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"revenue\":{\"values\":[{\"period\":\"2026-10-07\",\"google\":14318,\"apple\":17898,\"stripe\":3580}]},\"revenue_by_country\"...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscriptions-stats",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"subscriptions_stats\": {\n    \"data\": {\n      \"active\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"value\": 4346\n          }\n        ]\n      },\n      \"new_churn\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"new\": 892,\n            \"churn\": 714,\n            \"sum\": 178\n          }\n        ],\n        \"variations\": []\n      },\n      \"refund\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"refund_count\": 13,\n            \"subscription_count\": 892,\n            \"percent\": 1.5\n          }\n        ]\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscriptions-stats",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"active\":{\"values\":[{\"period\":\"2026-10-07\",\"value\":4346}]},\"new_churn\":{\"values\":[{\"period\":\"2026-10-07\",\"new\"...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "trials-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"trials_live\": {\n    \"data\": {\n      \"trials\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"trials_converted\": 265,\n            \"trials_not_converted\": 85,\n            \"trials_ongoing_auto_renewing\": 175,\n            \"trials_ongoing_billing_retry\": 0,\n            \"trials_ongoing_grace_period\": 0,\n            \"trials_ongoing_non_auto_renewing\": 32\n          }\n        ]\n      },\n      \"intro_offers\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"intro_offers_converted\": 265,\n            \"intro_offers_not_converted\": 85,\n            \"intro_offers_ongoing_auto_renewing\": 175,\n            \"intro_offers_ongoing_billing_retry\": 0,\n            \"intro_offers_ongoing_grace_period\": 0,\n            \"intro_offers_ongoing_non_auto_renewing\": 32\n          }\n        ]\n      },\n      \"trials_balance\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"trials_started\": 355,\n            \"trials_started_auto_renewing\": 325,\n            \"trials_started_non_auto_renewing\": 32,\n            \"trials_converted\": 265,\n            \"trials_not_converted\": 85,\n            \"balance\": 17\n          }\n        ]\n      },\n      \"intro_offers_balance\": {\n        \"values\": [\n          {\n            \"period\": \"2026-10-07\",\n            \"intro_offers_started\": 355,\n            \"intro_offers_started_auto_renewing\": 325,\n            \"intro_offers_started_non_auto_renewing\": 32,\n            \"intro_offers_converted\": 265,\n            \"intro_offers_not_converted\": 85,\n            \"balance\": 17\n          }\n        ]\n      }\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "trials-live",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"trials\":{\"values\":[{\"period\":\"2026-10-07\",\"trials_converted\":265,\"trials_not_converted\":85,\"trials_ongoing_au...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"conversion\": {\n    \"kpi\": [\n      {\n        \"unique_viewers_count\": 20267\n      }\n    ],\n    \"primary_metric_by_period\": [\n      {\n        \"period\": \"2026-10-07\",\n        \"unique_viewers_count\": 732\n      },\n      {\n        \"period\": \"2026-10-08\",\n        \"unique_viewers_count\": 796\n      },\n      {\n        \"period\": \"2026-10-09\",\n        \"unique_viewers_count\": 902\n      },\n      {\n        \"period\": \"2026-10-10\",\n        \"unique_viewers_count\": 967\n      },\n      {\n        \"period\": \"2026-10-11\",\n        \"unique_viewers_count\": 942\n      },\n      {\n        \"period\": \"2026-10-12\",\n        \"unique_viewers_count\": 846\n      },\n      {\n        \"period\": \"2026-10-13\",\n        \"unique_viewers_count\": 753\n      },\n      {\n        \"period\": \"2026-10-14\",\n        \"unique_viewers_count\": 735\n      },\n      {\n        \"period\": \"2026-10-15\",\n        \"unique_viewers_count\": 805\n      },\n      {\n        \"period\": \"2026-10-16\",\n        \"unique_viewers_count\": 910\n      },\n      {\n        \"period\": \"2026-10-17\",\n        \"unique_viewers_count\": 969\n      },\n      {\n        \"period\": \"2026-10-18\",\n        \"unique_viewers_count\": 936\n      },\n      {\n        \"period\": \"2026-10-19\",\n        \"unique_viewers_count\": 837\n      },\n      {\n        \"period\": \"2026-10-20\",\n        \"unique_viewers_count\": 748\n      },\n      {\n        \"period\": \"2026-10-21\",\n        \"unique_viewers_count\": 738\n      },\n      {\n        \"period\": \"2026-10-22\",\n        \"unique_viewers_count\": 814\n      },\n      {\n        \"period\": \"2026-10-23\",\n        \"unique_viewers_count\": 918\n      },\n      {\n        \"period\": \"2026-10-24\",\n        \"unique_viewers_count\": 970\n      },\n      {\n        \"period\": \"2026-10-25\",\n        \"unique_viewers_count\": 929\n      },\n      {\n        \"period\": \"2026-10-26\",\n        \"unique_viewers_count\": 827\n      },\n      {\n        \"period\": \"2026-10-27\",\n        \"unique_viewers_count\": 743\n      },\n      {\n        \"period\": \"2026-10-28\",\n        \"unique_viewers_count\": 741\n      },\n      {\n        \"period\": \"2026-10-29\",\n        \"unique_viewers_count\": 823\n      },\n      {\n        \"period\": \"2026-10-30\",\n        \"unique_viewers_count\": 926\n      },\n      {\n        \"period\": \"2026-10-31\",\n        \"unique_viewers_count\": 970\n      },\n      {\n        \"period\": \"2026-11-01\",\n        \"unique_viewers_count\": 921\n      },\n      {\n        \"period\": \"2026-11-02\",\n        \"unique_viewers_count\": 818\n      },\n      {\n        \"period\": \"2026-11-03\",\n        \"unique_viewers_count\": 739\n      },\n      {\n        \"period\": \"2026-11-04\",\n        \"unique_viewers_count\": 746\n      },\n      {\n        \"period\": \"2026-11-05\",\n        \"unique_viewers_count\": 833\n      }\n    ],\n    \"secondary_metric_by_period\": [\n      {\n        \"period\": \"2026-10-07\",\n        \"total_conversions_count\": 24\n      },\n      {\n        \"period\": \"2026-10-08\",\n        \"total_conversions_count\": 27\n      },\n      {\n        \"period\": \"2026-10-09\",\n        \"total_conversions_count\": 33\n      },\n      {\n        \"period\": \"2026-10-10\",\n        \"total_conversions_count\": 36\n      },\n      {\n        \"period\": \"2026-10-11\",\n        \"total_conversions_count\": 35\n      },\n      {\n        \"period\": \"2026-10-12\",\n        \"total_conversions_count\": 30\n      },\n      {\n        \"period\": \"2026-10-13\",\n        \"total_conversions_count\": 25\n      },\n      {\n        \"period\": \"2026-10-14\",\n        \"total_conversions_count\": 24\n      },\n      {\n        \"period\": \"2026-10-15\",\n        \"total_conversions_count\": 28\n      },\n      {\n        \"period\": \"2026-10-16\",\n        \"total_conversions_count\": 33\n      },\n      {\n        \"period\": \"2026-10-17\",\n        \"total_conversions_count\": 36\n      },\n      {\n        \"period\": \"2026-10-18\",\n        \"total_conversions_count\": 34\n      },\n      {\n        \"period\": \"2026-10-19\",\n        \"total_conversions_count\": 29\n      },\n      {\n        \"period\": \"2026-10-20\",\n        \"total_conversions_count\": 25\n      },\n      {\n        \"period\": \"2026-10-21\",\n        \"total_conversions_count\": 24\n      },\n      {\n        \"period\": \"2026-10-22\",\n        \"total_conversions_count\": 28\n      },\n      {\n        \"period\": \"2026-10-23\",\n        \"total_conversions_count\": 33\n      },\n      {\n        \"period\": \"2026-10-24\",\n        \"total_conversions_count\": 36\n      },\n      {\n        \"period\": \"2026-10-25\",\n        \"total_conversions_count\": 34\n      },\n      {\n        \"period\": \"2026-10-26\",\n        \"total_conversions_count\": 29\n      },\n      {\n        \"period\": \"2026-10-27\",\n        \"total_conversions_count\": 25\n      },\n      {\n        \"period\": \"2026-10-28\",\n        \"total_conversions_count\": 25\n      },\n      {\n        \"period\": \"2026-10-29\",\n        \"total_conversions_count\": 29\n      },\n      {\n        \"period\": \"2026-10-30\",\n        \"total_conversions_count\": 34\n      },\n      {\n        \"period\": \"2026-10-31\",\n        \"total_conversions_count\": 36\n      },\n      {\n        \"period\": \"2026-11-01\",\n        \"total_conversions_count\": 34\n      },\n      {\n        \"period\": \"2026-11-02\",\n        \"total_conversions_count\": 28\n      },\n      {\n        \"period\": \"2026-11-03\",\n        \"total_conversions_count\": 24\n      },\n      {\n        \"period\": \"2026-11-04\",\n        \"total_conversions_count\": 25\n      },\n      {\n        \"period\": \"2026-11-05\",\n        \"total_conversions_count\": 29\n      }\n    ]\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key                         value\nkpi                         [{\"unique_viewers_count\":20267}]\nprimary_metric_by_period    [{\"period\":\"2026-10-07\",\"unique_viewers_count\":732},{\"period\":\"2026-10-08\",\"unique_viewer...\nsecondary_metric_by_period  [{\"period\":\"2026-10-07\",\"total_conversions_count\":24},{\"period\":\"2026-10-08\",\"total_conve...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "mau-reports",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"mau_reports\": {\n    \"data\": {\n      \"app_starts\": [\n        {\n          \"period\": \"2025-04\",\n          \"value\": 120000\n        },\n        {\n          \"period\": \"2025-05\",\n          \"value\": 128584\n        },\n        {\n          \"period\": \"2025-06\",\n          \"value\": 132216\n        },\n        {\n          \"period\": \"2025-07\",\n          \"value\": 130504\n        },\n        {\n          \"period\": \"2025-08\",\n          \"value\": 127960\n        },\n        {\n          \"period\": \"2025-09\",\n          \"value\": 129864\n        },\n        {\n          \"period\": \"2025-10\",\n          \"value\": 137408\n        },\n        {\n          \"period\": \"2025-11\",\n          \"value\": 146608\n        },\n        {\n          \"period\": \"2025-12\",\n          \"value\": 151928\n        },\n        {\n          \"period\": \"2026-01\",\n          \"value\": 151440\n        }\n      ],\n      \"unique_users\": [\n        {\n          \"period\": \"2025-04\",\n          \"value\": 15000\n        },\n        {\n          \"period\": \"2025-05\",\n          \"value\": 16073\n        },\n        {\n          \"period\": \"2025-06\",\n          \"value\": 16527\n        },\n        {\n          \"period\": \"2025-07\",\n          \"value\": 16313\n        },\n        {\n          \"period\": \"2025-08\",\n          \"value\": 15995\n        },\n        {\n          \"period\": \"2025-09\",\n          \"value\": 16233\n        },\n        {\n          \"period\": \"2025-10\",\n          \"value\": 17176\n        },\n        {\n          \"period\": \"2025-11\",\n          \"value\": 18326\n        },\n        {\n          \"period\": \"2025-12\",\n          \"value\": 18991\n        },\n        {\n          \"period\": \"2026-01\",\n          \"value\": 18930\n        }\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "mau-reports",
+            "--app",
+            "app_demo",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"app_starts\":[{\"period\":\"2025-04\",\"value\":120000},{\"period\":\"2025-05\",\"value\":128584},{\"period\":\"2025-06\",\"val...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paid-subscription-movements",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"paid_subscription_movements\": [\n    {\n      \"period\": \"2026-10-07\",\n      \"group_by\": null,\n      \"group_by_public_id\": null,\n      \"group_by_name\": null,\n      \"total_activations_count\": 834,\n      \"total_churns_count\": 654,\n      \"net_movement_count\": 180\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paid-subscription-movements",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "period      group_by  group_by_public_id  group_by_name  total_activations_count  total_churns_count\n2026-10-07                                               834                      654\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paid-subscription-retention",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"paid_subscription_retention\": {\n    \"rows\": [\n      {\n        \"cohort_date\": \"2026-10-01\",\n        \"period_date\": \"2026-10-01\",\n        \"period_name\": \"MONTH 0\",\n        \"is_partial\": false,\n        \"retained_count\": 140,\n        \"retained_ratio\": 1\n      },\n      {\n        \"cohort_date\": \"2026-10-01\",\n        \"period_date\": \"2026-11-01\",\n        \"period_name\": \"MONTH 1\",\n        \"is_partial\": true,\n        \"retained_count\": 115,\n        \"retained_ratio\": 0.82\n      },\n      {\n        \"cohort_date\": \"2026-11-01\",\n        \"period_date\": \"2026-11-01\",\n        \"period_name\": \"MONTH 0\",\n        \"is_partial\": true,\n        \"retained_count\": 140,\n        \"retained_ratio\": 1\n      }\n    ],\n    \"totals\": [\n      {\n        \"cohort_date\": \"2026-10-01\",\n        \"total_count\": 140,\n        \"total_revenue_in_dashboard_currency\": 3192,\n        \"revenue_per_subscription_in_dashboard_currency\": 22.8\n      },\n      {\n        \"cohort_date\": \"2026-11-01\",\n        \"total_count\": 140,\n        \"total_revenue_in_dashboard_currency\": 3192,\n        \"revenue_per_subscription_in_dashboard_currency\": 22.8\n      }\n    ],\n    \"grand_total\": {\n      \"total_count\": 280,\n      \"total_revenue_in_dashboard_currency\": 6384,\n      \"revenue_per_subscription_in_dashboard_currency\": 22.8,\n      \"periods\": [\n        {\n          \"period_name\": \"MONTH 0\",\n          \"period_date\": \"2026-10-01\",\n          \"retained_count\": 280,\n          \"total_count\": 280,\n          \"retained_ratio\": 1\n        },\n        {\n          \"period_name\": \"MONTH 1\",\n          \"period_date\": \"2026-11-01\",\n          \"retained_count\": 115,\n          \"total_count\": 140,\n          \"retained_ratio\": 0.82\n        }\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paid-subscription-retention",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key          value\nrows         [{\"cohort_date\":\"2026-10-01\",\"period_date\":\"2026-10-01\",\"period_name\":\"MONTH 0\",\"is_partial\":false,\"reta...\ntotals       [{\"cohort_date\":\"2026-10-01\",\"total_count\":140,\"total_revenue_in_dashboard_currency\":3192,\"revenue_per_s...\ngrand_total  {\"total_count\":280,\"total_revenue_in_dashboard_currency\":6384,\"revenue_per_subscription_in_dashboard_cur...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paywall-latency",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"paywall_latency\": {\n    \"data\": {\n      \"dates\": [\n        \"2025-12-17\",\n        \"2025-12-18\",\n        \"2025-12-19\",\n        \"2025-12-20\",\n        \"2025-12-21\",\n        \"2025-12-22\",\n        \"2025-12-23\",\n        \"2025-12-24\",\n        \"2025-12-25\",\n        \"2025-12-26\",\n        \"2025-12-27\",\n        \"2025-12-28\",\n        \"2025-12-29\",\n        \"2025-12-30\",\n        \"2025-12-31\",\n        \"2026-01-01\",\n        \"2026-01-02\",\n        \"2026-01-03\",\n        \"2026-01-04\",\n        \"2026-01-05\",\n        \"2026-01-06\",\n        \"2026-01-07\",\n        \"2026-01-08\",\n        \"2026-01-09\",\n        \"2026-01-10\",\n        \"2026-01-11\",\n        \"2026-01-12\",\n        \"2026-01-13\",\n        \"2026-01-14\",\n        \"2026-01-15\"\n      ],\n      \"p50\": [\n        132,\n        128,\n        118,\n        109,\n        109,\n        118,\n        128,\n        132,\n        127,\n        117,\n        109,\n        110,\n        118,\n        128,\n        132,\n        126,\n        116,\n        109,\n        110,\n        119,\n        129,\n        132,\n        125,\n        115,\n        108,\n        111,\n        120,\n        130,\n        132,\n        124\n      ],\n      \"p95\": [\n        374,\n        362,\n        333,\n        309,\n        309,\n        333,\n        362,\n        374,\n        360,\n        330,\n        308,\n        311,\n        336,\n        364,\n        374,\n        358,\n        328,\n        307,\n        312,\n        338,\n        366,\n        373,\n        355,\n        325,\n        307,\n        314,\n        341,\n        368,\n        373,\n        353\n      ],\n      \"p99\": [\n        858,\n        830,\n        764,\n        710,\n        710,\n        764,\n        830,\n        858,\n        825,\n        758,\n        707,\n        713,\n        770,\n        835,\n        857,\n        820,\n        752,\n        705,\n        716,\n        776,\n        839,\n        856,\n        815,\n        746,\n        704,\n        720,\n        783,\n        843,\n        855,\n        809\n      ],\n      \"request_count\": [\n        2640,\n        2555,\n        2351,\n        2184,\n        2184,\n        2351,\n        2555,\n        2640,\n        2540,\n        2332,\n        2177,\n        2193,\n        2370,\n        2569,\n        2638,\n        2524,\n        2314,\n        2170,\n        2204,\n        2389,\n        2582,\n        2635,\n        2507,\n        2296,\n        2165,\n        2216,\n        2408,\n        2594,\n        2631,\n        2489\n      ],\n      \"countries\": [\n        \"US\",\n        \"FR\",\n        \"GB\"\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paywall-latency",
+            "--app",
+            "app_demo",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"dates\":[\"2025-12-17\",\"2025-12-18\",\"2025-12-19\",\"2025-12-20\",\"2025-12-21\",\"2025-12-22\",\"2025-12-23\",\"2025-12-2...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "sdk-evolution",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"sdk_evolution\": [\n    {\n      \"period\": \"2026-10-07\",\n      \"group_by\": null,\n      \"group_by_public_id\": null,\n      \"group_by_name\": null,\n      \"app_starts_count\": 74994\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "sdk-evolution",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "period      group_by  group_by_public_id  group_by_name  app_starts_count\n2026-10-07                                               74994\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "sdk-versions",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"sdk_versions\": [\n    {\n      \"sdk_version\": \"6.2.0\",\n      \"events_count\": 84000\n    },\n    {\n      \"sdk_version\": \"6.1.0\",\n      \"events_count\": 3500\n    },\n    {\n      \"sdk_version\": \"6.3.0\",\n      \"events_count\": 900\n    },\n    {\n      \"sdk_version\": \"6.0.0\",\n      \"events_count\": 20\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "sdk-versions",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "sdk_version  events_count\n6.2.0        84000\n6.1.0        3500\n6.3.0        900\n6.0.0        20\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-activations",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"subscription_activations\": [\n    {\n      \"period\": \"2026-10-07\",\n      \"group_by\": null,\n      \"group_by_public_id\": null,\n      \"group_by_name\": null,\n      \"total_activations_count\": 894\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-activations",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "period      group_by  group_by_public_id  group_by_name  total_activations_count\n2026-10-07                                               894\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-evolution",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"subscription_evolution\": [\n    {\n      \"period\": \"2026-10-07\",\n      \"group_by\": null,\n      \"count\": 4346\n    },\n    {\n      \"period\": \"2026-10-08\",\n      \"group_by\": null,\n      \"count\": 4359\n    },\n    {\n      \"period\": \"2026-10-09\",\n      \"group_by\": null,\n      \"count\": 4379\n    },\n    {\n      \"period\": \"2026-10-10\",\n      \"group_by\": null,\n      \"count\": 4392\n    },\n    {\n      \"period\": \"2026-10-11\",\n      \"group_by\": null,\n      \"count\": 4389\n    },\n    {\n      \"period\": \"2026-10-12\",\n      \"group_by\": null,\n      \"count\": 4375\n    },\n    {\n      \"period\": \"2026-10-13\",\n      \"group_by\": null,\n      \"count\": 4362\n    },\n    {\n      \"period\": \"2026-10-14\",\n      \"group_by\": null,\n      \"count\": 4361\n    },\n    {\n      \"period\": \"2026-10-15\",\n      \"group_by\": null,\n      \"count\": 4374\n    },\n    {\n      \"period\": \"2026-10-16\",\n      \"group_by\": null,\n      \"count\": 4394\n    },\n    {\n      \"period\": \"2026-10-17\",\n      \"group_by\": null,\n      \"count\": 4406\n    },\n    {\n      \"period\": \"2026-10-18\",\n      \"group_by\": null,\n      \"count\": 4402\n    },\n    {\n      \"period\": \"2026-10-19\",\n      \"group_by\": null,\n      \"count\": 4388\n    },\n    {\n      \"period\": \"2026-10-20\",\n      \"group_by\": null,\n      \"count\": 4375\n    },\n    {\n      \"period\": \"2026-10-21\",\n      \"group_by\": null,\n      \"count\": 4375\n    },\n    {\n      \"period\": \"2026-10-22\",\n      \"group_by\": null,\n      \"count\": 4390\n    },\n    {\n      \"period\": \"2026-10-23\",\n      \"group_by\": null,\n      \"count\": 4409\n    },\n    {\n      \"period\": \"2026-10-24\",\n      \"group_by\": null,\n      \"count\": 4420\n    },\n    {\n      \"period\": \"2026-10-25\",\n      \"group_by\": null,\n      \"count\": 4415\n    },\n    {\n      \"period\": \"2026-10-26\",\n      \"group_by\": null,\n      \"count\": 4400\n    },\n    {\n      \"period\": \"2026-10-27\",\n      \"group_by\": null,\n      \"count\": 4388\n    },\n    {\n      \"period\": \"2026-10-28\",\n      \"group_by\": null,\n      \"count\": 4390\n    },\n    {\n      \"period\": \"2026-10-29\",\n      \"group_by\": null,\n      \"count\": 4406\n    },\n    {\n      \"period\": \"2026-10-30\",\n      \"group_by\": null,\n      \"count\": 4425\n    },\n    {\n      \"period\": \"2026-10-31\",\n      \"group_by\": null,\n      \"count\": 4434\n    },\n    {\n      \"period\": \"2026-11-01\",\n      \"group_by\": null,\n      \"count\": 4428\n    },\n    {\n      \"period\": \"2026-11-02\",\n      \"group_by\": null,\n      \"count\": 4413\n    },\n    {\n      \"period\": \"2026-11-03\",\n      \"group_by\": null,\n      \"count\": 4402\n    },\n    {\n      \"period\": \"2026-11-04\",\n      \"group_by\": null,\n      \"count\": 4405\n    },\n    {\n      \"period\": \"2026-11-05\",\n      \"group_by\": null,\n      \"count\": 4421\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-evolution",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "period      group_by  count\n2026-10-07            4346\n2026-10-08            4359\n2026-10-09            4379\n2026-10-10            4392\n2026-10-11            4389\n2026-10-12            4375\n2026-10-13            4362\n2026-10-14            4361\n2026-10-15            4374\n2026-10-16            4394\n2026-10-17            4406\n2026-10-18            4402\n2026-10-19            4388\n2026-10-20            4375\n2026-10-21            4375\n2026-10-22            4390\n2026-10-23            4409\n2026-10-24            4420\n2026-10-25            4415\n2026-10-26            4400\n2026-10-27            4388\n2026-10-28            4390\n2026-10-29            4406\n2026-10-30            4425\n2026-10-31            4434\n2026-11-01            4428\n2026-11-02            4413\n2026-11-03            4402\n2026-11-04            4405\n2026-11-05            4421\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-reactivations",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"subscription_reactivations\": [\n    {\n      \"period\": \"2026-10-07\",\n      \"group_by\": null,\n      \"group_by_public_id\": null,\n      \"group_by_name\": null,\n      \"total_reactivations_count\": 119\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "subscription-reactivations",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "period      group_by  group_by_public_id  group_by_name  total_reactivations_count\n2026-10-07                                               119\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "funnel",
+            "--dimension",
+            "platform",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"funnel\": {\n    \"data\": [\n      {\n        \"name\": \"IOS\",\n        \"results\": {\n          \"subscription_started_count\": 375,\n          \"subscription_terminated_count\": 45,\n          \"trial_started_count\": 180,\n          \"trial_converted_count\": 135,\n          \"trial_not_converted_count\": 45,\n          \"first_renewals_count\": 300\n        }\n      },\n      {\n        \"name\": \"ANDROID\",\n        \"results\": {\n          \"subscription_started_count\": 300,\n          \"subscription_terminated_count\": 36,\n          \"trial_started_count\": 144,\n          \"trial_converted_count\": 108,\n          \"trial_not_converted_count\": 36,\n          \"first_renewals_count\": 240\n        }\n      },\n      {\n        \"name\": \"STRIPE\",\n        \"results\": {\n          \"subscription_started_count\": 75,\n          \"subscription_terminated_count\": 9,\n          \"trial_started_count\": 36,\n          \"trial_converted_count\": 27,\n          \"trial_not_converted_count\": 9,\n          \"first_renewals_count\": 60\n        }\n      }\n    ]\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "funnel",
+            "--dimension",
+            "platform",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  [{\"name\":\"IOS\",\"results\":{\"subscription_started_count\":375,\"subscription_terminated_count\":45,\"trial_started_co...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "flow-paths",
+            "--flow-id",
+            "flow_demo",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"flow_paths\": {\n    \"data\": {\n      \"steps\": [\n        {\n          \"screen_id\": \"pres_demo_onboarding\",\n          \"views\": 700,\n          \"next\": [\n            {\n              \"screen_id\": \"pres_demo_upsell\",\n              \"count\": 260\n            }\n          ]\n        },\n        {\n          \"screen_id\": \"pres_demo_upsell\",\n          \"views\": 260,\n          \"next\": []\n        }\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "flow-paths",
+            "--flow-id",
+            "flow_demo",
+            "--app",
+            "app_demo",
+            "--date-range",
+            "2026-10-07,2026-11-05",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "key   value\ndata  {\"steps\":[{\"screen_id\":\"pres_demo_onboarding\",\"views\":700,\"next\":[{\"screen_id\":\"pres_demo_upsell\",\"count\":260}]...\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P10"
+    },
+    {
+      "test": "demo::demo mode > an unknown read is a 404 that says demo mode has no data for it",
+      "steps": [
+        {
+          "argv": [
+            "audiences",
+            "list",
+            "--app",
+            "app_demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Demo mode (PURCHASELY_DEMO=1) has no sample data for GET /management/v1/applications/{application_id}/audiences. The sample app is app_demo. Run `purchasely demo` for the commands to try.\"],\"status\":404}}\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_real"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Demo mode (PURCHASELY_DEMO=1) has no sample data for GET /management/v1/applications/{application_id}/placements. The sample app is app_demo. Run `purchasely demo` for the commands to try.\"],\"status\":404}}\n"
+        }
+      ],
+      "pending": "P6b"
+    },
+    {
+      "test": "demo::demo mode > refuses a write with exit 10 and sends nothing; --dry-run and --plan still work",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_demo",
+            "--id",
+            "plc_demo_home",
+            "--data",
+            "{\"name\":\"x\"}",
+            "--env",
+            "staging"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "",
+          "err": "purchasely env=staging surface=management identity=- key=- demo=on (sample data, not real)\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Demo mode (PURCHASELY_DEMO=1) never sends a write, so the CLI sent nothing. --dry-run and --plan still show the request.\"]}}\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_demo",
+            "--id",
+            "plc_demo_home",
+            "--data",
+            "{\"name\":\"x\"}",
+            "--env",
+            "staging",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"method\": \"PATCH\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements update; script)\",\n    \"Content-Type\": \"application/json\"\n  },\n  \"body\": {\n    \"name\": \"x\"\n  }\n}\n",
+          "err": "purchasely env=staging surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "app_demo",
+            "--id",
+            "plc_demo_home",
+            "--data",
+            "{\"name\":\"x\"}",
+            "--env",
+            "staging",
+            "--plan",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-k8WgNi/plan.json"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"staging\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"x\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202273746167696e67222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692d73746167696e672e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f64656d6f2f706c6163656d656e74732f706c635f64656d6f5f686f6d65222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22785c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-k8WgNi/plan.json\",\n  \"number\": 1,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\",\n  \"body\": {\n    \"name\": \"x\"\n  }\n}\n",
+          "err": "purchasely env=staging surface=management identity=- key=- demo=on (sample data, not real)\n"
+        },
+        {
+          "argv": [
+            "apply",
+            "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-k8WgNi/plan.json",
+            "--yes"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"staging\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"x\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202273746167696e67222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692d73746167696e672e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f64656d6f2f706c6163656d656e74732f706c635f64656d6f5f686f6d65222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22785c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "plan.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\n  \"version\": 1,\n  \"requests\": [\n    {\n      \"command\": \"placements-update\",\n      \"env\": \"staging\",\n      \"method\": \"PATCH\",\n      \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\",\n      \"pathTemplate\": \"/management/v1/applications/{application_id}/placements/{id}\",\n      \"body\": \"{\\\"name\\\":\\\"x\\\"}\"\n    }\n  ]\n}\n",
+                "hex": "7b0a20202276657273696f6e223a20312c0a2020227265717565737473223a205b0a202020207b0a20202020202022636f6d6d616e64223a2022706c6163656d656e74732d757064617465222c0a20202020202022656e76223a202273746167696e67222c0a202020202020226d6574686f64223a20225041544348222c0a2020202020202275726c223a202268747470733a2f2f6170692d73746167696e672e70757263686173656c792e696f2f6d616e6167656d656e742f76312f6170706c69636174696f6e732f6170705f64656d6f2f706c6163656d656e74732f706c635f64656d6f5f686f6d65222c0a202020202020227061746854656d706c617465223a20222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c0a20202020202022626f6479223a20227b5c226e616d655c223a5c22785c227d220a202020207d0a20205d0a7d0a"
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 10,
+          "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-update\",\n    \"error\": {\n      \"code\": \"REFUSED\",\n      \"messages\": [\n        \"Demo mode (PURCHASELY_DEMO=1) never sends a write, so the CLI sent nothing. --dry-run and --plan still show the request.\"\n      ]\n    }\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n#1 staging PATCH https://api-staging.purchasely.io/management/v1/applications/app_demo/placements/plc_demo_home\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Demo mode (PURCHASELY_DEMO=1) never sends a write, so the CLI sent nothing. --dry-run and --plan still show the request.\"]}}\n"
+        }
+      ],
+      "pending": "P6b"
+    },
+    {
+      "test": "demo::demo mode > doctor reports demo mode instead of a missing key",
+      "steps": [
+        {
+          "argv": [
+            "doctor"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_DEMO": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"checks\": [\n    {\n      \"check\": \"node\",\n      \"status\": \"ok\",\n      \"detail\": \"Node 26.10.0\"\n    },\n    {\n      \"check\": \"install\",\n      \"status\": \"ok\",\n      \"detail\": \"npm install, automatic update off\"\n    },\n    {\n      \"check\": \"version\",\n      \"status\": \"warn\",\n      \"detail\": \"9.9.9. PURCHASELY_DEMO=1 is set: no check of the latest version\"\n    },\n    {\n      \"check\": \"key\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode (PURCHASELY_DEMO=1): no key needed. The data is built-in sample data, not real\"\n    },\n    {\n      \"check\": \"api\",\n      \"status\": \"ok\",\n      \"detail\": \"Not checked: demo mode sends no request\"\n    },\n    {\n      \"check\": \"ai plugin\",\n      \"status\": \"warn\",\n      \"detail\": \"Not installed with the CLI. Run `purchasely ai install`\"\n    },\n    {\n      \"check\": \"writes\",\n      \"status\": \"ok\",\n      \"detail\": \"Demo mode: every write is refused\"\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n"
+        }
+      ],
+      "pending": "P5b"
+    },
+    {
+      "test": "demo::purchasely demo > prints how to start, as JSON, with no key and no header line",
+      "steps": [
+        {
+          "argv": [
+            "demo"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"demo\": \"Demo mode answers every read from the sample data of one fictional app (app_demo). No key, no request. The data is not real. A write exits 10.\",\n  \"start\": \"export PURCHASELY_DEMO=1\",\n  \"app\": \"app_demo\",\n  \"try\": [\n    \"purchasely applications list\",\n    \"purchasely placements list --app app_demo\",\n    \"purchasely dashboard summary --app app_demo --output table\"\n  ],\n  \"stop\": \"unset PURCHASELY_DEMO\"\n}\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "demo::purchasely demo > is the first search result for a test with no key",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "try the cli with sample data, no key"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 50077,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely demo\",\n    \"summary\": \"Try the CLI with no key: sample data of a fictional app, for a first test\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely purge\",\n    \"summary\": \"Delete the cached client data\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely doctor\",\n    \"summary\": \"Check the install, the key, the network and the version\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely dashboard summary --app app_xxx --output table\",\n    \"summary\": \"Analytics dashboard of an app: key metrics with trend charts\",\n    \"method\": \"GET\",\n    \"path\": \"-\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-today --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Today's key figures\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_today\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard mau-reports --app app_xxx\",\n    \"summary\": \"Monthly active users\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/mau_reports\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a custom event property\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:create\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a custom event property\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties/{id}\",\n    \"scope\": \"setup.custom_events:edit\"\n  },\n  {\n    \"command\": \"purchasely custom-properties create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a custom property\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:create\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ],
+      "pending": "P7a"
+    }
+  ]
+}

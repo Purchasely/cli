@@ -186,6 +186,20 @@ mod tests {
     use super::*;
     use std::{net::TcpListener, thread};
 
+    #[test]
+    fn net_error_carries_the_node_cause_code() {
+        assert_eq!(
+            net_error(ureq::Error::HostNotFound).code.as_deref(),
+            Some("ENOTFOUND")
+        );
+        let refused = io::Error::from(io::ErrorKind::ConnectionRefused);
+        assert_eq!(
+            net_error(ureq::Error::Io(refused)).code.as_deref(),
+            Some("ECONNREFUSED")
+        );
+        assert_eq!(net_error(ureq::Error::ConnectionFailed).code, None);
+    }
+
     fn server(response: Vec<u8>, delay: Duration) -> String {
         server_requests(response, delay, 1)
     }

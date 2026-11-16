@@ -37,7 +37,10 @@ pub struct ExecOpts;
 #[derive(Clone, Debug, Default)]
 pub struct ExecResult;
 #[derive(Clone, Debug, Default)]
-pub enum ExecError { #[default] NotFound }
+pub enum ExecError {
+    #[default]
+    NotFound,
+}
 pub trait Keychain {}
 pub trait Io {}
 
@@ -80,28 +83,56 @@ mod tests {
 
     struct TrivialHost;
     impl Host for TrivialHost {
-        fn fetch(&self, _: Request) -> Result<Response, NetError> { Ok(Response::default()) }
-        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> { Ok(ExecResult) }
-        fn prompt(&self, _: &str, _: bool) -> String { String::new() }
-        fn read_stdin(&self) -> String { String::new() }
-        fn now(&self) -> i64 { 0 }
-        fn wall_now(&self) -> i64 { 0 }
-        fn pid_alive(&self, _: u32) -> bool { false }
+        fn fetch(&self, _: Request) -> Result<Response, NetError> {
+            Ok(Response::default())
+        }
+        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            Ok(ExecResult)
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            0
+        }
+        fn wall_now(&self) -> i64 {
+            0
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            false
+        }
         fn sleep(&self, _: i64) {}
         fn stdout(&self, _: &str) {}
         fn stderr(&self, _: &str) {}
-        fn keychain(&self) -> Option<&dyn Keychain> { None }
-        fn io(&self) -> Option<&dyn Io> { None }
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
     }
 
     #[test]
     fn builds_deps() {
         let deps = Deps {
-            host: Box::new(TrivialHost), env: BTreeMap::new(), is_tty: false,
-            config_dir: PathBuf::new(), state_dir: PathBuf::new(), cache_dir: PathBuf::new(),
-            version: "0.7.2".into(), pid: 1, name: "purchasely".into(),
-            host_url: "https://cli.purchasely.io".into(), ext: None,
-            self_exe: PathBuf::new(), platform: "linux", stdout_tty: false, columns: None,
+            host: Box::new(TrivialHost),
+            env: BTreeMap::new(),
+            is_tty: false,
+            config_dir: PathBuf::new(),
+            state_dir: PathBuf::new(),
+            cache_dir: PathBuf::new(),
+            version: "0.7.2".into(),
+            pid: 1,
+            name: "purchasely".into(),
+            host_url: "https://cli.purchasely.io".into(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
         };
         assert_eq!(deps.name, "purchasely");
         assert_eq!(deps.host.now(), 0);

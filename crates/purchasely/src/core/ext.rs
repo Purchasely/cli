@@ -1,4 +1,7 @@
-use crate::{cli::Command, core::{deps::Deps, runtime::Runtime}};
+use crate::{
+    cli::Command,
+    core::{deps::Deps, runtime::Runtime},
+};
 
 pub struct Program {
     pub name: &'static str,
@@ -6,6 +9,8 @@ pub struct Program {
     pub host: &'static str,
     pub ext: Option<Extension>,
 }
+pub type LatestFn = fn(&Deps) -> Result<Option<String>, CliError>;
+
 pub struct Extension {
     pub modules: Vec<Register>,
     pub surface: &'static str,
@@ -13,7 +18,7 @@ pub struct Extension {
     pub surface_defs: Vec<SurfaceDef>,
     pub identity: bool,
     pub section: (&'static str, &'static str),
-    pub latest: Option<fn(&Deps) -> Result<Option<String>, CliError>>,
+    pub latest: Option<LatestFn>,
     pub npm_update: Option<&'static str>,
 }
 pub type Register = fn(&mut Command, &Runtime);

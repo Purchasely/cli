@@ -8,7 +8,6 @@ use crate::{
         runtime::{Runtime, add_globals},
     },
 };
-use std::collections::BTreeSet;
 
 const STOP: &[&str] = &[
     "the", "a", "an", "of", "to", "for", "in", "on", "and", "or", "my", "all", "me", "with", "by",
@@ -94,6 +93,18 @@ fn score(query: &[String], e: &Item) -> usize {
         })
         .sum()
 }
+fn item_from_entry(entry: &crate::core::runtime::SearchEntry) -> Item {
+    Item {
+        command: entry.command.clone(),
+        resource: entry.resource.clone(),
+        action: entry.action.clone(),
+        summary: entry.summary.clone(),
+        description: entry.description.clone(),
+        method: entry.method.clone(),
+        path: entry.path.clone(),
+        scope: entry.scope.clone(),
+    }
+}
 pub fn search_tree(root: &Command, query: &str, limit: usize) -> Vec<Match> {
     let mut items = Vec::new();
     for c in root.commands.iter().filter(|c| !c.hidden) {
@@ -149,7 +160,6 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
         .push(OptionDef::value("--limit <n>", "number of results").default("10"));
     command=command.after_help(format!("\nPrints a JSON array, best match first. It needs no credential.\nExample:\n  {} search \"list the placements of an app\"\n",rt.d.name));
     program.commands.push(command);
-    let snapshot = program.clone();
     let leaf = program
         .commands
         .iter_mut()
@@ -164,116 +174,41 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
             .filter(|n| *n > 0)
             .ok_or_else(|| usage("--limit must be a positive integer."))?;
         let task = p.arguments.first().map(String::as_str).unwrap_or("");
-        let found = search_tree(&snapshot, task, usize::MAX);
-        // API search entries use the same generated flags and operation metadata as help.
-        let (_, ops) = crate::management::spec::embedded_spec();
-        let generated = crate::management::spec::derive_commands(&ops);
-        let mut candidates: Vec<Item> = found
-            .into_iter()
-            .map(|m| {
-                let resource = m.command.split_whitespace().nth(1).unwrap_or("").to_owned();
-                let action = m
-                    .command
-                    .split_whitespace()
-                    .skip(2)
-                    .collect::<Vec<_>>()
-                    .join(" ");
-                Item {
+        let mut candidates: Vec<Item> = rt.search_index.iter().map(item_from_entry).collect();
+        let indexed: std::collections::BTreeSet<_> = rt
+            .search_index
+            .iter()
+            .map(|entry| (entry.resource.clone(), entry.action.clone()))
+            .collect();
+        if let Some(tree) = rt.command_tree.as_ref() {
+            let mut live = Vec::new();
+            for child in tree.commands.iter().filter(|child| !child.hidden) {
+                walk(child, &mut vec![child.name.clone()], &rt.d.name, &mut live);
+            }
+            candidates.extend(live.into_iter().filter(|entry| {
+                !indexed.contains(&(entry.resource.clone(), entry.action.clone()))
+            }));
+        }
+        for provider in &rt.search_extra {
+            candidates.extend(provider(rt).iter().map(item_from_entry));
+        }
+        let q = tokens(task);
+        candidates.retain(|m| score(&q, m) > 0);
+        candidates.sort_by_key(|left| std::cmp::Reverse(score(&q, left)));
+        candidates.truncate(limit);
+        let env = p.opt("env").unwrap_or("prod").to_owned();
+        let value = result_value(
+            candidates
+                .into_iter()
+                .map(|m| Match {
                     command: m.command,
-                    resource,
-                    action,
-                    summary: m.summary.clone(),
-                    description: m.summary,
+                    summary: m.summary,
                     method: m.method,
                     path: m.path,
                     scope: m.scope,
-                }
-            })
-            .collect();
-        // These commands register after search, but the TypeScript command walk runs at search time.
-        for (command, summary) in [
-            ("purge", "Delete the cached client data"),
-            (
-                "doctor",
-                "Check the install, the key, the network and the version",
-            ),
-        ] {
-            let full_command = format!("{} {command}", rt.d.name);
-            if candidates.iter().any(|item| item.command == full_command) {
-                continue;
-            }
-            candidates.push(Item {
-                command: full_command,
-                resource: command.into(),
-                action: String::new(),
-                summary: summary.into(),
-                description: summary.into(),
-                method: "-".into(),
-                path: "-".into(),
-                scope: "cli".into(),
-            });
-        }
-        let existing: BTreeSet<_> = candidates.iter().map(|m| m.command.clone()).collect();
-        let taken: BTreeSet<_> = rt.taken.iter().cloned().collect();
-
-        // The summary command is handwritten and carries its own index entry in the TS runtime.
-        if taken.contains("dashboard summary") {
-            candidates.push(Item {
-                command: format!("{} dashboard summary --app app_xxx --output table", rt.d.name),
-                resource: "dashboard".into(),
-                action: "summary".into(),
-                summary: "Analytics dashboard of an app: key metrics with trend charts".into(),
-                description: "Dashboard of one app in the terminal: MRR, active subscriptions, paywall unique viewers and conversions over the last days, with a sparkline chart per metric (--output table). Overview of revenue, subscriptions, conversion and stats".into(),
-                method: "GET".into(),
-                path: "-".into(),
-                scope: "analytics.dashboards:view".into(),
-            });
-        }
-        for g in generated {
-            let command = crate::management::help::usage_string(&g, &rt.d.name);
-            if existing.contains(&command) {
-                continue;
-            }
-            let op = g.app_op.as_ref().or(g.global_op.as_ref());
-            let Some(op) = op else { continue };
-            candidates.push(Item {
-                command,
-                resource: g.resource,
-                action: g.action,
-                summary: g.summary,
-                description: op.description.clone(),
-                method: op.method.clone(),
-                path: op.path.clone(),
-                scope: op.scope.clone(),
-            });
-        }
-        let demo = "Try the CLI with no key: sample data of a fictional app, for a first test";
-        candidates.push(Item {
-            command: format!("{} demo", rt.d.name),
-            resource: "demo".into(),
-            action: String::new(),
-            summary: demo.into(),
-            description: demo.into(),
-            method: "-".into(),
-            path: "-".into(),
-            scope: "cli".into(),
-        });
-        let q = tokens(task);
-        candidates.retain(|m| score(&q, m) > 0);
-        candidates.sort_by(|left, right| {
-            score(&q, right)
-                .cmp(&score(&q, left))
-                .then_with(|| (left.scope == "cli").cmp(&(right.scope == "cli")))
-        });
-        candidates.truncate(limit);
-        let env = p.opt("env").unwrap_or("prod").to_owned();
-        let value = result_value(candidates.into_iter().map(|m| Match {
-            command: m.command,
-            summary: m.summary,
-            method: m.method,
-            path: m.path,
-            scope: m.scope,
-        }).collect());
+                })
+                .collect(),
+        );
         output::emit(
             &rt.d,
             &value,

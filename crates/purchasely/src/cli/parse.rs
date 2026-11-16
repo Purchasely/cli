@@ -15,6 +15,20 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         if !literal && (arg == "-h" || arg == "--help") {
             return Err(CliError(format!("HELP:{}", command.name)));
         }
+        if !literal && arg == "help" && command.help_command {
+            let mut node = command;
+            for name in argv.iter().skip(i + 1) {
+                let Some(sub) = node
+                    .commands
+                    .iter()
+                    .find(|c| c.name == *name || c.aliases.contains(name))
+                else {
+                    return Err(CliError(format!("error: unknown command '{}'", name)));
+                };
+                node = sub;
+            }
+            return Err(CliError(format!("HELP:{}", node.name)));
+        }
         if !literal && (arg == "-V" || arg == "--version") && command.version.is_some() {
             return Err(CliError(command.version.clone().unwrap()));
         }
@@ -172,5 +186,14 @@ mod tests {
                 .0
                 .contains("Allowed choices")
         );
+    }
+
+    #[test]
+    fn help_command_routes_to_nested_command() {
+        let command = Command::new("dashboard")
+            .help_command(true)
+            .command(Command::new("summary"));
+        let parsed = parse(&command, &["help".into(), "summary".into()]).unwrap_err();
+        assert_eq!(parsed.0, "HELP:summary");
     }
 }

@@ -14,14 +14,16 @@ fn collect(root: &Command, rt: &Runtime) -> Reference {
     for top in root.commands.iter().filter(|c| !c.hidden) {
         let mut leaves = Vec::new();
         collect_leaves(top, vec![top.name.clone()], root.name.as_str(), &mut leaves);
+        leaves.sort_by_key(|left| left.path.join(" "));
         groups.push(Group {
             name: top.name.clone(),
             id: format!("g-{}", top.name),
             description: top.description.clone(),
-            extension: false,
+            extension: rt.extension_top.contains(&top.name),
             leaves,
         });
     }
+    groups.sort_by(|left, right| left.name.cmp(&right.name));
     Reference {
         name: rt.d.name.clone(),
         version: rt.d.version.clone(),
@@ -36,9 +38,36 @@ fn collect(root: &Command, rt: &Runtime) -> Reference {
             .map(|e| (e.section.0.into(), e.section.1.into())),
     }
 }
+fn completed_tree(rt: &mut Runtime) -> Command {
+    let mut root = rt
+        .command_tree
+        .clone()
+        .expect("the command tree is finalized before dispatch");
+    let Some(modules) = rt.d.ext.as_ref().map(|extension| extension.modules.clone()) else {
+        return root;
+    };
+    let before: std::collections::BTreeSet<_> =
+        root.commands.iter().map(|c| c.name.clone()).collect();
+    let taken = rt.taken.clone();
+    let search_index = rt.search_index.clone();
+    let search_extra = rt.search_extra.clone();
+    for register in modules {
+        register(&mut root, rt);
+    }
+    rt.extension_top = root
+        .commands
+        .iter()
+        .filter(|command| !before.contains(&command.name))
+        .map(|command| command.name.clone())
+        .collect();
+    rt.taken = taken;
+    rt.search_index = search_index;
+    rt.search_extra = search_extra;
+    root
+}
 fn collect_leaves(node: &Command, path: Vec<String>, root_name: &str, out: &mut Vec<Leaf>) {
     let mut ancestors = vec![root_name.to_owned()];
-    ancestors.extend(path.iter().cloned());
+    ancestors.extend(path.iter().take(path.len().saturating_sub(1)).cloned());
     let help_text = help::help(
         node,
         &ancestors.iter().map(String::as_str).collect::<Vec<_>>(),
@@ -72,7 +101,6 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
                 .default("markdown"),
         );
     program.commands.push(cmd);
-    let snapshot = program.clone();
     let leaf = program
         .commands
         .iter_mut()
@@ -84,12 +112,17 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
         if !["markdown", "man", "html", "json"].contains(&format) {
             return Err(usage("--format must be markdown, man, html or json."));
         }
+        let tree = completed_tree(rt);
         let text = if format == "json" {
-            crate::core::json::stringify_pretty(&reference::json(&snapshot))
-                .unwrap_or_else(|_| "{}".into())
+            crate::core::json::stringify_pretty(&reference::json(
+                &tree,
+                &rt.extension_top,
+                rt.d.ext.is_some(),
+            ))
+            .unwrap_or_else(|_| "{}".into())
                 + "\n"
         } else {
-            let r = collect(&snapshot, rt);
+            let r = collect(&tree, rt);
             match format {
                 "man" => reference::man(&r, &format_date(rt.d.host.now())),
                 "html" => reference_html::html(&r),

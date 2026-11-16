@@ -65,7 +65,7 @@ pub fn help(command: &Command, ancestors: &[&str], width: usize) -> String {
         "Arguments:",
         arguments
             .iter()
-            .map(|a| format_item(&arg_name(a), term_width, &a.description, width))
+            .map(|a| format_item(&arg_name(a), term_width, &argument_description(a), width))
             .collect(),
     );
     list(
@@ -85,6 +85,9 @@ pub fn help(command: &Command, ancestors: &[&str], width: usize) -> String {
     let mut out = output.join("\n");
     if !command.after_help.is_empty() {
         out.push_str(&command.after_help);
+        out.push('\n');
+    }
+    if !out.ends_with('\n') {
         out.push('\n');
     }
     out
@@ -131,7 +134,11 @@ fn option_description(o: &OptionDef) -> String {
         extra.push(format!("choices: {}", choices.join(", ")));
     }
     if let Some(default) = o.default.as_ref().filter(|_| !o.boolean) {
-        extra.push(format!("default: {default:?}"));
+        if default == "[]" {
+            extra.push("default: []".to_owned());
+        } else {
+            extra.push(format!("default: {default:?}"));
+        }
     }
     match (extra.is_empty(), o.description.is_empty()) {
         (true, _) => o.description.clone(),
@@ -162,6 +169,23 @@ fn arg_name(a: &Argument) -> String {
         .trim_matches(['<', '>', '[', ']'])
         .trim_end_matches("...")
         .to_owned()
+}
+
+fn argument_description(argument: &Argument) -> String {
+    if argument.choices.is_empty() {
+        argument.description.clone()
+    } else {
+        format!(
+            "{} (choices: {})",
+            argument.description,
+            argument
+                .choices
+                .iter()
+                .map(|choice| format!("{choice:?}"))
+                .collect::<Vec<_>>()
+                .join(", ")
+        )
+    }
 }
 
 fn format_item(term: &str, term_width: usize, description: &str, width: usize) -> String {

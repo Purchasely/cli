@@ -172,6 +172,11 @@ pub fn parse_spec_doc(source: &str) -> Result<(String, Vec<Op>), String> {
             });
         }
     }
+    ops.sort_by_key(|op| {
+        source
+            .find(&format!("\"{}\"", op.path))
+            .unwrap_or(usize::MAX)
+    });
     Ok((base, ops))
 }
 

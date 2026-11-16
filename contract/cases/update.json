@@ -2677,7 +2677,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 95843,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2778,7 +2778,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 95843,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2829,7 +2829,7 @@
                 "/r",
                 "--upgrade-only",
                 "--log",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-yqapPn/state/update.purchasely.log"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-RhDYoJ/state/update.purchasely.log"
               ],
               "opts": {
                 "timeoutMs": 600000
@@ -2847,8 +2847,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "update::public channel > spawns the running bundle",

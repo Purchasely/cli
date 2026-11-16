@@ -674,6 +674,16 @@ fn api_error(response: &http::HttpResponse) -> CliError {
 
 pub fn register(program: &mut Command, rt: &mut Runtime) {
     rt.taken.insert("dashboard summary".into());
+    rt.search_index.push(runtime::SearchEntry {
+        command: format!("{} dashboard summary --app app_xxx --output table", rt.d.name),
+        resource: "dashboard".into(),
+        action: "summary".into(),
+        summary: "Analytics dashboard of an app: key metrics with trend charts".into(),
+        description: "Dashboard of one app in the terminal: MRR, active subscriptions, paywall unique viewers and conversions over the last days, with a sparkline chart per metric (--output table). Overview of revenue, subscriptions, conversion and stats".into(),
+        method: "GET".into(),
+        path: "-".into(),
+        scope: "analytics.dashboards:view".into(),
+    });
     let mut group = runtime::group(program, "dashboard").clone().description(
         "Analytics dashboards. Start with: dashboard summary --app <app_id> --output table",
     );
@@ -686,11 +696,22 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
         "\nWithout a subcommand, an interactive terminal shows a menu of the dashboards, then runs the chosen one for the last 30 days, as a table.\nThe menu leaves out the dashboards that need another flag (funnel, flow-paths): run them by name.\nWith --output json, or without a terminal, it prints the list of all the dashboards as JSON, with their required flags, and sends no request.\n\nExample:\n  {} dashboard --output json | jq -r '.[].command'\n",
         rt.d.name
     ));
-    let mut summary_command = Command::new("summary")
-        .description("Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts")
-        .option(crate::cli::OptionDef::value("--app <app_id>", "application public id (required)"))
-        .option(crate::cli::OptionDef::value("--days <n>", "number of days up to today, from 2 to 730").default("30"));
+    let mut summary_command = Command::new("summary").description(
+        "Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts",
+    );
     runtime::add_globals(&mut summary_command);
+    summary_command.options.push(crate::cli::OptionDef::value(
+        "--app <app_id>",
+        "application public id (required)",
+    ));
+    summary_command.options.push(
+        crate::cli::OptionDef::value("--days <n>", "number of days up to today, from 2 to 730")
+            .default("30"),
+    );
+    summary_command = summary_command.after_help(format!(
+        "\nShows the MRR, the active subscriptions, the paywall unique viewers and the conversions of one app.\nThe default output is JSON. --output table draws one line per metric with a sparkline.\nMRR is today's value, in the dashboard currency of the app. Active subscriptions is the current base.\nViewers and conversions are the total of the range.\nIt sends 3 requests (4 when --days is above 60).\n\nExample:\n  {} dashboard summary --app app_xxx --output table\n  {} dashboard summary --app app_xxx --days 90 --output table\n",
+        rt.d.name, rt.d.name
+    ));
     group
         .commands
         .push(summary_command.action(|p, rt| summary(rt, p)));

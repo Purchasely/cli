@@ -52,6 +52,39 @@ pub struct Opt {
 }
 
 pub fn tree(command: &Command) -> Node {
+    let mut options = command
+        .options
+        .iter()
+        .filter(|o| !o.hidden && o.long() != "--help")
+        .map(|o| Opt {
+            flags: o.flags.clone(),
+            long: o
+                .flags
+                .split(',')
+                .map(str::trim)
+                .find(|f| f.starts_with("--"))
+                .map(|f| f.split_whitespace().next().unwrap_or("").to_owned()),
+            description: o.description.clone(),
+            required: o.required,
+            default: if o.long() == "--query" && o.repeat {
+                Some(Value::Array(Vec::new()))
+            } else {
+                o.default.as_ref().map(|d| Value::from(d.clone()))
+            },
+        })
+        .collect::<Vec<_>>();
+    if command.version.is_some() {
+        options.insert(
+            0,
+            Opt {
+                flags: "-V, --version".into(),
+                long: Some("--version".into()),
+                description: "output the version number".into(),
+                required: false,
+                default: None,
+            },
+        );
+    }
     Node {
         name: command.name.clone(),
         description: command.description.clone(),
@@ -69,23 +102,7 @@ pub fn tree(command: &Command) -> Node {
                 variadic: a.variadic,
             })
             .collect(),
-        options: command
-            .options
-            .iter()
-            .filter(|o| !o.hidden && o.long() != "--help")
-            .map(|o| Opt {
-                flags: o.flags.clone(),
-                long: o
-                    .flags
-                    .split(',')
-                    .map(str::trim)
-                    .find(|f| f.starts_with("--"))
-                    .map(|f| f.split_whitespace().next().unwrap_or("").to_owned()),
-                description: o.description.clone(),
-                required: o.required,
-                default: o.default.as_ref().map(|d| Value::from(d.clone())),
-            })
-            .collect(),
+        options,
         commands: command
             .commands
             .iter()
@@ -141,9 +158,34 @@ fn node_value(n: &Node) -> Value {
     ])
 }
 
-pub fn json(root: &Command) -> Value {
+pub fn json(
+    root: &Command,
+    extension_top: &std::collections::BTreeSet<String>,
+    has_extension: bool,
+) -> Value {
     let mut v = node_value(&tree(root));
     if let Value::Object(fields) = &mut v {
+        if has_extension
+            && let Some((_, Value::Array(commands))) =
+                fields.iter_mut().find(|(name, _)| name == "commands")
+        {
+            for command in commands {
+                let name = if let Value::Object(values) = command {
+                    values
+                        .iter()
+                        .find(|(key, _)| key == "name")
+                        .and_then(|(_, value)| value.as_str())
+                } else {
+                    None
+                };
+                if let Value::Object(values) = command {
+                    values.push((
+                        "extension".into(),
+                        Value::Bool(name.is_some_and(|n| extension_top.contains(&n))),
+                    ));
+                }
+            }
+        }
         fields.push((
             "version".into(),
             Value::from(root.version.clone().unwrap_or_default()),
@@ -271,7 +313,11 @@ mod tests {
     }
     #[test]
     fn json_renders_tree_names_and_descriptions() {
-        let s = crate::core::json::stringify(&json(&small_tree()), None).unwrap();
+        let s = crate::core::json::stringify(
+            &json(&small_tree(), &std::collections::BTreeSet::new(), false),
+            None,
+        )
+        .unwrap();
         for n in ["purchasely", "apps", "list", "get"] {
             assert!(s.contains(&format!("\"name\":\"{n}\"")));
         }

@@ -96,6 +96,7 @@ impl Command {
 pub struct Argument {
     pub syntax: String,
     pub description: String,
+    pub choices: Vec<String>,
     pub required: bool,
     pub variadic: bool,
 }
@@ -104,6 +105,7 @@ impl Argument {
         Self {
             syntax: s.into(),
             description: d.into(),
+            choices: Vec::new(),
             required: true,
             variadic: false,
         }
@@ -112,12 +114,17 @@ impl Argument {
         Self {
             syntax: s.into(),
             description: d.into(),
+            choices: Vec::new(),
             required: false,
             variadic: false,
         }
     }
     pub fn variadic(mut self) -> Self {
         self.variadic = true;
+        self
+    }
+    pub fn choices(mut self, values: &[&str]) -> Self {
+        self.choices = values.iter().map(|value| (*value).to_owned()).collect();
         self
     }
 }

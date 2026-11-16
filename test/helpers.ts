@@ -18,7 +18,10 @@ if (contractRecordDir) {
     const destination = join(contractRecordDir, `${stem}.json`);
     const existing = exists(destination) ? JSON.parse(readFileSync(destination, "utf8")) as { cases?: unknown[] } : { cases: [] };
     const cases = existing.cases ?? [];
-    cases.push({ test: `${stem}::${state.currentTestName ?? "unknown"}`, steps: recordedSteps.splice(0) });
+    const recorded = { test: `${stem}::${state.currentTestName ?? "unknown"}`, steps: recordedSteps.splice(0) };
+    const old = cases.findIndex((item) => (item as { test?: string }).test === recorded.test);
+    if (old === -1) cases.push(recorded);
+    else cases[old] = recorded;
     writeFileSync(destination, `${JSON.stringify({ cases }, null, 2)}\n`);
   });
 }
@@ -143,11 +146,29 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       try {
         const response = await original.fetch(input, init);
         const clone = response.clone();
-        const text = await clone.text();
-        fetchCalls.push({ ...call, reply: { status: response.status, headers: Object.fromEntries(response.headers), text } });
+        const binary = call.url.includes("/tar.gz/");
+        if (binary) {
+          const bytes = new Uint8Array(await clone.arrayBuffer());
+          // The gzip header timestamp comes from tar(1)'s source file mtime and is not part of the fixture.
+          if (bytes.length >= 8 && bytes[0] === 0x1f && bytes[1] === 0x8b) bytes.fill(0, 4, 8);
+          const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+          fetchCalls.push({ ...call, reply: { status: response.status, headers: Object.fromEntries(response.headers), hex } });
+        } else {
+          const text = await clone.text();
+          fetchCalls.push({ ...call, reply: { status: response.status, headers: Object.fromEntries(response.headers), text } });
+        }
         return response;
       } catch (error) {
-        fetchCalls.push({ ...call, reply: { error: error instanceof Error ? error.message : String(error) } });
+        const causeCode = error && typeof error === "object" && "cause" in error
+          ? (error as { cause?: { code?: unknown } }).cause?.code
+          : undefined;
+        fetchCalls.push({
+          ...call,
+          reply: {
+            error: typeof causeCode === "string" ? causeCode : error instanceof Error ? error.message : String(error),
+            ...(typeof causeCode === "string" ? { code: causeCode } : {}),
+          },
+        });
         throw error;
       }
     }) as typeof d.fetch;

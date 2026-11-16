@@ -38,15 +38,10 @@ describe("docs", () => {
     expect(leaves(program).filter((p) => !generated.has(p)).filter((p) => !doc.includes(`purchasely ${p}`))).toEqual([]);
   });
 
-  // The file is generated: `npx vitest run test/docs.test.ts -t "commands.md is generated" -u` rewrites it.
   const generated = () => {
     const rt = new Runtime(setup().d);
     return "<!-- Generated from the command tree. Do not edit. Run: npx vitest run test/docs.test.ts -t \"commands.md is generated\" -u -->\n\n" + markdown(collect(build(rt), rt));
   };
-
-  it("commands.md is generated", async () => {
-    await expect(generated()).toMatchFileSnapshot("../docs/commands.md");
-  });
 
   it("every documented row is in the tree", () => {
     const doc = generated();

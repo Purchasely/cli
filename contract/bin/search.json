@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "test": "search::placements",
+      "argv": [
+        "search",
+        "list placements",
+        "--limit",
+        "10"
+      ],
+      "env": {},
+      "stdin": "",
+      "code": 0,
+      "out": "[\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a placement\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements get --app app_xxx --id <id>\",\n    \"summary\": \"Get a placement\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a placement\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:delete\"\n  },\n  {\n    \"command\": \"purchasely placements delete-audience --app app_xxx --id <id> --audience-id <audience-id> --env prod\",\n    \"summary\": \"Remove an audience from a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences/{audience_id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements duplicate --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Duplicate a placement's targeting\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/duplicate\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default placement\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/make_default\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  }\n]\n",
+      "err": "purchasely env=prod surface=management identity=- key=-\n"
+    },
+    {
+      "test": "search::dashboard",
+      "argv": [
+        "search",
+        "dashboard metrics",
+        "--limit",
+        "10"
+      ],
+      "env": {},
+      "stdin": "",
+      "code": 0,
+      "out": "[\n  {\n    \"command\": \"purchasely dashboard summary --app app_xxx --output table\",\n    \"summary\": \"Analytics dashboard of an app: key metrics with trend charts\",\n    \"method\": \"GET\",\n    \"path\": \"-\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard conversion --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Paywall conversion\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard composition-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription composition\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/composition_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard events --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Event counts by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/events\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard flow-paths --app app_xxx --date-range <date-range> --flow-id <flow-id>\",\n    \"summary\": \"Flow paths funnel\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/flow_paths\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard funnel --app app_xxx --date-range <date-range> --dimension <dimension>\",\n    \"summary\": \"Conversion funnel\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/funnel\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Live subscription and user status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-today --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Today's key figures\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_today\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard mrr-evolution-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"MRR evolution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-revenues --app app_xxx --date-range <date-range>\",\n    \"summary\": \"One-time purchase revenue by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/one_time_purchases_revenues\",\n    \"scope\": \"analytics.dashboards:view\"\n  }\n]\n",
+      "err": "purchasely env=prod surface=management identity=- key=-\n"
+    },
+    {
+      "test": "search::games",
+      "argv": [
+        "search",
+        "play game",
+        "--limit",
+        "10"
+      ],
+      "env": {},
+      "stdin": "",
+      "code": 0,
+      "out": "[\n  {\n    \"command\": \"purchasely games\",\n    \"summary\": \"Play a game in the terminal\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely distributions get --app app_xxx --plan-id <plan-id> --store <store>\",\n    \"summary\": \"Get a store distribution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions update --app app_xxx --plan-id <plan-id> --store <store> --data @body.json --env prod\",\n    \"summary\": \"Update a store distribution\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely platforms create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Add a store platform\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:edit\"\n  }\n]\n",
+      "err": "purchasely env=prod surface=management identity=- key=-\n"
+    },
+    {
+      "test": "search::doctor",
+      "argv": [
+        "search",
+        "check install",
+        "--limit",
+        "10"
+      ],
+      "env": {},
+      "stdin": "",
+      "code": 0,
+      "out": "[\n  {\n    \"command\": \"purchasely ai install\",\n    \"summary\": \"Install the plugin in every coding agent found on this machine\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely update\",\n    \"summary\": \"Check for a new version and install it (managed install) or print the upgrade command\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely doctor\",\n    \"summary\": \"Check the install, the key, the network and the version\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely ai update\",\n    \"summary\": \"Update the plugin in the agents that ai install registered\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely ai uninstall\",\n    \"summary\": \"Remove the plugin from the agents that ai install registered\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely screens validate --app app_xxx --id <id>\",\n    \"summary\": \"Validate a screen draft\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/validate\",\n    \"scope\": \"experiences.screens:view\"\n  }\n]\n",
+      "err": "purchasely env=prod surface=management identity=- key=-\n"
+    }
+  ]
+}

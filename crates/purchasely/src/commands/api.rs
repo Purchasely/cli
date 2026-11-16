@@ -14,7 +14,7 @@ use crate::{
 };
 
 const METHODS: &[&str] = &["GET", "POST", "PUT", "PATCH", "DELETE"];
-pub fn register(program: &mut Command, _: &mut Runtime) {
+pub fn register(program: &mut Command, rt: &mut Runtime) {
     let mut c = Command::new("api")
         .description("Send a raw Management API request")
         .argument(Argument::required(
@@ -26,8 +26,11 @@ pub fn register(program: &mut Command, _: &mut Runtime) {
             "path under /management/v1, such as /applications/app_xxx/placements",
         ));
     c.options.extend(globals());
-    c.options
-        .push(OptionDef::value("--query <k=v>", "query parameter (repeatable)").repeat());
+    c.options.push(
+        OptionDef::value("--query <k=v>", "query parameter (repeatable)")
+            .repeat()
+            .default("[]"),
+    );
     c.options.push(OptionDef::value(
         "--data <json>",
         "request body: JSON, @file.json or - for stdin",
@@ -36,12 +39,17 @@ pub fn register(program: &mut Command, _: &mut Runtime) {
         "--confirm-token <token>",
         "token from a CONFIRMATION_REQUIRED response",
     ));
-    c=c.after_help("The path is relative to /management/v1, or starts with it. The CLI sends it only to the Management API of --env.\nA write (POST, PUT, PATCH, DELETE) needs --env prod or --env staging, also with --dry-run.\n\nExamples:\n  purchasely api GET /applications/app_xxx/placements --query limit=10\n  purchasely api PATCH /applications/app_xxx/placements/plc_xxx --data @placement.json --env prod --dry-run");
+    c.options.push(OptionDef::value(
+        "--plan <file>",
+        "record the write in this plan file, send nothing. A person reads it, then runs `apply <file>`",
+    ));
+    c = c.after_help(format!("\nThe path is relative to /management/v1, or starts with it. The CLI sends it only to the Management API of --env.\nA write (POST, PUT, PATCH, DELETE) needs --env prod or --env staging, also with --dry-run.\nA risky change returns CONFIRMATION_REQUIRED: add --yes, answer the prompt, or resend with --confirm-token <token>.\n\nExamples:\n  {} api GET /applications/app_xxx/placements --query limit=10\n  {} api PATCH /applications/app_xxx/placements/plc_xxx --data @placement.json --env prod --dry-run", rt.d.name, rt.d.name));
     c = c.action(run);
     program.commands.push(c);
 }
 pub fn globals() -> Vec<OptionDef> {
     vec![
+        OptionDef::value("--output <format>", "json (default) or table"),
         OptionDef::value("--env <env>", "prod or staging. Mandatory for writes"),
         OptionDef::boolean("--dry-run", "print the request without sending it"),
         OptionDef::boolean("--yes", "accept the confirmation prompt of a risky change"),
@@ -51,14 +59,9 @@ pub fn globals() -> Vec<OptionDef> {
         ),
         OptionDef::value("--rate <n>", "requests per second, lower than the default"),
         OptionDef::boolean("--i-asked-backend", "allow a rate above the hard cap"),
-        OptionDef::value("--output <format>", "json (default) or table"),
         OptionDef::value(
             "--out <file>",
             "write the JSON output to a file, or - for stdout",
-        ),
-        OptionDef::value(
-            "--plan <file>",
-            "record the write in this plan file, send nothing. A person reads it, then runs `apply <file>`",
         ),
     ]
 }

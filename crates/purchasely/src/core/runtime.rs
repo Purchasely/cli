@@ -11,10 +11,30 @@ use std::{
     collections::{BTreeMap, BTreeSet},
 };
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SearchEntry {
+    pub command: String,
+    pub resource: String,
+    pub action: String,
+    pub summary: String,
+    pub description: String,
+    pub method: String,
+    pub path: String,
+    pub scope: String,
+}
+
+/// Extension modules may add entries from local caches when search runs.
+pub type SearchProvider = fn(&Runtime) -> Vec<SearchEntry>;
+
 pub struct Runtime {
     pub d: Deps,
     pub cfg: Config,
     pub taken: BTreeSet<String>,
+    pub search_index: Vec<SearchEntry>,
+    pub search_extra: Vec<SearchProvider>,
+    /// Completed tree, refreshed by the final registration module and extension modules.
+    pub command_tree: Option<Command>,
+    pub extension_top: BTreeSet<String>,
     pub command: Option<String>,
     /// One resolution per `env:surface` and run (TS `Runtime.creds`), errors included.
     creds: RefCell<BTreeMap<String, Result<Option<Credential>, String>>>,
@@ -60,6 +80,10 @@ impl Runtime {
             d,
             cfg,
             taken: BTreeSet::new(),
+            search_index: Vec::new(),
+            search_extra: Vec::new(),
+            command_tree: None,
+            extension_top: BTreeSet::new(),
             command: None,
             creds: RefCell::default(),
         }

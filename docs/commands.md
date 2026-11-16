@@ -1,4 +1,4 @@
-<!-- Generated from the command tree. Do not edit. Run: npx vitest run test/docs.test.ts -t "commands.md is generated" -u -->
+<!-- Generated from purchasely reference --format markdown. Do not edit. -->
 
 # purchasely command reference
 

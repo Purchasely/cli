@@ -197,13 +197,15 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
         });
         let _ = permit.release();
         let response = response.map_err(|e| {
+            let cause = match e.message.as_str() {
+                "ENOTFOUND" => "ENOTFOUND",
+                _ if e.timed_out => "Timeout",
+                _ => "Error",
+            };
             CliError::new(
                 EXIT::GENERIC,
                 "NETWORK_ERROR",
-                vec![format!(
-                    "The request failed before a response ({}).",
-                    if e.timed_out { "Timeout" } else { "Error" }
-                )],
+                vec![format!("The request failed before a response ({cause}).")],
             )
         })?;
         let text = String::from_utf8_lossy(&response.body).into_owned();

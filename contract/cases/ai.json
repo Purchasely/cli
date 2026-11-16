@@ -955,13 +955,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GHg4wT"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-kDhtpb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -991,8 +991,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GHg4wT/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GHg4wT/.config/opencode/references\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\"}",
-                "hex": "7b226167656e7473223a7b226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4748673477542f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4748673477542f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30227d"
+                "text": "{\"agents\":{\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-kDhtpb/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-kDhtpb/.config/opencode/references\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\"}",
+                "hex": "7b226167656e7473223a7b226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6b44687470622f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6b44687470622f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30227d"
               },
               {
                 "path": "state",
@@ -1093,7 +1093,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��5n\u000f;\u0014\u0004ZE\u0011�:!&��к�Z�H�1�\tw�\u0016��3�:�\u00125/n;#���FI�dN���gvP�x\u001at>��\u001a|��\u001b�����?�P�\u0010v�\u0004�X\n�ެ��\u001aS>_Ϸ�K\u0004��<F\u0004s1�0Ꮋ�\u000bHc\u001aF~�/�R]�G)���z����[q���\u000b{O\u001e8�����o[�{���g�C�P�|�����|\u007f�~vvz�9;�^\u001e�\u000e�Y|��3\u001e\"\u007f2\u0019(4\t�Wj�:���u���Ƒ���\u0016n\u0012H�ؿ>R~W\u0005\u0007��\u000ed��X����q��q�Y�<�\f�è?T�D�x��j�!�1N$�|_H��x^?}q�x�\u0012]�Q\u0014�Uq=��4�����O섞v�����'5��NZ�����\u001e�Jr�\u000f�VFV�gy�;��\u0013:�bkW�B��R��=�۹Q\u0019��Gu\u000f����\u0000�WjR�P�\r�\u0001c��DR\u0002�g�\u0004�\u0013���\u0000�+<)�_�~C\u00154�?�1#�\u007f6�W��\u001d��\n�Nmh^���Q\u0006�\u007f�\u0000�+5��P�u�\u0001s��\u0018����\u007f\u0012\u0013����\nO��/R��\n��\u001f%0�g���\u0017^�\u0007�5�o���\u0011.���\u0000�WjL�o�v 3�X���(��\u007f6����5Y��\u007f�'_��_w\u0018���\bc�\u007fV0���\u0019�J\u007f\u0014����Tf\u0019���7`��\u000e�\u007f��(��f�s�\u0003��\u007f�y0�k���?O�\u0014��\u0000\u0016\u001e���J}\u000e)4�?�%��Za��G���F���ݤ2���qn�\u007f�`\u0001�g\u0005�R�y�\u0017R��\u000ed�?�\u007f\f���\u0007�w�$��\u0010U&��\n��������=\u0012��=\r��6h)�~�RA�\u001f�O\u0011:Я����{Y��[W�3\bj�0~�\u0003�c?��2��_0&!�V\u0000�/5��_z\u0014 o;`��TbO��� ��O�%����c�\u007f��?��c/��\u0013\u0002��\u0015n�\u001a�\u0007\u0000\u0000P:~\u0003�\r\u0016)\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9b4d6fd3301c87b34913629ce19c231ceaf925b697c30e050dada2886d9d1013425568dd51ad6f4bd231be0977be169f8333ee3ad612352f6e3b239affa366e9f25227f57ef6933843cde371d8fa1244aaf7ad52ad558e7be38beea0421143d859131863c9b97b3b17d339a6de743e7dcf5cc2a914821142b18b89d00b1d776d0790c5388a83501fcaa5baee0e32b6d39b753a19eba7a7e2decfff17769e3d72b61de76dd072df35dc0fee1d9365ce633d513d5de969f2fb8f621f593d3b3bbd7b3bd9e3bb9e9e2436d99a2d7fda1af651301af5141a85c36b3508062de56c6d3be35f3bc3581cfe5cc34902691c0737472a68ab70efe1da81dcfc6399c8bfe44c38eecd3a4e308f92e79ffa6e3feef6d50191beb7ef494628123e6184fbde2e976ebdf6b27afaeaa8f6fe10dd04711ca245693da89ed4aaedcef9ebcfec849eb6bfee7abedbd03bd5cfb3769a8bf8eebffe1a4a4b7aeaf7d656465efe2779f93bff5c78d871f9da8e208392e73fa3fe517374bf72a5328cfd8f6a0324e07f5600ff2b3519f99fa9e18aed406efe49a2fda7446209fe67038617fa9f4708c1120470e3c9c8ff2cf52baaa0b1ff51ac2f01c1ff6c50acfe5133541d152a9ddac8bc0c73ffa30ceeff5902fcafd414cbff4c05976907ccfdcfc30c83ffd920c5ff3896fbbe0ffeb7f114cbff2cf5cba8a0b9ff5102f7ffec50d4ffa2cb6eafb784fb4d30f73fe209f03f3b80ff951a53ff5ba61d30f73fa61781ffd920c5ff98e4ba12c0ff369e62f99fa67ed9db80e6fe471805ffb38251fdcf8f0857ba83585d8441ac72cb30f73f2e288cffda01fcafd418e57fd188708176c0dcff24f360fcd70a69e3bf1ceb9fe07f1b8f51fe17a5be80149afb1ff7388cff5a61f5fa47cdc69b5abd8efaedb432f4f7213ccfc4ff24960cfccf0ae07fa566f5fccfa430ad1dc8cd7fd2ff18bebdfe03ff7b78d2fc4f5206e3bf2560f5fce7f5fef9f9c78224fa7f21b807fdbf0d1a4ab91faf5518758783e8d37384f6f46b6eb83f6a5f56feacd695fc0282ba59183fff819a893f89fc32ccfd9f33ca21ff5600ff2f35c6f99f7b14a0683b60ecfffafa9f33f07f1ba43dffc918a7f00fe09b8f71fe8d7bff02fe8f45b2ff2718fa7f2bdc5635a40f0000a074fc06d01da814004e0000"
               }
             }
           ],
@@ -1157,9 +1157,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-tmBR0F/cache/ai/release-r8mUXE/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-8UuMRa/cache/ai/release-fgWMi3/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-tmBR0F/cache/ai/release-r8mUXE"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-8UuMRa/cache/ai/release-fgWMi3"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1177,8 +1177,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"opencode\",\n      \"action\": \"installed\",\n      \"version\": \"2.3.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "ai::ai > copy agents keep the skill references",
@@ -1191,13 +1190,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-r9QxSu"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-N58gpC"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1233,8 +1232,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-r9QxSu/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000},\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-r9QxSu/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-r9QxSu/.config/opencode/references\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d7239517853752f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d2c226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d7239517853752f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d7239517853752f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-N58gpC/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000},\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-N58gpC/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-N58gpC/.config/opencode/references\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4e35386770432f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d2c226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4e35386770432f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4e35386770432f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -1391,7 +1390,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��%���\u000e\u0005�VQĶN�\t�*���7�t�o��������T͋�Έ���Q�&���?��\u001d�:����A���*�z�?��\r+\u0014Q��-�1���7k1[c��ֳm�\u0012N�>�\bg.&\u0002\u0013�[��4&Q\u001c��R.�Uo�r�>��M�?�\u0015�n����䁳�8o�����wo�~�<�\u000b��\u0017�L����'kgg����3�����!;��\u001f�G\u0003\u0014��}����J\r�a[9;�����(\u0016/\u007fn�&�$���#\u0015tTxp\u007f�@f�\t^ʿ�\u001eq��m�`\u0016%�?�� �\r�!�Uϧ��\u0019b\u001cWu\u0005U�>�n���v����%�\u000e�8D��zX;��:��W��\t=�|���nS��8O;i!����{(+ɩ?�Z\u0019Y������s�u��֮ ���?��Qk|�s�2����\u001e���Y\u0001��Ԥ�\u007f��\u001b�\u0003��Gu�1��\rV�\u001f�RJ���\u0015����S��\n\u001a�\u001fŘa�?\u001b�\u007f�\nUW�J�62/���(��?K����|����:퀹�y\u0018����\u007f\fK\"\b�_�ɗ�y��QAs��\u0004�������^����M1�?�I�?;���\u001aS�[�\u001d��?�K�g�J�?\u001b����?m\u007f\u0002������,��\u000e\u0003��\u001fa\f��\nF��8#\\�\rcu\u0011\u0006��,����\u0006���\u0001���\u0018�\u007fՌp�v�|�O2\u0001�VH\u0018�#���\n\u0002Xx��*�9�����'a��\n��?j5_�\u001b\r4�$���\u000f�y&�'\t����\u0000�Wj6��\\\n�ځ��/�\u001f�7�����?\t�G���\u000f�Wx6�\u007fV\u007f,�R�/����۠����J�Qo4�>>E�@�\u0016����e��n]�� �����\u000f�Z�Id�a���1\u0001��\u0002�\u007f�1��£\u0000y�\u0001c��R�\u0000�o���?���\u0004�/<��7��s�?\u0016��?!��[ᦪ!}\u0000\u0000\u0000��7.xV�\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9a4d6fd3301c87b34913629ce19c231ceaf925b6dbc30e05815651c4b64e8809a12ab4eea8d63792748c6fc29dafc5e7e08cb38eb544cd8bdbce88e6ffa851dabcd449dc9ffd242e6a1f4f83ce673f54836f957aa3723c985ef447158a28c2ce86c0184bcedd9bb998cd31f566f3d97be6124ea5108c108a5d4c04c6c471377600594cc3c80ff4a15caaabfe28633bbd59af97b17e762aeeddfc7f61efc90367d771def81df76dcb7defde122f731eea89eae98b9ee2cf3f8a7d65fdececf4f66dbcc7773d3d4a6cb2335ffeb8331e227f3219283409c6576ae48f3acad9d975a6bff6c69178f973032709a471ec5f1f29bfab8283fb6b0772f38f6522ff9233eeb8d79b38c13c4a9e7f5a7387517fa80e89ac79554f324291a8624a6a84ef73e9361bcfeba72f8e1aef5ea26b3f8a02b42cad87f59346bddb3b7ff5899dd0d3eed77dafe6b6f44ecdf3ac9d1622beffaf2f4369494ffdc1c6cac8cb7f9c97bff3cf05938ecb37760419943cff19f58fda93bb956b9561ec7f343640f03f2b80ff959a8cfccfd570cd762037ff24d1fe5322b100ffb301c34bfd8f51c2880401dc7a32f23f4ffd9a2a68ec7f146b0100ffb341b1fa47ed40f554a0746a43f332ccfd8f3278fe6709f0bf52532cff73155ca51d30f73f0f5309fe678314fff3a44680ff6d3dc5f23f4ffd2a2a68ee7ffaee039eff59a1a8ff8597fdc16005f78b31f73fe209f03f3b80ff951a53ff5ba51d30f73f4631f89f1552fc8f563dc66be07f5b4fb1fccf52bfea634073ff8b1f3e83ffd9c0a8fe1747842bfd51a42e023f52b96598fb1f1714c67fed00fe576a8cf2bf6c44b8403b60ee7f927930fe6b85b4f15f29751d80ff6d3d46f95f96fa025268ee7fdce330fe6b85f5eb1fb55baf1bcd261a76d3cad0d743789e89ff492c29f89f15c0ff4acdfaf99f4b615a3b909bffa4ff317c73ff07fe77ffa48dff32ec6102feb7f5ac9fffbcde3f3fff589044ff2f0467d0ffdba0a594fbe14a05617f3c0a3f3e45e840bf1686fbc3ee65e5cf6a5dc9cf20a8db85f1ff3f503bf193c82fc3dcff39a31ee4df0ae0ffa5c638ff0b7f0528da0e18fbbfbeffe714fcdf0629fecf7115fcbf0c18e7dfb8f72fe0ff5824fb7f82a1ffb7c24d5543fa0000004ac76f0006c326004e0000"
               }
             }
           ],
@@ -1455,9 +1454,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-WjpepQ/cache/ai/release-LGzwjM/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-bmMjAI/cache/ai/release-gw8GPs/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-WjpepQ/cache/ai/release-LGzwjM"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-bmMjAI/cache/ai/release-gw8GPs"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1475,8 +1474,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    },\n    {\n      \"agent\": \"opencode\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "ai::ai > a plugin installed by hand is never touched",
@@ -1489,13 +1487,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gH8AgK"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vCRZgY"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1666,7 +1664,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��%���\u000e\u0005�VQĶN�\t�*���7�t�o��������T͋�Έ���Q�&���?��\u001d�:����A���*�z�?��\r+\u0014Q��-�1���7k1[c��ֳm�\u0012N�>�\bg.&\u0002\u0013�[��4&Q\u001c��R.�Uo�r�>��M�?�\u0015�n����䁳�8o�����wo�~�<�\u000b��\u0017�L����'kgg����3�����!;��\u001f�G\u0003\u0014��}����J\r�a[9;�����(\u0016/\u007fn�&�$���#\u0015tTxp\u007f�@f�\t^ʿ�\u001eq��m�`\u0016%�?�� �\r�!�Uϧ��\u0019b\u001cWu\u0005U�>�n���v����%�\u000e�8D��zX;��:��W��\t=�|���nS��8O;i!����{(+ɩ?�Z\u0019Y������s�u��֮ ���?��Qk|�s�2����\u001e���Y\u0001��Ԥ�\u007f��\u001b�\u0003��Gu�1��\rV�\u001f�RJ���\u0015����S��\n\u001a�\u001fŘa�?\u001b�\u007f�\nUW�J�62/���(��?K����|����:퀹�y\u0018����\u007f\fK\"\b�_�ɗ�y��QAs��\u0004�������^����M1�?�I�?;���\u001aS�[�\u001d��?�K�g�J�?\u001b����?m\u007f\u0002������,��\u000e\u0003��\u001fa\f��\nF��8#\\�\rcu\u0011\u0006��,����\u0006���\u0001���\u0018�\u007fՌp�v�|�O2\u0001�VH\u0018�#���\n\u0002Xx��*�9�����'a��\n��?j5_�\u001b\r4�$���\u000f�y&�'\t����\u0000�Wj6��\\\n�ځ��/�\u001f�7�����?\t�G���\u000f�Wx6�\u007fV\u007f,�R�/����۠����J�Qo4�>>E�@�\u0016����e��n]�� �����\u000f�Z�Id�a���1\u0001��\u0002�\u007f�1��£\u0000y�\u0001c��R�\u0000�o���?���\u0004�/<��7��s�?\u0016��?!��[ᦪ!}\u0000\u0000\u0000��7.xV�\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9a4d6fd3301c87b34913629ce19c231ceaf925b6dbc30e05815651c4b64e8809a12ab4eea8d63792748c6fc29dafc5e7e08cb38eb544cd8bdbce88e6ffa851dabcd449dc9ffd242e6a1f4f83ce673f54836f957aa3723c985ef447158a28c2ce86c0184bcedd9bb998cd31f566f3d97be6124ea5108c108a5d4c04c6c471377600594cc3c80ff4a15caaabfe28633bbd59af97b17e762aeeddfc7f61efc90367d771def81df76dcb7defde122f731eea89eae98b9ee2cf3f8a7d65fdececf4f66dbcc7773d3d4a6cb2335ffeb8331e227f3219283409c6576ae48f3acad9d975a6bff6c69178f973032709a471ec5f1f29bfab8283fb6b0772f38f6522ff9233eeb8d79b38c13c4a9e7f5a7387517fa80e89ac79554f324291a8624a6a84ef73e9361bcfeba72f8e1aef5ea26b3f8a02b42cad87f59346bddb3b7ff5899dd0d3eed77dafe6b6f44ecdf3ac9d1622beffaf2f4369494ffdc1c6cac8cb7f9c97bff3cf05938ecb37760419943cff19f58fda93bb956b9561ec7f343640f03f2b80ff959a8cfccfd570cd762037ff24d1fe5322b100ffb301c34bfd8f51c2880401dc7a32f23f4ffd9a2a68ec7f146b0100ffb341b1fa47ed40f554a0746a43f332ccfd8f3278fe6709f0bf52532cff73155ca51d30f73f0f5309fe678314fff3a44680ff6d3dc5f23f4ffd2a2a68ee7ffaee039eff59a1a8ff8597fdc16005f78b31f73fe209f03f3b80ff951a53ff5ba51d30f73f4631f89f1552fc8f563dc66be07f5b4fb1fccf52bfea634073ff8b1f3e83ffd9c0a8fe1747842bfd51a42e023f52b96598fb1f1714c67fed00fe576a8cf2bf6c44b8403b60ee7f927930fe6b85b4f15f29751d80ff6d3d46f95f96fa025268ee7fdce330fe6b85f5eb1fb55baf1bcd261a76d3cad0d743789e89ff492c29f89f15c0ff4acdfaf99f4b615a3b909bffa4ff317c73ff07fe77ffa48dff32ec6102feb7f5ac9fffbcde3f3fff589044ff2f0467d0ffdba0a594fbe14a05617f3c0a3f3e45e840bf1686fbc3ee65e5cf6a5dc9cf20a8db85f1ff3f503bf193c82fc3dcff39a31ee4df0ae0ffa5c638ff0b7f0528da0e18fbbfbeffe714fcdf0629fecf7115fcbf0c18e7dfb8f72fe0ff5824fb7f82a1ffb7c24d5543fa0000004ac76f0006c326004e0000"
               }
             }
           ],
@@ -1752,9 +1750,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-g8nrG3/cache/ai/release-zjGiZ1/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-SicJle/cache/ai/release-tdKKao/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-g8nrG3/cache/ai/release-zjGiZ1"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-SicJle/cache/ai/release-tdKKao"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1780,13 +1778,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gH8AgK"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vCRZgY"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1971,8 +1969,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "ai::ai > update and uninstall re-check ownership",
@@ -1985,13 +1982,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GUE4ZM"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-zBeARV"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2188,13 +2185,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GUE4ZM"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-zBeARV"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2295,13 +2292,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SMLg5a"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QVDqWW"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2498,13 +2495,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SMLg5a"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QVDqWW"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2605,13 +2602,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-25ObfI"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AQg7F7"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2808,13 +2805,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-25ObfI"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AQg7F7"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2915,13 +2912,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g5MNNk"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-KFDbPh"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3118,13 +3115,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g5MNNk"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-KFDbPh"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3225,13 +3222,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-L3KGl0"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-BWESiw"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3428,13 +3425,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-L3KGl0"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-BWESiw"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3516,13 +3513,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CxIYLo"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GXIR4E"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3719,13 +3716,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CxIYLo"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GXIR4E"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3807,13 +3804,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Qo3Jyd"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QQjjCC"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4010,13 +4007,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Qo3Jyd"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QQjjCC"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4098,13 +4095,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-nerZRA"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6VBPuH"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4301,13 +4298,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-nerZRA"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6VBPuH"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4389,13 +4386,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UDphQa"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gg1seA"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4431,8 +4428,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UDphQa/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5544706851612f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gg1seA/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6767317365412f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4536,7 +4533,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��%���\u000e\u0005�VQĶN�\t�*���7�t�o��������T͋�Έ���Q�&���?��\u001d�:����A���*�z�?��\r+\u0014Q��-�1���7k1[c��ֳm�\u0012N�>�\bg.&\u0002\u0013�[��4&Q\u001c��R.�Uo�r�>��M�?�\u0015�n����䁳�8o�����wo�~�<�\u000b��\u0017�L����'kgg����3�����!;��\u001f�G\u0003\u0014��}����J\r�a[9;�����(\u0016/\u007fn�&�$���#\u0015tTxp\u007f�@f�\t^ʿ�\u001eq��m�`\u0016%�?�� �\r�!�Uϧ��\u0019b\u001cWu\u0005U�>�n���v����%�\u000e�8D��zX;��:��W��\t=�|���nS��8O;i!����{(+ɩ?�Z\u0019Y������s�u��֮ ���?��Qk|�s�2����\u001e���Y\u0001��Ԥ�\u007f��\u001b�\u0003��Gu�1��\rV�\u001f�RJ���\u0015����S��\n\u001a�\u001fŘa�?\u001b�\u007f�\nUW�J�62/���(��?K����|����:퀹�y\u0018����\u007f\fK\"\b�_�ɗ�y��QAs��\u0004�������^����M1�?�I�?;���\u001aS�[�\u001d��?�K�g�J�?\u001b����?m\u007f\u0002������,��\u000e\u0003��\u001fa\f��\nF��8#\\�\rcu\u0011\u0006��,����\u0006���\u0001���\u0018�\u007fՌp�v�|�O2\u0001�VH\u0018�#���\n\u0002Xx��*�9�����'a��\n��?j5_�\u001b\r4�$���\u000f�y&�'\t����\u0000�Wj6��\\\n�ځ��/�\u001f�7�����?\t�G���\u000f�Wx6�\u007fV\u007f,�R�/����۠����J�Qo4�>>E�@�\u0016����e��n]�� �����\u000f�Z�Id�a���1\u0001��\u0002�\u007f�1��£\u0000y�\u0001c��R�\u0000�o���?���\u0004�/<��7��s�?\u0016��?!��[ᦪ!}\u0000\u0000\u0000��7.xV�\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9a4d6fd3301c87b34913629ce19c231ceaf925b6dbc30e05815651c4b64e8809a12ab4eea8d63792748c6fc29dafc5e7e08cb38eb544cd8bdbce88e6ffa851dabcd449dc9ffd242e6a1f4f83ce673f54836f957aa3723c985ef447158a28c2ce86c0184bcedd9bb998cd31f566f3d97be6124ea5108c108a5d4c04c6c471377600594cc3c80ff4a15caaabfe28633bbd59af97b17e762aeeddfc7f61efc90367d771def81df76dcb7defde122f731eea89eae98b9ee2cf3f8a7d65fdececf4f66dbcc7773d3d4a6cb2335ffeb8331e227f3219283409c6576ae48f3acad9d975a6bff6c69178f973032709a471ec5f1f29bfab8283fb6b0772f38f6522ff9233eeb8d79b38c13c4a9e7f5a7387517fa80e89ac79554f324291a8624a6a84ef73e9361bcfeba72f8e1aef5ea26b3f8a02b42cad87f59346bddb3b7ff5899dd0d3eed77dafe6b6f44ecdf3ac9d1622beffaf2f4369494ffdc1c6cac8cb7f9c97bff3cf05938ecb37760419943cff19f58fda93bb956b9561ec7f343640f03f2b80ff959a8cfccfd570cd762037ff24d1fe5322b100ffb301c34bfd8f51c2880401dc7a32f23f4ffd9a2a68ec7f146b0100ffb341b1fa47ed40f554a0746a43f332ccfd8f3278fe6709f0bf52532cff73155ca51d30f73f0f5309fe678314fff3a44680ff6d3dc5f23f4ffd2a2a68ee7ffaee039eff59a1a8ff8597fdc16005f78b31f73fe209f03f3b80ff951a53ff5ba51d30f73f4631f89f1552fc8f563dc66be07f5b4fb1fccf52bfea634073ff8b1f3e83ffd9c0a8fe1747842bfd51a42e023f52b96598fb1f1714c67fed00fe576a8cf2bf6c44b8403b60ee7f927930fe6b85b4f15f29751d80ff6d3d46f95f96fa025268ee7fdce330fe6b85f5eb1fb55baf1bcd261a76d3cad0d743789e89ff492c29f89f15c0ff4acdfaf99f4b615a3b909bffa4ff317c73ff07fe77ffa48dff32ec6102feb7f5ac9fffbcde3f3fff589044ff2f0467d0ffdba0a594fbe14a05617f3c0a3f3e45e840bf1686fbc3ee65e5cf6a5dc9cf20a8db85f1ff3f503bf193c82fc3dcff39a31ee4df0ae0ffa5c638ff0b7f0528da0e18fbbfbeffe714fcdf0629fecf7115fcbf0c18e7dfb8f72fe0ff5824fb7f82a1ffb7c24d5543fa0000004ac76f0006c326004e0000"
               }
             }
           ],
@@ -4595,9 +4592,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Z51XSb/cache/ai/release-pxgX9U/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-BYBPSn/cache/ai/release-aDUj3W/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Z51XSb/cache/ai/release-pxgX9U"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-BYBPSn/cache/ai/release-aDUj3W"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -4623,13 +4620,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UDphQa"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gg1seA"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4655,8 +4652,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UDphQa/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5544706851612f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gg1seA/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6767317365412f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4739,8 +4736,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UDphQa/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5544706851612f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-gg1seA/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6767317365412f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4846,13 +4843,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-qoEXKL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-be1XD2"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4888,8 +4885,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-qoEXKL/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d716f45584b4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-be1XD2/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6265315844322f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4993,7 +4990,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��%���\u000e\u0005�VQĶN�\t�*���7�t�o��������T͋�Έ���Q�&���?��\u001d�:����A���*�z�?��\r+\u0014Q��-�1���7k1[c��ֳm�\u0012N�>�\bg.&\u0002\u0013�[��4&Q\u001c��R.�Uo�r�>��M�?�\u0015�n����䁳�8o�����wo�~�<�\u000b��\u0017�L����'kgg����3�����!;��\u001f�G\u0003\u0014��}����J\r�a[9;�����(\u0016/\u007fn�&�$���#\u0015tTxp\u007f�@f�\t^ʿ�\u001eq��m�`\u0016%�?�� �\r�!�Uϧ��\u0019b\u001cWu\u0005U�>�n���v����%�\u000e�8D��zX;��:��W��\t=�|���nS��8O;i!����{(+ɩ?�Z\u0019Y������s�u��֮ ���?��Qk|�s�2����\u001e���Y\u0001��Ԥ�\u007f��\u001b�\u0003��Gu�1��\rV�\u001f�RJ���\u0015����S��\n\u001a�\u001fŘa�?\u001b�\u007f�\nUW�J�62/���(��?K����|����:퀹�y\u0018����\u007f\fK\"\b�_�ɗ�y��QAs��\u0004�������^����M1�?�I�?;���\u001aS�[�\u001d��?�K�g�J�?\u001b����?m\u007f\u0002������,��\u000e\u0003��\u001fa\f��\nF��8#\\�\rcu\u0011\u0006��,����\u0006���\u0001���\u0018�\u007fՌp�v�|�O2\u0001�VH\u0018�#���\n\u0002Xx��*�9�����'a��\n��?j5_�\u001b\r4�$���\u000f�y&�'\t����\u0000�Wj6��\\\n�ځ��/�\u001f�7�����?\t�G���\u000f�Wx6�\u007fV\u007f,�R�/����۠����J�Qo4�>>E�@�\u0016����e��n]�� �����\u000f�Z�Id�a���1\u0001��\u0002�\u007f�1��£\u0000y�\u0001c��R�\u0000�o���?���\u0004�/<��7��s�?\u0016��?!��[ᦪ!}\u0000\u0000\u0000��7.xV�\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9a4d6fd3301c87b34913629ce19c231ceaf925b6dbc30e05815651c4b64e8809a12ab4eea8d63792748c6fc29dafc5e7e08cb38eb544cd8bdbce88e6ffa851dabcd449dc9ffd242e6a1f4f83ce673f54836f957aa3723c985ef447158a28c2ce86c0184bcedd9bb998cd31f566f3d97be6124ea5108c108a5d4c04c6c471377600594cc3c80ff4a15caaabfe28633bbd59af97b17e762aeeddfc7f61efc90367d771def81df76dcb7defde122f731eea89eae98b9ee2cf3f8a7d65fdececf4f66dbcc7773d3d4a6cb2335ffeb8331e227f3219283409c6576ae48f3acad9d975a6bff6c69178f973032709a471ec5f1f29bfab8283fb6b0772f38f6522ff9233eeb8d79b38c13c4a9e7f5a7387517fa80e89ac79554f324291a8624a6a84ef73e9361bcfeba72f8e1aef5ea26b3f8a02b42cad87f59346bddb3b7ff5899dd0d3eed77dafe6b6f44ecdf3ac9d1622beffaf2f4369494ffdc1c6cac8cb7f9c97bff3cf05938ecb37760419943cff19f58fda93bb956b9561ec7f343640f03f2b80ff959a8cfccfd570cd762037ff24d1fe5322b100ffb301c34bfd8f51c2880401dc7a32f23f4ffd9a2a68ec7f146b0100ffb341b1fa47ed40f554a0746a43f332ccfd8f3278fe6709f0bf52532cff73155ca51d30f73f0f5309fe678314fff3a44680ff6d3dc5f23f4ffd2a2a68ee7ffaee039eff59a1a8ff8597fdc16005f78b31f73fe209f03f3b80ff951a53ff5ba51d30f73f4631f89f1552fc8f563dc66be07f5b4fb1fccf52bfea634073ff8b1f3e83ffd9c0a8fe1747842bfd51a42e023f52b96598fb1f1714c67fed00fe576a8cf2bf6c44b8403b60ee7f927930fe6b85b4f15f29751d80ff6d3d46f95f96fa025268ee7fdce330fe6b85f5eb1fb55baf1bcd261a76d3cad0d743789e89ff492c29f89f15c0ff4acdfaf99f4b615a3b909bffa4ff317c73ff07fe77ffa48dff32ec6102feb7f5ac9fffbcde3f3fff589044ff2f0467d0ffdba0a594fbe14a05617f3c0a3f3e45e840bf1686fbc3ee65e5cf6a5dc9cf20a8db85f1ff3f503bf193c82fc3dcff39a31ee4df0ae0ffa5c638ff0b7f0528da0e18fbbfbeffe714fcdf0629fecf7115fcbf0c18e7dfb8f72fe0ff5824fb7f82a1ffb7c24d5543fa0000004ac76f0006c326004e0000"
               }
             }
           ],
@@ -5052,9 +5049,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-McLXkA/cache/ai/release-XNwPwz/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-RM2BuV/cache/ai/release-t8gvuZ/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-McLXkA/cache/ai/release-XNwPwz"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-RM2BuV/cache/ai/release-t8gvuZ"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5080,13 +5077,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-qoEXKL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-be1XD2"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5112,8 +5109,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-qoEXKL/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d716f45584b4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-be1XD2/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6265315844322f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5196,8 +5193,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-qoEXKL/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d716f45584b4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-be1XD2/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6265315844322f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5276,8 +5273,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\",\n      \"message\": \"cursor: the installed files changed since ai install. Nothing was changed.\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "ai::ai > copy agents update to a newer release and uninstall",
@@ -5290,13 +5286,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5332,8 +5328,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d493547464d6c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d35657a3549452f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5437,7 +5433,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��%���\u000e\u0005�VQĶN�\t�*���7�t�o��������T͋�Έ���Q�&���?��\u001d�:����A���*�z�?��\r+\u0014Q��-�1���7k1[c��ֳm�\u0012N�>�\bg.&\u0002\u0013�[��4&Q\u001c��R.�Uo�r�>��M�?�\u0015�n����䁳�8o�����wo�~�<�\u000b��\u0017�L����'kgg����3�����!;��\u001f�G\u0003\u0014��}����J\r�a[9;�����(\u0016/\u007fn�&�$���#\u0015tTxp\u007f�@f�\t^ʿ�\u001eq��m�`\u0016%�?�� �\r�!�Uϧ��\u0019b\u001cWu\u0005U�>�n���v����%�\u000e�8D��zX;��:��W��\t=�|���nS��8O;i!����{(+ɩ?�Z\u0019Y������s�u��֮ ���?��Qk|�s�2����\u001e���Y\u0001��Ԥ�\u007f��\u001b�\u0003��Gu�1��\rV�\u001f�RJ���\u0015����S��\n\u001a�\u001fŘa�?\u001b�\u007f�\nUW�J�62/���(��?K����|����:퀹�y\u0018����\u007f\fK\"\b�_�ɗ�y��QAs��\u0004�������^����M1�?�I�?;���\u001aS�[�\u001d��?�K�g�J�?\u001b����?m\u007f\u0002������,��\u000e\u0003��\u001fa\f��\nF��8#\\�\rcu\u0011\u0006��,����\u0006���\u0001���\u0018�\u007fՌp�v�|�O2\u0001�VH\u0018�#���\n\u0002Xx��*�9�����'a��\n��?j5_�\u001b\r4�$���\u000f�y&�'\t����\u0000�Wj6��\\\n�ځ��/�\u001f�7�����?\t�G���\u000f�Wx6�\u007fV\u007f,�R�/����۠����J�Qo4�>>E�@�\u0016����e��n]�� �����\u000f�Z�Id�a���1\u0001��\u0002�\u007f�1��£\u0000y�\u0001c��R�\u0000�o���?���\u0004�/<��7��s�?\u0016��?!��[ᦪ!}\u0000\u0000\u0000��7.xV�\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9a4d6fd3301c87b34913629ce19c231ceaf925b6dbc30e05815651c4b64e8809a12ab4eea8d63792748c6fc29dafc5e7e08cb38eb544cd8bdbce88e6ffa851dabcd449dc9ffd242e6a1f4f83ce673f54836f957aa3723c985ef447158a28c2ce86c0184bcedd9bb998cd31f566f3d97be6124ea5108c108a5d4c04c6c471377600594cc3c80ff4a15caaabfe28633bbd59af97b17e762aeeddfc7f61efc90367d771def81df76dcb7defde122f731eea89eae98b9ee2cf3f8a7d65fdececf4f66dbcc7773d3d4a6cb2335ffeb8331e227f3219283409c6576ae48f3acad9d975a6bff6c69178f973032709a471ec5f1f29bfab8283fb6b0772f38f6522ff9233eeb8d79b38c13c4a9e7f5a7387517fa80e89ac79554f324291a8624a6a84ef73e9361bcfeba72f8e1aef5ea26b3f8a02b42cad87f59346bddb3b7ff5899dd0d3eed77dafe6b6f44ecdf3ac9d1622beffaf2f4369494ffdc1c6cac8cb7f9c97bff3cf05938ecb37760419943cff19f58fda93bb956b9561ec7f343640f03f2b80ff959a8cfccfd570cd762037ff24d1fe5322b100ffb301c34bfd8f51c2880401dc7a32f23f4ffd9a2a68ec7f146b0100ffb341b1fa47ed40f554a0746a43f332ccfd8f3278fe6709f0bf52532cff73155ca51d30f73f0f5309fe678314fff3a44680ff6d3dc5f23f4ffd2a2a68ee7ffaee039eff59a1a8ff8597fdc16005f78b31f73fe209f03f3b80ff951a53ff5ba51d30f73f4631f89f1552fc8f563dc66be07f5b4fb1fccf52bfea634073ff8b1f3e83ffd9c0a8fe1747842bfd51a42e023f52b96598fb1f1714c67fed00fe576a8cf2bf6c44b8403b60ee7f927930fe6b85b4f15f29751d80ff6d3d46f95f96fa025268ee7fdce330fe6b85f5eb1fb55baf1bcd261a76d3cad0d743789e89ff492c29f89f15c0ff4acdfaf99f4b615a3b909bffa4ff317c73ff07fe77ffa48dff32ec6102feb7f5ac9fffbcde3f3fff589044ff2f0467d0ffdba0a594fbe14a05617f3c0a3f3e45e840bf1686fbc3ee65e5cf6a5dc9cf20a8db85f1ff3f503bf193c82fc3dcff39a31ee4df0ae0ffa5c638ff0b7f0528da0e18fbbfbeffe714fcdf0629fecf7115fcbf0c18e7dfb8f72fe0ff5824fb7f82a1ffb7c24d5543fa0000004ac76f0006c326004e0000"
               }
             }
           ],
@@ -5496,9 +5492,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-3r2vvz/cache/ai/release-gUQGY0/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-akPRZt/cache/ai/release-FUqYOV/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-3r2vvz/cache/ai/release-gUQGY0"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-akPRZt/cache/ai/release-FUqYOV"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5524,13 +5520,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5556,8 +5552,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d493547464d6c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d35657a3549452f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5640,8 +5636,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d493547464d6c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d35657a3549452f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
               },
               {
                 "path": "state/update.purchasely.check.json",
@@ -5767,7 +5763,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "text": "\u001f�\b\u0000k��j\u0000\u0003�Mo�0\u001c��I\u0013b��#\u001c��5n\u000f;\u0014\u0004ZE\u0011�:!&��к�Z�H�1�\tw�\u0016��3�:�\u00125/n;#���FI�dN���gvP�x\u001at>��\u001a|��\u001b�����?�P�\u0010v�\u0004�X\n�ެ��\u001aS>_Ϸ�K\u0004��<F\u0004s1�0Ꮋ�\u000bHc\u001aF~�/�R]�G)���z����[q���\u000b{O\u001e8�����o[�{���g�C�P�|�����|\u007f�~vvz�9;�^\u001e�\u000e�Y|��3\u001e\"\u007f2\u0019(4\t�Wj�:���u���Ƒ���\u0016n\u0012H�ؿ>R~W\u0005\u0007��\u000ed��X����q��q�Y�<�\f�è?T�D�x��j�!�1N$�|_H��x^?}q�x�\u0012]�Q\u0014�Uq=��4�����O섞v�����'5��NZ�����\u001e�Jr�\u000f�VFV�gy�;��\u0013:�bkW�B��R��=�۹Q\u0019��Gu\u000f����\u0000�WjR�P�\r�\u0001c��DR\u0002�g�\u0004�\u0013���\u0000�+<)�_�~C\u00154�?�1#�\u007f6�W��\u001d��\n�Nmh^���Q\u0006�\u007f�\u0000�+5��P�u�\u0001s��\u0018����\u007f\u0012\u0013����\nO��/R��\n��\u001f%0�g���\u0017^�\u0007�5�o���\u0011.���\u0000�WjL�o�v 3�X���(��\u007f6����5Y��\u007f�'_��_w\u0018���\bc�\u007fV0���\u0019�J\u007f\u0014����Tf\u0019���7`��\u000e�\u007f��(��f�s�\u0003��\u007f�y0�k���?O�\u0014��\u0000\u0016\u001e���J}\u000e)4�?�%��Za��G���F���ݤ2���qn�\u007f�`\u0001�g\u0005�R�y�\u0017R��\u000ed�?�\u007f\f���\u0007�w�$��\u0010U&��\n��������=\u0012��=\r��6h)�~�RA�\u001f�O\u0011:Я����{Y��[W�3\bj�0~�\u0003�c?��2��_0&!�V\u0000�/5��_z\u0014 o;`��TbO��� ��O�%����c�\u007f��?��c/��\u0013\u0002��\u0015n�\u001a�\u0007\u0000\u0000P:~\u0003�\r\u0016)\u0000N\u0000\u0000"
+                "hex": "1f8b0800000000000003ed9b4d6fd3301c87b34913629ce19c231ceaf925b697c30e050dada2886d9d1013425568dd51ad6f4bd231be0977be169f8333ee3ad612352f6e3b239affa366e9f25227f57ef6933843cde371d8fa1244aaf7ad52ad558e7be38beea0421143d859131863c9b97b3b17d339a6de743e7dcf5cc2a914821142b18b89d00b1d776d0790c5388a83501fcaa5baee0e32b6d39b753a19eba7a7e2decfff17769e3d72b61de76dd072df35dc0fee1d9365ce633d513d5de969f2fb8f621f593d3b3bbd7b3bd9e3bb9e9e2436d99a2d7fda1af651301af5141a85c36b3508062de56c6d3be35f3bc3581cfe5cc34902691c0737472a68ab70efe1da81dcfc6399c8bfe44c38eecd3a4e308f92e79ffa6e3feef6d50191beb7ef494628123e6184fbde2e976ebdf6b27afaeaa8f6fe10dd04711ca245693da89ed4aaedcef9ebcfec849eb6bfee7abedbd03bd5cfb3769a8bf8eebffe1a4a4b7aeaf7d656465efe2779f93bff5c78d871f9da8e208392e73fa3fe517374bf72a5328cfd8f6a0324e07f5600ff2b3519f99fa9e18aed406efe49a2fda7446209fe67038617fa9f4708c1120470e3c9c8ff2cf52baaa0b1ff51ac2f01c1ff6c50acfe5133541d152a9ddac8bc0c73ffa30ceeff5902fcafd414cbff4c05976907ccfdcfc30c83ffd920c5ff3896fbbe0ffeb7f114cbff2cf5cba8a0b9ff5102f7ffec50d4ffa2cb6eafb784fb4d30f73fe209f03f3b80ff951a53ff5ba61d30f73fa61781ffd920c5ff98e4ba12c0ff369e62f99fa67ed9db80e6fe471805ffb38251fdcf8f0857ba83585d8441ac72cb30f73f2e288cffda01fcafd418e57fd188708176c0dcff24f360fcd70a69e3bf1ceb9fe07f1b8f51fe17a5be80149afb1ff7388cff5a61f5fa47cdc69b5abd8efaedb432f4f7213ccfc4ff24960cfccf0ae07fa566f5fccfa430ad1dc8cd7fd2ff18bebdfe03ff7b78d2fc4f5206e3bf2560f5fce7f5fef9f9c78224fa7f21b807fdbf0d1a4ab91faf5518758783e8d37384f6f46b6eb83f6a5f56feacd695fc0282ba59183fff819a893f89fc32ccfd9f33ca21ff5600ff2f35c6f99f7b14a0683b60ecfffafa9f33f07f1ba43dffc918a7f00fe09b8f71fe8d7bff02fe8f45b2ff2718fa7f2bdc5635a40f0000a074fc06d01da814004e0000"
               }
             }
           ],
@@ -5776,9 +5772,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-3r2vvz/cache/ai/release-LhHbeZ/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-akPRZt/cache/ai/release-qpR1xM/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-3r2vvz/cache/ai/release-LhHbeZ"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-akPRZt/cache/ai/release-qpR1xM"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5804,13 +5800,13 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 7767,
+          "pid": 95129,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5836,8 +5832,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I5GFMl/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d493547464d6c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-5ez5IE/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d35657a3549452f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
               },
               {
                 "path": "state/update.purchasely.check.json",
@@ -5973,8 +5969,7 @@
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"removed\",\n      \"version\": \"2.3.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
-      ],
-      "pending": "P7b"
+      ]
     },
     {
       "test": "ai::ai > status lists detected and managed agents",

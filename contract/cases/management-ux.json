@@ -1,0 +1,1528 @@
+{
+  "cases": [
+    {
+      "test": "management-ux::B1 array values > --date-range takes a JSON array or the comma form",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "[\"2026-01-01\",\"2026-10-01\"]"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"9b5930a1-f6e4-4455-88e2-d33fb9ca9ed1\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239623539333061312d663665342d343435352d383865322d643333666239636139656431227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2026-01-01&date_range[]=2026-10-01",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard conversion; script)",
+                "X-Request-Id": "9b5930a1-f6e4-4455-88e2-d33fb9ca9ed1"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "2026-01-01,2026-10-01"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"496b2b42-b962-4637-924a-e555d994f323\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2234393662326234322d623936322d343633372d393234612d653535356439393466333233227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2026-01-01&date_range[]=2026-10-01",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard conversion; script)",
+                "X-Request-Id": "496b2b42-b962-4637-924a-e555d994f323"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B1 array values > --date-range takes ISO date-times",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "2026-01-01T00:00:00Z,2026-10-01T12:30:00+02:00"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"58aea496-123e-413a-8fd0-6f38f979ab59\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235386165613439362d313233652d343133612d386664302d366633386639373961623539227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2026-01-01T00%3A00%3A00Z&date_range[]=2026-10-01T12%3A30%3A00%2B02%3A00",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard conversion; script)",
+                "X-Request-Id": "58aea496-123e-413a-8fd0-6f38f979ab59"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B1 array values > a bad --date-range is a usage error that shows the form, with no call",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "2026-01-01"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "a,b"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "2026-01-01,2026-10-01,2026-11-01"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "[\"2026-01-01\""
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range is not a valid JSON array. Use --date-range 2026-01-01,2026-10-01.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1",
+            "--date-range",
+            "01/01/2026,2026-10-01"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01.\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B1 array values > any array option takes a JSON array of scalars, and refuses other items",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_1",
+            "--fields",
+            "[\"id\",\"name\"]"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"69be0784-77ca-4a8d-a270-cc74ff773afa\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236396265303738342d373763612d346138642d613237302d636337346666373733616661227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements?fields[]=id&fields[]=name",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "69be0784-77ca-4a8d-a270-cc74ff773afa"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_1",
+            "--fields",
+            "[\"id\",{\"a\":1}]"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"69be0784-77ca-4a8d-a270-cc74ff773afa\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236396265303738342d373763612d346138642d613237302d636337346666373733616661227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"69be0784-77ca-4a8d-a270-cc74ff773afa\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236396265303738342d373763612d346138642d613237302d636337346666373733616661227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--fields takes a JSON array of strings, numbers or booleans.\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B2 dashboard date range > is required where the spec declares it",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--app",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--date-range is required.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "conversion",
+            "--help"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely dashboard conversion [options]\n\nPaywall conversion\n\nOptions:\n  --output <format>                    json (default) or table\n  --env <env>                          prod or staging. Mandatory for writes\n  --dry-run                            print the request without sending it\n  --yes                                accept the confirmation prompt of a risky\n                                       change\n  --reason <text>                      why you run this command (sent in the\n                                       User-Agent)\n  --rate <n>                           requests per second, lower than the\n                                       default\n  --i-asked-backend                    allow a rate above the hard cap\n  --out <file>                         write the JSON output to a file, or - for\n                                       stdout\n  --app <app_id>                       application public id (required)\n  --date-range <a,b>                   Two-element [start_date, end_date] window\n                                       of ISO8601 dates (YYYY-MM-DD); both ends\n                                       inclusive (the end date's events are\n                                       counted). Every time-series tool in this\n                                       namespace needs it. [array of string,\n                                       required] comma separated or repeated\n  --periodicity <value>                Bucket granularity. Defaults to MONTH.\n                                       Use DAY for ranges up to ~60 days, WEEK\n                                       up to ~6 months, MONTH beyond. Each row's\n                                       `period` is the bucket's start date.\n                                       [enum: DAY|WEEK|MONTH|YEAR]\n  --countries <a,b>                    Filter by store country ISO codes. [array\n                                       of string] comma separated or repeated\n  --platform-names <a,b>               Filter by platform name. [array of enum:\n                                       AMAZON|ANDROID|HUAWEI|IOS|STRIPE|SWG]\n                                       comma separated or repeated\n  --audiences <a,b>                    Filter by audience public_id. [array of\n                                       string] comma separated or repeated\n  --campaigns <a,b>                    Filter by campaign public_id. [array of\n                                       string] comma separated or repeated\n  --placements <a,b>                   Filter by placement public_id. [array of\n                                       string] comma separated or repeated\n  --screens <a,b>                      Filter by screen (paywall) public_id.\n                                       [array of string] comma separated or\n                                       repeated\n  --ab-test-variants <a,b>             Filter by A/B test variant public_id.\n                                       [array of string] comma separated or\n                                       repeated\n  --offer-types <a,b>                  Filter by offer type. [array of enum:\n                                       NONE|FREE_TRIAL|INTRO_OFFER|PROMOTIONAL_OFFER|PROMO_CODE]\n                                       comma separated or repeated\n  --unique-users <value>               Restrict to unique users\n                                       (\"true\"/\"false\"). [string]\n  --survey <value>                     Filter by survey identifier. [string]\n  --primary-metric-group-by <value>    Split the paywall views / unique viewers\n                                       (primary metric) by one dimension. Omit\n                                       for a single, ungrouped series. Values\n                                       beyond the 10 largest groups are\n                                       collapsed into one \"Other\" row. platform\n                                       = store platform (ios, android, …);\n                                       screen = paywall screen the subscription\n                                       was purchased from; placement = placement\n                                       the paywall was shown at; audience =\n                                       audience the user matched;\n                                       ab_test_variant = A/B test variant;\n                                       country = store country (ISO code).\n                                       [enum:\n                                       platform|screen|placement|audience|ab_test_variant|country]\n  --secondary-metric-group-by <value>  Split the purchases / conversions\n                                       (secondary metric) by one dimension. Omit\n                                       for a single, ungrouped series. Values\n                                       beyond the 10 largest groups are\n                                       collapsed into one \"Other\" row. platform\n                                       = store platform (ios, android, …);\n                                       screen = paywall screen the subscription\n                                       was purchased from; placement = placement\n                                       the paywall was shown at; audience =\n                                       audience the user matched; plan =\n                                       subscription plan; ab_test_variant = A/B\n                                       test variant; country = store country\n                                       (ISO code). [enum:\n                                       platform|screen|placement|audience|plan|ab_test_variant|country]\n  --fields <a,b>                       Field selection for token economy: an\n                                       explicit list of field names to include\n                                       in the response, or [\"*\"] for every\n                                       field. Omit for this endpoint's own\n                                       default field set. [array of string]\n                                       comma separated or repeated\n  -h, --help                           display help for command\n\nPaywall conversion: paywall views and the purchases they led to, from 2024-01-01 onwards.\n\nReturns one object with five keys:\n\n- `primary_metric_by_period`: `[{period, group_by, group_by_public_id, group_by_name, presentation_views_count, unique_viewers_count}]`. Views and distinct viewers per period, split by `primary_metric_group_by`.\n- `secondary_metric_by_period`: `[{period, group_by, group_by_public_id, group_by_name, purchase_tapped_count, conversions_to_offer_count, conversions_to_regular_count, total_conversions_count, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio, click_through_rate_purchase_tapped_ratio}]`. Counts split by `secondary_metric_group_by`. Each ratio divides the group's count by the unique viewers of the whole period, not of the group.\n- `primary_metric_table` and `secondary_metric_table`: the same counts totalled over the whole range per dimension value, with `*_by_presentation_views_ratio` and `*_by_unique_viewers_ratio`.\n- `kpi`: `[{presentation_views_count, unique_viewers_count, paywalls_viewed_per_user_average, conversions_to_offer_ratio, conversions_to_regular_ratio, total_conversions_ratio}]` for the whole range.\n\nDefinitions:\n\n- `conversions_to_offer`: free-trial, intro-offer and promotional-offer starts.\n- `conversions_to_regular`: those offers converting to paid, plus direct full-price purchases.\n- `total_conversions`: offer starts plus direct purchases.\n\nUnits and constraints:\n\n- Units: counts, and ratios of a count to a viewer count. A viewer can start several subscriptions, so a ratio can exceed 1. A ratio is not a percentage.\n- `date_range` is mandatory here.\n- Recommended periodicity: WEEK or MONTH.\n- Single application only.\n\nRequired scope: analytics.dashboards:view\nRequest:\n  GET /management/v1/applications/{application_id}/dashboard_v2/conversion\n\nExample:\n  purchasely dashboard conversion --app app_xxx --date-range <date-range>\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B2 dashboard date range > is not added where the spec has no date range",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "mau-reports",
+            "--app",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/mau_reports\",\"status\":200,\"rate_limited\":false,\"request_id\":\"d449d58a-e492-4a1b-bf04-e388747e3f5b\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f6d61755f7265706f727473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264343439643538612d653439322d346131622d626630342d653338383734376533663562227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/mau_reports",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard mau-reports; script)",
+                "X-Request-Id": "d449d58a-e492-4a1b-bf04-e388747e3f5b"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "paywall-latency",
+            "--app",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/paywall_latency\",\"status\":200,\"rate_limited\":false,\"request_id\":\"a40f6968-5bb1-4ac8-a416-a5cb41a2ad6d\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f70617977616c6c5f6c6174656e6379222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2261343066363936382d356262312d346163382d613431362d613563623431613261643664227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/paywall_latency",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard paywall-latency; script)",
+                "X-Request-Id": "a40f6968-5bb1-4ac8-a416-a5cb41a2ad6d"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B3 array option help > shows the comma form",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--help"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely placements list [options]\n\nList placements\n\nOptions:\n  --output <format>   json (default) or table\n  --env <env>         prod or staging. Mandatory for writes\n  --dry-run           print the request without sending it\n  --yes               accept the confirmation prompt of a risky change\n  --reason <text>     why you run this command (sent in the User-Agent)\n  --rate <n>          requests per second, lower than the default\n  --i-asked-backend   allow a rate above the hard cap\n  --out <file>        write the JSON output to a file, or - for stdout\n  --app <app_id>      application public id (optional: omit for all apps)\n  --fields <a,b>      Field selection for token economy: an explicit list of\n                      field names to include in the response, or [\"*\"] for every\n                      field. Omit for this endpoint's own default field set.\n                      [array of string] comma separated or repeated\n  --page <value>      Page number (1-indexed). Defaults to 1. [integer]\n  --per-page <value>  Results per page. Defaults to 25, capped at 100. [integer]\n  -h, --help          display help for command\n\nList placements for an application.\n\nRequired scope: targeting.placements:view\nRequest:\n  GET /management/v1/applications/{application_id}/placements  (with --app)\n  GET /management/v1/placements  (without --app)\n\nExample:\n  purchasely placements list --app app_xxx\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B4 examples hold the required flags > plans list",
+      "steps": [
+        {
+          "argv": [
+            "plans",
+            "list",
+            "--help"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely plans list [options]\n\nList plans\n\nOptions:\n  --output <format>     json (default) or table\n  --env <env>           prod or staging. Mandatory for writes\n  --dry-run             print the request without sending it\n  --yes                 accept the confirmation prompt of a risky change\n  --reason <text>       why you run this command (sent in the User-Agent)\n  --rate <n>            requests per second, lower than the default\n  --i-asked-backend     allow a rate above the hard cap\n  --out <file>          write the JSON output to a file, or - for stdout\n  --app <app_id>        application public id (required)\n  --product-id <value>  Public ID of the product whose plans to list. [string,\n                        required]\n  --fields <a,b>        Field selection for token economy: an explicit list of\n                        field names to include in the response, or [\"*\"] for\n                        every field. Omit for this endpoint's own default field\n                        set. [array of string] comma separated or repeated\n  -h, --help            display help for command\n\nList every plan configured for a product.\n\nRequired scope: setup.plans:view\nRequest:\n  GET /management/v1/applications/{application_id}/plans\n\nExample:\n  purchasely plans list --app app_xxx --product-id <product-id>\n",
+          "err": ""
+        },
+        {
+          "argv": [
+            "search",
+            "list plans",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely plans list --app app_xxx --product-id <product-id>\",\n    \"summary\": \"List plans\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions list --app app_xxx --plan-id <plan-id>\",\n    \"summary\": \"List store distributions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely plans create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a plan\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/plans\",\n    \"scope\": \"setup.plans:create\"\n  },\n  {\n    \"command\": \"purchasely plans get --app app_xxx --id <id>\",\n    \"summary\": \"Get a plan\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{id}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely plans update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a plan\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{id}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely plans delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Delete a plan\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{id}\",\n    \"scope\": \"setup.plans:delete\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  },\n  {\n    \"command\": \"purchasely answers list --app app_xxx --survey-id <survey-id>\",\n    \"summary\": \"List survey answers\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/answers\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely applications list\",\n    \"summary\": \"List applications\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely audiences list --app app_xxx\",\n    \"summary\": \"List audiences\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/audiences\",\n    \"scope\": \"targeting.audiences:view\"\n  },\n  {\n    \"command\": \"purchasely campaigns list --app app_xxx\",\n    \"summary\": \"List campaigns\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns\",\n    \"scope\": \"targeting.campaigns:view\"\n  },\n  {\n    \"command\": \"purchasely category-tags list --app app_xxx\",\n    \"summary\": \"List category tags\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/category_tags\",\n    \"scope\": \"experiences.category_tags:view\"\n  },\n  {\n    \"command\": \"purchasely client-errors list --app app_xxx\",\n    \"summary\": \"List client errors\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/client_errors\",\n    \"scope\": \"lookups.client_errors:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties list --app app_xxx\",\n    \"summary\": \"List custom event properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-events list --app app_xxx\",\n    \"summary\": \"List custom events\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_events\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-properties list --app app_xxx\",\n    \"summary\": \"List custom properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:view\"\n  },\n  {\n    \"command\": \"purchasely flows list --app app_xxx\",\n    \"summary\": \"List in-app flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows\",\n    \"scope\": \"experiences.flows:view\"\n  },\n  {\n    \"command\": \"purchasely fonts list --app app_xxx\",\n    \"summary\": \"List custom fonts\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/fonts\",\n    \"scope\": \"setup.fonts:view\"\n  },\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely products list --app app_xxx\",\n    \"summary\": \"List products\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/products\",\n    \"scope\": \"setup.products:view\"\n  },\n  {\n    \"command\": \"purchasely one-time-purchases list --app app_xxx\",\n    \"summary\": \"List one-time purchases\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_one_time_purchases\",\n    \"scope\": \"lookups.one_time_purchases:view\"\n  },\n  {\n    \"command\": \"purchasely subscriptions list --app app_xxx\",\n    \"summary\": \"List subscriptions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_subscriptions\",\n    \"scope\": \"lookups.subscriptions:view\"\n  },\n  {\n    \"command\": \"purchasely screens list --app app_xxx\",\n    \"summary\": \"List screens\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions list --app app_xxx --screen-id <screen-id>\",\n    \"summary\": \"List screen versions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely surveys list --app app_xxx\",\n    \"summary\": \"List surveys\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/surveys\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely web-flows list --app app_xxx\",\n    \"summary\": \"List web flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/web_flows\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely webhook-deliveries list --user-id <user-id>\",\n    \"summary\": \"List webhook deliveries for a user\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/users/{user_id}/webhook_deliveries\",\n    \"scope\": \"integrations.webhook_deliveries:view\"\n  },\n  {\n    \"command\": \"purchasely translations list --app app_xxx\",\n    \"summary\": \"Get translation status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/translations\",\n    \"scope\": \"setup.translations:view\"\n  },\n  {\n    \"command\": \"purchasely users list --app app_xxx --identifier <identifier>\",\n    \"summary\": \"Find a user by ID\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/users\",\n    \"scope\": \"lookups.users:view\"\n  },\n  {\n    \"command\": \"purchasely webhooks list --app app_xxx\",\n    \"summary\": \"Get webhook event settings\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/webhooks\",\n    \"scope\": \"integrations.webhooks:view\"\n  },\n  {\n    \"command\": \"purchasely apply\",\n    \"summary\": \"Send the writes of a plan file, after a person reads them\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely distributions create --app app_xxx --plan-id <plan-id> --data @body.json --env prod\",\n    \"summary\": \"Create a store distribution\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely distributions get --app app_xxx --plan-id <plan-id> --store <store>\",\n    \"summary\": \"Get a store distribution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions update --app app_xxx --plan-id <plan-id> --store <store> --data @body.json --env prod\",\n    \"summary\": \"Update a store distribution\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely distributions delete --app app_xxx --plan-id <plan-id> --store <store> --env prod\",\n    \"summary\": \"Delete a store distribution\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update an AB test\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests/{id}\",\n    \"scope\": \"experimentation.ab_tests:edit\"\n  },\n  {\n    \"command\": \"purchasely dashboard composition-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription composition\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/composition_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-revenues --app app_xxx --date-range <date-range>\",\n    \"summary\": \"One-time purchase revenue by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/one_time_purchases_revenues\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-stats --app app_xxx --date-range <date-range>\",\n    \"summary\": \"One-time purchase sales and refunds\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/one_time_purchases_stats\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscriptions-revenues --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription revenue by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/subscriptions_revenues\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B5 table output > shows six scalar columns, id first, by default",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_1",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": 100,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"0ed2e0c2-1fd6-4362-95b5-1c9ee53ac62d\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230656432653063322d316664362d343336322d393562352d316339656535336163363264227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "0ed2e0c2-1fd6-4362-95b5-1c9ee53ac62d"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"placements\":[{\"created_at\":\"2026-01-01\",\"extra\":{\"a\":1},\"type\":\"default\",\"status\":\"live\",\"name\":\"Home 1\",\"vendor_id\":\"home_1\",\"id\":\"plc_1\",\"updated_at\":\"2026-02-01\",\"description\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"created_at\":\"2026-01-01\",\"extra\":{\"a\":1},\"type\":\"default\",\"status\":\"live\",\"name\":\"Home 2\",\"vendor_id\":\"home_2\",\"id\":\"plc_2\",\"updated_at\":\"2026-02-01\",\"description\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}],\"meta\":{\"total\":2}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "id     vendor_id  name    status  type     created_at\nplc_1  home_1     Home 1  live    default  2026-01-01\nplc_2  home_2     Home 2  live    default  2026-01-01\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B5 table output > keeps every --fields column in the given order and fits the width",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_1",
+            "--output",
+            "table",
+            "--fields",
+            "description,updated_at,id,name,vendor_id,status,type"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": 100,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"6b5092f2-c4da-447e-a681-7aee15ae4345\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236623530393266322d633464612d343437652d613638312d376165653135616534333435227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements?fields[]=description&fields[]=updated_at&fields[]=id&fields[]=name&fields[]=vendor_id&fields[]=status&fields[]=type",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "6b5092f2-c4da-447e-a681-7aee15ae4345"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"placements\":[{\"created_at\":\"2026-01-01\",\"extra\":{\"a\":1},\"type\":\"default\",\"status\":\"live\",\"name\":\"Home 1\",\"vendor_id\":\"home_1\",\"id\":\"plc_1\",\"updated_at\":\"2026-02-01\",\"description\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"created_at\":\"2026-01-01\",\"extra\":{\"a\":1},\"type\":\"default\",\"status\":\"live\",\"name\":\"Home 2\",\"vendor_id\":\"home_2\",\"id\":\"plc_2\",\"updated_at\":\"2026-02-01\",\"description\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}],\"meta\":{\"total\":2}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "description                                    updated_at  id     name    vendor_id  status  type\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...  2026-02-01  plc_1  Home 1  home_1     live    default\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...  2026-02-01  plc_2  Home 2  home_2     live    default\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B6 not found names the resource > names the id and the app before the server message",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "get",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_9"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":404,\"rate_limited\":false,\"request_id\":\"134e804d-5637-4055-91ce-ba011cb4ad6a\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2231333465383034642d353633372d343035352d393163652d626130313163623461643661227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_9",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements get; script)",
+                "X-Request-Id": "134e804d-5637-4055-91ce-ba011cb4ad6a"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 404,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Not found\"]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"placement \\\"plc_9\\\" not found in app app_1\",\"Not found\"],\"status\":404}}\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "get",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_9"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":404,\"rate_limited\":false,\"request_id\":\"13658a49-aabc-46ba-a388-e00f0052c022\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2231333635386134392d616162632d343662612d613338382d653030663030353263303232227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements/plc_9",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements get; script)",
+                "X-Request-Id": "13658a49-aabc-46ba-a388-e00f0052c022"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 404,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "<html>"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"HTTP_404\",\"messages\":[\"placement \\\"plc_9\\\" not found in app app_1\",\"HTTP 404\"],\"status\":404}}\n"
+        }
+      ]
+    },
+    {
+      "test": "management-ux::B6 not found names the resource > adds nothing when the app is the only path id",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72944,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":404,\"rate_limited\":false,\"request_id\":\"8e3db37c-0ed3-4fab-9390-0ffb08d34fcf\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238653364623337632d306564332d346661622d393339302d306666623038643334666366227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "8e3db37c-0ed3-4fab-9390-0ffb08d34fcf"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 404,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Not found\"]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Not found\"],\"status\":404}}\n"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,570 @@
+{
+  "cases": [
+    {
+      "test": "commands::command generation > maps apps to applications and --app-id to --app",
+      "steps": [
+        {
+          "argv": [
+            "apps",
+            "list"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"82859621-bb51-4e5a-ba77-197e6c1d3669\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238323835393632312d626235312d346535612d626137372d313937653663316433363639227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; applications list; script)",
+                "X-Request-Id": "82859621-bb51-4e5a-ba77-197e6c1d3669"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"applications\":[]}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"applications\": []\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app-id",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000001250,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"82859621-bb51-4e5a-ba77-197e6c1d3669\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238323835393632312d626235312d346535612d626137372d313937653663316433363639227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000002500,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030323530302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"82859621-bb51-4e5a-ba77-197e6c1d3669\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e319cbeb-e35b-48c7-9747-a7b3273f8ce3\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238323835393632312d626235312d346535612d626137372d313937653663316433363639227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265333139636265622d653335622d343863372d393734372d613762333237336638636533227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/placements",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "e319cbeb-e35b-48c7-9747-a7b3273f8ce3"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"applications\":[]}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"applications\": []\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "list",
+            "--app-id=app_2"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000001250,
+          "t_after": 1700000002500,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000002500,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030323530302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"82859621-bb51-4e5a-ba77-197e6c1d3669\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e319cbeb-e35b-48c7-9747-a7b3273f8ce3\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238323835393632312d626235312d346535612d626137372d313937653663316433363639227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265333139636265622d653335622d343863372d393734372d613762333237336638636533227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000003750,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030333735302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"82859621-bb51-4e5a-ba77-197e6c1d3669\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e319cbeb-e35b-48c7-9747-a7b3273f8ce3\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"d4dc2897-2bd7-4790-8d5d-eeb9077fab49\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238323835393632312d626235312d346535612d626137372d313937653663316433363639227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265333139636265622d653335622d343863372d393734372d613762333237336638636533227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264346463323839372d326264372d343739302d386435642d656562393037376661623439227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_2/placements",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; placements list; script)",
+                "X-Request-Id": "d4dc2897-2bd7-4790-8d5d-eeb9077fab49"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"applications\":[]}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"applications\": []\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "commands::search > puts placements list first",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "list placements"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a placement\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements get --app app_xxx --id <id>\",\n    \"summary\": \"Get a placement\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a placement\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:delete\"\n  },\n  {\n    \"command\": \"purchasely placements delete-audience --app app_xxx --id <id> --audience-id <audience-id> --env prod\",\n    \"summary\": \"Remove an audience from a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences/{audience_id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements duplicate --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Duplicate a placement's targeting\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/duplicate\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default placement\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/make_default\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "search",
+            "list placements",
+            "--limit",
+            "2"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "search",
+            "list placements",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a placement\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements get --app app_xxx --id <id>\",\n    \"summary\": \"Get a placement\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a placement\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:delete\"\n  },\n  {\n    \"command\": \"purchasely placements delete-audience --app app_xxx --id <id> --audience-id <audience-id> --env prod\",\n    \"summary\": \"Remove an audience from a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences/{audience_id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements duplicate --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Duplicate a placement's targeting\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/duplicate\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default placement\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/make_default\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "commands::a group with no subcommand > prints its help on stdout, exits 0 and prints no error JSON, for a generated group and a group of an extension",
+      "steps": [
+        {
+          "argv": [
+            "web-flows"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely web-flows [options] [command]\n\nManagement API: web-flows\n\nOptions:\n  -h, --help        display help for command\n\nCommands:\n  list [options]    List web flows\n  create [options]  Create a web flow\n  get [options]     Get a web flow\n  update [options]  Update a web flow\n  delete [options]  Discard a web flow\n  help [command]    display help for command\n",
+          "err": ""
+        },
+        {
+          "argv": [
+            "extra"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": null,
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: acme extra [options] [command]\n\nAdded commands\n\nOptions:\n  -h, --help      display help for command\n\nCommands:\n  run             Run it\n  help [command]  display help for command\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "commands::a group with no subcommand > still refuses an unknown subcommand",
+      "steps": [
+        {
+          "argv": [
+            "web-flows",
+            "nope"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 72987,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'nope'\"]}}\n"
+        }
+      ]
+    }
+  ]
+}

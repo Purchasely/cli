@@ -25,7 +25,7 @@ pub fn register(program: &mut Command, _: &mut Runtime) {
             .into_iter()
             .filter(|o| o.key() != "plan"),
     );
-    c=c.after_help("A plan file holds writes that a command recorded with --plan <file>. An agent can record them\nwith PURCHASELY_READ_ONLY=1 or with no key: nothing is sent. A person reads the plan, then applies it.\n\nThe CLI lists the writes and asks once (or --yes). A risky change still asks on its own in a terminal;\nwithout a terminal, apply stops there (exit 8). Each applied write is marked in the file, so a second\nrun sends only the rest. apply stops at the first error: exit 9 when some writes were applied.\n\nExamples:\n  purchasely placements update --app app_xxx --id plc_xxx --data @placement.json --env prod --plan plan.json\n  purchasely apply plan.json --dry-run\n  purchasely apply plan.json");
+    c=c.after_help("\nA plan file holds writes that a command recorded with --plan <file>. An agent can record them\nwith PURCHASELY_READ_ONLY=1 or with no key: nothing is sent. A person reads the plan, then applies it.\n\nThe CLI lists the writes and asks once (or --yes). A risky change still asks on its own in a terminal;\nwithout a terminal, apply stops there (exit 8). Each applied write is marked in the file, so a second\nrun sends only the rest. apply stops at the first error: exit 9 when some writes were applied.\n\nExamples:\n  purchasely placements update --app app_xxx --id plc_xxx --data @placement.json --env prod --plan plan.json\n  purchasely apply plan.json --dry-run\n  purchasely apply plan.json");
     c = c.action(run);
     program.commands.push(c)
 }

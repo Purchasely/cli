@@ -17,6 +17,21 @@ use std::collections::BTreeMap;
 pub fn register(program: &mut Command, runtime: &mut Runtime) {
     let (_, ops) = spec::embedded_spec();
     for generated in spec::derive_commands(&ops) {
+        let op = generated.app_op.as_ref().or(generated.global_op.as_ref());
+        if let Some(op) = op {
+            runtime
+                .search_index
+                .push(crate::core::runtime::SearchEntry {
+                    command: help::usage_string(&generated, &runtime.d.name),
+                    resource: generated.resource.clone(),
+                    action: generated.action.clone(),
+                    summary: help::plain(&generated.summary),
+                    description: op.description.clone(),
+                    method: op.method.clone(),
+                    path: op.path.clone(),
+                    scope: op.scope.clone(),
+                });
+        }
         if runtime
             .taken
             .contains(&format!("{} {}", generated.resource, generated.action))
@@ -32,6 +47,7 @@ pub fn register(program: &mut Command, runtime: &mut Runtime) {
             add_leaf(group, &generated, &name);
         }
     }
+    runtime.command_tree = Some(program.clone());
 }
 
 fn find_or_create_hidden_group<'a>(program: &'a mut Command, name: &str) -> &'a mut Command {

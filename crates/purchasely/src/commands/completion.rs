@@ -138,12 +138,14 @@ pub fn render(shell: &str, command: &Command) -> String {
         _ => String::new(),
     }
 }
-pub fn register(program: &mut Command, _rt: &mut Runtime) {
-    let shell = Argument::required("<shell>", "the shell of the script");
+pub fn register(program: &mut Command, rt: &mut Runtime) {
+    let shell =
+        Argument::required("<shell>", "the shell of the script").choices(&["bash", "zsh", "fish"]);
+    let name = &rt.d.name;
     let command = Command::new("completion")
         .description("Print a shell completion script (bash, zsh or fish)")
-        .argument(shell);
-    let snapshot = program.clone();
+        .argument(shell)
+        .after_help(format!("\nIt prints the script and installs nothing. Put one line in the startup file of the shell:\n  bash  source <({name} completion bash)     in ~/.bashrc\n  zsh   source <({name} completion zsh)      in ~/.zshrc, after compinit\n  fish  {name} completion fish | source      in ~/.config/fish/config.fish\nThe script holds the commands, the subcommands and the long options of this version. It makes no request.\n"));
     program.commands.push(command.action(move |p: &Parsed, rt| {
         let shell = p.arguments.first().map(String::as_str).unwrap_or("");
         if !["bash", "zsh", "fish"].contains(&shell) {
@@ -151,7 +153,11 @@ pub fn register(program: &mut Command, _rt: &mut Runtime) {
                 "Unknown shell: {shell}. Choose bash, zsh or fish."
             )));
         }
-        let out = render(shell, &snapshot);
+        let tree = rt
+            .command_tree
+            .as_ref()
+            .expect("the command tree is finalized before dispatch");
+        let out = render(shell, tree);
         rt.d.host.stdout(&out);
         Ok(())
     }));

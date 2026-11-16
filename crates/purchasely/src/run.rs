@@ -97,8 +97,41 @@ fn root_command(name: &str, version: &str) -> Command {
     let mut root = Command::new(name)
         .description("Purchasely command line tool")
         .version(version);
+    // TS has no root options: commander passes an option before the subcommand on to it. The Rust parser reads
+    // them at the root, so they exist there but stay out of the root help.
     add_globals(&mut root);
-    root.after_help(format!("\nConventions:\n  JSON goes to stdout. An error goes to stderr as one JSON object.\n  A command is <resource> <action>.\n  --env is mandatory on every write.\n  --dry-run prints the request without sending it.\n\nExamples:\n  {name} reference --format man"))
+    for option in &mut root.options {
+        option.hidden = true;
+    }
+    root.after_help(intro(name))
+}
+
+/// TS `intro` of `run.ts`.
+fn intro(name: &str) -> String {
+    format!(
+        "
+Conventions:
+  JSON goes to stdout. An error goes to stderr as one JSON object.
+  A command is <resource> <action>. The resource is the lowercase tag of the spec (ab-tests, custom-events).
+  The action is list, get, create, update, delete, or a verb such as start or make-default. apps is an alias of applications.
+  --app <id> is the application id (--app-id is an alias). A command that exists with and without an application
+  (placements list) calls the global endpoint when you omit --app.
+  The other path parameters are flags: --id, --plan-id, --store.
+  The query parameters are flags in kebab case. An array takes --fields id,name or a repeated flag.
+  --data '<json>', --data @file.json or --data - (stdin) is the body.
+  --dry-run prints {{ method, url, headers, body }} and sends nothing. It needs no key.
+  --env is mandatory on every write (POST, PUT, PATCH, DELETE), also with --dry-run. Exit 10 without it.
+  A risky change returns CONFIRMATION_REQUIRED with its impact and a confirm_token (valid 5 minutes, tied to the exact request).
+  A JSON output over 200 KB is not printed. It goes to a file in the cache directory and the CLI prints {{\"file\": \"...\", \"bytes\": 123}}.
+  --out <file> chooses the file. --out - forces stdout.
+
+Examples:
+  {name} placements list --app app_xxx --fields id,vendor_id | jq -r '.placements[].id'
+  {name} screens list --app app_xxx
+  {name} placements get --app app_xxx --id <placement>
+  {name} placements update --app app_xxx --id plc_xxx --data @placement.json --env prod --dry-run
+  {name} reference --format man"
+    )
 }
 
 fn fail(rt: &Runtime, error: &CliError) -> i32 {
@@ -120,16 +153,19 @@ pub fn run(argv: Vec<String>, d: Deps) -> i32 {
         Err(error) if error.0.starts_with("HELP:") => {
             // The parse error names the leaf only: walk argv to the command that asked for help.
             let mut command = &root;
+            let mut ancestors = Vec::new();
             for arg in &argv {
                 if let Some(sub) = command
                     .commands
                     .iter()
                     .find(|c| c.name == *arg || c.aliases.contains(arg))
                 {
+                    ancestors.push(command.name.as_str());
                     command = sub;
                 }
             }
-            rt.d.host.stdout(&cli::help::help(command, width));
+            rt.d.host
+                .stdout(&cli::help::help(command, &ancestors, width));
             return EXIT::OK;
         }
         Err(error) if error.0 == rt.d.version => {
@@ -169,7 +205,7 @@ pub fn run(argv: Vec<String>, d: Deps) -> i32 {
         return fail(&rt, &error);
     }
     if parsed.arguments.is_empty() && parsed.options.is_empty() {
-        rt.d.host.stdout(&cli::help::help(&root, width));
+        rt.d.host.stdout(&cli::help::help(&root, &[], width));
     } else if !parsed.arguments.is_empty() {
         return fail(
             &rt,
@@ -199,7 +235,14 @@ fn dispatch(
     let Some(action) = command.action.clone() else {
         // A group with no subcommand prints its help on stdout and exits 0.
         if !command.commands.is_empty() {
-            rt.d.host.stdout(&cli::help::help(command, width));
+            let mut ancestors = vec![root.name.as_str()];
+            ancestors.extend(
+                parsed.command[..parsed.command.len() - 1]
+                    .iter()
+                    .map(String::as_str),
+            );
+            rt.d.host
+                .stdout(&cli::help::help(command, &ancestors, width));
             return Ok(());
         }
         return Err(CliError::new(

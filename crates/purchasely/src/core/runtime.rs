@@ -181,7 +181,6 @@ pub fn add_globals(command: &mut Command) {
             "--out <file>",
             "write the JSON output to a file, or - for stdout",
         ),
-        OptionDef::value("--app <id>", "application id"),
     ]);
 }
 

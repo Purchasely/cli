@@ -1,0 +1,3 @@
+[
+  {"test":"pack-release.sh > public install from the packed site","steps":[],"unit":"install::packed_site_install"}
+]

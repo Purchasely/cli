@@ -30,18 +30,51 @@ pub struct Response {
     pub headers: Vec<(String, String)>,
     pub body: Vec<u8>,
 }
-#[derive(Clone, Debug, Default)]
-pub struct NetError;
-#[derive(Clone, Debug, Default)]
-pub struct ExecOpts;
-#[derive(Clone, Debug, Default)]
-pub struct ExecResult;
-#[derive(Clone, Debug, Default)]
+/// A transport failure (DNS, connect, TLS, timeout): the TS `fetch` rejection.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct NetError {
+    pub message: String,
+    pub timed_out: bool,
+}
+
+/// `opts` of TS `d.exec` (`types.ts:30`).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ExecOpts {
+    pub cwd: Option<PathBuf>,
+    pub input: Option<String>,
+    pub timeout_ms: u64,
+    /// Resolves at once with code 0, stdio ignored, new session (A23).
+    pub detach: bool,
+}
+
+/// TS `ExecResult` (`types.ts:64`).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ExecResult {
+    pub code: i32,
+    pub stdout: String,
+    pub stderr: String,
+    pub timed_out: bool,
+}
+
+/// TS `d.exec` rejection: `NotFound` is ENOENT, `Other` any other spawn error code.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub enum ExecError {
     #[default]
     NotFound,
+    Other(String),
 }
-pub trait Keychain {}
+
+/// A keychain failure (the TS promise rejects): the message of the error.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct KeychainError(pub String);
+
+/// TS `Keychain` (`types.ts:5`). `None` from `Host::keychain()` is TS `keychain: null`.
+pub trait Keychain {
+    fn get(&self, service: &str, account: &str) -> Result<Option<String>, KeychainError>;
+    fn set(&self, service: &str, account: &str, secret: &str) -> Result<(), KeychainError>;
+    fn delete(&self, service: &str, account: &str) -> Result<(), KeychainError>;
+}
+/// Terminal of menus and games (`games/term.ts:104`). Owner of the methods: P11a.
 pub trait Io {}
 
 pub trait Host {
@@ -87,7 +120,7 @@ mod tests {
             Ok(Response::default())
         }
         fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
-            Ok(ExecResult)
+            Ok(ExecResult::default())
         }
         fn prompt(&self, _: &str, _: bool) -> String {
             String::new()

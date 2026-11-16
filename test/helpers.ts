@@ -116,11 +116,19 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
     ext: opts.ext,
   };
   const recordDir = process.env.CONTRACT_RECORD;
-  const exec = async (...argv: string[]) => {
+  const execOne = async (argv: string[]) => {
     out.length = 0;
     err.length = 0;
     const code = recordDir ? await recordedStep(argv) : await run(argv, d);
     return { code, out: out.join(""), err: err.join(""), json: () => JSON.parse(out.join("")), errJson: () => JSON.parse(err.join("").trim().split("\n").pop()!) };
+  };
+  // A recorded step owns the shared buffers and fakes: steps that a test starts together (Promise.all) run in turn.
+  let queue: Promise<unknown> = Promise.resolve();
+  const exec = (...argv: string[]) => {
+    if (!recordDir) return execOne(argv);
+    const next = queue.then(() => execOne(argv));
+    queue = next.catch(() => undefined);
+    return next;
   };
   async function recordedStep(argv: string[]): Promise<number> {
     const before = new Map<string, unknown>();

@@ -84,9 +84,10 @@ main() {
 
   os=$(uname -s)
   arch=$(uname -m)
-  case "$os" in Darwin|Linux) ;; *) die 2 "unsupported system" ;; esac
-  case "$arch" in arm64|aarch64) target=arm64 ;; x86_64|amd64) target=x64 ;; *) die 2 "unsupported architecture" ;; esac
-  if [ "$os" = Darwin ] && [ "$target" = x64 ] && command -v sysctl >/dev/null 2>&1 && [ "$(sysctl -n sysctl.proc_translated 2>/dev/null || true)" = 1 ]; then target=arm64; fi
+  case "$os" in Darwin) os_name=darwin ;; Linux) os_name=linux ;; *) die 2 "unsupported system" ;; esac
+  case "$arch" in arm64|aarch64) arch_name=arm64 ;; x86_64|amd64) arch_name=x64 ;; *) die 2 "unsupported architecture" ;; esac
+  if [ "$os_name" = darwin ] && [ "$arch_name" = x64 ] && command -v sysctl >/dev/null 2>&1 && [ "$(sysctl -n sysctl.proc_translated 2>/dev/null || true)" = 1 ]; then arch_name=arm64; fi
+  target="$os_name-$arch_name"
 
   if [ "$relaunch" -eq 1 ]; then
     mkdir -p "$root/staging" "$root/bin" "$root/releases"

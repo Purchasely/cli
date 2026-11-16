@@ -234,14 +234,7 @@ pub fn derive_commands(ops: &[Op]) -> Vec<Command> {
     let mut groups: HashMap<String, Vec<NamedOperation>> = HashMap::new();
     let mut keys = Vec::new();
     for op in ops {
-        let mut n = derive_name(&op.method, &op.path, &op.tag);
-        if op.tag == "Web Activations" && op.summary.ends_with("of a flow") {
-            n.resource = "web-activations".to_owned();
-            n.action = "flow".to_owned();
-        } else if op.tag == "Web Activations" && op.summary.ends_with("of a screen") {
-            n.resource = "web-activations".to_owned();
-            n.action = "screen".to_owned();
-        }
+        let n = derive_name(&op.method, &op.path, &op.tag);
         let key = format!("{} {}", n.resource, n.action);
         if !groups.contains_key(&key) {
             keys.push(key.clone());

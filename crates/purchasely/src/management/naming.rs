@@ -75,7 +75,7 @@ pub fn derive_name(method: &str, path: &str, tag: &str) -> Name {
             } else if method == "GET"
                 && ci > 0
                 && is_param(segments[ci - 1])
-                && singular(&kebab(segments[ci])) == segments[ci]
+                && singular(segments[ci]) == segments[ci]
             {
                 "get".to_owned()
             } else if method == "GET" {

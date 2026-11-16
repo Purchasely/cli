@@ -124,7 +124,9 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
   };
   async function recordedStep(argv: string[]): Promise<number> {
     const before = new Map<string, unknown>();
-    const roots = snapshotRoots(argv, d.env, root);
+    // A test can point stateDir at the root of another setup: that root is then the one the step writes to.
+    const base = d.stateDir === join(root, "state") ? root : dirname(d.stateDir);
+    const roots = snapshotRoots(argv, d.env, base);
     for (const dir of roots) before.set(dir, snapshot(dir));
     const callsBefore = calls.length;
     const promptsBefore = prompts.length;
@@ -243,8 +245,8 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
     } finally {
       const after = new Map<string, unknown>();
       for (const dir of roots) after.set(dir, snapshot(dir));
-      const filesBefore = Object.fromEntries([...before].map(([dir, value]) => [dirToken(dir, roots, root), value]));
-      const filesAfter = Object.fromEntries([...after].map(([dir, value]) => [dirToken(dir, roots, root), value]));
+      const filesBefore = Object.fromEntries([...before].map(([dir, value]) => [dirToken(dir, roots, base), value]));
+      const filesAfter = Object.fromEntries([...after].map(([dir, value]) => [dirToken(dir, roots, base), value]));
       recordedSteps.push({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join("") });
       Object.assign(d, original);
       killSpy.mockRestore();

@@ -15,7 +15,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -48,7 +48,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -132,7 +151,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -145,7 +164,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700003600000,
           "t_after": 1700003600000,
@@ -207,7 +245,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -240,7 +278,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700090000000,
           "t_after": 1700090000000,
@@ -347,7 +404,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -380,7 +437,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700180000000,
           "t_after": 1700180000000,
@@ -482,7 +558,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -515,7 +591,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -586,7 +681,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -599,7 +694,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -618,8 +732,8 @@
                 "path": "state/update.acme.lock",
                 "mode": 420,
                 "directory": false,
-                "text": "56366",
-                "hex": "3536333636"
+                "text": "9381",
+                "hex": "39333831"
               },
               {
                 "path": "state",
@@ -641,8 +755,8 @@
                 "path": "state/update.acme.lock",
                 "mode": 420,
                 "directory": false,
-                "text": "56366",
-                "hex": "3536333636"
+                "text": "9381",
+                "hex": "39333831"
               },
               {
                 "path": "state",
@@ -699,7 +813,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -712,7 +826,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -759,7 +892,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -772,7 +905,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -820,7 +972,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -833,7 +985,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -880,7 +1051,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -893,7 +1064,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -965,7 +1155,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1031,7 +1221,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1097,7 +1287,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1177,7 +1367,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1248,7 +1438,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1281,7 +1471,26 @@
                 }
               ],
               "result": "11.0.0"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1384,7 +1593,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1417,7 +1626,26 @@
                 }
               ],
               "result": "10.0.0"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1511,7 +1739,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1544,7 +1772,26 @@
                 }
               ],
               "result": "10.0.0"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1638,7 +1885,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1671,7 +1918,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1742,7 +2008,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1775,7 +2041,26 @@
                 }
               ],
               "result": "10.0.0"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1847,7 +2132,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1880,7 +2165,26 @@
                 }
               ],
               "result": null
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -1946,7 +2250,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1979,7 +2283,26 @@
                 }
               ],
               "error": "could not check the latest version"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -2052,7 +2375,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2085,7 +2408,26 @@
                 }
               ],
               "result": "10.0.0"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -2145,7 +2487,7 @@
                 "/r",
                 "--upgrade-only",
                 "--log",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-VHUMUb/state/update.acme.log"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-PzsObN/state/update.acme.log"
               ],
               "opts": {
                 "timeoutMs": 600000
@@ -2182,7 +2524,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2195,7 +2537,26 @@
               "note": "Only in `acme`."
             },
             "npm_update": "npm install -g acme",
-            "latest": null
+            "latest": null,
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -2263,7 +2624,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2360,7 +2721,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2422,7 +2783,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2484,7 +2845,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2542,7 +2903,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2609,7 +2970,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2677,7 +3038,7 @@
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 95843,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2710,7 +3071,26 @@
                 }
               ],
               "result": "9.9.9"
-            }
+            },
+            "commands": [
+              {
+                "name": "extra",
+                "description": "Added commands",
+                "hidden": false,
+                "action": false,
+                "options": [],
+                "commands": [
+                  {
+                    "name": "run",
+                    "description": "Run it",
+                    "hidden": false,
+                    "action": true,
+                    "options": [],
+                    "commands": []
+                  }
+                ]
+              }
+            ]
           },
           "t_before": 1700000000000,
           "t_after": 1700000000000,
@@ -2778,7 +3158,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 95843,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2789,10 +3169,43 @@
           "wall": "2026-01-15T12:00:00.000Z",
           "pid_probes": [],
           "files_before": {
-            "<ROOT>": []
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
           },
           "files_after": {
-            "<ROOT>": []
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"10.0.0\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a2231302e302e30227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
           },
           "keychain": {
             "before": {},
@@ -2829,7 +3242,7 @@
                 "/r",
                 "--upgrade-only",
                 "--log",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-RhDYoJ/state/update.purchasely.log"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-yHJJQy/state/update.purchasely.log"
               ],
               "opts": {
                 "timeoutMs": 600000
@@ -2864,7 +3277,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 56366,
+          "pid": 9381,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",

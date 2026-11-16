@@ -115,8 +115,7 @@
           "out": "{\n  \"placements\": []\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::breaker > falls back to X-RateLimit-Reset, then to 60 s, never 1 s",
@@ -344,8 +343,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::breaker > retries only once: two 429 exit 7",
@@ -463,8 +461,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"RATE_LIMITED\",\"messages\":[\"slow down\"],\"status\":429}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::breaker > halves down to 1/8 at most, and restores after 10 minutes without a 429",
@@ -1002,8 +999,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"RATE_LIMITED\",\"messages\":[\"slow down\"],\"status\":429}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::breaker > every process waits for paused_until",
@@ -1112,8 +1108,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::breaker > stops with exit 7 after 20 rejections in 5 minutes, then refuses at once",
@@ -2588,8 +2583,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"RATE_LIMIT_STOP\",\"messages\":[\"The server rejected 20 requests in 5 minutes. The CLI stopped to protect the API.\",\"Wait 5 minutes. Run `purchasely usage` to see the state. Stop other scripts that use the same key.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::rate options > refuses a rate above the cap unless --i-asked-backend",
@@ -2917,8 +2911,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--rate must be a number above 0.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::rate options > spaces sequential reads by 1/0.8 s",
@@ -3111,8 +3104,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::rate options > spaces writes by 7 s",
@@ -3313,8 +3305,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::usage log and command > logs one line per request without the key or query values",
@@ -3433,8 +3424,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::usage log and command > purchasely usage shows the last hour, rejections, limiter and breaker",
@@ -3739,8 +3729,7 @@
           "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"\u2026T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"\u2026T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::large output and purge > writes a JSON over 200 KB to the cache dir with 0700 dirs",
@@ -3851,8 +3840,7 @@
           "out": "{\"file\":\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-ocbjhq/cache/prod/a5cc40633d7b/1700000000000-placements-list.json\",\"bytes\":256055}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::large output and purge > honours --out file and --out -",
@@ -4163,8 +4151,7 @@
           "out": "{\"file\":\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-e0bXP2/small.json\",\"bytes\":13}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "guardrails::large output and purge > purge deletes the cache, for one env or all",
@@ -4722,8 +4709,7 @@
           "out": "{\"purged\":\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-zS1O8V/cache\"}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     }
   ]
 }

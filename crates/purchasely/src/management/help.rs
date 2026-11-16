@@ -171,7 +171,7 @@ fn strip_required_scope(description: &str) -> String {
         description.trim().to_owned()
     }
 }
-fn plain(text: &str) -> String {
+pub(crate) fn plain(text: &str) -> String {
     let mut out = String::new();
     let mut chars = text.chars().peekable();
     while let Some(ch) = chars.next() {

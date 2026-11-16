@@ -53,8 +53,7 @@
           "out": "{\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements update; script)\",\n    \"Content-Type\": \"application/json\"\n  },\n  \"body\": {\n    \"name\": \"X\"\n  }\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "dryrun::--dry-run > works without an API key",
@@ -116,8 +115,7 @@
           "out": "{\n  \"method\": \"DELETE\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements delete; script)\"\n  },\n  \"body\": null\n}\n",
           "err": "purchasely env=staging surface=management identity=- key=-\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     }
   ]
 }

@@ -149,32 +149,42 @@ pub fn to_table_value(value: &Value, fields: Option<&[String]>, width: usize) ->
         width,
     ))
 }
-pub fn cache_dir_for(d: &Deps, env: &str, key: &str) -> std::path::PathBuf {
-    use std::{fs, path::Path};
-    let hash = format!("{:x}", sha2::Sha256::digest(key.as_bytes()));
-    let dir = d.cache_dir.join(env).join(&hash[..12]);
-    let _ = fs::create_dir_all(&dir);
+/// TS `cacheDirFor`: `<cache>/<env>/<key hash or anonymous>`, 0700 up to the cache dir, files older than the
+/// TTL (by the clock of the host) removed.
+pub fn cache_dir_for(d: &Deps, env: &str, key: Option<&str>) -> std::path::PathBuf {
+    use std::fs;
+    let name = key.map_or_else(|| "anonymous".to_owned(), super::credentials::key_hash);
+    let dir = d.cache_dir.join(env).join(name);
+    let mut builder = fs::DirBuilder::new();
+    builder.recursive(true);
+    #[cfg(unix)]
+    std::os::unix::fs::DirBuilderExt::mode(&mut builder, 0o700);
+    let _ = builder.create(&dir);
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
-        let _ = fs::set_permissions(&dir, fs::Permissions::from_mode(0o700));
+        let mut p = dir.as_path();
+        while p.starts_with(&d.cache_dir) && p != d.cache_dir {
+            let _ = fs::set_permissions(p, fs::Permissions::from_mode(0o700));
+            p = p.parent().unwrap_or(&d.cache_dir);
+        }
     }
+    let now = d.host.now();
     if let Ok(entries) = fs::read_dir(&dir) {
         for e in entries.flatten() {
-            if e.metadata()
+            let mtime = e
+                .metadata()
                 .ok()
                 .and_then(|m| m.modified().ok())
-                .and_then(|t| t.elapsed().ok())
-                .is_some_and(|age| age.as_millis() as i64 > CACHE_TTL_MS)
-            {
+                .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+                .map_or(0, |t| t.as_millis() as i64);
+            if now - mtime > CACHE_TTL_MS {
                 let _ = fs::remove_file(e.path());
             }
         }
     }
-    let _ = Path::new("");
     dir
 }
-use sha2::Digest;
 #[derive(Clone, Debug, Default)]
 pub struct EmitOptions {
     pub table: bool,
@@ -206,19 +216,29 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
         return;
     }
     let file = if let Some(file) = &opts.out {
-        std::path::PathBuf::from(file)
+        // TS `resolve()`: absolute, no symlink resolution.
+        std::path::absolute(file).unwrap_or_else(|_| file.into())
     } else {
-        let dir = cache_dir_for(d, &opts.env, opts.key.as_deref().unwrap_or(""));
-        dir.join(format!(
-            "{}-{}.json",
-            d.host.now(),
-            opts.name
-                .chars()
-                .map(|c| if c.is_alphanumeric() { c } else { '-' })
-                .collect::<String>()
-        ))
+        let dir = cache_dir_for(d, &opts.env, opts.key.as_deref());
+        // TS `name.replace(/\W+/g, "-")`: each run of non-word characters becomes one dash.
+        let mut name = String::new();
+        for c in opts.name.chars() {
+            if c.is_ascii_alphanumeric() || c == '_' {
+                name.push(c);
+            } else if !name.ends_with('-') {
+                name.push('-');
+            }
+        }
+        dir.join(format!("{}-{name}.json", d.host.now()))
     };
-    if std::fs::write(&file, &text).is_ok() {
+    let mut options = std::fs::OpenOptions::new();
+    options.write(true).create(true).truncate(true);
+    #[cfg(unix)]
+    std::os::unix::fs::OpenOptionsExt::mode(&mut options, 0o600);
+    let written = options
+        .open(&file)
+        .and_then(|mut f| std::io::Write::write_all(&mut f, text.as_bytes()));
+    if written.is_ok() {
         d.host.stdout(&format!(
             "{}\n",
             json::stringify(

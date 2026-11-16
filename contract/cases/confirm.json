@@ -114,8 +114,7 @@
           "out": "{\n  \"deleted\": true\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > puts the token in the body for PUT webhooks, rest unchanged",
@@ -231,8 +230,7 @@
           "out": "{\n  \"deleted\": true\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > exits 8 without --yes when not interactive, with the token on stderr",
@@ -327,8 +325,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_9\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > an agent can resend with --confirm-token",
@@ -425,8 +422,7 @@
           "out": "{\n  \"deleted\": true\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > asks on a TTY: y resends, n exits 8",
@@ -647,8 +643,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_1\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > a second CONFIRMATION_REQUIRED exits 8 after two calls",
@@ -764,8 +759,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"stale\"],\"status\":403},\"confirm_token\":\"b\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "confirm::confirm token flow > does not loop when the user passed a token that is refused",
@@ -863,8 +857,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"new\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     }
   ]
 }

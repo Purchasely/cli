@@ -45,17 +45,32 @@ impl Globals {
     }
 }
 
+/// TS `Meta`: the `--fields` columns of a table, and the not-found message of a generated command.
+#[derive(Clone, Debug, Default)]
+pub struct Meta {
+    pub columns: Option<Vec<String>>,
+    pub not_found: Option<String>,
+}
+
 pub fn execute(
     rt: &mut Runtime,
     p: &Parsed,
     build: impl Fn(&str, Option<&str>) -> Result<Built, CliError>,
     name: &str,
     refuse_redirect: bool,
+    meta: Meta,
 ) -> Result<(), CliError> {
     let g = Globals::from(p);
     let built = build_first(rt, &g, &build)?;
-    let value = perform(rt, &g, built, &build, name, refuse_redirect)?;
-    let ctx = context(rt, &g, name)?;
+    let value = perform(rt, &g, built, &build, name, refuse_redirect).map_err(|mut e| {
+        if let Some(message) = &meta.not_found
+            && e.exit == EXIT::NOT_FOUND
+        {
+            e.messages.insert(0, message.clone());
+        }
+        e
+    })?;
+    let ctx = context(rt, &g)?;
     output::emit(
         &rt.d,
         &value,
@@ -65,14 +80,14 @@ pub fn execute(
             env: ctx.env,
             key: ctx.key,
             name: name.into(),
-            columns: None,
+            columns: meta.columns,
             width: rt.d.columns.unwrap_or(120) as usize,
         },
     );
     Ok(())
 }
 
-fn context<'a>(rt: &'a Runtime, g: &Globals, command: &str) -> Result<Ctx<'a>, CliError> {
+fn context<'a>(rt: &'a Runtime, g: &Globals) -> Result<Ctx<'a>, CliError> {
     let env = rt.env(g.env.as_deref())?;
     let rate = rt.rate("management", g.rate.as_deref(), g.allow_rate)?;
     let key = rt
@@ -84,11 +99,12 @@ fn context<'a>(rt: &'a Runtime, g: &Globals, command: &str) -> Result<Ctx<'a>, C
         env,
         surface: "management".into(),
         key,
-        identity: None,
+        identity: rt.cfg.identity_email.clone(),
         reason: g.reason.clone(),
-        command: Some(command.into()),
+        command: rt.command.clone(),
         rate,
         headers: vec![],
+        read_only: rt.read_only(),
     })
 }
 
@@ -126,7 +142,7 @@ pub(crate) fn perform(
     if g.plan.is_some() && first.op.method == "GET" {
         return Err(usage("--plan records a write. Run a GET without it."));
     }
-    let ctx = context(rt, g, name)?;
+    let ctx = context(rt, g)?;
     if let Some(file) = &g.plan {
         let r = build(&ctx.env, None)?;
         let number = append_plan(file, &plan_entry(name, &ctx.env, &r))?;
@@ -134,7 +150,8 @@ pub(crate) fn perform(
             (
                 "planned".into(),
                 Value::from(
-                    fs::canonicalize(file)
+                    // TS `resolve()`: absolute, no symlink resolution.
+                    std::path::absolute(file)
                         .unwrap_or_else(|_| file.into())
                         .to_string_lossy()
                         .into_owned(),
@@ -159,16 +176,7 @@ pub(crate) fn perform(
                 Value::from("Bearer <redacted>".to_owned()),
             ),
             ("Accept".into(), Value::from("application/json".to_owned())),
-            (
-                "User-Agent".into(),
-                Value::from(http::user_agent(
-                    &rt.d.version,
-                    None,
-                    g.reason.as_deref().unwrap_or("-"),
-                    name,
-                    "script",
-                )),
-            ),
+            ("User-Agent".into(), Value::from(http::ctx_user_agent(&ctx))),
         ];
         if first.body.is_some() {
             h.push((
@@ -189,22 +197,6 @@ pub(crate) fn perform(
                     .unwrap_or(Value::Null),
             ),
         ]));
-    }
-    if rt.read_only() {
-        return Err(errors::CliError::new(
-            EXIT::REFUSED,
-            "REFUSED",
-            vec![if rt
-                .d
-                .env
-                .get("PURCHASELY_READ_ONLY")
-                .is_some_and(|v| v == "1")
-            {
-                "PURCHASELY_READ_ONLY=1: writes are disabled.".into()
-            } else {
-                "read_only is true in the config. Writes are disabled.".into()
-            }],
-        ));
     }
     let mut current = first;
     let mut sent_token = g.confirm_token.is_some();
@@ -372,6 +364,23 @@ pub fn validate_api_path(raw: &str) -> Result<String, CliError> {
     Ok(format!("{PREFIX}{path}"))
 }
 
+/// TS `writePlan`: pretty JSON, mode 0600 when the file is created.
+pub fn write_plan(path: &Path, plan: &Value) -> Result<(), CliError> {
+    use std::io::Write;
+    let mut options = fs::OpenOptions::new();
+    options.write(true).create(true).truncate(true);
+    #[cfg(unix)]
+    std::os::unix::fs::OpenOptionsExt::mode(&mut options, 0o600);
+    options
+        .open(path)
+        .and_then(|mut f| {
+            f.write_all(
+                format!("{}\n", json::stringify_pretty(plan).unwrap_or_default()).as_bytes(),
+            )
+        })
+        .map_err(|e| CliError::new(EXIT::GENERIC, "FILE_ERROR", vec![e.to_string()]))
+}
+
 pub fn append_plan(file: &str, entry: &Value) -> Result<usize, CliError> {
     let path = Path::new(file);
     let mut plan = if path.exists() {
@@ -392,11 +401,7 @@ pub fn append_plan(file: &str, entry: &Value) -> Result<usize, CliError> {
     if let Some(parent) = path.parent() {
         let _ = fs::create_dir_all(parent);
     }
-    fs::write(
-        path,
-        format!("{}\n", json::stringify_pretty(&plan).unwrap_or_default()),
-    )
-    .map_err(|e| CliError::new(EXIT::GENERIC, "FILE_ERROR", vec![e.to_string()]))?;
+    write_plan(path, &plan)?;
     Ok(n)
 }
 pub fn read_plan(file: &str) -> Result<Value, CliError> {

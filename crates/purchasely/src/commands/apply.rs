@@ -224,7 +224,6 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             }
             Err(e) => {
                 let count = applied.len();
-                let message = e.message();
                 let code = e.code.clone();
                 let out = Value::Object(vec![
                     ("applied".into(), Value::Array(applied)),
@@ -236,24 +235,31 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                                 "command".into(),
                                 get(&r, "command").cloned().unwrap_or(Value::Null),
                             ),
-                            ("error".into(), e.to_value()),
+                            // TS `e.toJSON().error`: the inner object, without the confirm token.
+                            (
+                                "error".into(),
+                                get(&e.to_value(), "error").cloned().unwrap_or(Value::Null),
+                            ),
                         ]),
                     ),
                 ]);
                 let _ = emit(rt, &g, out, "apply");
-                return Err(CliError::new(
+                // TS keeps every message, the extra fields (the confirm token) and the status.
+                let mut messages = vec![format!(
+                    "Request #{} of the plan failed. {} applied, {} left.",
+                    i + 1,
+                    count,
+                    pending.len() - count
+                )];
+                messages.extend(e.messages.iter().cloned());
+                let mut error = CliError::new(
                     if count == 0 { e.exit } else { EXIT::PARTIAL },
                     code,
-                    vec![
-                        format!(
-                            "Request #{} of the plan failed. {} applied, {} left.",
-                            i + 1,
-                            count,
-                            pending.len() - count
-                        ),
-                        message,
-                    ],
-                ));
+                    messages,
+                );
+                error.extra = e.extra.clone();
+                error.status = e.status;
+                return Err(error);
             }
         }
     }
@@ -311,11 +317,7 @@ fn validate(r: &Value, n: usize) -> Result<(), CliError> {
     Ok(())
 }
 fn write_plan(file: &str, v: &Value) -> Result<(), CliError> {
-    std::fs::write(
-        file,
-        format!("{}\n", json::stringify_pretty(v).unwrap_or_default()),
-    )
-    .map_err(|e| CliError::new(EXIT::GENERIC, "FILE_ERROR", vec![e.to_string()]))
+    exec::write_plan(std::path::Path::new(file), v)
 }
 fn emit(rt: &Runtime, g: &Globals, v: Value, name: &str) -> Result<(), CliError> {
     let env = rt.env(g.env.as_deref()).unwrap_or_else(|_| "prod".into());

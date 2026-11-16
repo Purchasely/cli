@@ -357,8 +357,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > refuses a write without --env, also with --dry-run, and sends nothing",
@@ -1696,8 +1695,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > a 429 goes through the breaker: one retry, then exit 7",
@@ -1932,8 +1930,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > uses the Management key in an extension too",
@@ -2130,8 +2127,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > confirm flow: the token goes in the query for DELETE placements, in the body for PUT webhooks",
@@ -2748,8 +2744,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > confirm flow: declined on a TTY or not interactive exits 8 after one call",
@@ -3116,8 +3111,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > a path outside the spec gets no confirm retry",
@@ -3300,8 +3294,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > a path outside the spec is logged with {id} for each segment that is not a literal segment of the spec",
@@ -3478,8 +3471,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > an email or a vendor id with no digit and no underscore never reaches the usage log",
@@ -3822,8 +3814,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     },
     {
       "test": "api::api > --confirm-token on a path outside the spec is a usage error that names the other ways",
@@ -4221,8 +4212,7 @@
           }
         ]
       },
-      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option.",
-      "pending": "P1b"
+      "intended_diff": "The Rust API requests refuse redirects; the TS recorder omits the fetch redirect option."
     }
   ]
 }

@@ -89,8 +89,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > sends arrays with brackets, in either input style",
@@ -183,8 +182,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > parses integers and rejects bad ones",
@@ -362,8 +360,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--page must be an integer.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > validates enums",
@@ -413,8 +410,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--group-by must be one of: sdk_version, sdk_running_mode.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > chooses the global or the app path",
@@ -605,8 +601,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > requires --app when the command has only an app variant, and required path params",
@@ -697,8 +692,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--id is required.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > sends the body from --data, @file and stdin",
@@ -1108,8 +1102,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--data is required: pass '<json>' or @file.json.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > sends the identification headers",
@@ -1454,8 +1447,7 @@
           "out": "{}\n",
           "err": "acme env=prod surface=management identity=kevin@purchasely.com key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > never puts an email in the public User-Agent, even with identity_email in the shared config",
@@ -1821,8 +1813,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > keeps the email in the User-Agent of an extension with identity",
@@ -2028,8 +2019,7 @@
           "out": "{}\n",
           "err": "acme env=prod surface=management identity=kevin@purchasely.com key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > sends the command name and the runner, never the argument values",
@@ -2557,8 +2547,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > read-only mode refuses a write before the send, and keeps reads and --dry-run",
@@ -2842,8 +2831,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Read-only mode: read_only is true in the config. This command writes, so the CLI sent nothing.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > gives every request a time limit that also covers the body read",
@@ -2930,8 +2918,7 @@
           "out": "{}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > write_allowlist limits the writes of an env to its apps, before the dry-run",
@@ -3605,8 +3592,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"app_live is not in write_allowlist.prod of the config. Writes go to the listed apps only.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > prints the env header on stderr",
@@ -3695,8 +3681,7 @@
           "out": "{}\n",
           "err": "purchasely env=staging surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > needs --env on every write, also with --dry-run",
@@ -3835,8 +3820,7 @@
           "out": "",
           "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--env must be prod or staging, got \\\"mars\\\".\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > reads PURCHASELY_ENV for reads only",
@@ -4010,8 +3994,7 @@
           "out": "",
           "err": "purchasely env=staging surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"A write needs --env prod or --env staging. Add it, also with --dry-run.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "request::request building > prints a table",
@@ -4186,8 +4169,7 @@
           "out": "id  extra\np1  {\"a\":1}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     }
   ]
 }

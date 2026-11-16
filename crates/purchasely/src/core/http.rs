@@ -20,6 +20,8 @@ pub struct Ctx<'a> {
     pub command: Option<String>,
     pub rate: f64,
     pub headers: Vec<(String, String)>,
+    /// Refuse every write before it is sent (`PURCHASELY_READ_ONLY=1` or `read_only` in the config).
+    pub read_only: bool,
 }
 #[derive(Clone, Debug)]
 pub struct HttpRequest {
@@ -43,22 +45,65 @@ pub fn user_agent(
     command: &str,
     runner: &str,
 ) -> String {
+    // TS `clean`: each run of `\r\n();` becomes one space, then trim; an empty value is `-`.
     fn clean(s: &str) -> String {
-        s.chars()
-            .map(|c| if "\r\n();".contains(c) { ' ' } else { c })
-            .collect::<String>()
-            .trim()
-            .into()
+        let mut out = String::new();
+        let mut in_run = false;
+        for c in s.chars() {
+            if "\r\n();".contains(c) {
+                if !in_run {
+                    out.push(' ');
+                }
+                in_run = true;
+            } else {
+                out.push(c);
+                in_run = false;
+            }
+        }
+        let out = out.trim();
+        if out.is_empty() {
+            "-".into()
+        } else {
+            out.into()
+        }
     }
     format!(
         "purchasely-cli/{version} ({}; {}; {}; {})",
-        identity
-            .map(clean)
-            .filter(|s| !s.is_empty())
-            .unwrap_or_else(|| "-".into()),
+        clean(identity.unwrap_or("")),
         clean(reason),
         clean(command),
         runner
+    )
+}
+
+/// TS `readOnlyError`.
+pub fn read_only_error(d: &Deps) -> CliError {
+    let why = if d.env.get("PURCHASELY_READ_ONLY").is_some_and(|v| v == "1") {
+        "PURCHASELY_READ_ONLY=1 is set"
+    } else {
+        "read_only is true in the config"
+    };
+    CliError::new(
+        EXIT::REFUSED,
+        "REFUSED",
+        vec![format!(
+            "Read-only mode: {why}. This command writes, so the CLI sent nothing."
+        )],
+    )
+}
+
+/// TS `userAgent(ctx)`: only an extension with `identity` sends the email.
+pub fn ctx_user_agent(ctx: &Ctx<'_>) -> String {
+    user_agent(
+        &ctx.d.version,
+        if ctx.d.ext.as_ref().is_some_and(|e| e.identity) {
+            ctx.identity.as_deref()
+        } else {
+            None
+        },
+        ctx.reason.as_deref().unwrap_or(""),
+        ctx.command.as_deref().unwrap_or(""),
+        &runner(ctx.d),
     )
 }
 pub fn refused_redirect_exit() -> i32 {
@@ -113,6 +158,9 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
     let store = StateStore::new(ctx.d, &state_key);
     let limiter = Limiter::new(ctx.d, &store);
     let breaker = Breaker::new(ctx.d, &store);
+    if write && ctx.read_only {
+        return Err(read_only_error(ctx.d));
+    }
     for attempt in 0..2 {
         let factor = breaker.gate()?;
         let permit = limiter
@@ -133,20 +181,7 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
             headers.extend(ctx.headers.clone());
         }
         headers.extend([
-            (
-                "User-Agent".into(),
-                user_agent(
-                    &ctx.d.version,
-                    if ctx.d.ext.as_ref().is_some_and(|e| e.identity) {
-                        ctx.identity.as_deref()
-                    } else {
-                        None
-                    },
-                    ctx.reason.as_deref().unwrap_or(""),
-                    ctx.command.as_deref().unwrap_or(""),
-                    &runner(ctx.d),
-                ),
-            ),
+            ("User-Agent".into(), ctx_user_agent(ctx)),
             ("X-Request-Id".into(), id.clone()),
         ]);
         if req.body.is_some() {
@@ -339,6 +374,7 @@ mod tests {
                 command: Some("apps list".into()),
                 rate: 1.0,
                 headers: vec![],
+                read_only: false,
             },
             h,
         )

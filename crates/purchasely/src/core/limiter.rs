@@ -106,9 +106,6 @@ impl<'a> Limiter<'a> {
         }
     }
     pub fn acquire(&self, rate: f64, write: bool) -> Result<Permit<'a>, String> {
-        if rate <= 0.0 || rate > 1.0 {
-            return Err("rate must be greater than 0 and at most 1".into());
-        }
         if write {
             let at = self.store.with_lock(|| {
                 let v = self.store.read("limiter", fresh());

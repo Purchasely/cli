@@ -77,7 +77,8 @@ impl<'a> Breaker<'a> {
     pub fn new(d: &'a Deps, s: &'a StateStore<'a>) -> Self {
         Self { d, store: s }
     }
-    fn read(&self) -> Value {
+    /// TS `state()`: the rate factor restored after 10 min without a 429, the rejections of the window. Read only.
+    pub fn state(&self) -> Value {
         let v = self.store.read("breaker", state(0, 1.0, 0, vec![]));
         let now = self.d.host.now();
         let f = if factor(&v) < 1.0 && now - num(&v, "last_429_at") > RESTORE {
@@ -94,7 +95,7 @@ impl<'a> Breaker<'a> {
     }
     pub fn gate(&self) -> Result<f64, CliError> {
         loop {
-            let v = self.read();
+            let v = self.state();
             let r = rejs(&v);
             if r.len() >= MAX {
                 return Err(stop());
@@ -110,7 +111,7 @@ impl<'a> Breaker<'a> {
         let mut out = 0;
         self.store
             .with_lock(|| {
-                let v = self.read();
+                let v = self.state();
                 let now = self.d.host.now();
                 let mut f = factor(&v);
                 if now >= num(&v, "paused_until") {
@@ -123,7 +124,7 @@ impl<'a> Breaker<'a> {
                 let _ = self.store.write("breaker", &state(until, f, now, r));
             })
             .map_err(|e| CliError::new(EXIT::GENERIC, "STATE_ERROR", vec![e]))?;
-        if rejs(&self.read()).len() >= MAX {
+        if rejs(&self.state()).len() >= MAX {
             return Err(stop());
         }
         Ok(out)

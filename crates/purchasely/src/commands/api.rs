@@ -97,21 +97,31 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     } else {
         None
     };
-    let mut op = find_op(&method, &full);
-    if p.opt("confirm-token").is_some() && op.confirm.is_none() {
+    // The spec operation gives the confirm placement and the logged path template. No match: no confirm retry,
+    // and the log keeps a segment only when it is a literal segment of the spec.
+    let matched = find_op(&method, &full);
+    if p.opt("confirm-token").is_some() && matched.is_none() {
         return Err(usage(
             "No operation of the API spec matches this method and path, so the token has no place. Send it with --query confirm_token=<token>, or in the --data body.",
         ));
     }
-    if op.path != full {
-        op.path = template(path);
-    }
-    let op = op.clone();
+    let op = matched.unwrap_or_else(|| crate::management::spec::Op {
+        method: method.clone(),
+        path: template(path),
+        tag: String::new(),
+        summary: String::new(),
+        description: String::new(),
+        scope: String::new(),
+        params: vec![],
+        body: None,
+        confirm: None,
+        app: false,
+    });
     let full = full.clone();
     let body = body.clone();
     let query = query.clone();
     let build = move |env: &str, t: Option<&str>| {
-        let base = request::base_url(env).replace("/management/v1", "");
+        let base = request::base_url(env);
         let mut u = format!(
             "{base}{full}{}",
             if query.is_empty() {
@@ -132,25 +142,13 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             body: b,
         })
     };
-    exec::execute(rt, p, build, "api", true)
+    exec::execute(rt, p, build, "api", true, exec::Meta::default())
 }
-fn find_op(method: &str, path: &str) -> crate::management::spec::Op {
+fn find_op(method: &str, path: &str) -> Option<crate::management::spec::Op> {
     let (_, ops) = spec::embedded_spec();
     ops.into_iter()
         .filter(|o| o.method == method && matches(o.path.as_str(), path))
         .min_by_key(|o| o.path.matches('{').count())
-        .unwrap_or(crate::management::spec::Op {
-            method: method.into(),
-            path: path.into(),
-            tag: String::new(),
-            summary: String::new(),
-            description: String::new(),
-            scope: String::new(),
-            params: vec![],
-            body: None,
-            confirm: None,
-            app: false,
-        })
 }
 fn matches(pattern: &str, path: &str) -> bool {
     let a: Vec<_> = pattern.split('/').collect();

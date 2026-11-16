@@ -87,8 +87,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"UNAUTHORIZED\",\"messages\":[\"UNAUTHORIZED message\"],\"status\":401}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > 401 without code exits 3",
@@ -177,8 +176,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"HTTP_401\",\"messages\":[\"HTTP 401\"],\"status\":401}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > FORBIDDEN exits 4",
@@ -267,8 +265,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"FORBIDDEN\",\"messages\":[\"FORBIDDEN message\"],\"status\":403}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > FEATURE_NOT_ENABLED exits 4",
@@ -357,8 +354,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"FEATURE_NOT_ENABLED\",\"messages\":[\"FEATURE_NOT_ENABLED message\"],\"status\":403}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > VALIDATION_FAILED exits 5",
@@ -447,8 +443,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"VALIDATION_FAILED\",\"messages\":[\"VALIDATION_FAILED message\"],\"status\":422}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > other 422 exits 5",
@@ -537,8 +532,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"HTTP_422\",\"messages\":[\"HTTP 422\"],\"status\":422}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > NOT_FOUND exits 6",
@@ -627,8 +621,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"NOT_FOUND message\"],\"status\":404}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > 404 without code exits 6",
@@ -717,8 +710,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"HTTP_404\",\"messages\":[\"HTTP 404\"],\"status\":404}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > 500 exits 1",
@@ -807,8 +799,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"HTTP_500\",\"messages\":[\"HTTP 500\"],\"status\":500}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > unknown code exits 1",
@@ -897,8 +888,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"WHATEVER\",\"messages\":[\"WHATEVER message\"],\"status\":400}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > RATE_LIMITED exits 7 with retry_at, after one retry",
@@ -1018,8 +1008,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"RATE_LIMITED\",\"messages\":[\"RATE_LIMITED message\"],\"status\":429,\"retry_at\":1700000100}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > CONFIRMATION_REQUIRED arriving as 403 exits 8",
@@ -1112,8 +1101,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nImpact: CONFIRMATION_REQUIRED message\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"CONFIRMATION_REQUIRED message\"],\"status\":403},\"confirm_token\":\"tok\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > exits 1 on a network error and never prints the key",
@@ -1192,7 +1180,7 @@
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"NETWORK_ERROR\",\"messages\":[\"The request failed before a response (ENOTFOUND).\"]}}\n"
         }
       ],
-      "pending": "P6a"
+      "pending": "P7b"
     },
     {
       "test": "errors::error mapping > exits 2 on an unknown option and an unknown command",
@@ -1322,8 +1310,7 @@
           "out": "",
           "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--output must be json or table.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > prints help and version with exit 0",
@@ -1452,8 +1439,7 @@
           "out": "Usage: purchasely placements create [options]\n\nCreate a placement\n\nOptions:\n  --output <format>  json (default) or table\n  --env <env>        prod or staging. Mandatory for writes\n  --dry-run          print the request without sending it\n  --yes              accept the confirmation prompt of a risky change\n  --reason <text>    why you run this command (sent in the User-Agent)\n  --rate <n>         requests per second, lower than the default\n  --i-asked-backend  allow a rate above the hard cap\n  --out <file>       write the JSON output to a file, or - for stdout\n  --app <app_id>     application public id (required)\n  --fields <a,b>     Field selection for token economy: an explicit list of\n                     field names to include in the response, or [\"*\"] for every\n                     field. Omit for this endpoint's own default field set.\n                     [array of string] comma separated or repeated\n  --data <json>      request body: JSON, @file.json or - for stdin\n  --plan <file>      record the write in this plan file, send nothing. A person\n                     reads it, then runs `apply <file>`\n  -h, --help         display help for command\n\nCreate a placement on an application. The first placement created for an app automatically becomes its default.\n\nRequired scope: targeting.placements:create\nRequest:\n  POST /management/v1/applications/{application_id}/placements\n\nA write needs --env prod or --env staging. Run it with --dry-run first.\n\nBody (required): --data '<json>' or --data @file.json or --data -\n  category_tag_ids (array of string) Category tag public IDs (cat_\u2026) to associate.\n  default_presentable_id (string) Screen/flow (pres_.../flow_...) shown when no targeting audience matches.\n  description (string) Free-text description of the placement.\n  name (string, required) Display name shown in console.\n  vendor_id (string, required) Stable machine identifier used in SDK calls.\n\nExample:\n  purchasely placements create --app app_xxx --data @body.json --env prod\n",
           "err": ""
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "errors::error mapping > has no em-dash or en-dash in the help of any command",
@@ -7379,7 +7365,7 @@
           "err": ""
         }
       ],
-      "pending": "P6a"
+      "pending": "P7b"
     }
   ]
 }

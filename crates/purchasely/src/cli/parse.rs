@@ -33,7 +33,8 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
             } else {
                 let v = inline
                     .map(str::to_owned)
-                    .or_else(|| argv.get(i + 1).filter(|s| !s.starts_with('-')).cloned())
+                    // commander: a `<value>` option takes the next argument, also `-` or `-5`.
+                    .or_else(|| argv.get(i + 1).cloned())
                     .ok_or_else(|| {
                         CliError(format!("error: option '{}' argument missing", flag))
                     })?;

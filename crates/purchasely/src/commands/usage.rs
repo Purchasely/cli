@@ -100,7 +100,7 @@ fn usage(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         let key = key_hash(&credential.key);
         let state = StateStore::new(&rt.d, format!("{env}-management-{key}"));
         let limiter = state.read("limiter", Value::Object(vec![]));
-        let breaker = state.read("breaker", Value::Object(vec![]));
+        let breaker = crate::core::breaker::Breaker::new(&rt.d, &state).state();
         let inflight = field(&limiter, "inflight")
             .and_then(|v| {
                 if let Value::Array(a) = v {
@@ -146,7 +146,7 @@ fn usage(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                     ),
                     (
                         "rate_factor".into(),
-                        Value::Number(number(&breaker, "rate_factor").max(1.0)),
+                        Value::Number(number(&breaker, "rate_factor")),
                     ),
                     (
                         "rejections_last_5_min".into(),

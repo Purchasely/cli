@@ -149,8 +149,7 @@
           "out": "{\n  \"planned\": \"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-nfbwWw/plan.json\",\n  \"number\": 2,\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\",\n  \"body\": {\n    \"name\": \"plc_2\"\n  }\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=-\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > --plan needs --env, keeps the allow-list, and refuses --dry-run and a GET",
@@ -377,8 +376,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"app_1 is not in write_allowlist.prod of the config. Writes go to the listed apps only.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > apply lists the writes, asks once, sends them, and marks each one",
@@ -737,8 +735,7 @@
           "out": "{\n  \"pending\": []\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > apply without a terminal needs --yes, and --dry-run only lists",
@@ -1016,8 +1013,7 @@
           "out": "{\n  \"applied\": [\n    {\n      \"number\": 1,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > apply stops at the first error with exit 9, and a second run sends only the rest",
@@ -1474,8 +1470,7 @@
           "out": "{\n  \"applied\": [\n    {\n      \"number\": 2,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    },\n    {\n      \"number\": 3,\n      \"command\": \"placements-update\",\n      \"response\": {}\n    }\n  ]\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#2 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_2\n#3 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_3\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > --yes approves the plan, not a risky change",
@@ -1635,8 +1630,7 @@
           "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-delete\",\n    \"error\": {\n      \"code\": \"CONFIRMATION_REQUIRED\",\n      \"messages\": [\n        \"Used by 3 live campaigns\"\n      ],\n      \"status\": 422\n    }\n  }\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod DELETE https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\nImpact: Used by 3 live campaigns\n{\"error\":{\"code\":\"CONFIRMATION_REQUIRED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Used by 3 live campaigns\"],\"status\":422},\"confirm_token\":\"tok_1\"}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > apply sends the key only to the Management API of the env of each entry",
@@ -2132,8 +2126,7 @@
           "out": "",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xPGy6g/missing.json is not a readable plan file (JSON).\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     },
     {
       "test": "apply::plan, then apply > apply keeps read-only mode",
@@ -2262,8 +2255,7 @@
           "out": "{\n  \"applied\": [],\n  \"failed\": {\n    \"number\": 1,\n    \"command\": \"placements-update\",\n    \"error\": {\n      \"code\": \"REFUSED\",\n      \"messages\": [\n        \"Read-only mode: PURCHASELY_READ_ONLY=1 is set. This command writes, so the CLI sent nothing.\"\n      ]\n    }\n  }\n}\n",
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n#1 prod PATCH https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\n{\"error\":{\"code\":\"REFUSED\",\"messages\":[\"Request #1 of the plan failed. 0 applied, 1 left.\",\"Read-only mode: PURCHASELY_READ_ONLY=1 is set. This command writes, so the CLI sent nothing.\"]}}\n"
         }
-      ],
-      "pending": "P6a"
+      ]
     }
   ]
 }

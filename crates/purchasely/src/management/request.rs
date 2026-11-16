@@ -31,59 +31,138 @@ pub fn attr(flag: &str) -> String {
     out
 }
 
-pub fn parse_value(param: &Param, raw: &str) -> Result<Value, crate::core::errors::CliError> {
-    let flag = format!("--{}", param.name.replace('_', "-"));
-    let invalid = |why: &str| usage(format!("{flag} {why}"));
-    let scalar = |s: &str| -> Result<Value, crate::core::errors::CliError> {
-        if !param.schema.choices.is_empty() && !param.schema.choices.iter().any(|v| v == s) {
-            return Err(invalid(&format!(
-                "must be one of: {}.",
-                param.schema.choices.join(", ")
+/// One occurrence of an array option: a JSON array of scalars when it starts with `[`, else `a,b`.
+fn split_items(
+    flag: &str,
+    example: &str,
+    s: &str,
+) -> Result<Vec<String>, crate::core::errors::CliError> {
+    if !s.trim_start().starts_with('[') {
+        return Ok(s.split(',').map(str::to_owned).collect());
+    }
+    let Ok(Value::Array(items)) = json::parse(s) else {
+        return Err(usage(format!(
+            "{flag} is not a valid JSON array. Use {flag} {example}."
+        )));
+    };
+    items
+        .into_iter()
+        .map(|v| match v {
+            Value::String(s) => Ok(String::from_utf16_lossy(&s)),
+            Value::Bool(b) => Ok(b.to_string()),
+            Value::Number(_) => Ok(json::stringify(&v, None).unwrap_or_default()),
+            _ => Err(usage(format!(
+                "{flag} takes a JSON array of strings, numbers or booleans."
+            ))),
+        })
+        .collect()
+}
+
+/// TS `DATE`: `YYYY-MM-DD`, optionally with `THH:MM[:SS[.fff]]` and a zone.
+fn is_date(v: &str) -> bool {
+    let b = v.as_bytes();
+    let digits =
+        |r: std::ops::Range<usize>| b.get(r).is_some_and(|s| s.iter().all(u8::is_ascii_digit));
+    if !(b.len() >= 10
+        && digits(0..4)
+        && b[4] == b'-'
+        && digits(5..7)
+        && b[7] == b'-'
+        && digits(8..10))
+    {
+        return false;
+    }
+    let mut rest = &v[10..];
+    if rest.is_empty() {
+        return true;
+    }
+    let r = rest.as_bytes();
+    if !(r.len() >= 6
+        && r[0] == b'T'
+        && r[1..3].iter().all(u8::is_ascii_digit)
+        && r[3] == b':'
+        && r[4..6].iter().all(u8::is_ascii_digit))
+    {
+        return false;
+    }
+    rest = &rest[6..];
+    if let Some(sec) = rest.strip_prefix(':') {
+        let s = sec.as_bytes();
+        if !(s.len() >= 2 && s[..2].iter().all(u8::is_ascii_digit)) {
+            return false;
+        }
+        rest = &sec[2..];
+        if let Some(frac) = rest.strip_prefix('.') {
+            let n = frac.bytes().take_while(u8::is_ascii_digit).count();
+            if n == 0 {
+                return false;
+            }
+            rest = &frac[n..];
+        }
+    }
+    let z = rest.as_bytes();
+    rest.is_empty()
+        || rest == "Z"
+        || (z.len() == 6
+            && (z[0] == b'+' || z[0] == b'-')
+            && z[1..3].iter().all(u8::is_ascii_digit)
+            && z[3] == b':'
+            && z[4..6].iter().all(u8::is_ascii_digit))
+}
+
+/// TS `parseValue`: `raw` holds every occurrence of the option (an array option is repeatable).
+pub fn parse_value(param: &Param, raw: &[String]) -> Result<Value, crate::core::errors::CliError> {
+    let flag = format!("--{}", super::naming::kebab(&param.name));
+    let check = |s: &str, choices: &[String]| -> Result<Value, crate::core::errors::CliError> {
+        if !choices.is_empty() && !choices.iter().any(|v| v == s) {
+            return Err(usage(format!(
+                "{flag} must be one of: {}.",
+                choices.join(", ")
             )));
         }
         Ok(Value::from(s.to_owned()))
     };
+    let last = raw.last().map(String::as_str).unwrap_or_default();
     match param.schema.kind.as_deref() {
-        Some("integer") => raw
-            .parse::<i64>()
-            .map(|v| Value::Number(v as f64))
-            .map_err(|_| invalid("must be an integer.")),
-        Some("boolean") => Ok(Value::Bool(raw == "true")),
         Some("array") => {
-            let items: Vec<String> = if raw.trim_start().starts_with('[') {
-                let parsed = json::parse(raw).map_err(|_| invalid("is not a valid JSON array."))?;
-                let Value::Array(values) = parsed else {
-                    return Err(invalid("is not a valid JSON array."));
-                };
-                values
-                    .into_iter()
-                    .map(|v| match v {
-                        Value::String(s) => String::from_utf16_lossy(&s),
-                        Value::Number(n) => n.to_string(),
-                        Value::Bool(b) => b.to_string(),
-                        _ => String::new(),
-                    })
-                    .collect()
+            let example = if param.name == "date_range" {
+                "2026-01-01,2026-10-01"
             } else {
-                raw.split(',').map(str::to_owned).collect()
+                "a,b"
             };
-            if param.name == "date_range"
-                && (items.len() != 2
-                    || items
-                        .iter()
-                        .any(|v| v.len() < 10 || !v.as_bytes().get(4).is_some_and(|c| *c == b'-')))
-            {
-                return Err(invalid(
-                    "takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01.",
-                ));
+            let mut items = Vec::new();
+            for one in raw {
+                items.extend(split_items(&flag, example, one)?);
             }
-            let values = items
-                .iter()
-                .map(|s| scalar(s))
-                .collect::<Result<Vec<_>, _>>()?;
-            Ok(Value::Array(values))
+            items.retain(|v| !v.is_empty());
+            if param.name == "date_range" && (items.len() != 2 || !items.iter().all(|v| is_date(v)))
+            {
+                return Err(usage(format!(
+                    "{flag} takes two dates (YYYY-MM-DD or ISO date-times): --date-range 2026-01-01,2026-10-01."
+                )));
+            }
+            let choices = param
+                .schema
+                .items
+                .as_ref()
+                .map(|i| i.choices.clone())
+                .unwrap_or_default();
+            Ok(Value::Array(
+                items
+                    .iter()
+                    .map(|v| check(v, &choices))
+                    .collect::<Result<_, _>>()?,
+            ))
         }
-        _ => scalar(raw),
+        Some("integer") => {
+            let digits = last.strip_prefix('-').unwrap_or(last);
+            if digits.is_empty() || !digits.bytes().all(|b| b.is_ascii_digit()) {
+                return Err(usage(format!("{flag} must be an integer.")));
+            }
+            Ok(Value::Number(last.parse::<f64>().unwrap_or(0.0)))
+        }
+        Some("boolean") => Ok(Value::Bool(last == "true")),
+        _ => check(last, &param.schema.choices),
     }
 }
 
@@ -266,11 +345,12 @@ pub fn with_token(
     }
 }
 
+/// TS `BASE_URLS`: the host only; the spec paths start with `/management/v1`.
 pub fn base_url(env: &str) -> &'static str {
     if env == "staging" {
-        "https://api-staging.purchasely.io/management/v1"
+        "https://api-staging.purchasely.io"
     } else {
-        "https://api.purchasely.io/management/v1"
+        "https://api.purchasely.io"
     }
 }
 fn value_text(v: &Value) -> String {
@@ -313,6 +393,41 @@ mod tests {
         let built = build_request(&cmd, &values, "prod", None, None).unwrap();
         assert!(built.url.contains("app%201"));
         assert!(built.url.ends_with("fields[]=id&fields[]=name"));
+    }
+    #[test]
+    fn parse_value_follows_ts() {
+        use super::super::spec::{Param, Schema};
+        let param = |name: &str, kind: &str| Param {
+            name: name.into(),
+            location: "query".into(),
+            required: false,
+            description: None,
+            schema: Schema {
+                kind: Some(kind.into()),
+                ..Schema::default()
+            },
+        };
+        let raw = |v: &[&str]| v.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
+        let fields = parse_value(
+            &param("fields", "array"),
+            &raw(&["id,name", "[\"x\",2]", ""]),
+        )
+        .unwrap();
+        assert_eq!(
+            json::stringify(&fields, None).unwrap(),
+            r#"["id","name","x","2"]"#
+        );
+        let dates = param("date_range", "array");
+        assert!(parse_value(&dates, &raw(&["2026-01-01,2026-10-01T10:00:00Z"])).is_ok());
+        assert!(parse_value(&dates, &raw(&["2026-01-01"])).is_err());
+        assert!(parse_value(&dates, &raw(&["2026-01-01,2026-10-01T10"])).is_err());
+        assert!(parse_value(&param("page", "integer"), &raw(&["-2"])).is_ok());
+        assert_eq!(
+            parse_value(&param("page", "integer"), &raw(&["2.5"]))
+                .unwrap_err()
+                .messages,
+            ["--page must be an integer."]
+        );
     }
     #[test]
     fn malformed_body_is_usage_error() {

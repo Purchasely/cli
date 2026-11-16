@@ -215,7 +215,7 @@ pub fn run_case_directory(
         let Some(steps) = case["steps"].as_array_mut() else {
             continue;
         };
-        for step in steps {
+        for (step_index, step) in steps.iter_mut().enumerate() {
             let Some(data) = step.as_object() else {
                 continue;
             };
@@ -233,7 +233,7 @@ pub fn run_case_directory(
                 let tag = old
                     .get("pending")
                     .map_or(String::new(), |p| format!(" [pending {p}]"));
-                failures.push(format!("{}{tag}: {}", old["test"], e.0));
+                failures.push(format!("{}{tag}: step {step_index}: {}", old["test"], e.0));
                 break;
             }
             report.run += 1;
@@ -281,7 +281,6 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
     let result = (|| {
         fs::create_dir_all(&root).map_err(io_error)?;
         let roots = make_roots(step, &root)?;
-        apply_snapshots(step.get("files_before").unwrap_or(&Value::Null), &roots)?;
         let mut argv: Vec<String> =
             serde_json::from_value(step.get("argv").cloned().unwrap_or(json!([])))
                 .unwrap_or_default();
@@ -294,6 +293,27 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
             }
             s
         };
+        // A restored text file can hold a TS temp path (the targets of ai.plugin.json): it gets the replay path.
+        let mut files_before = step.get("files_before").cloned().unwrap_or(Value::Null);
+        for entry in files_before
+            .as_object_mut()
+            .into_iter()
+            .flat_map(|m| m.values_mut())
+            .filter_map(Value::as_array_mut)
+            .flatten()
+        {
+            let utf8 = entry["hex"]
+                .as_str()
+                .and_then(decode_hex)
+                .is_some_and(|b| String::from_utf8(b).is_ok());
+            if let (true, Some(text)) = (utf8, entry["text"].as_str()) {
+                entry["text"] = json!(to_replay(text));
+                if let Some(o) = entry.as_object_mut() {
+                    o.remove("hex");
+                }
+            }
+        }
+        apply_snapshots(&files_before, &roots)?;
         for arg in &mut argv {
             *arg = to_replay(arg);
         }

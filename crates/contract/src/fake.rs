@@ -116,6 +116,14 @@ impl FakeHost {
         if let Some(error) = self.inner.error.borrow().clone() {
             return Err(error);
         }
+        if let Some(next) = self.inner.calls.borrow().front() {
+            return Err(ReplayError(format!(
+                "{} fetch call(s) were not consumed, the next is {} {}",
+                self.inner.calls.borrow().len(),
+                next["method"].as_str().unwrap_or("?"),
+                next["url"].as_str().unwrap_or("?")
+            )));
+        }
         for (name, remaining) in [
             ("fetch", self.inner.calls.borrow().len()),
             ("exec", self.inner.execs.borrow().len()),

@@ -595,7 +595,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_1\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -616,7 +616,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_2\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -997,7 +997,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_1\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -1294,7 +1294,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_1\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -1315,7 +1315,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_2\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 404,
                 "headers": {
@@ -1433,7 +1433,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_2\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -1454,7 +1454,7 @@
                 "Content-Type": "application/json"
               },
               "body": "{\"name\":\"plc_3\"}",
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 200,
                 "headers": {
@@ -1614,7 +1614,7 @@
                 "X-Request-Id": "7917ed8e-b0e3-406b-b9df-6174cd60ec33"
               },
               "body": null,
-              "refuse_redirect": false,
+              "refuse_redirect": true,
               "reply": {
                 "status": 422,
                 "headers": {

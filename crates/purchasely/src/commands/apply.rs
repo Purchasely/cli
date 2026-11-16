@@ -201,7 +201,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                 body,
             })
         };
-        match exec::perform(rt, &globals, base, &build, &strv(&r, "command"), false) {
+        match exec::perform(rt, &globals, base, &build, &strv(&r, "command"), true) {
             Ok(response) => {
                 if let Some(Value::Array(reqs)) = get_mut(&mut plan, "requests")
                     && let Value::Object(o) = &mut reqs[i]

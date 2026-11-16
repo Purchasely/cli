@@ -5,6 +5,8 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
     let mut i = 0;
     let mut literal = false;
     let mut positional = 0;
+    // commander `unknown`: with allowUnknownOption, an unknown option switches the destination of the next words.
+    let mut unknown: Vec<String> = Vec::new();
     while i < argv.len() {
         let arg = &argv[i];
         if !literal && arg == "--" {
@@ -36,11 +38,18 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
             let (flag, inline) = arg
                 .split_once('=')
                 .map_or((arg.as_str(), None), |(a, b)| (a, Some(b)));
-            let opt = command
+            let found = command
                 .options
                 .iter()
-                .find(|o| o.long() == flag || o.short() == Some(flag))
-                .ok_or_else(|| CliError(format!("error: unknown option '{}'", flag)))?;
+                .find(|o| o.long() == flag || o.short() == Some(flag));
+            let Some(opt) = found else {
+                if command.allow_unknown_option {
+                    unknown.push(arg.clone());
+                    i += 1;
+                    continue;
+                }
+                return Err(CliError(format!("error: unknown option '{}'", flag)));
+            };
             let key = opt.key();
             let value = if opt.boolean {
                 inline.unwrap_or("true").to_owned()
@@ -73,6 +82,8 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
             }
             out.options.entry(key.clone()).or_default().push(value);
             out.option_sources.insert(key, "cli");
+        } else if !unknown.is_empty() && !literal {
+            unknown.push(arg.clone());
         } else if let Some(sub) = command
             .commands
             .iter()
@@ -120,6 +131,7 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         }
         i += 1;
     }
+    out.arguments.extend(unknown);
     for (idx, spec) in command.arguments.iter().enumerate() {
         if spec.required && out.arguments.get(idx).is_none() {
             return Err(CliError(format!(
@@ -170,6 +182,31 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
 mod tests {
     use super::*;
     use crate::cli::OptionDef;
+    #[test]
+    fn allow_unknown_option_passes_unknown_flags_as_arguments() {
+        let words = |list: &[&str]| list.iter().map(|w| w.to_string()).collect::<Vec<_>>();
+        let command = Command::new("call")
+            .argument(crate::cli::Argument::required("<tool>", "tool"))
+            .argument(crate::cli::Argument::optional("[args...]", "flags"))
+            .option(OptionDef::value("--env <env>", "env"));
+        assert_eq!(
+            parse(&command, &words(&["t", "--per-page", "5"]))
+                .unwrap_err()
+                .0,
+            "error: unknown option '--per-page'"
+        );
+        let open = command.allow_unknown_option();
+        let parsed = parse(
+            &open,
+            &words(&["t", "--per-page", "5", "--env", "staging", "--data", "{}"]),
+        )
+        .unwrap();
+        assert_eq!(
+            parsed.arguments,
+            words(&["t", "--per-page", "5", "--data", "{}"])
+        );
+        assert_eq!(parsed.opt("env"), Some("staging"));
+    }
     #[test]
     fn parses_alias_equals_and_repeated_values() {
         let command = Command::new("tool")

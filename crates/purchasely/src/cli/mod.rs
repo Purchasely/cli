@@ -31,9 +31,16 @@ pub struct Command {
     pub action: Option<Action>,
     /// commander `.helpCommand(true)`: list `help [command]` even when the group has an action.
     pub help_command: bool,
+    /// commander `.allowUnknownOption()`: an unknown option and the words after it go to the arguments.
+    pub allow_unknown_option: bool,
 }
 
 impl Command {
+    pub fn allow_unknown_option(mut self) -> Self {
+        self.allow_unknown_option = true;
+        self
+    }
+
     pub fn help_command(mut self, value: bool) -> Self {
         self.help_command = value;
         self

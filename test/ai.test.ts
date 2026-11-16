@@ -112,7 +112,8 @@ beforeAll(() => {
     writeFileSync(join(top, "skills", "purchasely-integrate", "SKILL.md"), "See [versions](../../references/sdk-versions.md)\n");
     writeFileSync(join(top, "references", "sdk-versions.md"), `${v}\n`);
     const file = join(src, `${v}.tgz`);
-    execFileSync("tar", ["-czf", file, "-C", src, `Purchasely-AI-Plugin-${v}`]);
+    // COPYFILE_DISABLE: macOS tar adds AppleDouble `._*` files that GNU tar extracts as real files.
+    execFileSync("tar", ["-czf", file, "-C", src, `Purchasely-AI-Plugin-${v}`], { env: { ...process.env, COPYFILE_DISABLE: "1" } });
     tgz[v] = readFileSync(file);
   }
 });

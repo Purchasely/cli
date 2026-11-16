@@ -132,8 +132,9 @@ jobs:
             mkdir -p "target/release-bins/$target"
             cp "out/bins/binary-$target/purchasely" "target/release-bins/$target/purchasely"
           done
-      - name: Install Rust CLI for reference generation
-        run: cargo build --release -p purchasely --bin purchasely --target x86_64-unknown-linux-musl && cp target/x86_64-unknown-linux-musl/release/purchasely target/release-bins/linux-x64/purchasely
+      # Artifacts lose the executable bit. The linux-x64 binary also generates the reference.
+      - name: Make the binaries executable
+        run: chmod +x target/release-bins/*/purchasely
       - name: Pack release and bridge
         env:
           GH_TOKEN: ${{ github.token }}

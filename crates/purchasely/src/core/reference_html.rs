@@ -45,8 +45,59 @@ const NAV: [(&str, &str); 6] = [
     ("safety", "Safety"),
     ("install", "Install"),
 ];
-const CSS: &str = "*,*::before,*::after{box-sizing:border-box}body{margin:0;background:#eef3e9;color:#002420;font:1rem/1.4 Arial,sans-serif}.wrap{max-width:80rem;margin:auto;padding:0 var(--gutter)}.nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 0}.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:inherit}.brand svg{width:9rem}.tag{border:1px solid;border-radius:99rem;padding:.3rem .55rem}.nav ul{display:flex;gap:1.75rem;list-style:none}.btn{padding:.75rem 1.5rem;background:#002420;color:white;border-radius:99rem}main{padding:3rem 0}section{padding-top:4rem;display:flex;flex-direction:column;gap:1rem}article,#root pre{background:white;border-radius:1.5rem;padding:1.25rem}pre{overflow:auto}.index ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr))}footer{margin:4rem 0}.foot{background:#002420;color:#eef3e9;padding:3rem;border-radius:2rem}";
+const CSS: &str = r#"*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--light-grey);color:var(--ink);font:400 1rem/1.4 var(--body);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+svg{display:block}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--dark-green);outline-offset:3px;border-radius:.25rem}
+.foot :focus-visible{outline-color:var(--light-green)}
+.skip{position:absolute;left:-999px;top:0;background:var(--dark-green);color:var(--white);padding:.75rem 1rem;border-radius:var(--r-full);z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:80rem;margin:0 auto;padding:0 var(--gutter)}
+h1,h2{font-family:var(--heading);font-weight:300;margin:0;letter-spacing:-.03em}
+h1{font-size:clamp(2.75rem,7.4vw,4.5rem);line-height:1}
+h2{font-size:clamp(1.75rem,4vw,2.25rem);line-height:1.1}
+h3{font:700 1rem/1.3 var(--mono);margin:0;letter-spacing:0;overflow-wrap:anywhere}
+p{margin:0}
+.soft{color:var(--ink-soft)}
+code,pre{font-family:var(--mono);font-size:.875rem;letter-spacing:0}
+:not(pre)>code{background:color-mix(in srgb,var(--dark-green) 7%,transparent);padding:.1em .35em;border-radius:.35rem;white-space:nowrap}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 0}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--ink)}
+.brand svg{width:9rem;height:auto}
+.tag{font:700 .75rem/1 var(--body);letter-spacing:0;border:1px solid var(--ink);border-radius:var(--r-full);padding:.3rem .55rem}
+.nav ul{display:flex;gap:1.75rem;list-style:none;margin:0;padding:0;font-size:.875rem;white-space:nowrap}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{text-decoration:underline}
+@media (max-width:1099px){
+  .nav{flex-wrap:wrap;row-gap:.75rem}
+  .nav nav{order:3;width:100%}
+  .nav ul{overflow-x:auto;gap:1.25rem;padding:.375rem .25rem;margin:0 -.25rem}
+}
+@media (max-width:479px){.brand svg{width:7.25rem}.brand{gap:.5rem}.nav .btn{padding:.75rem 1rem}}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.75rem 1.5rem;border-radius:var(--r-full);background:var(--dark-green);color:var(--white);font:400 .875rem/1 var(--body);text-decoration:none;transition:background-color .3s;white-space:nowrap}
+.btn:hover{background:var(--deep-green)}
+main{padding-top:clamp(2rem,6vw,4rem)}
+.intro{display:flex;flex-direction:column;gap:1rem;margin-bottom:2.5rem}
+.lead{font-size:clamp(1.125rem,2vw,1.375rem);line-height:1.5;letter-spacing:0;max-width:38rem}
+.index{border-top:1px solid var(--ink);padding-top:1.25rem;display:flex;flex-direction:column;gap:1rem}
+.index ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,13rem),1fr));gap:.5rem 1.5rem}
+.index li{font:400 .875rem/1.4 var(--mono);letter-spacing:0}
+section{padding-top:clamp(3rem,7vw,5rem);display:flex;flex-direction:column;gap:1rem}
+section>h2 a,article h3 a{text-decoration:none}
+section>h2 a:hover,article h3 a:hover{text-decoration:underline}
+article,#root pre{background:var(--white);border-radius:var(--r-m);padding:1.25rem}
+article{display:flex;flex-direction:column;gap:.875rem}
+pre{margin:0;overflow-x:auto;line-height:1.55;font-size:.8125rem}
+footer{margin:clamp(4rem,9vw,7rem) 0 var(--gutter)}
+.foot{background:var(--dark-green);color:var(--light-grey);border-radius:var(--r-l);padding:clamp(2rem,5vw,3rem) clamp(1.25rem,5vw,4rem);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem 3rem}
+.foot svg{width:9rem;height:auto;color:var(--light-green)}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.75rem 2rem;font-size:.875rem}
+.foot small{width:100%;font-size:.75rem;color:var(--on-dark-soft)}"#;
 const EXT_CSS: &str = "\n#extension-commands{margin-top:clamp(3rem,7vw,5rem);padding-top:1.25rem;border-top:1px solid var(--ink)}\n#extension-commands+p{margin-top:.75rem}";
+const DOCS: &str = "https://docs.purchasely.com/docs/management-api";
 const LOGO_MARKUP: &str = "<svg viewBox=\"0 0 142 24\" width=\"142\" height=\"24\" role=\"img\" aria-label=\"Purchasely\"><use href=\"#logo-mark\"/></svg>";
 fn article(r: &Reference, l: &Leaf) -> String {
     let title = esc(&format!("{} {}", r.name, l.path.join(" ")));
@@ -59,23 +110,16 @@ fn article(r: &Reference, l: &Leaf) -> String {
     )
 }
 fn section(g: &Group, r: &Reference) -> String {
-    let ext = if g.extension { " extension" } else { "" };
-    let mut s = format!(
-        "<section id=\"{}\" class=\"group{}\">\n<h2><a href=\"#{}\">{}</a></h2>",
-        esc(&g.id),
-        ext,
-        esc(&g.id),
-        esc(&g.name)
-    );
+    let mut parts = vec![
+        format!("<section id=\"{}\">", esc(&g.id)),
+        format!("<h2><a href=\"#{}\">{}</a></h2>", esc(&g.id), esc(&g.name)),
+    ];
     if !g.description.is_empty() {
-        s.push_str(&format!("\n<p>{}</p>", esc(&g.description)));
+        parts.push(format!("<p class=\"soft\">{}</p>", esc(&g.description)));
     }
-    for l in &g.leaves {
-        s.push('\n');
-        s.push_str(&article(r, l));
-    }
-    s.push_str("\n</section>");
-    s
+    parts.extend(g.leaves.iter().map(|l| article(r, l)));
+    parts.push("</section>".into());
+    parts.join("\n")
 }
 
 /// Render the static reference page. Command text is escaped before insertion into HTML.
@@ -129,19 +173,73 @@ pub fn html(r: &Reference) -> String {
         ""
     };
     format!(
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>{} command reference</title>\n<meta name=\"description\" content=\"Every command of the Purchasely CLI with its options, as --help prints it.\">\n<meta name=\"theme-color\" content=\"#002420\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"assets/favicon.png\" media=\"(prefers-color-scheme: light)\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"assets/favicon-white.png\" media=\"(prefers-color-scheme: dark)\">\n<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"assets/apple-touch-icon.png\">\n<style>\n{}\n{}\n{}\n</style>\n</head>\n<body>\n<svg width=\"0\" height=\"0\" style=\"position:absolute\" aria-hidden=\"true\" focusable=\"false\">{}</svg>\n<a class=\"skip\" href=\"#main\">Skip to content</a>\n<div class=\"wrap\">\n<header class=\"nav\">\n  <a class=\"brand\" href=\"/\" aria-label=\"Purchasely CLI home\">{}<span class=\"tag\">CLI</span></a>\n  <nav aria-label=\"Landing page sections\"><ul>\n{}\n    </ul></nav>\n  <a class=\"btn\" href=\"https://docs.purchasely.com/docs/management-api\">Documentation</a>\n</header>\n<main id=\"main\">\n<div class=\"intro\"><h1>Command reference</h1><p class=\"lead soft\">{} {}. Each entry is what <code>--help</code> prints for that command.</p></div>\n<nav class=\"index\" aria-label=\"Command groups\"><p class=\"soft\">Groups, with the number of entries in each.</p><ul>\n{}\n</ul></nav>\n{}\n</main>\n<footer><div class=\"foot\">{}<ul><li><a href=\"/\">CLI home</a></li><li><a href=\"https://docs.purchasely.com/docs/management-api\">Management API docs</a></li><li><a href=\"https://www.purchasely.com\">purchasely.com</a></li></ul><small>© 2026 Purchasely. All rights reserved.</small></div></footer>\n</div>\n</body>\n</html>\n",
-        esc(&r.name),
-        BRAND,
-        CSS,
-        ext_css,
-        LOGO,
-        LOGO_MARKUP,
-        nav,
-        esc(&r.name),
-        esc(&r.version),
-        index.join("\n"),
-        body.join("\n"),
-        LOGO_MARKUP
+        r##"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{name} command reference</title>
+<meta name="description" content="Every command of the Purchasely CLI with its options, as --help prints it.">
+<meta name="theme-color" content="#002420">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-white.png" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<style>
+{BRAND}
+{CSS}{ext_css}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">{LOGO}</svg>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="wrap">
+<header class="nav">
+  <a class="brand" href="/" aria-label="Purchasely CLI home">
+    {LOGO_MARKUP}
+    <span class="tag">CLI</span>
+  </a>
+  <nav aria-label="Landing page sections">
+    <ul>
+{nav}
+    </ul>
+  </nav>
+  <a class="btn" href="{DOCS}">Documentation</a>
+</header>
+
+<main id="main">
+<div class="intro">
+<h1>Command reference</h1>
+<p class="lead soft">{name} {version}. Each entry is what <code>--help</code> prints for that command.</p>
+</div>
+<nav class="index" aria-label="Command groups">
+<p class="soft">Groups, with the number of entries in each.</p>
+<ul>
+{index}
+</ul>
+</nav>
+{body}
+</main>
+
+<footer>
+  <div class="foot">
+    {LOGO_MARKUP}
+    <ul>
+      <li><a href="/">CLI home</a></li>
+      <li><a href="{DOCS}">Management API docs</a></li>
+      <li><a href="https://www.purchasely.com">purchasely.com</a></li>
+    </ul>
+    <small>© 2026 Purchasely. All rights reserved.</small>
+  </div>
+</footer>
+</div>
+</body>
+</html>
+"##,
+        name = esc(&r.name),
+        version = esc(&r.version),
+        index = index.join("\n"),
+        body = body.join("\n"),
     )
 }
 

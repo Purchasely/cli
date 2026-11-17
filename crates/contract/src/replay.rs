@@ -176,6 +176,8 @@ pub fn compare_drift_case(committed: &Value, fresh: &Value) -> Result<(), String
 }
 pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usize), String> {
     let (mut checked, mut skipped, mut new_files) = (0, 0, 0);
+    // Every drift, not only the first: one CI run shows them all.
+    let mut drifts: Vec<String> = Vec::new();
     if !fresh.exists() {
         return Err(format!(
             "fresh recordings directory is missing: {}",
@@ -199,7 +201,8 @@ pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usi
                     skipped += 1;
                     continue;
                 }
-                return Err(format!("missing fresh recording file {}", path.display()));
+                drifts.push(format!("missing fresh recording file {}", path.display()));
+                continue;
             }
             let new: Value =
                 serde_json::from_slice(&fs::read(&fresh_path).map_err(|e| e.to_string())?)
@@ -214,10 +217,16 @@ pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usi
                         skipped += 1;
                         continue;
                     }
-                    return Err(format!("missing fresh case {name}"));
+                    drifts.push(format!("missing fresh case {name}"));
+                    continue;
                 };
-                compare_drift_case(&expected, actual)?;
-                checked += 1;
+                match compare_drift_case(&expected, actual) {
+                    Ok(()) => checked += 1,
+                    Err(e) => drifts.push(format!(
+                        "{name}: {}",
+                        e.chars().take(1500).collect::<String>()
+                    )),
+                }
             }
         }
     }
@@ -230,6 +239,9 @@ pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usi
         {
             new_files += 1;
         }
+    }
+    if !drifts.is_empty() {
+        return Err(format!("{} drift(s):\n{}", drifts.len(), drifts.join("\n")));
     }
     Ok((checked, skipped, new_files))
 }

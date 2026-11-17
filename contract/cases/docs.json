@@ -3,7 +3,7 @@
     {
       "test": "docs::docs > commands.md is generated",
       "steps": [],
-      "unit": "binary::docs::reference_markdown"
+      "unit":"binary::docs_commands_md_is_the_generated_reference"
     }
   ]
 }

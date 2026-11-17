@@ -301,6 +301,13 @@ pub fn cut(text: &str, width: usize) -> String {
     format!("{}...", text.chars().take(prefix).collect::<String>())
 }
 
+/// TS `io.stdin.isTTY && io.stdout.isTTY`, with `io` the `d.io` adapter or the process streams.
+pub fn menu_terminal(d: &crate::Deps) -> bool {
+    d.host
+        .io()
+        .map_or(d.is_tty && d.stdout_tty, |io| io.is_tty())
+}
+
 /// A menu of lines in the alternate screen: the selected line index, or `None` when the user quits.
 pub fn choose(
     lines: &[String],

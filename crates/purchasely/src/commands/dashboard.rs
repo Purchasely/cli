@@ -442,8 +442,8 @@ fn list_value(name: &str) -> Value {
     Value::Array(rows)
 }
 
-fn print_list_only(output: Option<&str>, stdin_tty: bool, stdout_tty: bool) -> bool {
-    output == Some("json") || !(stdin_tty && stdout_tty)
+fn print_list_only(output: Option<&str>, terminal: bool) -> bool {
+    output == Some("json") || !terminal
 }
 
 fn validate_menu_dry_run(dry_run: bool, app: Option<&str>) -> Result<(), CliError> {
@@ -488,7 +488,7 @@ fn menu_output(p: &Parsed) -> &str {
 }
 
 fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
-    if print_list_only(p.opt("output"), rt.d.is_tty, rt.d.stdout_tty) {
+    if print_list_only(p.opt("output"), term::menu_terminal(&rt.d)) {
         rt.d.host
             .stdout(&(json::stringify_pretty(&list_value(&rt.d.name)).unwrap_or_default() + "\n"));
         return Ok(());
@@ -860,7 +860,7 @@ mod tests {
 
     #[test]
     fn non_terminal_dashboard_list_is_json_with_summary_first() {
-        assert!(super::print_list_only(None, false, false));
+        assert!(super::print_list_only(None, false));
         let list = super::list_value("purchasely");
         let rows = super::values(Some(&list));
         assert_eq!(
@@ -871,8 +871,8 @@ mod tests {
 
     #[test]
     fn json_output_skips_the_menu_even_when_both_streams_are_tty() {
-        assert!(super::print_list_only(Some("json"), true, true));
-        assert!(!super::print_list_only(Some("table"), true, true));
+        assert!(super::print_list_only(Some("json"), true));
+        assert!(!super::print_list_only(Some("table"), true));
     }
 
     #[test]

@@ -116,10 +116,12 @@ fn visible_options(command: &Command) -> Vec<(String, String)> {
             .filter(|o| !o.hidden)
             .map(|o| (o.flags.clone(), option_description(o))),
     );
-    out.push((
-        "-h, --help".to_owned(),
-        "display help for command".to_owned(),
-    ));
+    if !command.no_help_option {
+        out.push((
+            "-h, --help".to_owned(),
+            "display help for command".to_owned(),
+        ));
+    }
     out
 }
 

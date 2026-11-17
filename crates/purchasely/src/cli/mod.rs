@@ -33,11 +33,18 @@ pub struct Command {
     pub help_command: bool,
     /// commander `.allowUnknownOption()`: an unknown option and the words after it go to the arguments.
     pub allow_unknown_option: bool,
+    /// commander `.helpOption(false)`: `-h`/`--help` are ordinary options, the action handles them.
+    pub no_help_option: bool,
 }
 
 impl Command {
     pub fn allow_unknown_option(mut self) -> Self {
         self.allow_unknown_option = true;
+        self
+    }
+
+    pub fn no_help_option(mut self) -> Self {
+        self.no_help_option = true;
         self
     }
 

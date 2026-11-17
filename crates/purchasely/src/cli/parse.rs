@@ -14,7 +14,7 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
             i += 1;
             continue;
         }
-        if !literal && (arg == "-h" || arg == "--help") {
+        if !literal && !command.no_help_option && (arg == "-h" || arg == "--help") {
             return Err(CliError(format!("HELP:{}", command.name)));
         }
         if !literal && arg == "help" && super::help::has_help_command(command) {
@@ -276,5 +276,17 @@ mod tests {
             .command(Command::new("summary"));
         let parsed = parse(&command, &["help".into(), "summary".into()]).unwrap_err();
         assert_eq!(parsed.0, "HELP:summary");
+    }
+
+    #[test]
+    fn no_help_option_leaves_help_to_the_action() {
+        let command = Command::new("dashboard")
+            .no_help_option()
+            .option(OptionDef::boolean("-h, --help", "own help"));
+        assert!(parse(&command, &["--help".into()]).unwrap().flag("help"));
+        assert!(parse(&command, &["-h".into()]).unwrap().flag("help"));
+        let help = crate::cli::help::help(&command, &[], 80);
+        assert_eq!(help.matches("-h, --help").count(), 1);
+        assert!(help.contains("own help"));
     }
 }

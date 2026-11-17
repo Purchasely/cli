@@ -28,6 +28,8 @@ struct Inner {
     execs: RefCell<VecDeque<Value>>,
     answers: RefCell<VecDeque<Value>>,
     probes: RefCell<VecDeque<Value>>,
+    /// The keys of a recorded terminal (`io.keys`), in order, across every menu of the step.
+    keys: RefCell<VecDeque<Value>>,
     now: Cell<i64>,
     wall: Cell<i64>,
     stdout: RefCell<String>,
@@ -85,6 +87,13 @@ impl FakeHost {
                 execs: RefCell::new(array(step, "execs").into()),
                 answers: RefCell::new(array(step, "prompts").into()),
                 probes: RefCell::new(array(step, "pid_probes").into()),
+                keys: RefCell::new(
+                    step["io"]["keys"]
+                        .as_array()
+                        .cloned()
+                        .unwrap_or_default()
+                        .into(),
+                ),
                 now: Cell::new(step["t_before"].as_i64().unwrap_or(0)),
                 wall: Cell::new(parse_wall(step["wall"].as_str().unwrap_or_default()).unwrap_or(0)),
                 stdout: RefCell::new(String::new()),
@@ -128,6 +137,7 @@ impl FakeHost {
             ("fetch", self.inner.calls.borrow().len()),
             ("exec", self.inner.execs.borrow().len()),
             ("pid probe", self.inner.probes.borrow().len()),
+            ("terminal key", self.inner.keys.borrow().len()),
         ] {
             if remaining != 0 {
                 return Err(ReplayError(format!(
@@ -420,7 +430,28 @@ impl Host for FakeHost {
         self.inner.keychain.as_ref().map(|k| k as &dyn Keychain)
     }
     fn io(&self) -> Option<&dyn Io> {
-        None
+        self.inner.step["io"].is_object().then_some(self as &dyn Io)
+    }
+}
+
+/// The recorded terminal: its keys go to the game until it is over; no key left quits.
+impl Io for FakeHost {
+    fn play(&self, game: &mut dyn purchasely::games::term::Game) -> Option<Result<String, String>> {
+        while game.over().is_none() {
+            let Some(key) = self.inner.keys.borrow_mut().pop_front() else {
+                return Some(Ok("Bye.".into()));
+            };
+            game.key(key.as_str().unwrap_or_default());
+        }
+        Some(Ok(game.over().unwrap_or_default().to_owned()))
+    }
+    fn dimensions(&self) -> (usize, usize) {
+        let io = &self.inner.step["io"];
+        let size = |key: &str, default: u64| io[key].as_u64().unwrap_or(default) as usize;
+        (size("columns", 80), size("rows", 24))
+    }
+    fn is_tty(&self) -> bool {
+        self.inner.step["io"]["tty"].as_bool().unwrap_or(false)
     }
 }
 
@@ -601,6 +632,21 @@ fn parse_wall(s: &str) -> Option<i64> {
 mod tests {
     use super::*;
     use purchasely::core::deps::KeychainError;
+    #[test]
+    fn recorded_terminal_keys_drive_the_menus() {
+        let host = FakeHost::from_step(
+            &json!({"io":{"tty":true,"columns":100,"rows":24,"keys":["down","return","return","down"]}}),
+        );
+        let io = host.io().unwrap();
+        assert!(io.is_tty());
+        assert_eq!(io.dimensions(), (100, 24));
+        let lines = ["a".to_owned(), "b".to_owned()];
+        let pick = || purchasely::games::term::choose(&lines, "T", "run", host.io(), &mut |_| {});
+        assert_eq!(pick(), Some(1));
+        assert_eq!(pick(), Some(0));
+        assert!(host.finish().unwrap_err().0.contains("1 terminal key"));
+        assert!(FakeHost::from_step(&json!({})).io().is_none());
+    }
     #[test]
     fn extra_call_fails() {
         let host = FakeHost::from_step(&json!({"calls":[]}));

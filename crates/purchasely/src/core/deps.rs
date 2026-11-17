@@ -85,6 +85,10 @@ pub trait Io {
     fn dimensions(&self) -> (usize, usize) {
         (80, 24)
     }
+    /// TS `io.stdin.isTTY && io.stdout.isTTY` of a `d.io` adapter.
+    fn is_tty(&self) -> bool {
+        true
+    }
 }
 
 pub trait Host {

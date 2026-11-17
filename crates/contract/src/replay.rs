@@ -284,6 +284,8 @@ pub fn run_case_directory(
             files.push((path, file["cases"].as_array().cloned().unwrap_or_default()));
         }
     }
+    // `read_dir` order differs between file systems (sorted on APFS, not on ext4): replay in one order.
+    files.sort_by(|a, b| a.0.cmp(&b.0));
     let flat = files
         .iter()
         .flat_map(|(_, cases)| cases.iter().cloned())

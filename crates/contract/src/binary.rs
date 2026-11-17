@@ -171,6 +171,8 @@ pub fn run_binary_directory(
             files.push((path, cases));
         }
     }
+    // `read_dir` order differs between file systems: run the cases in one order.
+    files.sort_by(|a, b| a.0.cmp(&b.0));
     let mut flat = files
         .iter()
         .flat_map(|(_, cases)| cases.iter().cloned())

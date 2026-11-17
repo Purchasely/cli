@@ -21,7 +21,7 @@ jobs:
           toolchain: 1.99.1
           components: rustfmt, clippy
       - run: cargo fmt --check
-      - run: cargo clippy -p purchasely -- -D warnings
+      - run: cargo clippy --workspace --all-targets -- -D warnings
       # The man page lint test needs mandoc; macOS ships it in /usr/bin.
       - if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y mandoc

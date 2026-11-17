@@ -374,7 +374,7 @@ mod tests {
     #[test]
     fn keeps_prod_base_url() {
         let (base, _) = parse_spec_doc(SPEC).unwrap();
-        assert_eq!(base, "https://api.purchasely.io");
+        assert_eq!(base, crate::management::request::base_url("prod"));
     }
 
     #[test]
@@ -387,13 +387,28 @@ mod tests {
             .collect::<BTreeSet<_>>();
         assert_eq!(names.len(), commands.len());
         assert_eq!(commands.len(), 140);
-        assert_eq!(
-            commands
-                .iter()
-                .map(|c| usize::from(c.app_op.is_some()) + usize::from(c.global_op.is_some()))
-                .sum::<usize>(),
-            172
-        );
+        // Every operation is reached once: the distinct operations of the commands are the 172 of the spec.
+        let reached = commands
+            .iter()
+            .flat_map(|c| [&c.app_op, &c.global_op])
+            .flatten()
+            .map(|op| (op.method.as_str(), op.path.as_str()))
+            .collect::<BTreeSet<_>>();
+        assert_eq!(reached.len(), 172);
+        // commands.test.ts "prints a table of resource action to METHOD path": one row per command.
+        let table = commands
+            .iter()
+            .map(|c| {
+                let ops = [&c.app_op, &c.global_op]
+                    .into_iter()
+                    .flatten()
+                    .map(|o| format!("{} {}", o.method, o.path))
+                    .collect::<Vec<_>>();
+                assert!(!ops.is_empty(), "{} {}", c.resource, c.action);
+                format!("{} {} -> {}", c.resource, c.action, ops.join(" | "))
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(table.len(), 140);
     }
 
     #[test]

@@ -565,6 +565,12 @@
           "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'nope'\"]}}\n"
         }
       ]
-    }
+    },
+    {"test": "commands::command generation > reads 172 operations in 128 paths", "steps": [], "unit": "purchasely::management::spec::tests::reads_spec_counts"},
+    {"test": "commands::command generation > keeps the prod base URL in sync with the spec", "steps": [], "unit": "purchasely::management::spec::tests::keeps_prod_base_url"},
+    {"test": "commands::command generation > gives every command a unique name and reaches every operation", "steps": [], "unit": "purchasely::management::spec::tests::derives_unique_commands_and_reaches_every_operation"},
+    {"test": "commands::command generation > derives the known names", "steps": [], "unit": "purchasely::management::spec::tests::keeps_known_names_and_confirmation_locations"},
+    {"test": "commands::command generation > finds the confirm token location per operation", "steps": [], "unit": "purchasely::management::spec::tests::keeps_known_names_and_confirmation_locations"},
+    {"test": "commands::command generation > prints a table of resource action to METHOD path", "steps": [], "unit": "purchasely::management::spec::tests::derives_unique_commands_and_reaches_every_operation"}
   ]
 }

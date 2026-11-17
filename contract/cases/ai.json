@@ -9531,6 +9531,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"]}}\n"
         }
       ]
-    }
+    },
+    {"test": "ai::ai > the parent spawns when only the plugin is due", "steps": [], "unit": "purchasely::core::update::tests::the_parent_spawns_when_only_the_plugin_is_due"}
   ]
 }

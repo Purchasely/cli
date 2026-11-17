@@ -1741,6 +1741,8 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ]
-    }
+    },
+    {"test": "dashboard-one::one dashboard group > holds the actions of the spec tag Dashboard V2 next to the others, with no name collision", "steps": [], "unit": "purchasely::commands::dashboard::tests::old_dashboard_v2_names_are_not_created_as_a_separate_resource"},
+    {"test": "dashboard-one::plain help > names no internal system in any summary or description", "steps": [], "unit": "purchasely::management::spec::tests::names_no_internal_system_in_any_summary_or_description"}
   ]
 }

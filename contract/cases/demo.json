@@ -3267,6 +3267,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ]
-    }
+    },
+    {"test": "demo::demo mode > starts no update check", "steps": [], "unit": "purchasely::core::update::tests::demo_mode_starts_no_update_check"}
   ]
 }

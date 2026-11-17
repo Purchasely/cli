@@ -371,6 +371,17 @@ mod tests {
         assert_eq!(ops.len(), 172);
     }
 
+    /// dashboard-one.test.ts "plain help > names no internal system in any summary or description".
+    #[test]
+    fn names_no_internal_system_in_any_summary_or_description() {
+        let (_, ops) = embedded_spec();
+        let named = ops
+            .iter()
+            .filter(|o| format!("{}{}", o.summary, o.description).contains("ClickHouse"))
+            .map(|o| o.path.as_str())
+            .collect::<Vec<_>>();
+        assert!(named.is_empty(), "{named:?}");
+    }
     #[test]
     fn keeps_prod_base_url() {
         let (base, _) = parse_spec_doc(SPEC).unwrap();

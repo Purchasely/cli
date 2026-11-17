@@ -503,6 +503,122 @@ mod tests {
         );
     }
 
+    /// The detached calls of `auto_update`: the host of `brew_runtime` that keeps the arguments.
+    struct Spawns(Arc<std::sync::Mutex<Vec<Vec<String>>>>);
+    impl Host for Spawns {
+        fn fetch(&self, r: Request) -> Result<Response, NetError> {
+            UpdateHost(Arc::default()).fetch(r)
+        }
+        fn exec(&self, _: &str, args: &[String], o: ExecOpts) -> Result<ExecResult, ExecError> {
+            if o.detach {
+                self.0.lock().unwrap().push(args.to_vec());
+            }
+            Ok(ExecResult::default())
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            DAY_MS * 3
+        }
+        fn wall_now(&self) -> i64 {
+            DAY_MS * 3
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            false
+        }
+        fn sleep(&self, _: i64) {}
+        fn stdout(&self, _: &str) {}
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+    fn spawn_runtime(
+        tag: &str,
+        env: &[(&str, &str)],
+    ) -> (Runtime, Arc<std::sync::Mutex<Vec<Vec<String>>>>) {
+        let dir =
+            std::env::temp_dir().join(format!("purchasely-spawn-{tag}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let mut rt = brew_runtime(&dir, Arc::default());
+        let spawned = Arc::<std::sync::Mutex<Vec<Vec<String>>>>::default();
+        rt.d.host = Box::new(Spawns(spawned.clone()));
+        rt.d.env = env
+            .iter()
+            .map(|(k, v)| ((*k).into(), (*v).into()))
+            .collect();
+        (rt, spawned)
+    }
+    fn number(n: i64) -> Value {
+        Value::Number(n as f64)
+    }
+
+    /// ai.test.ts "the parent spawns when only the plugin is due".
+    #[test]
+    fn the_parent_spawns_when_only_the_plugin_is_due() {
+        let (mut rt, spawned) = spawn_runtime("plugin", &[]);
+        let now = rt.d.host.now();
+        merge_record(
+            &update_store(&rt.d),
+            vec![("checked_at".into(), number(now))],
+        )
+        .unwrap();
+        let register = |rt: &Runtime, agents: bool, checked_at: i64| {
+            let claude = Value::Object(vec![("method".into(), Value::from("native".to_owned()))]);
+            let agents = Value::Object(if agents {
+                vec![("claude".into(), claude)]
+            } else {
+                vec![]
+            });
+            StateStore::new(&rt.d, "ai")
+                .write(
+                    "plugin",
+                    &Value::Object(vec![
+                        ("latest".into(), Value::from("2.1.1".to_owned())),
+                        ("agents".into(), agents),
+                        ("checked_at".into(), number(checked_at)),
+                    ]),
+                )
+                .unwrap();
+        };
+        let mut go = |rt: &mut Runtime, top: &str| {
+            spawned.lock().unwrap().clear();
+            auto_update(rt, top);
+            spawned.lock().unwrap().clone()
+        };
+        register(&rt, true, now - 2 * DAY_MS);
+        let calls = go(&mut rt, "usage");
+        assert_eq!(calls.len(), 1);
+        assert_eq!(calls[0][calls[0].len() - 2..], ["update", "--background"]);
+        // No spawn for the ai group itself: it does the work in the foreground.
+        assert!(go(&mut rt, "ai").is_empty());
+        register(&rt, true, now);
+        assert!(go(&mut rt, "usage").is_empty());
+        register(&rt, false, now - 2 * DAY_MS);
+        assert!(go(&mut rt, "usage").is_empty());
+        let _ = std::fs::remove_dir_all(&rt.d.state_dir);
+    }
+
+    /// demo.test.ts "demo mode > starts no update check": a check that is due does not start in demo mode.
+    #[test]
+    fn demo_mode_starts_no_update_check() {
+        let (mut rt, spawned) = spawn_runtime("demo", &[("PURCHASELY_DEMO", "1")]);
+        auto_update(&mut rt, "usage");
+        assert!(spawned.lock().unwrap().is_empty());
+        // The same runtime out of demo mode does start it: the test bites.
+        rt.d.env.clear();
+        auto_update(&mut rt, "usage");
+        assert_eq!(spawned.lock().unwrap().len(), 1);
+        let _ = std::fs::remove_dir_all(&rt.d.state_dir);
+    }
+
     /// update.test.ts "install kind > tells managed, brew and npm".
     #[test]
     fn tells_managed_brew_and_npm() {

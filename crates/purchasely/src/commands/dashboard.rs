@@ -831,7 +831,36 @@ mod tests {
                 .len(),
             names.len()
         );
-        assert!(names.contains(&"paid-subscription-retention".into()));
+        // dashboard-one.test.ts "holds the actions of the spec tag Dashboard V2 next to the others".
+        for v2 in [
+            "conversion",
+            "mau-reports",
+            "paid-subscription-movements",
+            "paid-subscription-retention",
+            "paywall-latency",
+            "sdk-evolution",
+            "sdk-versions",
+            "subscription-activations",
+            "subscription-evolution",
+            "subscription-reactivations",
+            "header-live",
+        ] {
+            assert!(names.contains(&v2.into()), "{v2}");
+        }
+        assert!(names.iter().all(|n| !n.ends_with("-dashboard")));
+        let (_, ops) = crate::management::spec::embedded_spec();
+        assert!(
+            crate::management::spec::derive_commands(&ops)
+                .iter()
+                .all(|c| c.resource != "dashboard-v2")
+        );
+    }
+
+    /// dashboard.test.ts "never draws a full block, so the rows of a table keep a gap".
+    #[test]
+    fn sparkline_never_draws_a_full_block() {
+        assert!(!super::sparkline(&[1.0, 5.0, 9.0, 2.0, 9.0]).contains('█'));
+        assert_eq!(super::sparkline(&[0.0, 100.0]), "▁▇");
     }
 
     #[test]

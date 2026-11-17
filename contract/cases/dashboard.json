@@ -1268,6 +1268,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--days must be a whole number from 2 to 730.\"]}}\n"
         }
       ]
-    }
+    },
+    {"test": "dashboard::dashboard summary > never draws a full block, so the rows of a table keep a gap", "steps": [], "unit": "purchasely::commands::dashboard::tests::sparkline_never_draws_a_full_block"}
   ]
 }

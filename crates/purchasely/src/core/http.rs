@@ -442,6 +442,30 @@ mod tests {
             "purchasely-cli/1 (person; hello world; apps list; ci)"
         )
     }
+    /// request.test.ts "the headers of the context replace Authorization and can replace Accept".
+    #[test]
+    fn context_headers_replace_authorization_and_accept() {
+        let (mut c, h) = ctx(&[200]);
+        c.headers = vec![
+            ("Authorization".into(), "Bearer other".into()),
+            (
+                "Accept".into(),
+                "application/json, text/event-stream".into(),
+            ),
+        ];
+        let _ = send(&c, &req(false)).unwrap();
+        let requests = h.requests.lock().unwrap();
+        let values = |name: &str| {
+            requests[0]
+                .headers
+                .iter()
+                .filter(|(k, _)| k.eq_ignore_ascii_case(name))
+                .map(|(_, v)| v.as_str())
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(values("Authorization"), ["Bearer other"]);
+        assert_eq!(values("Accept"), ["application/json, text/event-stream"]);
+    }
     #[test]
     fn refused_redirect_exit_10() {
         let (c, _) = ctx(&[302]);

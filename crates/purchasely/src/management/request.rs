@@ -429,6 +429,74 @@ mod tests {
             ["--page must be an integer."]
         );
     }
+    /// request.test.ts "rejects an option the chosen variant does not accept".
+    #[test]
+    fn rejects_an_option_the_chosen_variant_does_not_accept() {
+        use super::super::spec::{Command, Op, Opt, Param, Schema};
+        let param = |name: &str, location: &str, required: bool| Param {
+            name: name.into(),
+            location: location.into(),
+            required,
+            description: None,
+            schema: Schema {
+                kind: Some("string".into()),
+                ..Schema::default()
+            },
+        };
+        let op = |path: &str, app: bool, names: &[&str]| Op {
+            method: "GET".into(),
+            path: path.into(),
+            tag: "T".into(),
+            summary: String::new(),
+            description: String::new(),
+            scope: "s".into(),
+            params: app
+                .then(|| param("application_id", "path", true))
+                .into_iter()
+                .chain(names.iter().map(|n| param(n, "query", false)))
+                .collect(),
+            body: None,
+            confirm: None,
+            app,
+        };
+        let opt = |name: &str| Opt {
+            name: name.into(),
+            flag: name.into(),
+            kind: "query".into(),
+        };
+        let cmd = Command {
+            resource: "t".into(),
+            action: "list".into(),
+            summary: String::new(),
+            app_op: Some(op(
+                "/management/v1/applications/{application_id}/t",
+                true,
+                &["a", "b"],
+            )),
+            global_op: Some(op("/management/v1/t", false, &["a"])),
+            options: vec![opt("a"), opt("b")],
+            legacy: None,
+        };
+        let b = (String::from("b"), Value::from("1".to_owned()));
+        let error = build_request(&cmd, &BTreeMap::from([b.clone()]), "prod", None, None)
+            .err()
+            .unwrap();
+        assert!(
+            error.messages[0].contains("--b is not accepted without --app"),
+            "{:?}",
+            error.messages
+        );
+        let with_app = BTreeMap::from([
+            b,
+            ("application_id".into(), Value::from("app_1".to_owned())),
+        ]);
+        assert_eq!(
+            build_request(&cmd, &with_app, "prod", None, None)
+                .unwrap()
+                .url,
+            "https://api.purchasely.io/management/v1/applications/app_1/t?b=1"
+        );
+    }
     #[test]
     fn malformed_body_is_usage_error() {
         assert_eq!(json_body("{").unwrap_err().code, "USAGE");

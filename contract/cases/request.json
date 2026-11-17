@@ -4170,6 +4170,8 @@
           "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
-    }
+    },
+    {"test": "request::request building > rejects an option the chosen variant does not accept", "steps": [], "unit": "purchasely::management::request::tests::rejects_an_option_the_chosen_variant_does_not_accept"},
+    {"test": "request::request building > the headers of the context replace Authorization and can replace Accept", "steps": [], "unit": "purchasely::core::http::tests::context_headers_replace_authorization_and_accept"}
   ]
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 "use strict";
+// Part of the 0.9.0 bridge: an old managed install runs this file with its own Node, then hands over to
+// the native binary. Node stays here only; the CLI itself needs no Node.
 
 const fs = require("fs");
 const path = require("path");

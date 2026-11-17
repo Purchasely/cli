@@ -79,6 +79,7 @@ jobs:
         with:
           name: release-files
           path: out
+      # Node runs wrangler, the Pages deploy tool, here only. The CLI itself needs no Node.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22

@@ -160,6 +160,8 @@ jobs:
       - name: Verify bridge with the frozen installer and real binaries
         if: inputs.version == '0.9.0' || inputs.version == ''
         run: |
+          # Node stays for this check only: the frozen old installer (the 0.9.0-era install.sh) runs node, as on an
+          # old managed install that the bridge must upgrade. The ubuntu runner image ships Node.
           # The bridge runs the native binary, which prints its crate version; the old installer wants 0.9.0.
           # Before the crate is 0.9.0, the test release::bridge_tgz_accepted_by_old_installer covers this with fakes.
           crate=$(grep '^version =' crates/purchasely/Cargo.toml | head -1 | cut -d'"' -f2)

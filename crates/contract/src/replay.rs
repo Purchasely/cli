@@ -171,7 +171,38 @@ pub fn compare_drift_case(committed: &Value, fresh: &Value) -> Result<(), String
     if expected == actual {
         Ok(())
     } else {
-        Err(format!("contract drift: expected {expected}, got {actual}"))
+        let mut paths = Vec::new();
+        json_diff(&expected, &actual, String::new(), &mut paths);
+        Err(format!("contract drift at {}", paths.join("; ")))
+    }
+}
+
+/// The JSON paths where two values differ, with short values: a drift report a person can read.
+fn json_diff(a: &Value, b: &Value, path: String, out: &mut Vec<String>) {
+    if out.len() >= 8 || a == b {
+        return;
+    }
+    let short = |v: &Value| v.to_string().chars().take(160).collect::<String>();
+    match (a, b) {
+        (Value::Object(x), Value::Object(y)) => {
+            for key in x.keys().chain(y.keys().filter(|k| !x.contains_key(*k))) {
+                let p = format!("{path}/{key}");
+                match (x.get(key), y.get(key)) {
+                    (Some(u), Some(v)) => json_diff(u, v, p, out),
+                    (u, v) => out.push(format!(
+                        "{p}: {} vs {}",
+                        u.map_or("absent".into(), short),
+                        v.map_or("absent".into(), short)
+                    )),
+                }
+            }
+        }
+        (Value::Array(x), Value::Array(y)) if x.len() == y.len() => {
+            for (i, (u, v)) in x.iter().zip(y).enumerate() {
+                json_diff(u, v, format!("{path}[{i}]"), out);
+            }
+        }
+        _ => out.push(format!("{path}: {} vs {}", short(a), short(b))),
     }
 }
 pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usize), String> {

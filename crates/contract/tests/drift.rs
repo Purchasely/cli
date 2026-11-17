@@ -67,8 +67,7 @@ fn drift_ignores_platform_and_the_hex_of_a_text_file() {
 fn drift_compares_a_temp_root_by_its_token() {
     let step =
         |root: &str| json!({"tmp_roots": {"<TMP0>": root}, "argv": [format!("{root}/app.apk")]});
-    let committed =
-        json!({"test": "x::y", "steps": [step("/var/folders/zz/T/app-dir-AAAAAA")]});
+    let committed = json!({"test": "x::y", "steps": [step("/var/folders/zz/T/app-dir-AAAAAA")]});
     let fresh = json!({"test": "x::y", "steps": [step("/tmp/app-dir-BBBBBB")]});
     assert!(compare_drift_case(&committed, &fresh).is_ok());
     let other = json!({"test": "x::y", "steps": [{"tmp_roots": {"<TMP0>": "/tmp/a"}, "argv": ["/tmp/b/app.apk"]}]});

@@ -116,8 +116,14 @@ impl PlayState {
         }
         match key {
             Key::Quit => self.result = Some("Bye.".into()),
-            Key::Text('q') if !game.typing() => self.result = Some("Bye.".into()),
+            // TS onKey: a game that takes text gets the character as typed (a space too); another game
+            // gets the readline name, which is lower case, so Shift+Q quits it as q does.
+            Key::Text(c) if !game.typing() && c.eq_ignore_ascii_case(&'q') => {
+                self.result = Some("Bye.".into())
+            }
+            Key::Text(c) if !game.typing() => game.key(&c.to_ascii_lowercase().to_string()),
             Key::Text(c) => game.key(&c.to_string()),
+            Key::Named("space") if game.typing() => game.key(" "),
             Key::Named(name) => game.key(name),
         }
     }
@@ -559,9 +565,9 @@ mod tests {
     fn menu_search_wraps_selection_and_returns_original_index() {
         let mut menu = Menu::new(
             vec![
-                "Acme Fitness".into(),
-                "Blue Radio".into(),
-                "Acme Radio".into(),
+                "Acme Fitness  app_1  Acme".into(),
+                "Blue Radio  app_2  Blue".into(),
+                "Acme Radio  app_3  Acme".into(),
             ],
             "Arcade",
             "play",
@@ -569,10 +575,37 @@ mod tests {
         for c in "RADIO".chars() {
             menu.key(&c.to_string());
         }
-        assert!(strip_ansi(&menu.draw(80, 24).join("\n")).contains("Search: RADIO_"));
+        let plain = strip_ansi(&menu.draw(80, 24).join("\n"));
+        assert!(plain.contains("Search: RADIO_"));
+        assert!(!plain.contains("Acme Fitness"));
         menu.key("down");
         menu.key("return");
         assert_eq!(menu.chosen(), Some(2));
+        assert_eq!(Game::over(&menu), Some("Acme Radio  app_3  Acme"));
+    }
+
+    /// games.test.ts "the menu wraps and returns the chosen name".
+    #[test]
+    fn menu_wraps_and_returns_the_chosen_name() {
+        let mut menu = Menu::new(
+            vec!["2048".into(), "pong".into(), "snake".into()],
+            "Arcade",
+            "play",
+        );
+        menu.key("up");
+        let plain = menu
+            .draw(80, 24)
+            .iter()
+            .map(|l| strip_ansi(l))
+            .collect::<Vec<_>>();
+        assert!(plain.iter().any(|l| l == "  P snake "), "{plain:?}");
+        assert!(plain.iter().any(|l| l == "    pong"), "{plain:?}");
+        assert!(plain[1..6].join("\n").contains("███  █  █ ███"));
+        menu.key("down");
+        menu.key("down");
+        assert_eq!(Game::over(&menu), None);
+        menu.key("return");
+        assert_eq!(Game::over(&menu), Some("pong"));
     }
 
     #[test]
@@ -629,6 +662,9 @@ mod tests {
         };
         let mut state = PlayState::default();
         state.key(&mut game, Key::Text('q'));
+        assert_eq!(state.result.as_deref(), Some("Bye."));
+        let mut state = PlayState::default();
+        state.key(&mut game, Key::Text('Q'));
         assert_eq!(state.result.as_deref(), Some("Bye."));
     }
 
@@ -689,8 +725,10 @@ mod tests {
         };
         let mut state = PlayState::default();
         state.key(&mut menu, Key::Text('q'));
-        state.key(&mut menu, Key::Named("space"));
-        assert_eq!(menu.keys, ["q", "space"]);
+        state.key(&mut menu, decode_key(b" ").unwrap());
+        state.key(&mut menu, decode_key(b"Q").unwrap());
+        assert_eq!(menu.keys, ["q", " ", "Q"]);
+        assert_eq!(state.result, None);
         state.key(&mut menu, Key::Quit);
         assert_eq!(state.result.as_deref(), Some("Bye."));
     }

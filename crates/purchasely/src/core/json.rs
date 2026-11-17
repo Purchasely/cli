@@ -126,28 +126,8 @@ impl Parser<'_> {
                         b'n' => out.push(10),
                         b'r' => out.push(13),
                         b't' => out.push(9),
-                        b'u' => {
-                            let hi = self.hex4()?;
-                            if (0xd800..=0xdbff).contains(&hi) {
-                                if self.b.get(self.i..self.i + 2) == Some(b"\\u") {
-                                    self.i += 2;
-                                    let lo = self.hex4()?;
-                                    if (0xdc00..=0xdfff).contains(&lo) {
-                                        out.push(hi);
-                                        out.push(lo)
-                                    } else {
-                                        out.push(hi);
-                                        out.push(92);
-                                        out.extend("u".encode_utf16());
-                                        out.extend(format!("{lo:04x}").encode_utf16())
-                                    }
-                                } else {
-                                    out.push(hi)
-                                }
-                            } else {
-                                out.push(hi)
-                            }
-                        }
+                        // JS keeps each escape as one UTF-16 code unit, paired or not.
+                        b'u' => out.push(self.hex4()?),
                         _ => return Err(self.err("invalid escape")),
                     }
                 }
@@ -220,8 +200,7 @@ impl Parser<'_> {
             if self.b.get(self.i) != Some(&b'"') {
                 return Err(self.err("expected property name"));
             }
-            let key = String::from_utf16(&self.string()?)
-                .map_err(|_| self.err("surrogate in object key"))?;
+            let key = key_from_units(&self.string()?);
             self.ws();
             if !self.eat(b':') {
                 return Err(self.err("expected ':'"));
@@ -351,6 +330,37 @@ fn number(n: f64) -> String {
     let e = exp.parse::<i32>().unwrap_or(0);
     format!("{}e{}{e}", m, if e >= 0 { "+" } else { "" })
 }
+/// Object keys are Rust strings, which cannot hold a lone surrogate. A lone surrogate `u` is kept as
+/// KEY_MARK + U+F0000 + (u - 0xD800), and a real KEY_MARK as two marks, so the writer gets the JS code units back.
+const KEY_MARK: char = '\u{10ffff}';
+fn key_from_units(units: &[u16]) -> String {
+    let mut key = String::new();
+    for c in char::decode_utf16(units.iter().copied()) {
+        match c {
+            Ok(KEY_MARK) => key.extend([KEY_MARK, KEY_MARK]),
+            Ok(c) => key.push(c),
+            Err(e) => {
+                let lone = u32::from(e.unpaired_surrogate()) - 0xd800 + 0xf0000;
+                key.extend([KEY_MARK, char::from_u32(lone).unwrap()]);
+            }
+        }
+    }
+    key
+}
+fn key_units(key: &str) -> Vec<u16> {
+    let mut units = Vec::new();
+    let mut chars = key.chars();
+    while let Some(c) = chars.next() {
+        match (c, c == KEY_MARK) {
+            (_, true) => match chars.next() {
+                Some(KEY_MARK) | None => units.extend(KEY_MARK.encode_utf16(&mut [0; 2]).iter()),
+                Some(lone) => units.push((u32::from(lone) - 0xf0000 + 0xd800) as u16),
+            },
+            _ => units.extend(c.encode_utf16(&mut [0; 2]).iter()),
+        }
+    }
+    units
+}
 fn write_value(
     v: &Value,
     out: &mut String,
@@ -405,7 +415,7 @@ fn write_value(
                     out.push('\n');
                     out.push_str(&" ".repeat(w * (depth + 1)))
                 }
-                quote(&k.encode_utf16().collect::<Vec<_>>(), out);
+                quote(&key_units(k), out);
                 out.push(':');
                 if indent.is_some() {
                     out.push(' ')
@@ -448,6 +458,20 @@ mod tests {
     fn preserves_lone_surrogate() {
         let v = parse(r#""\ud800""#).unwrap();
         assert_eq!(stringify(&v, None).unwrap(), r#""\ud800""#)
+    }
+    #[test]
+    fn lone_high_surrogate_before_another_escape_keeps_both_units() {
+        let v = parse(r#"{"x":"\ud800\u0041"}"#).unwrap();
+        assert_eq!(stringify(&v, None).unwrap(), r#"{"x":"\ud800A"}"#)
+    }
+    #[test]
+    fn lone_surrogate_in_a_key_round_trips() {
+        let text = r#"{"\ud800A":1,"\udc00":2,"a\udbff\udfffb":3}"#;
+        let v = parse(text).unwrap();
+        assert_eq!(
+            stringify(&v, None).unwrap(),
+            "{\"\\ud800A\":1,\"\\udc00\":2,\"a\u{10ffff}b\":3}"
+        )
     }
     #[test]
     fn parses_unicode_escape() {

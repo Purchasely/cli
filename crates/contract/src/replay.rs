@@ -126,6 +126,17 @@ pub fn normalize_case(case: &Value) -> Value {
             if let Some(obj) = step.as_object_mut() {
                 obj.remove("pid");
                 obj.remove("platform");
+                // A test with real timers records the real time; the date-masked outputs still compare.
+                obj.remove("wall");
+                // A reply is a test input (a fixture), not an output: its raw bytes can differ by platform
+                // (a tarball made by macOS or GNU tar). Its `text` still compares.
+                if let Some(calls) = obj.get_mut("calls").and_then(Value::as_array_mut) {
+                    for call in calls {
+                        if let Some(reply) = call.get_mut("reply").and_then(Value::as_object_mut) {
+                            reply.remove("hex");
+                        }
+                    }
+                }
                 for side in ["files_before", "files_after"] {
                     if let Some(roots) = obj.get_mut(side).and_then(Value::as_object_mut) {
                         roots.values_mut().for_each(drop_hex_of_text_files);
@@ -242,6 +253,15 @@ pub fn compare_dirs(committed: &Path, fresh: &Path) -> Result<(usize, usize, usi
             let new_cases = new["cases"].as_array().cloned().unwrap_or_default();
             for expected in old_cases {
                 let name = expected["test"].as_str().unwrap_or_default();
+                // A unit case (`steps: []` with `unit`) maps the TS test to a Rust test: nothing to compare.
+                let unit_only = expected.get("unit").is_some()
+                    && expected["steps"]
+                        .as_array()
+                        .is_none_or(|steps| steps.is_empty());
+                if unit_only {
+                    skipped += 1;
+                    continue;
+                }
                 let Some(actual) = new_cases.iter().find(|c| c["test"].as_str() == Some(name))
                 else {
                     if expected.get("unit").is_some() {

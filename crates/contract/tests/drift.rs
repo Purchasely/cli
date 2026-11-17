@@ -73,3 +73,12 @@ fn drift_compares_a_temp_root_by_its_token() {
     let other = json!({"test": "x::y", "steps": [{"tmp_roots": {"<TMP0>": "/tmp/a"}, "argv": ["/tmp/b/app.apk"]}]});
     assert!(compare_drift_case(&committed, &other).is_err());
 }
+
+#[test]
+fn drift_skips_a_unit_case_and_ignores_reply_bytes_and_wall() {
+    let committed = json!({"test": "x::y", "steps": [{"wall": "2026-01-01T00:00:00.000Z", "calls": [{"reply": {"status": 200, "hex": "00"}}]}]});
+    let fresh = json!({"test": "x::y", "steps": [{"wall": "2026-02-02T00:00:00.000Z", "calls": [{"reply": {"status": 200, "hex": "ff"}}]}]});
+    assert!(compare_drift_case(&committed, &fresh).is_ok());
+    let changed = json!({"test": "x::y", "steps": [{"wall": "x", "calls": [{"reply": {"status": 500, "hex": "00"}}]}]});
+    assert!(compare_drift_case(&committed, &changed).is_err());
+}

@@ -293,10 +293,19 @@ impl Game for Menu {
     }
 }
 
+/// TS `clean`: each run of control characters (U+0000 to U+001F, U+007F to U+009F) becomes one space.
 pub fn clean(text: &str) -> String {
-    text.chars()
-        .map(|c| if c.is_control() { ' ' } else { c })
-        .collect()
+    let mut out = String::with_capacity(text.len());
+    let mut in_run = false;
+    for c in text.chars() {
+        if !c.is_control() {
+            out.push(c);
+        } else if !in_run {
+            out.push(' ');
+        }
+        in_run = c.is_control();
+    }
+    out
 }
 
 pub fn cut(text: &str, width: usize) -> String {
@@ -546,6 +555,15 @@ pub fn play(game: &mut dyn Game, wait: bool) -> io::Result<String> {
 
 #[cfg(test)]
 mod tests {
+    /// term.ts `clean`: `s.replace(/[\x00-\x1f\x7f-\x9f]+/g, " ")`.
+    #[test]
+    fn clean_turns_each_run_of_control_characters_into_one_space() {
+        assert_eq!(super::clean("a\u{1b}[2J\r\n\tb"), "a [2J b");
+        assert_eq!(super::clean("\u{7f}\u{9f}x\u{0}"), " x ");
+        // A space next to a run stays: only the run becomes one space.
+        assert_eq!(super::clean("a \n\nb"), "a  b");
+        assert_eq!(super::clean("\u{a0}plain"), "\u{a0}plain");
+    }
     use super::*;
 
     #[test]

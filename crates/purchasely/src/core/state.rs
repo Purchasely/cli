@@ -236,6 +236,84 @@ mod tests {
             columns: None,
         }
     }
+    /// state-lock.test.ts "async callback keeps the lock": a second caller starts after the first ends.
+    #[test]
+    fn a_held_lock_keeps_the_second_caller_out_until_it_ends() {
+        let d = tempfile_dir();
+        let log = std::sync::Arc::new(std::sync::Mutex::new(Vec::<&str>::new()));
+        let (open, gate) = std::sync::mpsc::channel::<()>();
+        let (started, a_started) = std::sync::mpsc::channel::<()>();
+        let (dir, a_log) = (d.clone(), log.clone());
+        let a = std::thread::spawn(move || {
+            let dep = deps(dir);
+            StateStore::new(&dep, "k")
+                .with_lock(|| {
+                    a_log.lock().unwrap().push("a start");
+                    started.send(()).unwrap();
+                    gate.recv().unwrap();
+                    a_log.lock().unwrap().push("a end");
+                })
+                .unwrap();
+        });
+        a_started.recv().unwrap();
+        let (dir, b_log) = (d.clone(), log.clone());
+        let b = std::thread::spawn(move || {
+            let dep = deps(dir);
+            StateStore::new(&dep, "k")
+                .with_lock(|| {
+                    b_log.lock().unwrap().push("b start");
+                    b_log.lock().unwrap().push("b end");
+                })
+                .unwrap();
+        });
+        std::thread::sleep(Duration::from_millis(50));
+        assert_eq!(*log.lock().unwrap(), ["a start"]);
+        open.send(()).unwrap();
+        a.join().unwrap();
+        b.join().unwrap();
+        assert_eq!(
+            *log.lock().unwrap(),
+            ["a start", "a end", "b start", "b end"]
+        );
+        let _ = fs::remove_dir_all(d);
+    }
+    /// state-lock.test.ts "live owner is not stolen": an old lock of a live pid stays; a dead pid and an
+    /// old empty lock are taken over.
+    #[test]
+    fn a_live_owner_is_not_stolen() {
+        let d = tempfile_dir();
+        let lock = d.join("k.lock");
+        let back = |ms: u64| {
+            let old = std::time::SystemTime::now() - Duration::from_millis(ms);
+            fs::File::options()
+                .write(true)
+                .open(&lock)
+                .unwrap()
+                .set_modified(old)
+                .unwrap();
+        };
+        // The fake clock moves with each sleep, so the 150 ms timeout ends; DEAD is a dead pid.
+        let host = Fake {
+            real_sleep: true,
+            ..Fake::default()
+        };
+        let dep = deps_with(d.clone(), Box::new(host));
+        let s = StateStore::new(&dep, "k");
+        fs::write(&lock, std::process::id().to_string()).unwrap();
+        back(11_000);
+        assert_eq!(
+            s.with_lock_timeout(150, || 1),
+            Err("state lock timeout".into())
+        );
+        assert!(lock.exists());
+        fs::write(&lock, DEAD.to_string()).unwrap();
+        assert_eq!(s.with_lock(|| "taken"), Ok("taken"));
+        fs::write(&lock, "").unwrap();
+        back(11_000);
+        assert_eq!(s.with_lock(|| "empty and old"), Ok("empty and old"));
+        assert!(!lock.exists());
+        let _ = fs::remove_dir_all(d);
+    }
     #[test]
     fn lock_file_is_exclusive_and_released() {
         let d = tempfile_dir();

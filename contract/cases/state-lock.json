@@ -1,0 +1,6 @@
+{
+  "cases": [
+    {"test": "state-lock::withLock > async callback keeps the lock", "steps": [], "unit": "purchasely::core::state::tests::a_held_lock_keeps_the_second_caller_out_until_it_ends"},
+    {"test": "state-lock::withLock > live owner is not stolen", "steps": [], "unit": "purchasely::core::state::tests::a_live_owner_is_not_stolen"}
+  ]
+}

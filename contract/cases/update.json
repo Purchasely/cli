@@ -2950,6 +2950,10 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ]
-    }
+    },
+    {"test": "update::install kind > tells managed, brew and npm", "steps": [], "unit": "purchasely::core::update::tests::tells_managed_brew_and_npm"},
+    {"test": "update::newer > compares x.y.z numerically", "steps": [], "unit": "purchasely::core::update::tests::newer_compares_x_y_z_numerically"},
+    {"test": "update::notice once a day > notice matrix per program and install kind", "steps": [], "unit": "purchasely::core::update::tests::notice_matrix_per_program_and_install_kind"},
+    {"test": "update::detach > a blocked child does not delay the parent's exit", "steps": [], "unit": "purchasely::core::real::tests::a_detached_child_that_blocks_does_not_delay_the_caller"}
   ]
 }

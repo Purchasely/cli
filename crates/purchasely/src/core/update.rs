@@ -503,6 +503,79 @@ mod tests {
         );
     }
 
+    /// update.test.ts "install kind > tells managed, brew and npm".
+    #[test]
+    fn tells_managed_brew_and_npm() {
+        assert_eq!(
+            install_kind(Path::new("/x/dist/core/update.js"), Some("/r")),
+            InstallKind::Managed
+        );
+        assert_eq!(
+            install_kind(
+                Path::new("/opt/homebrew/Cellar/purchasely/0.2.0/libexec/dist/core/update.js"),
+                None
+            ),
+            InstallKind::Brew
+        );
+        assert_eq!(
+            install_kind(Path::new("/Users/k/cli/dist/core/update.js"), None),
+            InstallKind::Npm
+        );
+    }
+
+    /// update.test.ts "newer > compares x.y.z numerically".
+    #[test]
+    fn newer_compares_x_y_z_numerically() {
+        assert!(newer("v0.2.0", "0.1.9"));
+        assert!(!newer("0.1.0", "0.1.0"));
+        assert!(!newer("0.1.0", "0.2.0"));
+        assert!(newer("0.10.0", "0.9.0"));
+    }
+
+    /// update.test.ts "notice once a day > notice matrix per program and install kind".
+    #[test]
+    fn notice_matrix_per_program_and_install_kind() {
+        let acme = || crate::core::ext::Extension {
+            modules: vec![],
+            surface: "extra",
+            surfaces: vec![("extra", "extra")],
+            surface_defs: vec![],
+            identity: true,
+            section: ("More commands", "Only in `acme`."),
+            latest: None,
+            npm_update: Some("npm install -g acme"),
+        };
+        let cases = [
+            (
+                "purchasely",
+                InstallKind::Brew,
+                "purchasely 10.0.0 is available: brew upgrade purchasely",
+            ),
+            (
+                "acme",
+                InstallKind::Brew,
+                "acme 10.0.0 is available: brew upgrade acme",
+            ),
+            (
+                "purchasely",
+                InstallKind::Npm,
+                "purchasely 10.0.0 is available: curl -fsSL https://cli.example.test/install.sh | sh",
+            ),
+            (
+                "acme",
+                InstallKind::Npm,
+                "acme 10.0.0 is available: npm install -g acme",
+            ),
+        ];
+        for (name, kind, line) in cases {
+            let mut d = crate::commands::ai::tests::test_deps();
+            d.name = name.into();
+            d.host_url = "https://cli.example.test".into();
+            d.ext = (name == "acme").then(acme);
+            assert_eq!(notice_line(&d, kind, "10.0.0"), line);
+        }
+    }
+
     #[test]
     fn latest_timeout_is_15000() {
         assert_eq!(latest_request().timeout_ms, 15_000);

@@ -186,6 +186,30 @@ mod tests {
     use super::*;
     use std::{net::TcpListener, thread};
 
+    /// update.test.ts "detach > a blocked child does not delay the parent's exit".
+    #[test]
+    fn a_detached_child_that_blocks_does_not_delay_the_caller() {
+        let start = std::time::Instant::now();
+        let result = RealHost::default().exec(
+            "sh",
+            &["-c".into(), "sleep 20".into()],
+            ExecOpts {
+                timeout_ms: 0,
+                detach: true,
+                ..ExecOpts::default()
+            },
+        );
+        assert_eq!(
+            result,
+            Ok(ExecResult {
+                code: 0,
+                stdout: String::new(),
+                stderr: String::new(),
+                timed_out: false,
+            })
+        );
+        assert!(start.elapsed() < std::time::Duration::from_secs(5));
+    }
     #[test]
     fn net_error_carries_the_node_cause_code() {
         assert_eq!(

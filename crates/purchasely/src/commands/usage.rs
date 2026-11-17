@@ -173,7 +173,7 @@ fn usage(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             name: "usage".into(),
             ..EmitOptions::default()
         },
-    );
+    )?;
     Ok(())
 }
 

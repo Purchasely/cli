@@ -105,7 +105,7 @@ pub fn execute(
             columns: meta.columns,
             width: rt.d.columns.unwrap_or(120) as usize,
         },
-    );
+    )?;
     Ok(())
 }
 

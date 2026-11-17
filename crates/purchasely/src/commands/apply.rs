@@ -243,7 +243,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                         ]),
                     ),
                 ]);
-                let _ = emit(rt, &g, out, "apply");
+                emit(rt, &g, out, "apply")?;
                 // TS keeps every message, the extra fields (the confirm token) and the status.
                 let mut messages = vec![format!(
                     "Request #{} of the plan failed. {} applied, {} left.",
@@ -333,8 +333,7 @@ fn emit(rt: &Runtime, g: &Globals, v: Value, name: &str) -> Result<(), CliError>
             columns: None,
             width: 120,
         },
-    );
-    Ok(())
+    )
 }
 fn get<'a>(v: &'a Value, k: &str) -> Option<&'a Value> {
     if let Value::Object(o) = v {

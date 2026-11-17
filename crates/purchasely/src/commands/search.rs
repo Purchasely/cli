@@ -221,7 +221,7 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
                 columns: None,
                 width: rt.d.columns.unwrap_or(120) as usize,
             },
-        );
+        )?;
         Ok(())
     });
 }

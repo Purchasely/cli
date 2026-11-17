@@ -198,7 +198,8 @@ pub struct EmitOptions {
     pub columns: Option<Vec<String>>,
     pub width: usize,
 }
-pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
+/// TS lets `writeFileSync` throw: a file that cannot be written is an error, never a silent exit 0.
+pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) -> Result<(), super::errors::CliError> {
     if opts.table
         && let Some(t) = to_table_value(
             value,
@@ -207,7 +208,7 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
         )
     {
         d.host.stdout(&format!("{t}\n"));
-        return;
+        return Ok(());
     }
     let text = format!(
         "{}\n",
@@ -216,7 +217,7 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
     let bytes = text.len();
     if opts.out.as_deref() == Some("-") || (opts.out.is_none() && bytes <= MAX_STDOUT_BYTES) {
         d.host.stdout(&text);
-        return;
+        return Ok(());
     }
     let file = if let Some(file) = &opts.out {
         // TS `resolve()`: absolute, no symlink resolution.
@@ -241,7 +242,8 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
     let written = options
         .open(&file)
         .and_then(|mut f| std::io::Write::write_all(&mut f, text.as_bytes()));
-    if written.is_ok() {
+    written.map_err(|e| super::breaker::state_error(format!("{e}, open '{}'", file.display())))?;
+    {
         d.host.stdout(&format!(
             "{}\n",
             json::stringify(
@@ -257,6 +259,7 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
             .unwrap_or_default()
         ))
     }
+    Ok(())
 }
 #[cfg(test)]
 mod tests {
@@ -277,6 +280,22 @@ mod tests {
                 .starts_with("a")
         );
         assert!(table("[1]").is_none());
+    }
+    #[test]
+    fn out_file_failure_is_an_error() {
+        let d = crate::commands::ai::tests::test_deps();
+        let missing =
+            std::env::temp_dir().join(format!("emit-missing-{}/answer.json", std::process::id()));
+        let opts = EmitOptions {
+            out: Some(missing.to_string_lossy().into_owned()),
+            ..EmitOptions::default()
+        };
+        let e = emit(&d, &Value::Null, &opts).unwrap_err();
+        assert_eq!(
+            (e.exit, e.code.as_str()),
+            (crate::core::errors::EXIT::GENERIC, "INTERNAL_ERROR")
+        );
+        assert!(!missing.exists());
     }
     #[test]
     fn stdout_limit_is_200_kib() {

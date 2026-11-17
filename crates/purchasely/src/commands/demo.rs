@@ -34,7 +34,7 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
             key: None,
             name: "demo".into(),
             ..EmitOptions::default()
-        });
+        })?;
         Ok(())
     }));
 }

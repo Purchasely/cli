@@ -376,7 +376,7 @@ pub fn run_update(rt: &mut Runtime, background: bool) -> Result<(), CliError> {
                 name: "update".into(),
                 ..Default::default()
             },
-        );
+        )?;
     }
     Ok(())
 }

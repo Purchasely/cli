@@ -124,7 +124,7 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
                         name: format!("ai-{verb}"),
                         ..EmitOptions::default()
                     },
-                );
+                )?;
                 if !p.flag("dry-run") && installed.iter().any(|a| a == "claude") {
                     rt.d.host
                         .stderr("Restart Claude Code to load the new plugin.\n");

@@ -367,7 +367,7 @@ fn summary(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
                 width: rt.d.columns.unwrap_or(120) as usize,
                 ..EmitOptions::default()
             },
-        );
+        )?;
     }
     Ok(())
 }
@@ -662,7 +662,7 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
             width: rt.d.columns.unwrap_or(120) as usize,
             ..EmitOptions::default()
         },
-    );
+    )?;
     Ok(())
 }
 

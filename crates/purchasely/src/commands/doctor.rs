@@ -279,7 +279,7 @@ fn doctor(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             columns: Some(vec!["check".into(), "status".into(), "detail".into()]),
             ..EmitOptions::default()
         },
-    );
+    )?;
     if failures.is_empty() {
         Ok(())
     } else {

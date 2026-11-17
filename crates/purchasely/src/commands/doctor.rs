@@ -177,6 +177,7 @@ fn doctor(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             rate: rt.rate("management", None, false).unwrap_or(0.8),
             headers: vec![],
             read_only: rt.read_only(),
+            timeout_ms: None,
         };
         let base = if env == "staging" {
             "https://api-staging.purchasely.io"

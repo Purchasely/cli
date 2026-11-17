@@ -22,6 +22,8 @@ pub struct Ctx<'a> {
     pub headers: Vec<(String, String)>,
     /// Refuse every write before it is sent (`PURCHASELY_READ_ONLY=1` or `read_only` in the config).
     pub read_only: bool,
+    /// A shorter deadline for each request of this context; `None` is `REQUEST_TIMEOUT_MS`.
+    pub timeout_ms: Option<u64>,
 }
 #[derive(Clone, Debug)]
 pub struct HttpRequest {
@@ -192,7 +194,7 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
             url: req.url.clone(),
             headers,
             body: req.body.as_ref().map(|s| s.as_bytes().to_vec()),
-            timeout_ms: REQUEST_TIMEOUT_MS,
+            timeout_ms: ctx.timeout_ms.unwrap_or(REQUEST_TIMEOUT_MS),
             refuse_redirect: req.refuse_redirect,
         });
         let _ = permit.release();
@@ -200,7 +202,8 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
             // TS: `cause.code`, else the error name. The message is never echoed.
             let cause = match &e.code {
                 Some(code) => code.as_str(),
-                None if e.timed_out => "Timeout",
+                // The name of the abort reason of `AbortSignal.timeout` in TS.
+                None if e.timed_out => "TimeoutError",
                 None => "Error",
             };
             CliError::new(
@@ -378,6 +381,7 @@ mod tests {
                 rate: 1.0,
                 headers: vec![],
                 read_only: false,
+                timeout_ms: None,
             },
             h,
         )
@@ -444,6 +448,13 @@ mod tests {
         let e = send(&c, &req(true)).unwrap_err();
         assert_eq!(e.exit, 10);
         assert_eq!(e.status, Some(302))
+    }
+    #[test]
+    fn context_timeout_overrides_the_default() {
+        let (mut c, h) = ctx(&[200]);
+        c.timeout_ms = Some(30_000);
+        let _ = send(&c, &req(false)).unwrap();
+        assert_eq!(h.requests.lock().unwrap()[0].timeout_ms, 30_000);
     }
     #[test]
     fn timeout_is_120000() {

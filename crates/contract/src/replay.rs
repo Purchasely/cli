@@ -284,14 +284,14 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
         let mut argv: Vec<String> =
             serde_json::from_value(step.get("argv").cloned().unwrap_or(json!([])))
                 .unwrap_or_default();
-        let root_text = root.to_string_lossy().into_owned();
         let tmp = ts_tmp_roots(step);
+        // The extra roots first: one can be the `purchasely-cli-` root of another setup, not this step's root.
         let to_replay = |s: &str| {
-            let mut s = crate::normalize::map_ts_root(&expand_tokens(s, &roots), &root_text);
+            let mut s = s.to_owned();
             for (path, token) in &tmp {
-                s = s.replace(path, &expand_tokens(token, &roots));
+                s = s.replace(path, token);
             }
-            s
+            expand_tokens(&crate::normalize::map_ts_root(&s, "<ROOT>"), &roots)
         };
         // A restored text file can hold a TS temp path (the targets of ai.plugin.json): it gets the replay path.
         let mut files_before = step.get("files_before").cloned().unwrap_or(Value::Null);
@@ -492,6 +492,13 @@ fn snapshot(root: &Path) -> Result<Value, ReplayError> {
 /// The extra temp dirs of the TS run (`snapshotRoots` of `test/helpers.ts`): an absolute env value whose last
 /// component is a `mkdtemp` name (`cli-ai-home-AbC123`) is the dir of `<TMPn>`, in env order.
 pub(crate) fn ts_tmp_roots(step: &Map<String, Value>) -> Vec<(String, String)> {
+    // A newer recording names each extra root (`tmp_roots`): no guess.
+    if let Some(recorded) = step.get("tmp_roots").and_then(Value::as_object) {
+        return recorded
+            .iter()
+            .filter_map(|(token, path)| Some((path.as_str()?.to_owned(), token.clone())))
+            .collect();
+    }
     let count = step
         .get("files_before")
         .and_then(Value::as_object)

@@ -215,6 +215,36 @@ impl FakeHost {
             columns: step["columns"].as_u64().map(|n| n as u16),
         }
     }
+    /// The files that the recorded command wrote in the step roots (a screenshot), with their mode.
+    fn apply_writes(&self, writes: &Value) -> Result<(), ExecError> {
+        let roots = crate::replay::execution_roots(&self.inner.step, &self.inner.root)
+            .map_err(|e| ExecError::Other(e.0))?;
+        for write in writes.as_array().into_iter().flatten() {
+            let token = write["root"].as_str().unwrap_or("<ROOT>");
+            let Some((_, root)) = roots.iter().find(|(t, _)| t == token) else {
+                self.fail(format!("exec write to an unknown root {token}"));
+                return Err(ExecError::Other("unknown write root".into()));
+            };
+            let path = root.join(write["path"].as_str().unwrap_or_default());
+            let bytes = write["hex"]
+                .as_str()
+                .and_then(decode_hex)
+                .unwrap_or_default();
+            let io = |e: std::io::Error| ExecError::Other(e.to_string());
+            if let Some(parent) = path.parent() {
+                std::fs::create_dir_all(parent).map_err(io)?;
+            }
+            std::fs::write(&path, bytes).map_err(io)?;
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::PermissionsExt;
+                let mode = write["mode"].as_u64().unwrap_or(0o644) as u32;
+                std::fs::set_permissions(&path, std::fs::Permissions::from_mode(mode))
+                    .map_err(io)?;
+            }
+        }
+        Ok(())
+    }
     fn exec_once(
         &self,
         file: &str,
@@ -286,6 +316,7 @@ impl FakeHost {
                 self.fail("child exit code differs");
             }
         }
+        self.apply_writes(&expected["writes"])?;
         if let Some(error) = expected["error"].as_str() {
             return Err(if error == "ENOENT" {
                 ExecError::NotFound
@@ -346,10 +377,13 @@ impl Host for FakeHost {
         }
         let reply = &expected["reply"];
         if let Some(message) = reply["error"].as_str() {
+            // The recorder keeps the error name when there is no cause code: TS prints `cause.code ?? name`.
+            let name = reply["name"].as_str();
             return Err(NetError {
                 message: message.into(),
-                timed_out: message.to_lowercase().contains("timed out"),
-                code: reply["code"].as_str().map(str::to_owned),
+                timed_out: message.to_lowercase().contains("timed out")
+                    || name == Some("TimeoutError"),
+                code: reply["code"].as_str().or(name).map(str::to_owned),
             });
         }
         let body = if let Some(hex) = reply["hex"].as_str() {
@@ -773,5 +807,31 @@ mod tests {
             }
         );
         host.finish().unwrap();
+    }
+    #[test]
+    fn exec_writes_its_recorded_files() {
+        let root = std::env::temp_dir().join(format!("contract-writes-{}", std::process::id()));
+        let host = FakeHost::with_root(
+            &json!({"execs":[{"file":"cmd","args":[],"writes":[{"root":"<ROOT>","path":"out/shot.png","mode":420,"hex":"6f6b"}],"result":{"code":0}}]}),
+            root.clone(),
+        );
+        host.exec("cmd", &[], ExecOpts::default()).unwrap();
+        assert_eq!(std::fs::read(root.join("out/shot.png")).unwrap(), b"ok");
+        let _ = std::fs::remove_dir_all(root);
+        host.finish().unwrap();
+    }
+    #[test]
+    fn fetch_error_name_is_the_cause() {
+        let host = FakeHost::from_step(
+            &json!({"calls":[{"method":"GET","url":"u","headers":{},"body":null,"refuse_redirect":false,"at":0,"reply":{"error":"no answer","name":"TimeoutError"}}]}),
+        );
+        let request = Request {
+            method: "GET".into(),
+            url: "u".into(),
+            ..Request::default()
+        };
+        let error = host.fetch(request).unwrap_err();
+        assert_eq!(error.code.as_deref(), Some("TimeoutError"));
+        assert!(error.timed_out);
     }
 }

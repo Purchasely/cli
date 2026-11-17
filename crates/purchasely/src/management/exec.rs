@@ -127,6 +127,7 @@ fn context<'a>(rt: &'a Runtime, g: &Globals) -> Result<Ctx<'a>, CliError> {
         rate,
         headers: vec![],
         read_only: rt.read_only(),
+        timeout_ms: None,
     })
 }
 

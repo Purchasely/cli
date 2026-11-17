@@ -120,6 +120,7 @@ fn context<'a>(rt: &'a Runtime, p: &Parsed) -> Result<Ctx<'a>, CliError> {
         rate: rt.rate("management", p.opt("rate"), p.flag("i-asked-backend"))?,
         headers: Vec::new(),
         read_only: rt.read_only(),
+        timeout_ms: None,
     })
 }
 

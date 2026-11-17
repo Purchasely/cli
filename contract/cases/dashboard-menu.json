@@ -2346,6 +2346,7 @@
           "err": "purchasely env=prod surface=management identity=- key=…T123\n"
         }
       ]
-    }
+    },
+    {"test": "dashboard-menu::dashboard with no subcommand > the menu scrolls: every entry fits the screen and the last one can be reached", "steps": [], "unit": "purchasely::commands::dashboard::tests::menu_scroll_can_select_the_last_dashboard"}
   ]
 }

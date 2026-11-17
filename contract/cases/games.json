@@ -344,6 +344,7 @@
           "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"play needs an interactive terminal.\"]}}\n"
         }
       ]
-    }
+    },
+    {"test": "games::games > the menu wraps and returns the chosen name", "steps": [], "unit": "purchasely::games::term::tests::menu_wraps_and_returns_the_chosen_name"}
   ]
 }

@@ -207,8 +207,20 @@ mod tests {
 
     #[test]
     fn draws_a_border_board_and_status_line() {
-        assert_eq!(screen(&game()).lines().count(), 8);
-        assert!(screen(&game()).contains("Purchasely Snake   Score: 0   q to quit"));
+        let blank = format!("│{}│", " ".repeat(20));
+        assert_eq!(
+            screen(&game()).split('\n').collect::<Vec<_>>(),
+            [
+                format!("┌{}┐", "─".repeat(20)),
+                format!("│P {}│", " ".repeat(18)),
+                blank.clone(),
+                "│      ██████        │".to_owned(),
+                blank.clone(),
+                blank,
+                format!("└{}┘", "─".repeat(20)),
+                "Purchasely Snake   Score: 0   q to quit".to_owned(),
+            ]
+        );
     }
 
     #[test]

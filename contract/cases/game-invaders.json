@@ -1,0 +1,10 @@
+{
+  "cases": [
+    {"test": "game-invaders::invaders > ends the game when the invaders land", "steps": [], "unit": "purchasely::games::invaders::tests::ends_the_game_when_the_invaders_land"},
+    {"test": "game-invaders::invaders > keeps the ship in the field", "steps": [], "unit": "purchasely::games::invaders::tests::keeps_the_ship_in_the_field"},
+    {"test": "game-invaders::invaders > kills an invader with a shot and scores", "steps": [], "unit": "purchasely::games::invaders::tests::kills_an_invader_with_a_shot_and_scores"},
+    {"test": "game-invaders::invaders > refuses a small terminal", "steps": [], "unit": "purchasely::games::invaders::tests::refuses_a_small_terminal"},
+    {"test": "game-invaders::invaders > starts a new wave when the last invader dies", "steps": [], "unit": "purchasely::games::invaders::tests::starts_a_new_wave_when_the_last_invader_dies"},
+    {"test": "game-invaders::invaders > takes a life when a bomb hits the ship", "steps": [], "unit": "purchasely::games::invaders::tests::takes_a_life_when_a_bomb_hits_the_ship"}
+  ]
+}

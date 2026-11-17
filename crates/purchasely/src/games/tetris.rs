@@ -323,8 +323,9 @@ mod tests {
         );
         assert_eq!(plain_rows(&game)[19], "....##....");
         let screen = game.draw().join("\n");
-        assert!(screen.contains("Score 100"));
-        assert!(screen.contains("Lines 1"));
+        // TS: /Score 100[\s\S]*Lines 1/
+        let score = screen.find("Score 100").unwrap();
+        assert!(screen[score..].contains("Lines 1"));
     }
 
     #[test]

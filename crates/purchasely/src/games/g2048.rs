@@ -257,11 +257,17 @@ mod tests {
             }
             game.key(["up", "left", "down", "right"][n % 4]);
         }
-        assert!(
-            game.over
-                .as_deref()
-                .is_some_and(|s| s.starts_with("Game over. Score ") && s.ends_with('.'))
-        );
+        // TS: /^Game over\. Score \d+, best tile \d+\.$/
+        let over = game.over.as_deref().unwrap();
+        let rest = over.strip_prefix("Game over. Score ").unwrap();
+        let (score, tile) = rest.split_once(", best tile ").unwrap();
+        let tile = tile.strip_suffix('.').unwrap();
+        for n in [score, tile] {
+            assert!(
+                !n.is_empty() && n.chars().all(|c| c.is_ascii_digit()),
+                "{over}"
+            );
+        }
     }
 
     #[test]

@@ -1,0 +1,8 @@
+{
+  "cases": [
+    {"test": "game-2048::2048 > ends when no move is possible", "steps": [], "unit": "purchasely::games::g2048::tests::ends_when_no_move_is_possible"},
+    {"test": "game-2048::2048 > merges equal tiles once per move", "steps": [], "unit": "purchasely::games::g2048::tests::merges_equal_tiles_once_per_move"},
+    {"test": "game-2048::2048 > refuses a terminal that is too small", "steps": [], "unit": "purchasely::games::g2048::tests::refuses_a_terminal_that_is_too_small"},
+    {"test": "game-2048::2048 > spawns a tile only after a move that changes the grid", "steps": [], "unit": "purchasely::games::g2048::tests::spawns_a_tile_only_after_a_move_that_changes_the_grid"}
+  ]
+}

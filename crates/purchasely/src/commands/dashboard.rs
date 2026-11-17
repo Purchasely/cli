@@ -1019,6 +1019,26 @@ mod tests {
 
     #[test]
     fn menu_scroll_can_select_the_last_dashboard() {
+        // dashboard-menu.test.ts "the menu scrolls: every entry fits the screen and the last one can be reached".
+        let mut scrolled = crate::games::term::Menu::new(
+            (0..30).map(|n| format!("entry-{n}")).collect(),
+            "Dashboards",
+            "run",
+        );
+        for _ in 0..29 {
+            scrolled.key("down");
+        }
+        let plain = scrolled
+            .draw(100, 20)
+            .iter()
+            .map(|l| crate::games::term::strip_ansi(l))
+            .collect::<Vec<_>>();
+        assert!(plain.len() <= 20);
+        let text = plain.join("\n");
+        assert!(text.contains("  P entry-29 "), "{text}");
+        assert!(text.contains("Dashboards"));
+        assert!(text.contains("Enter run"));
+        assert!(!text.contains("entry-0 "));
         let mut menu = crate::games::term::Menu::new(
             (0..40).map(|n| format!("dashboard {n}")).collect(),
             "Dashboards",

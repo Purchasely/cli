@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {"test": "game-snake::snake > does not reverse onto itself", "steps": [], "unit": "purchasely::games::snake::tests::does_not_reverse_onto_itself"},
+    {"test": "game-snake::snake > draws a border, the board and a status line", "steps": [], "unit": "purchasely::games::snake::tests::draws_a_border_board_and_status_line"},
+    {"test": "game-snake::snake > eats, grows and scores", "steps": [], "unit": "purchasely::games::snake::tests::eats_grows_and_scores"},
+    {"test": "game-snake::snake > moves one cell per step and dies on the wall", "steps": [], "unit": "purchasely::games::snake::tests::moves_one_cell_per_step_and_dies_on_the_wall"},
+    {"test": "game-snake::snake > refuses a small terminal", "steps": [], "unit": "purchasely::games::snake::tests::refuses_a_small_terminal"}
+  ]
+}

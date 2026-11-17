@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {"test": "game-tetris::tetris > clears a full line and scores it", "steps": [], "unit": "purchasely::games::tetris::tests::clears_a_full_line_and_scores_it"},
+    {"test": "game-tetris::tetris > ends when a new piece cannot spawn", "steps": [], "unit": "purchasely::games::tetris::tests::ends_when_a_new_piece_cannot_spawn"},
+    {"test": "game-tetris::tetris > hard-drops a piece to the floor", "steps": [], "unit": "purchasely::games::tetris::tests::hard_drops_a_piece_to_the_floor"},
+    {"test": "game-tetris::tetris > kicks a rotation away from the wall", "steps": [], "unit": "purchasely::games::tetris::tests::kicks_a_rotation_away_from_the_wall"},
+    {"test": "game-tetris::tetris > refuses a small terminal", "steps": [], "unit": "purchasely::games::tetris::tests::refuses_a_small_terminal"}
+  ]
+}

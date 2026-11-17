@@ -234,14 +234,19 @@ pub fn auto_update(rt: &mut Runtime, top_level: &str) {
         && let Some(latest) = get_string(&record, "latest")
         && newer(&latest, &d.version)
         && now - get_number(&record, "notified_at").unwrap_or(0) >= DAY_MS
+        // TS: one lock attempt, and the notice only when no other process gave it meanwhile.
         && store
             .with_lock_timeout(-1, || {
+                if now - get_number(&read_record(&store), "notified_at").unwrap_or(0) < DAY_MS {
+                    return false;
+                }
                 let _ = merge_record(
                     &store,
                     vec![("notified_at".into(), Value::Number(now as f64))],
                 );
+                true
             })
-            .is_ok()
+            .unwrap_or(false)
     {
         d.host
             .stderr(&format!("{}\n", notice_line(d, kind, &latest)));

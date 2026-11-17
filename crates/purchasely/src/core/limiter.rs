@@ -84,16 +84,19 @@ pub struct Permit<'a> {
     id: String,
 }
 impl Permit<'_> {
+    /// TS `release`: a failed state write fails the call, as a failed lock does.
     pub fn release(self) -> Result<(), String> {
         self.store.with_lock(|| {
             let v = self.store.read("limiter", fresh());
             let mut s = slots(&v);
             s.retain(|x| x.id != self.id);
-            let _ = self.store.write(
-                "limiter",
-                &value(number(&v, "next_at"), number(&v, "next_write_at"), &s),
-            );
-        })
+            self.store
+                .write(
+                    "limiter",
+                    &value(number(&v, "next_at"), number(&v, "next_write_at"), &s),
+                )
+                .map_err(|e| e.to_string())
+        })?
     }
 }
 impl<'a> Limiter<'a> {
@@ -520,6 +523,20 @@ mod tests {
                 .unwrap();
             permit.release().unwrap();
         }
+    }
+    /// TS `store.write` throws inside `release`: the error reaches the caller.
+    #[test]
+    fn release_returns_a_failed_state_write() {
+        let dir = temp("release-write");
+        let d = deps_in(&dir, Box::new(Clock(Arc::new(AtomicI64::new(1_000_000)))));
+        let store = StateStore::new(&d, "k");
+        let permit = Limiter::new(&d, &store).acquire(5.0, false).unwrap();
+        // A folder at the state file path makes the rename of the write fail.
+        std::fs::remove_file(dir.join("k.limiter.json")).unwrap();
+        std::fs::create_dir(dir.join("k.limiter.json")).unwrap();
+        assert!(permit.release().is_err());
+        assert!(!dir.join("k.lock").exists());
+        let _ = std::fs::remove_dir_all(dir);
     }
     #[test]
     fn cap_and_stale_slot_contract() {

@@ -1,6 +1,6 @@
 //! HTTP request pipeline: credentials, shared limits, headers, retry, usage, and redirects.
 use super::{
-    breaker::{Breaker, pause_from_headers},
+    breaker::{Breaker, pause_from_headers, state_error},
     credentials::{Surface, hint, key_hash, what},
     deps::{Deps, Request, Response},
     errors::{CliError, EXIT},
@@ -167,7 +167,7 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
         let factor = breaker.gate()?;
         let permit = limiter
             .acquire(ctx.rate * factor, write)
-            .map_err(|e| CliError::new(EXIT::GENERIC, "STATE_ERROR", vec![e]))?;
+            .map_err(state_error)?;
         let id = uuid();
         let mut headers = Vec::new();
         if !ctx
@@ -197,7 +197,8 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
             timeout_ms: ctx.timeout_ms.unwrap_or(REQUEST_TIMEOUT_MS),
             refuse_redirect: req.refuse_redirect,
         });
-        let _ = permit.release();
+        // TS releases in `finally`: a failed release replaces the fetch result or its error.
+        permit.release().map_err(state_error)?;
         let response = response.map_err(|e| {
             // TS: `cause.code`, else the error name. The message is never echoed.
             let cause = match &e.code {

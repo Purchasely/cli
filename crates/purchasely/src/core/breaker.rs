@@ -108,8 +108,9 @@ impl<'a> Breaker<'a> {
         }
     }
     pub fn record(&self, pause: i64) -> Result<i64, CliError> {
-        let mut out = 0;
-        self.store
+        // TS `record`: a failed lock or state write throws, and the count is the written one.
+        let (until, count) = self
+            .store
             .with_lock(|| {
                 let v = self.state();
                 let now = self.d.host.now();
@@ -120,15 +121,23 @@ impl<'a> Breaker<'a> {
                 let until = num(&v, "paused_until").max(now + pause);
                 let mut r = rejs(&v);
                 r.push(now);
-                out = until;
-                let _ = self.store.write("breaker", &state(until, f, now, r));
+                let count = r.len();
+                self.store
+                    .write("breaker", &state(until, f, now, r))
+                    .map_err(|e| e.to_string())?;
+                Ok((until, count))
             })
-            .map_err(|e| CliError::new(EXIT::GENERIC, "STATE_ERROR", vec![e]))?;
-        if rejs(&self.state()).len() >= MAX {
+            .and_then(|r| r)
+            .map_err(state_error)?;
+        if count >= MAX {
             return Err(stop());
         }
-        Ok(out)
+        Ok(until)
     }
+}
+/// TS `run.ts`: an error that is not a `CliError` (the state lock or a state write) ends as INTERNAL_ERROR.
+pub fn state_error(message: String) -> CliError {
+    CliError::new(EXIT::GENERIC, "INTERNAL_ERROR", vec![message])
 }
 fn stop() -> CliError {
     CliError::new(EXIT::RATE_LIMITED,"RATE_LIMIT_STOP",vec!["The server rejected 20 requests in 5 minutes. The CLI stopped to protect the API.".into(),"Wait 5 minutes. Run `purchasely usage` to see the state. Stop other scripts that use the same key.".into()])
@@ -143,6 +152,72 @@ mod tests {
         assert_eq!(pause_from_headers(Some("9999"), None, 0), 900000);
         assert_eq!(pause_from_headers(Some("1.5"), None, 0), 1500);
         assert_eq!(pause_from_headers(None, Some("12"), 10000), 2000)
+    }
+    #[test]
+    fn record_returns_a_failed_state_write() {
+        use crate::core::deps::*;
+        struct H;
+        impl Host for H {
+            fn fetch(&self, _: Request) -> Result<Response, NetError> {
+                Ok(Response::default())
+            }
+            fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+                Ok(ExecResult::default())
+            }
+            fn prompt(&self, _: &str, _: bool) -> String {
+                String::new()
+            }
+            fn read_stdin(&self) -> String {
+                String::new()
+            }
+            fn now(&self) -> i64 {
+                1_000_000
+            }
+            fn wall_now(&self) -> i64 {
+                1_000_000
+            }
+            fn pid_alive(&self, _: u32) -> bool {
+                false
+            }
+            fn sleep(&self, _: i64) {}
+            fn stdout(&self, _: &str) {}
+            fn stderr(&self, _: &str) {}
+            fn keychain(&self) -> Option<&dyn Keychain> {
+                None
+            }
+            fn io(&self) -> Option<&dyn Io> {
+                None
+            }
+        }
+        let dir = std::env::temp_dir().join(format!("breaker-write-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let d = Deps {
+            host: Box::new(H),
+            env: Default::default(),
+            is_tty: false,
+            config_dir: dir.clone(),
+            state_dir: dir.clone(),
+            cache_dir: dir.clone(),
+            version: "x".into(),
+            pid: std::process::id(),
+            name: "purchasely".into(),
+            host_url: String::new(),
+            ext: None,
+            self_exe: Default::default(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
+        };
+        let store = StateStore::new(&d, "k");
+        let breaker = Breaker::new(&d, &store);
+        assert_eq!(breaker.record(2000).unwrap(), 1_002_000);
+        // A folder at the state file path makes the rename of the write fail.
+        std::fs::remove_file(dir.join("k.breaker.json")).unwrap();
+        std::fs::create_dir(dir.join("k.breaker.json")).unwrap();
+        let e = breaker.record(2000).unwrap_err();
+        assert_eq!(e.code, "INTERNAL_ERROR");
+        assert!(!dir.join("k.lock").exists());
+        let _ = std::fs::remove_dir_all(dir);
     }
     #[test]
     fn rate_factor_never_falls_below_eighth() {

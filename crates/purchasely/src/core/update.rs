@@ -240,11 +240,12 @@ pub fn auto_update(rt: &mut Runtime, top_level: &str) {
                 if now - get_number(&read_record(&store), "notified_at").unwrap_or(0) < DAY_MS {
                     return false;
                 }
-                let _ = merge_record(
+                // TS writes before the notice: a failed write gives no notice.
+                merge_record(
                     &store,
                     vec![("notified_at".into(), Value::Number(now as f64))],
-                );
-                true
+                )
+                .is_ok()
             })
             .unwrap_or(false)
     {

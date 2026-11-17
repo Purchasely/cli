@@ -142,7 +142,7 @@ fn each_unit_is_a_listed_test_that_is_not_ignored() {
 }
 
 #[test]
-fn unmapped_ids_are_counted() {
+fn no_id_is_unmapped() {
     let inv = inventory();
     let mapping = Mapping::from_files(&case_files()).unwrap();
     let unmapped = inv.unmapped(&mapped(&mapping));
@@ -154,4 +154,10 @@ fn unmapped_ids_are_counted() {
     for id in &unmapped {
         println!("unmapped: {id}");
     }
+    // The cut-over (P13) deletes the TS tests: every ID needs its case, its Rust test or its exclusion.
+    assert!(
+        unmapped.is_empty(),
+        "{} unmapped inventory IDs",
+        unmapped.len()
+    );
 }

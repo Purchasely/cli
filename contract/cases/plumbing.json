@@ -1,0 +1,6 @@
+{
+  "cases": [
+    {"test": "plumbing::plumbing > group reuses a command and keeps the apps alias", "steps": [], "unit": "purchasely::run::tests::plumbing_group_reuses_command_and_keeps_apps_alias"},
+    {"test": "plumbing::plumbing > real exec: stdin, exit code, timeout, missing binary", "steps": [], "unit": "purchasely::run::tests::plumbing_real_exec_handles_input_status_timeout_and_missing_binary"}
+  ]
+}

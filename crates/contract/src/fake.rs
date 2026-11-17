@@ -216,16 +216,51 @@ impl FakeHost {
         }
     }
     /// The files that the recorded command wrote in the step roots (a screenshot), with their mode.
-    fn apply_writes(&self, writes: &Value) -> Result<(), ExecError> {
+    fn apply_writes(
+        &self,
+        writes: &Value,
+        recorded_args: &[String],
+        actual_args: &[String],
+    ) -> Result<(), ExecError> {
         let roots = crate::replay::execution_roots(&self.inner.step, &self.inner.root)
             .map_err(|e| ExecError::Other(e.0))?;
+        // A folder the command made with a random name (`release-XXXXXX`) has another name in this run:
+        // the recorded and the real arguments name both, component by component.
+        let renames: Vec<(String, String)> = recorded_args
+            .iter()
+            .zip(actual_args)
+            .flat_map(|(recorded, actual)| {
+                let (r, a) = (Path::new(recorded), Path::new(actual));
+                r.components()
+                    .zip(a.components())
+                    .filter(|(x, y)| x != y)
+                    .map(|(x, y)| {
+                        (
+                            x.as_os_str().to_string_lossy().into_owned(),
+                            y.as_os_str().to_string_lossy().into_owned(),
+                        )
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect();
         for write in writes.as_array().into_iter().flatten() {
             let token = write["root"].as_str().unwrap_or("<ROOT>");
             let Some((_, root)) = roots.iter().find(|(t, _)| t == token) else {
                 self.fail(format!("exec write to an unknown root {token}"));
                 return Err(ExecError::Other("unknown write root".into()));
             };
-            let path = root.join(write["path"].as_str().unwrap_or_default());
+            let path = root.join(
+                Path::new(write["path"].as_str().unwrap_or_default())
+                    .components()
+                    .map(|c| {
+                        let c = c.as_os_str().to_string_lossy();
+                        renames
+                            .iter()
+                            .find(|(from, _)| *from == c)
+                            .map_or(c.to_string(), |(_, to)| to.clone())
+                    })
+                    .collect::<PathBuf>(),
+            );
             let bytes = write["hex"]
                 .as_str()
                 .and_then(decode_hex)
@@ -310,13 +345,13 @@ impl FakeHost {
         }
         if expected["run_child"] == true {
             self.inner.child_runs.set(self.inner.child_runs.get() + 1);
-            let child_args = expected_args;
+            let child_args = expected_args.clone();
             let result = purchasely::run::run(child_args.clone(), self.deps(child_args));
             if result != expected["result"]["code"].as_i64().unwrap_or(0) as i32 {
                 self.fail("child exit code differs");
             }
         }
-        self.apply_writes(&expected["writes"])?;
+        self.apply_writes(&expected["writes"], &expected_args, actual_args)?;
         if let Some(error) = expected["error"].as_str() {
             return Err(if error == "ENOENT" {
                 ExecError::NotFound

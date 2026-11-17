@@ -33,8 +33,10 @@ pub fn config(
     };
     match load_extra_certs(Some(path)) {
         Ok(certs) => {
-            let certs = certs
+            // As NODE_EXTRA_CA_CERTS: the extra certificates extend the Mozilla roots, they do not replace them.
+            let certs = webpki_root_certs::TLS_SERVER_ROOT_CERTS
                 .iter()
+                .chain(certs.iter())
                 .map(|c| ureq::tls::Certificate::from_der(c.as_ref()).to_owned())
                 .collect::<Vec<_>>();
             let roots = ureq::tls::RootCerts::new_with_certs(&certs);
@@ -52,7 +54,7 @@ pub fn config(
 mod tests {
     use super::*;
     #[test]
-    fn pem_file_adds_one_certificate() {
+    fn pem_file_extends_the_mozilla_roots() {
         let path = std::env::temp_dir().join(format!("extra-ca-{}.pem", std::process::id()));
         fs::write(
             &path,
@@ -61,11 +63,14 @@ mod tests {
         .unwrap();
         let env = BTreeMap::from([("SSL_CERT_FILE".into(), path.to_string_lossy().into_owned())]);
         let cfg = config(&env, |_| {});
-        let n = match cfg.root_certs() {
-            ureq::tls::RootCerts::Specific(certs) => certs.len(),
-            _ => 0,
+        let ureq::tls::RootCerts::Specific(certs) = cfg.root_certs() else {
+            panic!("expected the Mozilla roots plus the extra certificate");
         };
-        assert_eq!(n, 1);
+        let mozilla = webpki_root_certs::TLS_SERVER_ROOT_CERTS;
+        assert_eq!(certs.len(), mozilla.len() + 1);
+        // Both trust paths: a public root (as webpki::TLS_SERVER_ROOTS) and the extra certificate.
+        assert!(certs.iter().any(|c| c.der() == mozilla[0].as_ref()));
+        assert_eq!(certs.last().unwrap().der(), [0u8]);
         let _ = fs::remove_file(path);
     }
     #[test]

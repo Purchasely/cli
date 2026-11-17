@@ -383,7 +383,12 @@ fn pack_refuses_site_headers() {
         root.join("scripts/pack-release.sh"),
     )
     .unwrap();
-    fs::copy(repo().join("package.json"), root.join("package.json")).unwrap();
+    fs::create_dir_all(root.join("crates/purchasely")).unwrap();
+    fs::copy(
+        repo().join("crates/purchasely/Cargo.toml"),
+        root.join("crates/purchasely/Cargo.toml"),
+    )
+    .unwrap();
     fs::write(root.join("site/_headers"), "/x\n  X: y\n").unwrap();
     let output = sandbox.path("refused");
     let result = Command::new("sh")

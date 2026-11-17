@@ -4,7 +4,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 bridge=0
-version="$(node -p 'require("./package.json").version')"
+version="$(grep '^version =' crates/purchasely/Cargo.toml | head -1 | cut -d'"' -f2)"
 version_set=0
 native=""
 count=0
@@ -42,7 +42,7 @@ find "$out" \( -name '*.md' -o -name .DS_Store \) -type f -delete
 stage="$work/purchasely-$version"
 mkdir -p "$stage/bin" "$stage/man"
 cp README.md LICENSE "$stage/"
-sed -e "s|^HOST=\$|HOST=$(node -p 'require("./package.json").config.host')|" \
+sed -e "s|^HOST=\$|HOST=$(sed -n 's/^HOST=//p' packaging/site.env)|" \
     -e "s|^BRIDGE_VERSION=\$|BRIDGE_VERSION=$(sed -n 's/^BRIDGE_VERSION=//p' packaging/bridge.env)|" install.sh >"$stage/install.sh"
 chmod +x "$stage/install.sh"
 cp "$stage/install.sh" "$out/install.sh"

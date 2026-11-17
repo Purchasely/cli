@@ -271,6 +271,256 @@ mod tests {
         assert!(clock.load(Ordering::SeqCst) >= 8250);
         let _ = std::fs::remove_dir_all(dir);
     }
+    /// The real clock of the process, in ms, with real sleeps: several threads or processes share it.
+    struct RealClock;
+    impl Host for RealClock {
+        fn fetch(&self, _: Request) -> Result<Response, NetError> {
+            Ok(Response::default())
+        }
+        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            Ok(ExecResult::default())
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_millis() as i64
+        }
+        fn wall_now(&self) -> i64 {
+            self.now()
+        }
+        fn pid_alive(&self, p: u32) -> bool {
+            unsafe { libc::kill(p as i32, 0) == 0 }
+        }
+        fn sleep(&self, n: i64) {
+            std::thread::sleep(std::time::Duration::from_millis(n.max(0) as u64))
+        }
+        fn stdout(&self, _: &str) {}
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+    /// `fixture()` with its own dir: `fixture()` clears a dir that is the same for each test.
+    fn deps_in(dir: &std::path::Path, host: Box<dyn Host>) -> Deps {
+        Deps {
+            host,
+            env: BTreeMap::new(),
+            is_tty: false,
+            config_dir: dir.into(),
+            state_dir: dir.into(),
+            cache_dir: dir.into(),
+            version: "x".into(),
+            pid: std::process::id(),
+            name: "purchasely".into(),
+            host_url: String::new(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
+        }
+    }
+    fn temp(tag: &str) -> PathBuf {
+        static N: AtomicI64 = AtomicI64::new(0);
+        let dir = std::env::temp_dir().join(format!(
+            "limiter-{tag}-{}-{}",
+            std::process::id(),
+            N.fetch_add(1, Ordering::SeqCst)
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        dir
+    }
+    fn max_in_window(starts: &[i64], window: i64) -> usize {
+        starts
+            .iter()
+            .map(|s| {
+                starts
+                    .iter()
+                    .filter(|x| **x >= *s && **x < s + window)
+                    .count()
+            })
+            .max()
+            .unwrap_or(0)
+    }
+    fn max_concurrent(spans: &[(i64, i64)]) -> usize {
+        let mut events = spans
+            .iter()
+            .flat_map(|(start, end)| [(*start, 1), (*end, -1)])
+            .collect::<Vec<_>>();
+        events.sort();
+        let (mut current, mut max) = (0i64, 0i64);
+        for (_, delta) in events {
+            current += delta;
+            max = max.max(current);
+        }
+        max as usize
+    }
+
+    /// limiter.test.ts "50 parallel callers never exceed the rate nor 4 in flight", on the real clock
+    /// with the times divided by 10: rate 50 per s in 100 ms windows, each call held 100 ms.
+    #[test]
+    fn fifty_parallel_callers_never_exceed_the_rate_nor_4_in_flight() {
+        let dir = temp("parallel");
+        let rate = 50.0;
+        let spans = std::sync::Mutex::new(Vec::new());
+        std::thread::scope(|scope| {
+            for _ in 0..50 {
+                scope.spawn(|| {
+                    let d = deps_in(&dir, Box::new(RealClock));
+                    let store = StateStore::new(&d, "k");
+                    let permit = Limiter::new(&d, &store).acquire(rate, false).unwrap();
+                    let start = permit.at;
+                    d.host.sleep(100);
+                    spans.lock().unwrap().push((start, d.host.now()));
+                    permit.release().unwrap();
+                });
+            }
+        });
+        let spans = spans.into_inner().unwrap();
+        assert_eq!(spans.len(), 50);
+        let starts = spans.iter().map(|s| s.0).collect::<Vec<_>>();
+        assert!(max_in_window(&starts, 100) <= 5);
+        // The cap was reached: the test bites.
+        assert_eq!(max_concurrent(&spans), MAX_IN_FLIGHT);
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
+    /// limiter.test.ts "spaces writes by 7 s".
+    #[test]
+    fn spaces_writes_by_7_s() {
+        let dir = temp("writes");
+        let clock = Arc::new(AtomicI64::new(1_000_000));
+        let d = deps_in(&dir, Box::new(Clock(clock.clone())));
+        let store = StateStore::new(&d, "k");
+        let limiter = Limiter::new(&d, &store);
+        let ats = (0..3)
+            .map(|_| {
+                let permit = limiter.acquire(1.0, true).unwrap();
+                let at = clock.load(Ordering::SeqCst);
+                permit.release().unwrap();
+                at
+            })
+            .collect::<Vec<_>>();
+        assert!(ats[1] - ats[0] >= WRITE_GAP_MS, "{ats:?}");
+        assert!(ats[2] - ats[1] >= WRITE_GAP_MS, "{ats:?}");
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
+    /// limiter.test.ts "frees the slots of a dead process": 4 slots of a dead pid do not block.
+    #[test]
+    fn frees_the_slots_of_a_dead_process() {
+        let dir = temp("dead-slots");
+        let clock = Arc::new(AtomicI64::new(1_000_000));
+        let d = deps_in(&dir, Box::new(Clock(clock.clone())));
+        let store = StateStore::new(&d, "k");
+        let dead = (0..4)
+            .map(|i| Slot {
+                id: format!("x{i}"),
+                pid: (1 << 22) + 7,
+                at: 1_000_000,
+            })
+            .collect::<Vec<_>>();
+        store.write("limiter", &value(0, 0, &dead)).unwrap();
+        let permit = Limiter::new(&d, &store).acquire(5.0, false).unwrap();
+        permit.release().unwrap();
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
+    /// limiter.test.ts "breaks the lock of a dead process".
+    #[test]
+    fn breaks_the_lock_of_a_dead_process() {
+        let dir = temp("dead-lock");
+        let d = deps_in(&dir, Box::new(Clock(Arc::new(AtomicI64::new(1_000_000)))));
+        std::fs::write(dir.join("k.lock"), ((1u32 << 22) + 7).to_string()).unwrap();
+        assert_eq!(StateStore::new(&d, "k").with_lock(|| 42), Ok(42));
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
+    /// limiter.test.ts "limiter (8 real processes)": 8 processes of 2 calls each, rate 10, held 500 ms.
+    #[test]
+    fn keeps_the_same_guarantees_across_8_processes() {
+        let exe = std::env::current_exe().unwrap();
+        let dir = temp("processes");
+        let log = dir.join("log.jsonl");
+        std::fs::write(&log, "").unwrap();
+        let children = (0..8)
+            .map(|_| {
+                std::process::Command::new(&exe)
+                    .args([
+                        "--exact",
+                        "core::limiter::tests::limiter_child",
+                        "--nocapture",
+                    ])
+                    .env("LIMITER_CHILD_DIR", &dir)
+                    .stdout(std::process::Stdio::piped())
+                    .stderr(std::process::Stdio::piped())
+                    .spawn()
+                    .unwrap()
+            })
+            .collect::<Vec<_>>();
+        for child in children {
+            let out = child.wait_with_output().unwrap();
+            assert!(
+                out.status.success(),
+                "{}{}",
+                String::from_utf8_lossy(&out.stdout),
+                String::from_utf8_lossy(&out.stderr)
+            );
+        }
+        let rows = std::fs::read_to_string(&log)
+            .unwrap()
+            .lines()
+            .map(|line| {
+                let n = line
+                    .split(' ')
+                    .map(|x| x.parse::<i64>().unwrap())
+                    .collect::<Vec<_>>();
+                (n[0], n[1], n[2])
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(rows.len(), 16);
+        let ats = rows.iter().map(|r| r.0).collect::<Vec<_>>();
+        assert!(max_in_window(&ats, 1000) <= 10);
+        let spans = rows.iter().map(|r| (r.1, r.2)).collect::<Vec<_>>();
+        assert!(max_concurrent(&spans) <= MAX_IN_FLIGHT);
+        let _ = std::fs::remove_dir_all(dir);
+    }
+    /// The child of `keeps_the_same_guarantees_across_8_processes`: it logs `at start end` per call.
+    #[test]
+    fn limiter_child() {
+        let Some(dir) = std::env::var_os("LIMITER_CHILD_DIR") else {
+            return;
+        };
+        let dir = PathBuf::from(dir);
+        let d = deps_in(&dir, Box::new(RealClock));
+        let store = StateStore::new(&d, "shared");
+        let limiter = Limiter::new(&d, &store);
+        for _ in 0..2 {
+            let permit = limiter.acquire(10.0, false).unwrap();
+            let start = d.host.now();
+            d.host.sleep(500);
+            let line = format!("{} {start} {}\n", permit.at, d.host.now());
+            use std::io::Write;
+            std::fs::OpenOptions::new()
+                .append(true)
+                .open(dir.join("log.jsonl"))
+                .unwrap()
+                .write_all(line.as_bytes())
+                .unwrap();
+            permit.release().unwrap();
+        }
+    }
     #[test]
     fn cap_and_stale_slot_contract() {
         assert_eq!(MAX_IN_FLIGHT, 4);

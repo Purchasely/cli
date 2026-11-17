@@ -298,9 +298,49 @@ mod tests {
             id: "g-tools".into(),
             description: "Tools".into(),
             extension: true,
-            leaves: vec![],
+            leaves: vec![Leaf {
+                path: vec!["tools".into(), "run".into()],
+                id: "tools-run".into(),
+                summary: "Run".into(),
+                help: "Usage: acme tools run".into(),
+            }],
         });
         let p = html(&r);
+        // reference-html.test.ts "has the brand nav, a group index and an anchor per command".
+        assert!(p.contains("class=\"brand\""));
+        assert!(p.contains("<span class=\"tag\">CLI</span>"));
+        for a in [
+            "/#who",
+            "/#use-cases",
+            "/#mcp",
+            "/#agents",
+            "/#safety",
+            "/#install",
+            "https://docs.purchasely.com/docs/management-api",
+        ] {
+            assert!(p.contains(&format!("href=\"{a}\"")), "{a}");
+        }
+        assert!(p.contains("href=\"assets/favicon.png\""));
+        let index = p
+            .split_once("<nav class=\"index\"")
+            .and_then(|(_, rest)| rest.split_once("</nav>"))
+            .unwrap()
+            .0;
+        assert!(index.contains("href=\"#extension-commands\""));
+        for g in &r.groups {
+            assert!(index.contains(&format!(
+                "<a href=\"#{}\">{}</a> <span class=\"soft\">{}</span>",
+                g.id,
+                g.name,
+                g.leaves.len()
+            )));
+            for l in &g.leaves {
+                assert!(p.contains(&format!(
+                    "<article id=\"{0}\">\n<h3><a href=\"#{0}\">",
+                    l.id
+                )));
+            }
+        }
         assert!(p.contains("--dark-green:#002420"));
         assert!(p.contains("href=\"#extension-commands\""));
         assert!(p.contains("#extension-commands{margin-top"));

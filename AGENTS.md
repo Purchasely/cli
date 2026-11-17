@@ -47,6 +47,9 @@ See [docs/exit-codes.md](docs/exit-codes.md). The short rule: 7 means stop, 9 me
 - `docs/commands.md` is generated from the command tree. Change the help text of the command, not the file, then run `scripts/gen-docs.sh`.
 - A hand-written command may take over a generated name: register it before the surface and add `resource action` to `rt.taken`.
 - Tests call `run(argv, deps)` with a fake `fetch`, keychain, clock and prompt. Do not call the network. Do not use real time in limiter tests.
-- Commits: atomic. Use Conventional Commits. The full suite runs in CI: locally run `npm run typecheck` and the tests of your change.
+- Build: `cargo build -p purchasely --bins`. Check: `cargo fmt --check` and `cargo clippy --workspace --all-targets -- -D warnings`.
+- Run the tests of your change only: `cargo test -p purchasely <module>::tests`, or one contract file with `CONTRACT_FILTER=<file>::<test name prefix>` (for example `CONTRACT_FILTER=search:: cargo test -p contract --test replay`). The binary suite runs `target/debug/purchasely`: build it first (`cargo test -p contract --test binary`).
+- The contract cases (`contract/cases/*.json` in process, `contract/bin/*.json` for the binary) are frozen fixtures. To add or update a case: write its inputs in the JSON file, run its test with `CONTRACT_BLESS=1` and a `CONTRACT_FILTER` that selects only that case, and read the diff. Bless writes the outputs from the Rust run and marks the case `"source": "bless"`. Reviewers read that diff in the PR.
+- Commits: atomic. Use Conventional Commits. The full suite runs in CI.
 - Do not use em-dashes or en-dashes in docs or help text.
 - Never write the key in a log, an error or a test snapshot.

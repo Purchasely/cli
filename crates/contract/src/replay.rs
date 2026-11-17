@@ -228,9 +228,15 @@ pub fn run_case_directory(
     if bless {
         let mut offset = 0;
         for (path, cases) in &mut files {
+            let mut changed = false;
             for case in cases.iter_mut() {
+                changed |= *case != updated[offset];
                 *case = updated[offset].clone();
                 offset += 1;
+            }
+            // Write only the files of the blessed cases: a rewrite of the others changes their key order only.
+            if !changed {
+                continue;
             }
             let file = json!({"cases":cases});
             fs::write(

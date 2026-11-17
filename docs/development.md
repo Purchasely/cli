@@ -38,5 +38,5 @@ A hand-written command may take over a generated name: register it before the su
 - `crates/contract/tests/binary.rs` runs `target/debug/purchasely` (or `CONTRACT_BIN`) on `contract/bin/*.json` and compares stdout, stderr and the exit code. Build the binary first.
 - `crates/contract/tests/install.rs` and `release.rs` run `install.sh` and `scripts/pack-release.sh` with fake tools on `PATH`. `docs.rs` checks the links and the content of the docs.
 - `CONTRACT_FILTER=<file>::<test name prefix>` selects cases (a comma separates prefixes). A prefix that matches no case fails the run.
-- The cases are frozen fixtures. To add or update one, write its inputs, then run with `CONTRACT_BLESS=1` and a filter that selects only that case. Bless writes the outputs from the Rust run and marks the case `"source": "bless"`. Read the diff before you commit it.
+- The cases are frozen fixtures. To add or update one, write its inputs, then run with `CONTRACT_BLESS=1` and a filter that selects only that case. In `contract/cases`, first remove the outputs of a case that you update (`code`, `out`, `err`, `t_after`, `files_after`): the replay bless fails on an output that differs. Bless writes the outputs from the Rust run and marks the case `"source": "bless"`. Read the diff before you commit it.
 - `docs/commands.md` is generated from the command tree: `scripts/gen-docs.sh`.

@@ -27,6 +27,6 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y mandoc
       # The binary contract suite runs target/debug/purchasely: build it first.
       - run: cargo build -p purchasely --bins
-      # release::bridge_tgz_accepted_by_old_installer runs the frozen 0.9.0-era installer, which needs the
-      # Node of the runner image (`which node`). The CLI itself needs no Node.
+      # release::bridge_tgz_accepted_by_old_installer runs the frozen installer of the Node CLI (before the bridge),
+      # which needs Node 22.12 or newer from the runner image (`which node`). The CLI itself needs no Node.
       - run: cargo test --workspace

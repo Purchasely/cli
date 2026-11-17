@@ -12,9 +12,8 @@ fn binary_transcript_compares_stdout_stderr_and_status() {
     assert!(compare_recorded(&json!({"code":0,"stdout":"ready\n","stderr":""}), &actual).is_ok());
 }
 
-/// CONTRACT_BIN, else the debug Rust binary. A relative path word (`target/debug/purchasely`, the
-/// `dist/bin/purchasely.js` of `node dist/bin/purchasely.js`) is relative to the workspace root; `node` is looked
-/// up in PATH.
+/// CONTRACT_BIN, else the debug Rust binary. CONTRACT_BIN is a program and its prefix arguments; a relative
+/// path word (`target/debug/purchasely`) is relative to the workspace root, a bare word is looked up in PATH.
 fn contract_bin() -> String {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let command =
@@ -37,7 +36,7 @@ fn contract_bin() -> String {
     words.join(" ")
 }
 
-/// The program and its prefix arguments (`node dist/bin/purchasely.js`), with an isolated HOME.
+/// The program and its prefix arguments of `contract_bin`, with an isolated HOME.
 fn bin_command(home: &std::path::Path, args: &[&str]) -> Command {
     let command = contract_bin();
     let mut words = command.split_whitespace();
@@ -65,6 +64,7 @@ fn temp_home(tag: &str) -> std::path::PathBuf {
 fn binary_contract_directory_supports_record_replay_and_bless() {
     let directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../contract/bin");
     let command = contract_bin();
+    // CONTRACT_RECORD=1 writes the output into the cases; CONTRACT_BLESS=1 also marks them `source: bless`.
     let record = std::env::var("CONTRACT_RECORD").is_ok_and(|v| v == "1");
     let bless = std::env::var("CONTRACT_BLESS").is_ok_and(|v| v == "1");
     let filter = std::env::var("CONTRACT_FILTER").ok();

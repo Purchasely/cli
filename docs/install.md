@@ -49,11 +49,11 @@ The script prints fixed messages only. It never prints the output of `curl`. The
 
 ## Site files (public host)
 
-The Cloudflare Pages project `purchasely-cli` serves the landing page, `install.sh`, `latest.json`, target archives, `SHA256SUMS` and `_headers`. The 0.9.0 bridge tarball remains available during the first two stable native releases. The host value lives in `package.json` `config.host` only.
+The Cloudflare Pages project `purchasely-cli` serves the landing page, `install.sh`, `latest.json`, target archives, `SHA256SUMS` and `_headers`. The 0.9.0 bridge tarball remains available during the first two stable native releases. The host value lives in `packaging/site.env` (`HOST`) only.
 
 ## Update mechanics
 
-- Install kind: `managed` when `PURCHASELY_MANAGED_INSTALL_ROOT` is set (the launcher sets it), `brew` when the module path holds `/Cellar/`, else `npm`.
+- Install kind: `managed` when `PURCHASELY_MANAGED_INSTALL_ROOT` is set (the launcher sets it), `brew` when the path of the executable (after links) holds `/Cellar/`, else `npm`.
 - The first command of each day (the record `update.<name>.check.json` in the state dir) starts a detached `update --background`. The parent never waits. For a managed install the child runs `install.sh --upgrade-only`. The log is `update.<name>.log`.
 - Notices (stderr, once a day, only when the record holds a newer version): managed, none; brew, `brew upgrade purchasely`; npm, `curl -fsSL https://cli.purchasely.io/install.sh | sh`.
 - Off: `PURCHASELY_DISABLE_AUTOUPDATE=1`, `PURCHASELY_OFFLINE=1`, `CI` set, or `"auto_update": false` in `~/.config/purchasely/config.json`.

@@ -1,5 +1,6 @@
 import { lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, readlinkSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { defineSurface } from "../src/core/credentials.js";
 import type { Deps, Extension, Keychain } from "../src/core/types.js";
@@ -255,7 +256,7 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       for (const dir of roots) after.set(dir, snapshot(dir));
       const filesBefore = Object.fromEntries([...before].map(([dir, value]) => [dirToken(dir, roots, base), value]));
       const filesAfter = Object.fromEntries([...after].map(([dir, value]) => [dirToken(dir, roots, base), value]));
-      recordedSteps.push({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join("") });
+      recordedSteps.push(repoRelative({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join("") }));
       Object.assign(d, original);
       killSpy.mockRestore();
       if (hadFakeTimers) {
@@ -328,6 +329,10 @@ function snapshot(dir: string): unknown {
   walk(dir);
   return entries;
 }
+
+// The clone path differs on each machine: a repo path is recorded as `<REPO>`, and the replay maps it to its own clone.
+const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+function repoRelative<T>(step: T): T { return JSON.parse(JSON.stringify(step).replaceAll(REPO, "<REPO>")) as T; }
 
 function exists(path: string): boolean { try { statSync(path); return true; } catch { return false; } }
 function dirToken(dir: string, roots: string[], root: string): string { return dir === root ? "<ROOT>" : `<TMP${roots.indexOf(dir) - 1}>`; }

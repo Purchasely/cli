@@ -38,8 +38,9 @@ fn committed_cases_match_fresh_recordings() {
         eprintln!("drift skipped: CONTRACT_DRIFT_DIR unset");
         return;
     };
-    let committed = Path::new("contract/cases");
-    let (checked, skipped, new_files) = compare_dirs(committed, &dir).unwrap();
+    // The test runs from crates/contract: the cases sit in the workspace root.
+    let committed = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../contract/cases");
+    let (checked, skipped, new_files) = compare_dirs(&committed, &dir).unwrap();
     eprintln!("drift checked {checked}, skipped {skipped}, new files {new_files}");
 }
 

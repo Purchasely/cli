@@ -35,11 +35,17 @@ impl RealHost {
 
     fn write_stdout(&self, value: &str) {
         if let Err(error) = io::stdout().write_all(value.as_bytes())
-            && error.kind() != io::ErrorKind::BrokenPipe
+            && stdout_error_is_fatal(&error)
         {
             let _ = writeln!(io::stderr(), "{error}");
+            std::process::exit(1);
         }
     }
+}
+
+/// TS `main()`: EPIPE on stdout (`reference | head`) is ignored; any other stdout error is fatal.
+fn stdout_error_is_fatal(error: &io::Error) -> bool {
+    error.kind() != io::ErrorKind::BrokenPipe
 }
 
 impl Host for RealHost {
@@ -186,6 +192,17 @@ mod tests {
     use super::*;
     use std::{net::TcpListener, thread};
 
+    /// main.test.ts "ignores EPIPE on stdout": EPIPE is ignored, EIO is still fatal. The binary test
+    /// `reference_closed_stdout_exits_quietly` runs the EPIPE case end to end.
+    #[test]
+    fn epipe_on_stdout_is_ignored_and_another_error_is_fatal() {
+        assert!(!stdout_error_is_fatal(&io::Error::from_raw_os_error(
+            libc::EPIPE
+        )));
+        assert!(stdout_error_is_fatal(&io::Error::from_raw_os_error(
+            libc::EIO
+        )));
+    }
     /// update.test.ts "detach > a blocked child does not delay the parent's exit".
     #[test]
     fn a_detached_child_that_blocks_does_not_delay_the_caller() {

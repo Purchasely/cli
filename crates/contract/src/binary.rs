@@ -279,14 +279,6 @@ fn set_output(case: &mut Value, key: &str, alias: &str, bytes: &[u8]) {
         case.as_object_mut().unwrap().remove(alias);
     }
 }
-pub fn record_path(directory: &Path, name: &str, result: &BinaryResult) -> std::io::Result<()> {
-    fs::create_dir_all(directory)?;
-    let val = json!({"test":name,"code":result.code,"stdout":String::from_utf8_lossy(&result.stdout),"stderr":String::from_utf8_lossy(&result.stderr)});
-    fs::write(
-        directory.join(format!("{name}.json")),
-        serde_json::to_vec_pretty(&val).map_err(std::io::Error::other)?,
-    )
-}
 /// `actual` comes normalized from the runner (`normalize_bytes`): only the expected side is normalized here.
 pub fn compare_recorded(expected: &Value, actual: &BinaryResult) -> Result<(), String> {
     let got = json!({"code":actual.code,"stdout":String::from_utf8_lossy(&actual.stdout),"stderr":String::from_utf8_lossy(&actual.stderr)});

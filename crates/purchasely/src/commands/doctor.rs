@@ -191,6 +191,7 @@ fn doctor(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             body: None,
             write: Some(false),
             refuse_redirect: false,
+            rate_limited: None,
         };
         match http::send(&ctx, &request) {
             Ok(response) if (200..300).contains(&response.status) => checks.push(check("api", Status::Ok, format!("The Management API of {env} accepts the key"))),

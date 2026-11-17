@@ -33,6 +33,9 @@ pub struct HttpRequest {
     pub body: Option<String>,
     pub write: Option<bool>,
     pub refuse_redirect: bool,
+    /// TS `rateLimited`: the pause (ms) of a rate limit that the body of the answer reports, or `None`.
+    /// `None` here, or a `None` answer, falls back to the headers of an HTTP 429.
+    pub rate_limited: Option<fn(&HttpResponse) -> Option<i64>>,
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HttpResponse {
@@ -214,15 +217,25 @@ pub fn send(ctx: &Ctx<'_>, req: &HttpRequest) -> Result<HttpResponse, CliError> 
             )
         })?;
         let text = String::from_utf8_lossy(&response.body).into_owned();
-        let pause = if response.status == 429 {
-            Some(pause_from_headers(
-                header(&response, "retry-after"),
-                header(&response, "x-ratelimit-reset"),
-                ctx.d.host.now(),
-            ))
-        } else {
-            None
-        };
+        // TS: one path for every rate limit, the body of the answer first, the headers of a 429 as the fallback.
+        let pause = req
+            .rate_limited
+            .and_then(|f| {
+                f(&HttpResponse {
+                    status: response.status,
+                    headers: response.headers.clone(),
+                    text: text.clone(),
+                })
+            })
+            .or_else(|| {
+                (response.status == 429).then(|| {
+                    pause_from_headers(
+                        header(&response, "retry-after"),
+                        header(&response, "x-ratelimit-reset"),
+                        ctx.d.host.now(),
+                    )
+                })
+            });
         let line = UsageLine {
             ts: String::new(),
             env: ctx.env.clone(),
@@ -434,7 +447,34 @@ mod tests {
             body: None,
             write: Some(false),
             refuse_redirect: refuse,
+            rate_limited: None,
         }
+    }
+    /// http.ts: `req.rateLimited?.(out) ?? (429 ? headers : null)`. A 200 that the hook reads as a rate limit
+    /// records the pause in the shared breaker and is sent once more; a `None` answer is a normal response.
+    #[test]
+    fn the_rate_limited_hook_pauses_in_the_breaker_and_retries_once() {
+        let (c, h) = ctx(&[200, 200]);
+        let mut r = req(false);
+        r.rate_limited = Some(|res| (res.status == 200).then_some(30_000));
+        // Both answers are 200 and the hook reads both as a limit: one retry only, then the answer.
+        let out = send(&c, &r).unwrap();
+        assert_eq!(out.status, 200);
+        assert_eq!(h.requests.lock().unwrap().len(), 2);
+        assert!(h.now.load(Ordering::SeqCst) >= 30_000);
+        let store = StateStore::new(c.d, "prod-management-".to_owned() + &key_hash("test-key"));
+        let state = Breaker::new(c.d, &store).state();
+        use crate::core::json::Value;
+        let Value::Object(fields) = state else {
+            panic!()
+        };
+        let get = |k: &str| fields.iter().find(|(n, _)| n == k).map(|(_, v)| v.clone());
+        assert_eq!(get("rate_factor"), Some(Value::Number(0.25)));
+        assert!(matches!(get("rejections"), Some(Value::Array(a)) if a.len() == 2));
+        let (c, h) = ctx(&[200]);
+        r.rate_limited = Some(|_| None);
+        assert_eq!(send(&c, &r).unwrap().status, 200);
+        assert_eq!(h.requests.lock().unwrap().len(), 1);
     }
     #[test]
     fn user_agent() {

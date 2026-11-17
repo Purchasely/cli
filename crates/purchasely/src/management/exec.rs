@@ -231,6 +231,7 @@ pub(crate) fn perform(
             body: current.body.clone(),
             write: None,
             refuse_redirect,
+            rate_limited: None,
         };
         let res = read_request(rt, &ctx, &req)?;
         if (200..300).contains(&res.status) {

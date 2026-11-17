@@ -150,6 +150,7 @@ fn read(
             body: None,
             write: Some(false),
             refuse_redirect: false,
+            rate_limited: None,
         },
     )?;
     if !(200..300).contains(&response.status) {
@@ -533,6 +534,7 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
                 body: None,
                 write: Some(false),
                 refuse_redirect: false,
+                rate_limited: None,
             },
         )?;
         if !(200..300).contains(&response.status) {
@@ -641,6 +643,7 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
             body: None,
             write: Some(false),
             refuse_redirect: false,
+            rate_limited: None,
         },
     )?;
     if !(200..300).contains(&response.status) {

@@ -231,8 +231,10 @@ impl FakeHost {
             .zip(actual_args)
             .flat_map(|(recorded, actual)| {
                 let (r, a) = (Path::new(recorded), Path::new(actual));
+                // From the end: the temp prefix has another depth on another system (/var/folders/.../T, /tmp).
                 r.components()
-                    .zip(a.components())
+                    .rev()
+                    .zip(a.components().rev())
                     .filter(|(x, y)| x != y)
                     .map(|(x, y)| {
                         (

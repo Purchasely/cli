@@ -160,6 +160,8 @@ pub fn normalize_case(case: &Value) -> Value {
             for (path, token) in roots {
                 text = text.replace(&path, &token);
             }
+            // `doctor` of the TS CLI prints the Node version of the recording machine.
+            let text = mask_node_version(&text);
             let text = crate::normalize::normalize(&text, "__NO_ROOT_MATCH__", pid, &version)
                 .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
             *step = serde_json::from_str::<Value>(&text).expect("normalized step is JSON");
@@ -167,6 +169,25 @@ pub fn normalize_case(case: &Value) -> Value {
     }
     normalized
 }
+/// `Node 22.23.4` becomes `Node <NODE>`: a fact of the recording machine, like the pid.
+fn mask_node_version(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut rest = text;
+    while let Some(i) = rest.find("Node ") {
+        out.push_str(&rest[..i + 5]);
+        rest = &rest[i + 5..];
+        let end = rest
+            .find(|c: char| !(c.is_ascii_digit() || c == '.'))
+            .unwrap_or(rest.len());
+        if end > 0 && rest[..end].contains('.') {
+            out.push_str("<NODE>");
+            rest = &rest[end..];
+        }
+    }
+    out.push_str(rest);
+    out
+}
+
 /// A file entry with `text` also has `hex`, the raw bytes: the normalizer masks the text, not the hex.
 fn drop_hex_of_text_files(entries: &mut Value) {
     for entry in entries.as_array_mut().into_iter().flatten() {

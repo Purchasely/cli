@@ -83,3 +83,11 @@ fn drift_skips_a_unit_case_and_ignores_reply_bytes_and_wall() {
     let changed = json!({"test": "x::y", "steps": [{"wall": "x", "calls": [{"reply": {"status": 500, "hex": "00"}}]}]});
     assert!(compare_drift_case(&committed, &changed).is_err());
 }
+
+#[test]
+fn drift_masks_the_node_version_of_the_recording_machine() {
+    let step = |v: &str| json!({"out": format!("node ok Node {v}\nNode is ready")});
+    let committed = json!({"test": "x::y", "steps": [step("26.10.0")]});
+    let fresh = json!({"test": "x::y", "steps": [step("22.23.4")]});
+    assert!(compare_drift_case(&committed, &fresh).is_ok());
+}

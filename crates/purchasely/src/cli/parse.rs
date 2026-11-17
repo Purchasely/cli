@@ -168,7 +168,7 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
             } else if opt.required {
                 return Err(CliError(format!(
                     "error: required option '{}' not specified",
-                    opt.long()
+                    opt.flags
                 )));
             } else if opt.boolean {
                 out.options.entry(key).or_default().push("false".into());
@@ -276,6 +276,15 @@ mod tests {
             .command(Command::new("summary"));
         let parsed = parse(&command, &["help".into(), "summary".into()]).unwrap_err();
         assert_eq!(parsed.0, "HELP:summary");
+    }
+
+    #[test]
+    fn required_option_error_names_the_flags_as_commander() {
+        let c = Command::new("tree").option(OptionDef::value("--keys <list>", "k").required());
+        assert_eq!(
+            parse(&c, &[]).unwrap_err().0,
+            "error: required option '--keys <list>' not specified"
+        );
     }
 
     #[test]

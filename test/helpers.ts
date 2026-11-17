@@ -247,6 +247,16 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       try { const result = realKill(pid, signal as NodeJS.Signals); pidProbes.push({ pid: pid === process.pid ? "<PID>" : pid, alive: true }); return result; }
       catch (error) { pidProbes.push({ pid: pid === process.pid ? "<PID>" : pid, alive: false }); throw error; }
     }) as typeof process.kill);
+    // A fake terminal (`d.io`): its TTY state, its size and the keys the menus read, in order. A plain
+    // object with no stdin emitter (a non-terminal stub) is not recorded.
+    const io = d.io as { stdin: NodeJS.EventEmitter & { isTTY?: boolean }; stdout: Partial<NodeJS.EventEmitter> & { isTTY?: boolean; columns?: number; rows?: number } } | undefined;
+    const terminal = typeof io?.stdin?.on === "function" ? io : undefined;
+    const keys: string[] = [];
+    const onKey = (_: unknown, key?: { name?: string }) => keys.push(key?.name ?? "");
+    // A resize is not a key, but it ends a menu at its place in the key order: `<resize>` keeps that place.
+    const onResize = () => keys.push("<resize>");
+    terminal?.stdin.on("keypress", onKey);
+    terminal?.stdout.on?.("resize", onResize);
     let stepCode = 0;
     try {
       stepCode = await run(argv, d);
@@ -256,7 +266,10 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       for (const dir of roots) after.set(dir, snapshot(dir));
       const filesBefore = Object.fromEntries([...before].map(([dir, value]) => [dirToken(dir, roots, base), value]));
       const filesAfter = Object.fromEntries([...after].map(([dir, value]) => [dirToken(dir, roots, base), value]));
-      recordedSteps.push(repoRelative({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join("") }));
+      terminal?.stdin.off("keypress", onKey);
+      terminal?.stdout.off?.("resize", onResize);
+      const ioData = terminal ? { io: { tty: Boolean(terminal.stdin.isTTY && terminal.stdout.isTTY), columns: terminal.stdout.columns ?? null, rows: terminal.stdout.rows ?? null, keys } } : {};
+      recordedSteps.push(repoRelative({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join(""), ...ioData }));
       Object.assign(d, original);
       killSpy.mockRestore();
       if (hadFakeTimers) {

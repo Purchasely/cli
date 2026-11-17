@@ -503,14 +503,19 @@ impl Host for FakeHost {
     }
 }
 
-/// The recorded terminal: its keys go to the game until it is over; no key left quits.
+/// The recorded terminal: its keys go to the game until it is over; no key left quits. A recorded
+/// `<resize>` ends the game as a resize of the real terminal does.
 impl Io for FakeHost {
     fn play(&self, game: &mut dyn purchasely::games::term::Game) -> Option<Result<String, String>> {
         while game.over().is_none() {
             let Some(key) = self.inner.keys.borrow_mut().pop_front() else {
                 return Some(Ok("Bye.".into()));
             };
-            game.key(key.as_str().unwrap_or_default());
+            let key = key.as_str().unwrap_or_default();
+            if key == "<resize>" {
+                return Some(Ok("The terminal changed size.".into()));
+            }
+            game.key(key);
         }
         Some(Ok(game.over().unwrap_or_default().to_owned()))
     }
@@ -715,6 +720,15 @@ mod tests {
         assert_eq!(pick(), Some(0));
         assert!(host.finish().unwrap_err().0.contains("1 terminal key"));
         assert!(FakeHost::from_step(&json!({})).io().is_none());
+        let resized = FakeHost::from_step(&json!({"io":{"tty":true,"keys":["<resize>"]}}));
+        let mut said = Vec::new();
+        assert_eq!(
+            purchasely::games::term::choose(&lines, "T", "run", resized.io(), &mut |s| said
+                .push(s.to_owned())),
+            None
+        );
+        assert_eq!(said, ["The terminal changed size.\n"]);
+        resized.finish().unwrap();
     }
     #[test]
     fn extra_call_fails() {

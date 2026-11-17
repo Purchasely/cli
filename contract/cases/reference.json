@@ -19532,6 +19532,8 @@
           "err": ""
         }
       ]
-    }
+    },
+    {"test": "reference::reference > leaves a hidden command out, as --help does", "steps": [], "unit": "purchasely::commands::reference::tests::leaves_a_hidden_command_out"},
+    {"test": "reference::reference > sorts groups and commands by path, and does not depend on the registration order", "steps": [], "unit": "purchasely::commands::reference::tests::sorts_groups_and_commands_by_path_whatever_the_registration_order"}
   ]
 }

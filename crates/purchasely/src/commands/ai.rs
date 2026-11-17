@@ -143,7 +143,7 @@ pub fn register(program: &mut Command, rt: &mut Runtime) {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
     #[test]
     fn registers_four_ai_verbs() {
@@ -160,7 +160,7 @@ mod tests {
         );
         assert_eq!(rt.taken.len(), 4);
     }
-    fn test_deps() -> crate::core::deps::Deps {
+    pub(crate) fn test_deps() -> crate::core::deps::Deps {
         use crate::core::deps::*;
         use std::{collections::BTreeMap, path::PathBuf};
         struct H;

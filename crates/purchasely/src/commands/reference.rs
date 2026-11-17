@@ -128,6 +128,115 @@ fn format_date(now: i64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::ext::Extension;
+
+    fn leaf(name: &'static str) -> Command {
+        Command::new(name)
+            .description(format!("the {name}"))
+            .option(OptionDef::boolean("--x", "an option"))
+            .action(|_: &Parsed, _: &mut Runtime| Ok(()))
+    }
+    fn zeta_alpha(p: &mut Command, _: &mut Runtime) {
+        p.commands.push(leaf("zeta"));
+        p.commands.push(leaf("alpha"));
+    }
+    fn alpha_zeta(p: &mut Command, _: &mut Runtime) {
+        p.commands.push(leaf("alpha"));
+        p.commands.push(leaf("zeta"));
+    }
+    fn ext(module: crate::core::ext::Register) -> Extension {
+        Extension {
+            modules: vec![module],
+            surface: "extra",
+            surfaces: vec![("extra", "extra")],
+            surface_defs: vec![],
+            identity: true,
+            section: ("More commands", "Only in `acme`."),
+            latest: None,
+            npm_update: None,
+        }
+    }
+    /// The tree of `name` with `ext`, and its reference.
+    fn reference_of(name: &str, ext: Option<Extension>) -> (Command, Reference) {
+        let mut d = crate::commands::ai::tests::test_deps();
+        d.name = name.into();
+        d.ext = ext;
+        let mut rt = Runtime::new(d);
+        let (root, _) = crate::run::build(&mut rt);
+        let r = collect(&root, &rt);
+        (root, r)
+    }
+
+    /// reference.test.ts "leaves a hidden command out, as --help does".
+    #[test]
+    fn leaves_a_hidden_command_out() {
+        for (name, ext) in [("purchasely", None), ("acme", Some(ext(zeta_alpha)))] {
+            let (root, r) = reference_of(name, ext);
+            assert!(root.commands.iter().any(|c| c.name == "play"), "{name}");
+            assert!(r.groups.iter().all(|g| g.name != "play"), "{name}");
+            let tops = r
+                .groups
+                .iter()
+                .flat_map(|g| g.leaves.iter().map(|l| l.path[0].as_str()))
+                .collect::<Vec<_>>();
+            assert!(!tops.contains(&"play"), "{name}");
+            assert!(tops.contains(&"games"), "{name}");
+        }
+    }
+
+    /// reference.test.ts "sorts groups and commands by path, and does not depend on the registration order".
+    #[test]
+    fn sorts_groups_and_commands_by_path_whatever_the_registration_order() {
+        let (_, a) = reference_of("acme", Some(ext(zeta_alpha)));
+        let (_, b) = reference_of("acme", Some(ext(alpha_zeta)));
+        assert_eq!(a.groups, b.groups);
+        let names = |r: &Reference| {
+            r.groups
+                .iter()
+                .filter(|g| g.extension)
+                .map(|g| g.name.clone())
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(names(&a), ["alpha", "zeta"]);
+        let (root, real) = reference_of("acme", Some(ext(zeta_alpha)));
+        for extension in [false, true] {
+            let part = real
+                .groups
+                .iter()
+                .filter(|g| g.extension == extension)
+                .collect::<Vec<_>>();
+            let mut sorted = part.iter().map(|g| g.name.clone()).collect::<Vec<_>>();
+            sorted.sort();
+            assert_eq!(
+                part.iter().map(|g| g.name.clone()).collect::<Vec<_>>(),
+                sorted
+            );
+            for g in part {
+                let paths = g
+                    .leaves
+                    .iter()
+                    .map(|l| l.path.join(" "))
+                    .collect::<Vec<_>>();
+                let mut sorted = paths.clone();
+                sorted.sort();
+                assert_eq!(paths, sorted, "{}", g.name);
+            }
+        }
+        // The built-in groups all come before the groups of the extension.
+        assert_eq!(
+            real.groups.iter().position(|g| g.extension),
+            Some(real.groups.iter().filter(|g| !g.extension).count())
+        );
+        // The running tree keeps its registration order.
+        let order = root
+            .commands
+            .iter()
+            .map(|c| c.name.as_str())
+            .collect::<Vec<_>>();
+        let zeta = order.iter().position(|n| *n == "zeta").unwrap();
+        assert_eq!(order[zeta + 1], "alpha");
+    }
+
     #[test]
     fn date_is_utc_calendar_date() {
         assert_eq!(format_date(0), "1970-01-01");

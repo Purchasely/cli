@@ -164,7 +164,6 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         let path = get(&r, "pathTemplate")
             .and_then(Value::as_str)
             .unwrap_or_else(|| "/management/v1/{id}".to_owned());
-        exec::allowlist(rt, &env, &url)?;
         let op = Op {
             method: method.clone(),
             path,
@@ -184,6 +183,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         };
         let op_for_build = op.clone();
         let mut globals = g.clone();
+        let env_of_request = env.clone();
         globals.env = Some(env);
         globals.yes = false;
         globals.dry_run = false;
@@ -201,7 +201,10 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                 body,
             })
         };
-        match exec::perform(rt, &globals, base, &build, &strv(&r, "command"), true) {
+        // TS: the allowlist check of `perform` is inside the per-request try/catch.
+        let sent = exec::allowlist(rt, &env_of_request, &url)
+            .and_then(|_| exec::perform(rt, &globals, base, &build, &strv(&r, "command"), true));
+        match sent {
             Ok(response) => {
                 if let Some(Value::Array(reqs)) = get_mut(&mut plan, "requests")
                     && let Value::Object(o) = &mut reqs[i]
@@ -364,6 +367,118 @@ fn truthy(v: &Value) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::deps::*;
+    use std::{cell::RefCell, collections::BTreeMap, path::PathBuf, rc::Rc};
+    #[derive(Default)]
+    struct Seen {
+        urls: Vec<String>,
+        stdout: String,
+    }
+    struct H(Rc<RefCell<Seen>>);
+    impl Host for H {
+        fn fetch(&self, r: Request) -> Result<Response, NetError> {
+            self.0.borrow_mut().urls.push(r.url);
+            Ok(Response {
+                status: 200,
+                body: b"{\"ok\":true}".to_vec(),
+                ..Response::default()
+            })
+        }
+        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            Ok(ExecResult::default())
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            1_700_000_000_000
+        }
+        fn wall_now(&self) -> i64 {
+            1_700_000_000_000
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            false
+        }
+        fn sleep(&self, _: i64) {}
+        fn stdout(&self, s: &str) {
+            self.0.borrow_mut().stdout.push_str(s)
+        }
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+    /// TS `perform` runs inside the per-request try/catch: an allowlist refusal of request 2, after
+    /// request 1 was sent, is a partial failure (exit 9) with the applied/failed summary.
+    #[test]
+    fn allowlist_refusal_after_a_write_is_partial() {
+        let root = std::env::temp_dir().join(format!("apply-allowlist-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).unwrap();
+        let plan = root.join("plan.json");
+        let req = |app: &str| {
+            format!(
+                r#"{{"command":"placements update","env":"prod","method":"PATCH","url":"https://api.purchasely.io/management/v1/applications/{app}/placements/p","body":"{{}}"}}"#
+            )
+        };
+        std::fs::write(
+            &plan,
+            format!(
+                r#"{{"version":1,"requests":[{},{}]}}"#,
+                req("allowed"),
+                req("blocked")
+            ),
+        )
+        .unwrap();
+        let seen = Rc::new(RefCell::new(Seen::default()));
+        let mut env = BTreeMap::new();
+        env.insert("PURCHASELY_API_KEY".into(), "pk_mgmt_live_SECRET123".into());
+        let mut rt = Runtime::new(Deps {
+            host: Box::new(H(seen.clone())),
+            env,
+            is_tty: false,
+            config_dir: root.join("config"),
+            state_dir: root.join("state"),
+            cache_dir: root.join("cache"),
+            version: "9.9.9".into(),
+            pid: std::process::id(),
+            name: "purchasely".into(),
+            host_url: "https://cli.test".into(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
+        });
+        rt.cfg.write_allowlist = Some(json::parse(r#"{"prod":["allowed"]}"#).unwrap());
+        let mut program = Command::new("purchasely");
+        register(&mut program, &mut rt);
+        let argv = [
+            "apply".to_owned(),
+            plan.to_string_lossy().into_owned(),
+            "--yes".into(),
+        ];
+        let p = crate::cli::parse(&program, &argv).unwrap();
+        let leaf = program.find(&p.command).unwrap();
+        let e = (leaf.action.as_ref().unwrap().0)(&p, &mut rt).unwrap_err();
+        assert_eq!((e.exit, e.code.as_str()), (EXIT::PARTIAL, "REFUSED"));
+        assert!(e.messages[0].starts_with("Request #2 of the plan failed. 1 applied, 1 left."));
+        let seen = seen.borrow();
+        assert_eq!(seen.urls.len(), 1);
+        let out = json::parse(&seen.stdout).unwrap();
+        assert!(matches!(get(&out, "applied"), Some(Value::Array(a)) if a.len() == 1));
+        assert_eq!(
+            get(get(&out, "failed").unwrap(), "number"),
+            Some(&Value::Number(2.0))
+        );
+        let _ = std::fs::remove_dir_all(root);
+    }
     #[test]
     fn apply_plan_rejects_untrusted_host() {
         let r = json::parse(

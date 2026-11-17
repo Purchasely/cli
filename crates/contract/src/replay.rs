@@ -132,7 +132,23 @@ pub fn normalize_case(case: &Value) -> Value {
                     }
                 }
             }
-            let text = step.to_string();
+            let mut text = step.to_string();
+            // A recorded temp root is a machine path (`/var/folders/...` on macOS, `/tmp/...` on Linux):
+            // compare its token. Longest path first, so a root inside another root keeps its own token.
+            let mut roots: Vec<(String, String)> = step["tmp_roots"]
+                .as_object()
+                .map(|m| {
+                    m.iter()
+                        .filter_map(|(token, path)| {
+                            Some((path.as_str()?.to_owned(), token.clone()))
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+            roots.sort_by_key(|(path, _)| std::cmp::Reverse(path.len()));
+            for (path, token) in roots {
+                text = text.replace(&path, &token);
+            }
             let text = crate::normalize::normalize(&text, "__NO_ROOT_MATCH__", pid, &version)
                 .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
             *step = serde_json::from_str::<Value>(&text).expect("normalized step is JSON");

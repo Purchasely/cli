@@ -65,14 +65,15 @@ pub fn to_table_value(value: &Value, fields: Option<&[String]>, width: usize) ->
         return None;
     };
     let roots: Vec<_> = root.iter().filter(|(k, _)| k != "meta").collect();
-    if roots.len() != 1 {
-        return None;
-    }
-    let body = &roots[0].1;
-    if let Value::Array(items) = body {
-        if items.is_empty() || !items.iter().all(|v| matches!(v, Value::Object(_))) {
-            return None;
-        }
+    // TS: one root that is a list of records is a grid; one root that is a record, or any other body, is key/value.
+    let body = match roots.as_slice() {
+        [(_, inner @ Value::Object(_))] => inner,
+        _ => value,
+    };
+    if let [(_, Value::Array(items))] = roots.as_slice()
+        && !items.is_empty()
+        && items.iter().all(|v| matches!(v, Value::Object(_)))
+    {
         let mut keys = Vec::<String>::new();
         for item in items {
             if let Value::Object(o) = item {
@@ -84,11 +85,11 @@ pub fn to_table_value(value: &Value, fields: Option<&[String]>, width: usize) ->
             }
         }
         let scalars: Vec<_> = keys
-            .into_iter()
+            .iter()
             .filter(|k| {
                 items.iter().all(|v| {
                     if let Value::Object(o) = v {
-                        o.iter().find(|(x, _)| x == k).is_none_or(|(_, v)| {
+                        o.iter().find(|(x, _)| x == *k).is_none_or(|(_, v)| {
                             matches!(
                                 v,
                                 Value::Null | Value::Bool(_) | Value::Number(_) | Value::String(_)
@@ -99,17 +100,19 @@ pub fn to_table_value(value: &Value, fields: Option<&[String]>, width: usize) ->
                     }
                 })
             })
+            .cloned()
             .collect();
+        let pick = if scalars.is_empty() { keys } else { scalars };
         let selected: Vec<String> =
             if let Some(f) = fields.filter(|f| !f.is_empty() && !f.iter().any(|x| x == "*")) {
                 f.to_vec()
             } else {
                 let mut v: Vec<_> = ["id", "vendor_id", "name", "status", "type"]
                     .iter()
-                    .filter(|k| scalars.iter().any(|x| x == **k))
+                    .filter(|k| pick.iter().any(|x| x == **k))
                     .map(|x| x.to_string())
                     .collect();
-                for x in scalars {
+                for x in pick {
                     if v.len() >= 6 {
                         break;
                     }
@@ -258,6 +261,23 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn table_falls_back_to_key_value_as_in_ts() {
+        let table =
+            |text: &str| to_table_value(&crate::core::json::parse(text).unwrap(), None, 120);
+        assert_eq!(
+            table(r#"{"tool":"t","ok":true}"#).unwrap(),
+            "key   value\ntool  t\nok    true"
+        );
+        assert!(table(r#"{"data":{"a":1}}"#).unwrap().starts_with("key"));
+        assert!(table(r#"{"data":[]}"#).unwrap().contains("data"));
+        assert!(
+            table(r#"{"rows":[{"a":{"x":1}}]}"#)
+                .unwrap()
+                .starts_with("a")
+        );
+        assert!(table("[1]").is_none());
+    }
     #[test]
     fn stdout_limit_is_200_kib() {
         assert_eq!(MAX_STDOUT_BYTES, 200 * 1024)

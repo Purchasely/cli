@@ -7,9 +7,12 @@ use crate::{
     },
     games::{
         g2048::Game2048,
+        invaders::Invaders,
+        minesweeper::Minesweeper,
         pong::Pong,
         snake::Snake,
         term::{self, Game, Menu},
+        tetris::Tetris,
     },
 };
 
@@ -42,6 +45,13 @@ fn random_unit() -> f64 {
     (u64::from_ne_bytes(bytes) >> 11) as f64 / (1u64 << 53) as f64
 }
 
+/// TS `Date.now()`: the minesweeper clock.
+fn now_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0, |d| d.as_millis() as u64)
+}
+
 fn report_terminal_size(message: String) -> String {
     let mut out = String::new();
     let mut chars = message.chars().peekable();
@@ -67,6 +77,14 @@ fn make_game(name: &str, cols: usize, rows: usize) -> Result<Box<dyn Game>, CliE
         }
         "snake" => Snake::new(cols, rows, random_unit).map(|game| Box::new(game) as Box<dyn Game>),
         "pong" => Pong::new(cols, rows, random_unit).map(|game| Box::new(game) as Box<dyn Game>),
+        "invaders" => {
+            Invaders::new(cols, rows, random_unit).map(|game| Box::new(game) as Box<dyn Game>)
+        }
+        "minesweeper" => Minesweeper::new(cols, rows, random_unit, now_ms)
+            .map(|game| Box::new(game) as Box<dyn Game>),
+        "tetris" => {
+            Tetris::new(cols, rows, random_unit).map(|game| Box::new(game) as Box<dyn Game>)
+        }
         _ => Err(format!("Game {name} is not available in this build.")),
     }
     .map_err(|message| usage(report_terminal_size(message)))
@@ -190,6 +208,30 @@ mod tests {
         assert!(require_terminal("games", true).is_ok());
     }
 
+    #[test]
+    /// game-term.test.ts "play on a small terminal > ${name} reports the size the terminal needs, and that
+    /// size works", for its 6 rows. `play` gives the game one row less than the terminal: so does this.
+    #[test]
+    fn each_game_reports_the_size_the_terminal_needs_and_that_size_works() {
+        let start = |name: &str, cols: usize, rows: usize| make_game(name, cols, rows - 1);
+        for name in GAMES {
+            let error = start(name, 10, 5).err().unwrap().messages[0].clone();
+            assert!(error.contains(&format!("too small for {name}")), "{error}");
+            assert!(error.contains("10x5"), "{error}");
+            let need = error.split("needs ").nth(1).unwrap();
+            let (cols, rest) = need.split_once('x').unwrap();
+            let rows = rest
+                .chars()
+                .take_while(char::is_ascii_digit)
+                .collect::<String>();
+            let (cols, rows) = (cols.parse().unwrap(), rows.parse().unwrap());
+            let mut game = start(name, cols, rows).unwrap_or_else(|e| panic!("{name}: {e:?}"));
+            game.key("q");
+            game.draw();
+            let tight = start(name, cols, rows - 1).err().unwrap().messages[0].clone();
+            assert!(tight.contains("too small"), "{name}: {tight}");
+        }
+    }
     #[test]
     fn small_terminal_messages_report_the_full_terminal_height() {
         assert_eq!(

@@ -145,3 +145,60 @@ fn docs_commands_md_is_the_generated_reference() {
         "docs/commands.md is stale: run scripts/gen-docs.sh"
     );
 }
+
+/// The leaves of the `reference --format json` tree, as `resource action` paths: visible, no `help`.
+fn leaves(node: &serde_json::Value, path: &[String], out: &mut Vec<String>) {
+    for child in node["commands"].as_array().into_iter().flatten() {
+        let mut next = path.to_vec();
+        next.push(child["name"].as_str().unwrap().to_owned());
+        if child["commands"].as_array().is_none_or(|c| c.is_empty()) {
+            out.push(next.join(" "));
+        } else {
+            leaves(child, &next, out);
+        }
+    }
+}
+
+/// docs.test.ts "every hand-written command is documented": each leaf that the spec does not generate is
+/// in `docs/commands.md`.
+#[test]
+fn every_hand_written_command_is_documented() {
+    let home = temp_home("documented");
+    let out = bin_command(&home, &["reference", "--format", "json"])
+        .output()
+        .unwrap();
+    let _ = std::fs::remove_dir_all(home);
+    assert_eq!(out.status.code(), Some(0));
+    let tree: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    let mut all = Vec::new();
+    leaves(&tree, &[], &mut all);
+    assert!(all.iter().any(|p| p == "ai install"), "{all:?}");
+    let (_, ops) = purchasely::management::spec::embedded_spec();
+    let generated = purchasely::management::spec::derive_commands(&ops)
+        .into_iter()
+        .map(|c| format!("{} {}", c.resource, c.action))
+        .collect::<std::collections::BTreeSet<_>>();
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/commands.md");
+    let doc = std::fs::read_to_string(path).unwrap();
+    let missing = all
+        .iter()
+        .filter(|p| !generated.contains(*p))
+        .filter(|p| !doc.contains(&format!("purchasely {p}")))
+        .collect::<Vec<_>>();
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
+/// docs.test.ts "every documented row is in the tree": the generated reference names these rows.
+#[test]
+fn every_documented_row_is_in_the_tree() {
+    let home = temp_home("rows");
+    let out = bin_command(&home, &["reference", "--format", "markdown"])
+        .output()
+        .unwrap();
+    let _ = std::fs::remove_dir_all(home);
+    assert_eq!(out.status.code(), Some(0));
+    let doc = String::from_utf8_lossy(&out.stdout);
+    for w in ["keychain", "200 KB", "PURCHASELY_OFFLINE"] {
+        assert!(doc.contains(w), "{w}");
+    }
+}

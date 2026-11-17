@@ -4,6 +4,14 @@
       "test": "docs::docs > commands.md is generated",
       "steps": [],
       "unit":"binary::docs_commands_md_is_the_generated_reference"
-    }
+    },
+    {"test": "docs::docs > links resolve", "steps": [], "unit": "docs::links_resolve"},
+    {"test": "docs::docs > every hand-written command is documented", "steps": [], "unit": "binary::every_hand_written_command_is_documented"},
+    {"test": "docs::docs > every documented row is in the tree", "steps": [], "unit": "binary::every_documented_row_is_in_the_tree"},
+    {"test": "docs::docs > ai section: readmes and landing page", "steps": [], "unit": "docs::ai_section_readmes_and_landing_page"},
+    {"test": "docs::docs > landing page: sharing head, reference links, real 404 and robots.txt", "steps": [], "unit": "docs::landing_page_sharing_head_reference_links_404_and_robots"},
+    {"test": "docs::docs > ai section: commands, install, limits, release", "steps": [], "unit": "docs::ai_section_commands_install_limits_release"},
+    {"test": "docs::docs > uninstall and skill count match the code", "steps": [], "unit": "docs::uninstall_and_skill_count_match_the_code"},
+    {"test": "docs::docs > no em-dash or en-dash", "steps": [], "unit": "docs::no_em_dash_or_en_dash"}
   ]
 }

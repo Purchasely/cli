@@ -269,7 +269,8 @@ export function setup(opts: { exec?: Deps["exec"]; replies?: Reply[] | ((c: Call
       terminal?.stdin.off("keypress", onKey);
       terminal?.stdout.off?.("resize", onResize);
       const ioData = terminal ? { io: { tty: Boolean(terminal.stdin.isTTY && terminal.stdout.isTTY), columns: terminal.stdout.columns ?? null, rows: terminal.stdout.rows ?? null, keys } } : {};
-      recordedSteps.push(repoRelative({ argv, env: { ...d.env }, is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join(""), ...ioData }));
+      const tmpRoots = Object.fromEntries(roots.filter((dir) => dir !== base).map((dir) => [dirToken(dir, roots, base), dir]));
+      recordedSteps.push(repoRelative({ argv, env: { ...d.env }, ...(Object.keys(tmpRoots).length ? { tmp_roots: tmpRoots } : {}), is_tty: d.isTTY, stdin: opts.stdin ?? "", answers: opts.answers ?? [], name: d.name, pid: process.pid, version: d.version, host: d.host, platform: process.platform, stdout_tty: process.stdout.isTTY, columns: process.stdout.columns ?? null, ext: extensionData(opts.ext, latestData), t_before: tBefore, t_after: d.now(), wall, pid_probes: pidProbes, files_before: filesBefore, files_after: filesAfter, keychain: keychain ? { before: initialKeychain, after: keychain && "store" in keychain ? Object.fromEntries((keychain as FakeKeychain).store) : {}, ops: keyOps } : null, calls: fetchCalls, execs: execCalls, prompts: promptCalls, code: stepCode, out: out.join(""), err: err.join(""), ...ioData }));
       Object.assign(d, original);
       killSpy.mockRestore();
       if (hadFakeTimers) {
@@ -318,10 +319,21 @@ function snapshotRoots(argv: string[], env: Record<string, string | undefined>, 
   }
   for (const token of argv) {
     const value = token.startsWith("@") ? token.slice(1) : token;
-    if (isAbsolute(value)) roots.add(dirname(resolve(value)));
+    // A directory argument outside the setup root (`--in <dir>`) is a root itself; else root the parent, as before.
+    if (isAbsolute(value)) {
+      const candidate = resolve(value);
+      const outside = !candidate.startsWith(root + "/");
+      roots.add(outside && exists(candidate) && statSync(candidate).isDirectory() ? candidate : dirname(candidate));
+    }
   }
   // Only the temporary directories of the tests: an env path like /usr/bin/git must not snapshot /usr/bin.
   const tmp = resolve(tmpdir());
+  // A temp folder that a file of the root names (a path in a config) is a root too: else the replay reads it on this machine only.
+  const escaped = tmp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const named = new RegExp(escaped + "/[^/\"'\\s]+", "g");
+  for (const entry of snapshot(root) as { text?: string }[]) {
+    for (const [dir] of entry.text?.matchAll(named) ?? []) if (dir !== root && exists(dir) && statSync(dir).isDirectory()) roots.add(dir);
+  }
   return [...roots].filter((r) => r === root || r.startsWith(tmp + "/"));
 }
 

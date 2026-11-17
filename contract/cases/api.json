@@ -199,7 +199,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -225,8 +225,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"cc0e1179-8754-4bfe-89c9-d710dcdce29b\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263633065313137392d383735342d346266652d383963392d643731306463646365323962227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"77ceb1b1-f522-4317-bff9-0791e3fcd915\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237376365623162312d663532322d343331372d626666392d303739316533666364393135227d0a"
                 },
                 {
                   "path": "state",
@@ -249,10 +249,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "cc0e1179-8754-4bfe-89c9-d710dcdce29b"
+                  "X-Request-Id": "77ceb1b1-f522-4317-bff9-0791e3fcd915"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -286,7 +286,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -312,8 +312,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"984c5b0d-3312-4939-a65a-2c7d579c9b31\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239383463356230642d333331322d343933392d613635612d326337643537396339623331227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements\",\"status\":200,\"rate_limited\":false,\"request_id\":\"604816c0-5b80-48d3-a58e-70ae7f296e4c\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e7473222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236303438313663302d356238302d343864332d613538652d373061653766323936653463227d0a"
                 },
                 {
                   "path": "state",
@@ -336,10 +336,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "984c5b0d-3312-4939-a65a-2c7d579c9b31"
+                  "X-Request-Id": "604816c0-5b80-48d3-a58e-70ae7f296e4c"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -376,7 +376,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -419,7 +419,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -471,7 +471,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -518,7 +518,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -560,7 +560,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -602,7 +602,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -644,7 +644,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -686,7 +686,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -728,7 +728,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -770,7 +770,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -812,7 +812,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -854,7 +854,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -896,7 +896,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -938,7 +938,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -980,7 +980,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1022,7 +1022,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1064,7 +1064,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1106,7 +1106,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1148,7 +1148,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1190,7 +1190,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1232,7 +1232,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1274,7 +1274,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1316,7 +1316,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1358,7 +1358,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1400,7 +1400,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1444,7 +1444,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1488,7 +1488,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1623,7 +1623,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -1649,8 +1649,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":302,\"rate_limited\":false,\"request_id\":\"8ee0d7e8-dc11-48ce-b024-da0c180133dc\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3330322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238656530643765382d646331312d343863652d623032342d646130633138303133336463227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":302,\"rate_limited\":false,\"request_id\":\"115882e0-34ba-4410-b80b-88b638e194a5\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3330322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2231313538383265302d333462612d343431302d623830622d383862363338653139346135227d0a"
                 },
                 {
                   "path": "state",
@@ -1673,10 +1673,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "8ee0d7e8-dc11-48ce-b024-da0c180133dc"
+                  "X-Request-Id": "115882e0-34ba-4410-b80b-88b638e194a5"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 302,
                   "headers": {
@@ -1830,7 +1830,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -1863,8 +1863,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":429,\"rate_limited\":true,\"request_id\":\"01b7b7fe-bd9d-410f-998f-3aeafa81463d\"}\n{\"ts\":\"2023-11-14T22:13:22.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":429,\"rate_limited\":true,\"request_id\":\"307d2112-eff5-44d5-8bfb-eb9adfa79fe2\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3432392c22726174655f6c696d69746564223a747275652c22726571756573745f6964223a2230316237623766652d626439642d343130662d393938662d336165616661383134363364227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3432392c22726174655f6c696d69746564223a747275652c22726571756573745f6964223a2233303764323131322d656666352d343464352d386266622d656239616466613739666532227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":429,\"rate_limited\":true,\"request_id\":\"e83711d4-5de1-42c8-8672-3c36cb486867\"}\n{\"ts\":\"2023-11-14T22:13:22.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":429,\"rate_limited\":true,\"request_id\":\"fe6eb1d2-4109-4d00-b372-15910d0f8746\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3432392c22726174655f6c696d69746564223a747275652c22726571756573745f6964223a2265383337313164342d356465312d343263382d383637322d336333366362343836383637227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3432392c22726174655f6c696d69746564223a747275652c22726571756573745f6964223a2266653665623164322d343130392d346430302d623337322d313539313064306638373436227d0a"
                 },
                 {
                   "path": "state",
@@ -1887,10 +1887,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "01b7b7fe-bd9d-410f-998f-3aeafa81463d"
+                  "X-Request-Id": "e83711d4-5de1-42c8-8672-3c36cb486867"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 429,
                   "headers": {
@@ -1908,10 +1908,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "307d2112-eff5-44d5-8bfb-eb9adfa79fe2"
+                  "X-Request-Id": "fe6eb1d2-4109-4d00-b372-15910d0f8746"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 429,
                   "headers": {
@@ -2047,7 +2047,7 @@
             "stdin": "",
             "answers": [],
             "name": "acme",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -2082,8 +2082,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"d7b6f623-6cab-4cb2-937d-12322b0e5b9a\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264376236663632332d366361622d346362322d393337642d313233323262306535623961227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications\",\"status\":200,\"rate_limited\":false,\"request_id\":\"6a28f149-9600-4a96-a80b-0a3e79f471a9\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236613238663134392d393630302d346139362d613830622d306133653739663437316139227d0a"
                 },
                 {
                   "path": "state",
@@ -2106,10 +2106,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "d7b6f623-6cab-4cb2-937d-12322b0e5b9a"
+                  "X-Request-Id": "6a28f149-9600-4a96-a80b-0a3e79f471a9"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -2456,7 +2456,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -2482,8 +2482,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"cf95ab45-bd0a-4df8-ad8c-70005e18a5f4\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"0f17e0ec-2679-4287-a400-f3fdae9a7ca2\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263663935616234352d626430612d346466382d616438632d373030303565313861356634227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230663137653065632d323637392d343238372d613430302d663366646165396137636132227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"6e1997e2-8d4d-4e35-80c5-0477773b65ae\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"0f223328-50f8-4f5b-8c50-f87aa08d0edd\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2236653139393765322d386434642d346533352d383063352d303437373737336236356165227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230663232333332382d353066382d346635622d386335302d663837616130386430656464227d0a"
                 },
                 {
                   "path": "state",
@@ -2506,10 +2506,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "cf95ab45-bd0a-4df8-ad8c-70005e18a5f4"
+                  "X-Request-Id": "6e1997e2-8d4d-4e35-80c5-0477773b65ae"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 422,
                   "headers": {
@@ -2526,10 +2526,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "0f17e0ec-2679-4287-a400-f3fdae9a7ca2"
+                  "X-Request-Id": "0f223328-50f8-4f5b-8c50-f87aa08d0edd"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -2564,7 +2564,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -2590,8 +2590,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":422,\"rate_limited\":false,\"request_id\":\"2907112e-290b-40a2-a786-087c82757cc0\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":200,\"rate_limited\":false,\"request_id\":\"ff78b039-c2c3-48a6-b90c-2af565314cc2\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232393037313132652d323930622d343061322d613738362d303837633832373537636330227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266663738623033392d633263332d343861362d623930632d326166353635333134636332227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":422,\"rate_limited\":false,\"request_id\":\"44e1072a-6791-4420-82f6-2a918b478b5b\"}\n{\"ts\":\"2023-11-14T22:13:27.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"PUT\",\"path\":\"/management/v1/applications/{application_id}/webhooks\",\"status\":200,\"rate_limited\":false,\"request_id\":\"1b4e1a4b-f8ee-4379-88bb-d342cad575a8\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2234346531303732612d363739312d343432302d383266362d326139313862343738623562227d0a7b227473223a22323032332d31312d31345432323a31333a32372e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22505554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f776562686f6f6b73222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2231623465316134622d663865652d343337392d383862622d643334326361643537356138227d0a"
                 },
                 {
                   "path": "state",
@@ -2614,11 +2614,11 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "2907112e-290b-40a2-a786-087c82757cc0",
+                  "X-Request-Id": "44e1072a-6791-4420-82f6-2a918b478b5b",
                   "Content-Type": "application/json"
                 },
                 "body": "{\"events\":{\"a\":{\"enabled\":true}}}",
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 422,
                   "headers": {
@@ -2635,11 +2635,11 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "ff78b039-c2c3-48a6-b90c-2af565314cc2",
+                  "X-Request-Id": "1b4e1a4b-f8ee-4379-88bb-d342cad575a8",
                   "Content-Type": "application/json"
                 },
                 "body": "{\"events\":{\"a\":{\"enabled\":true}},\"confirm_token\":\"tok_1\"}",
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -2673,7 +2673,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -2699,8 +2699,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"de2b6e65-358f-4db0-b6b5-5f26476d0b56\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264653262366536352d333538662d346462302d623662352d356632363437366430623536227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"93d4ddf6-8498-40a1-ae06-70b5d8ca140c\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239336434646466362d383439382d343061312d616530362d373062356438636131343063227d0a"
                 },
                 {
                   "path": "state",
@@ -2723,10 +2723,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "de2b6e65-358f-4db0-b6b5-5f26476d0b56"
+                  "X-Request-Id": "93d4ddf6-8498-40a1-ae06-70b5d8ca140c"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -2949,7 +2949,7 @@
               "n"
             ],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -2975,8 +2975,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"05cae2a3-deb9-4adc-b71a-e49e759e84fd\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230356361653261332d646562392d346164632d623731612d653439653735396538346664227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"254f0ac3-4144-4f91-b93b-a50cce2b36c4\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232353466306163332d343134342d346639312d623933622d613530636365326233366334227d0a"
                 },
                 {
                   "path": "state",
@@ -2999,10 +2999,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; tty)",
-                  "X-Request-Id": "05cae2a3-deb9-4adc-b71a-e49e759e84fd"
+                  "X-Request-Id": "254f0ac3-4144-4f91-b93b-a50cce2b36c4"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 422,
                   "headers": {
@@ -3040,7 +3040,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -3066,8 +3066,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"9de21865-7841-4aa7-9abf-bc4a6b09d1b2\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239646532313836352d373834312d346161372d396162662d626334613662303964316232227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"DELETE\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"b56ad0be-7b8e-4c48-986e-419dd5bd6c41\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a2244454c455445222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262353661643062652d376238652d346334382d393836652d343139646435626436633431227d0a"
                 },
                 {
                   "path": "state",
@@ -3090,10 +3090,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "9de21865-7841-4aa7-9abf-bc4a6b09d1b2"
+                  "X-Request-Id": "b56ad0be-7b8e-4c48-986e-419dd5bd6c41"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 422,
                   "headers": {
@@ -3223,7 +3223,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -3249,8 +3249,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"POST\",\"path\":\"/management/v1/applications/{id}/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"d52c34e5-0446-457a-9c3f-eae37e9f4cb9\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22504f5354222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264353263333465352d303434362d343537612d396333662d656165333765396634636239227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"POST\",\"path\":\"/management/v1/applications/{id}/{id}\",\"status\":422,\"rate_limited\":false,\"request_id\":\"b34e7606-1319-4f18-8ab4-95aa270a803c\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22504f5354222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d222c22737461747573223a3432322c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262333465373630362d313331392d346631382d386162342d393561613237306138303363227d0a"
                 },
                 {
                   "path": "state",
@@ -3273,10 +3273,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "d52c34e5-0446-457a-9c3f-eae37e9f4cb9"
+                  "X-Request-Id": "b34e7606-1319-4f18-8ab4-95aa270a803c"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 422,
                   "headers": {
@@ -3400,7 +3400,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -3426,8 +3426,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/{id}/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"96ee5ea6-7a91-4776-8631-c1dbcfe876fb\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d2f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239366565356561362d376139312d343737362d383633312d633164626366653837366662227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/{id}/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"f0b6bb55-eee3-4829-bc5c-09822d7c6898\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d2f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266306236626235352d656565332d343832392d626335632d303938323264376336383938227d0a"
                 },
                 {
                   "path": "state",
@@ -3450,10 +3450,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "96ee5ea6-7a91-4776-8631-c1dbcfe876fb"
+                  "X-Request-Id": "f0b6bb55-eee3-4829-bc5c-09822d7c6898"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -3660,7 +3660,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -3686,8 +3686,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"e422185d-9ad3-44cb-82f4-95112221cde3\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265343232313835642d396164332d343463622d383266342d393531313232323163646533227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"c0a127f6-e4d3-4770-bf66-c12f9ee4620d\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263306131323766362d653464332d343737302d626636362d633132663965653436323064227d0a"
                 },
                 {
                   "path": "state",
@@ -3710,10 +3710,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "e422185d-9ad3-44cb-82f4-95112221cde3"
+                  "X-Request-Id": "c0a127f6-e4d3-4770-bf66-c12f9ee4620d"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -3743,7 +3743,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -3769,8 +3769,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/placements/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"c7dd11a4-afd7-4ca8-b2b5-d8c8ab745aac\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f706c6163656d656e74732f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263376464313161342d616664372d346361382d623262352d643863386162373435616163227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{id}/placements/{id}/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"5aaf8771-fba0-4600-b3c1-c31a359d04b0\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b69647d2f706c6163656d656e74732f7b69647d2f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235616166383737312d666261302d343630302d623363312d633331613335396430346230227d0a"
                 },
                 {
                   "path": "state",
@@ -3793,10 +3793,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "c7dd11a4-afd7-4ca8-b2b5-d8c8ab745aac"
+                  "X-Request-Id": "5aaf8771-fba0-4600-b3c1-c31a359d04b0"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -3837,7 +3837,7 @@
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 55969,
+          "pid": 77488,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4056,7 +4056,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -4082,8 +4082,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"f6a34cf8-0b32-4b64-95bb-6160afc865f0\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266366133346366382d306233322d346236342d393562622d363136306166633836356630227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"b82806cc-7e62-456e-814e-c1337c2e5e64\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262383238303663632d376536322d343536652d383134652d633133333763326535653634227d0a"
                 },
                 {
                   "path": "state",
@@ -4106,10 +4106,10 @@
                   "Accept": "application/json",
                   "Authorization": "Bearer pk_mgmt_live_SECRET123",
                   "User-Agent": "purchasely-cli/9.9.9 (-; -; api; script)",
-                  "X-Request-Id": "f6a34cf8-0b32-4b64-95bb-6160afc865f0"
+                  "X-Request-Id": "b82806cc-7e62-456e-814e-c1337c2e5e64"
                 },
                 "body": null,
-                "refuse_redirect": false,
+                "refuse_redirect": true,
                 "reply": {
                   "status": 200,
                   "headers": {
@@ -4142,7 +4142,7 @@
             "stdin": "",
             "answers": [],
             "name": "purchasely",
-            "pid": 55969,
+            "pid": 77488,
             "version": "9.9.9",
             "host": "https://cli.test",
             "platform": "darwin",
@@ -4165,8 +4165,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"f6a34cf8-0b32-4b64-95bb-6160afc865f0\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266366133346366382d306233322d346236342d393562622d363136306166633836356630227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"b82806cc-7e62-456e-814e-c1337c2e5e64\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262383238303663632d376536322d343536652d383134652d633133333763326535653634227d0a"
                 },
                 {
                   "path": "state",
@@ -4188,8 +4188,8 @@
                   "path": "state/usage.jsonl",
                   "mode": 384,
                   "directory": false,
-                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"f6a34cf8-0b32-4b64-95bb-6160afc865f0\"}\n",
-                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266366133346366382d306233322d346236342d393562622d363136306166633836356630227d0a"
+                  "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/placements/{id}\",\"status\":200,\"rate_limited\":false,\"request_id\":\"b82806cc-7e62-456e-814e-c1337c2e5e64\"}\n",
+                  "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f706c6163656d656e74732f7b69647d222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262383238303663632d376536322d343536652d383134652d633133333763326535653634227d0a"
                 },
                 {
                   "path": "state",

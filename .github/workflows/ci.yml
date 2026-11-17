@@ -44,6 +44,11 @@ jobs:
       - run: cargo build -p purchasely --bins
       # The inventory test checks each `unit` of the case files against these lists. The same job runs
       # every listed test next, so a listed test that is not ignored ran.
-      - run: cargo test --workspace -- --list > target/test-list.txt 2>&1
-      - run: cargo test --workspace -- --list --ignored > target/test-list-ignored.txt 2>&1
+      # rust-toolchain sets CARGO_TERM_COLOR=always: the parser needs plain `Running tests/<file>.rs` lines.
+      - name: List the workspace tests
+        env:
+          CARGO_TERM_COLOR: never
+        run: |
+          cargo test --workspace -- --list > target/test-list.txt 2>&1
+          cargo test --workspace -- --list --ignored > target/test-list-ignored.txt 2>&1
       - run: cargo test --workspace

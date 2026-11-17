@@ -11,13 +11,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-rs4jSh"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-p8tvRb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-p8tvRb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -402,7 +405,7 @@
               },
               "result": {
                 "code": 0,
-                "stdout": "✓ purchasely (1.0.0)\n Path: /x/purchasely\n",
+                "stdout": "\u2713 purchasely (1.0.0)\n Path: /x/purchasely\n",
                 "stderr": "",
                 "timedOut": false
               }
@@ -411,7 +414,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"codex\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"copilot\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    },\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         }
       ]
     },
@@ -426,13 +429,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Fis8ww"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-drQzxv"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-drQzxv"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -536,7 +542,7 @@
           "prompts": [],
           "code": 2,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"No coding agent found. Supported agents: claude, codex, copilot, gemini, cursor, opencode.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"No coding agent found. Supported agents: claude, codex, copilot, gemini, cursor, opencode.\"]}}\n"
         }
       ]
     },
@@ -551,13 +557,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-sVFjAx"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UjSTiY"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UjSTiY"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -762,7 +771,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -772,13 +781,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-nVwH2p"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GXXAtK"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-GXXAtK"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -940,7 +952,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"failed\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin marketplace add failed (exit 1). Run \\\"claude plugin marketplace add Purchasely/Purchasely-AI-Plugin\\\" yourself to see why.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin marketplace add failed (exit 1). Run \\\"claude plugin marketplace add Purchasely/Purchasely-AI-Plugin\\\" yourself to see why.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin marketplace add failed (exit 1). Run \\\"claude plugin marketplace add Purchasely/Purchasely-AI-Plugin\\\" yourself to see why.\"]}}\n"
         }
       ]
     },
@@ -955,13 +967,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-wrRgKa"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fFI8XW"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fFI8XW"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -991,8 +1006,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-wrRgKa/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-wrRgKa/.config/opencode/references\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\"}",
-                "hex": "7b226167656e7473223a7b226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d777252674b612f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d777252674b612f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30227d"
+                "text": "{\"agents\":{\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fFI8XW/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fFI8XW/.config/opencode/references\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\"}",
+                "hex": "7b226167656e7473223a7b226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6646493858572f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d6646493858572f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30227d"
               },
               {
                 "path": "state",
@@ -1093,7 +1108,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acd6eda40148569a56e780a2fdb85cdfc8fbdc88256a982ca8204a9525475e1c2905a8041b6a1f45dfb1c5977022a0e14ff0c8e5c15df4f4883e4b1aef1e59c331e18f89b1be58f55d419aca2d1773f56b39f76b7670f66ab8720b489431dd4aa084248726e6d47b11b1161bb71fb1e230b732285605c8f16c29233d2b236550b976115277ea42f65aad64198334f4f9b4c728eef3e8ab51fff1328b2e649305757587acce594b9bae5c4e32ef1186e7369f57befbb771f6e7a9faf9d8d9f2491335acc1d7fb99c2967192dd62af4c391baeadef6bae3c9fdc76ff496dc8d7fb499670df549fdfbbc935ebd6ead1edf2c1271fdabfdafef4353c9567de7c56a14e9ff492f87fae7826bfdf317bb821c1aaeff9cfe0ff6d1b0dc4f3aab46a1ff2379d87f822591e0ff7540bc93fe2fa48739d8ffe593a3ff54f515a3c0d8ff09421483ffd741b9fea75110a9898a94966f5cbe46b1ff8ba3fe33c4c0ff6b81b827fd5fba8881fd378072fa4f557f4e1498fb3fc1b0feaf0753ff8fa7c16c66e0fd4f98afff29a108fcbf0eb2d6ff8c0958ff378072fadfa9fedcc70073ffc79482ffd78251ff4fed08d94198a887c84f54668d42ff3fdeff27920a0cfe5f0719fbff12bb8840005c3e46fa3fa5fa12a160eeff9c49d8ffa985eafd4f4361f8a9d7ef3bf3f1710d7d3ff47ad2c0ff29129482ffd74196ff33ec6209fe7ff154d77f96ea538af48f043ef27fa1695995ff78528686eb7fa894f565ada2385884f1d7b78ed3d1af67db7df1786aff39ac9bfc0e847a5918efff3edb0a3cfc6a64d730ce7f2291e090ff759091fffae9cfe51ee4ffc563acffd2aa4f29ccffbf7effe5184bc8ff3ad8b61ad4070000d0387e03178be33f00320000"
+                "hex": "1f8b0800000000000003ed9acd6eda40148569a56e780a2fdb85cdfc0f5e6441ab544165418214298aba7061482dc020db50faae7d8eae3b808a13848d074753d5dc4f4863c946d7f872ceb12ff483f58d0a462a6ef597f1f07b90a8e94fb7d375fbd3e55318b9c4a31e6a540421243977b6abd8ad88b0ddbadd46d2c19c488924c17a1b61c9196d38ebaa85cbb04cd220d6a73251ab302a384e1f361e17ecdf7d1467bffe2710df99a5e14c5d61e9339ff892720f0b8cb944b4c9a5d3eb7eecdc7dbae9de5f7beb204d636f389f79c1623155de229eaf5414444375d5b9ed7646e387cfdfe82db91bfd6832df19e837f51e8adef4e66d63f9fbdd3c15d7bf9afffa325c2cf9aa6fbd5a8d53fadfe8e5a5feb960bce1f0573b83022e5cff05fdefefa361b13fe8ac1a27fd1f1ff49f608919f8bf0d283aeaff442bb0ed4300d49e02fd67aaaf1805c6fe4f36fbc1ff6d50aeff5914c46aac62a5d59b94af61eeff0c510efe6f831cffa702f9e0ff174039fd67aa3f270accfd9f60b8ffb783a9ff2793703a35f0fe0de6fe4f0906ffb742defd3f21ba19e0ffb5a79cfe77aa3ff731c0dcff3125e0ff5630eaffb189901b46a97a8a8354e5d630f77fed4230ffb1429efffb924bf801a0fe18e9ff98ea4b8482b9ff732660fe6385eafdcf4261f0a5dbeb79b3d1610d7d3d046306fe4f912002fcdf0679f31f427dd606ffaf3dd5f59fa7fa8c53fa47021ff8bf1002379cca7f3c29c385eb7fa094f3b8527112cea3e4eb7bcf6be9d7b3715f329ab87f77eb267f00a1d60be3f9efb351e0cbaf467e0de3fc27120904f96f83bcfc6f73ec43fed71f63fd97567dc6c9fc47e2f0f90f6302f96f836dab417d00000017c71ff4690b1f00320000"
               }
             }
           ],
@@ -1157,9 +1172,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vUuPW0/cache/ai/release-D9Gykz/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-8AIa1L/cache/ai/release-DF1yax/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-vUuPW0/cache/ai/release-D9Gykz"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-8AIa1L/cache/ai/release-DF1yax"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1175,7 +1190,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"opencode\",\n      \"action\": \"installed\",\n      \"version\": \"2.3.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -1190,13 +1205,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6q9yeO"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QKFt3G"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QKFt3G"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1232,8 +1250,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6q9yeO/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000},\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6q9yeO/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6q9yeO/.config/opencode/references\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d36713979654f2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d2c226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d36713979654f2f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d36713979654f2f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QKFt3G/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000},\"opencode\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QKFt3G/.config/opencode/skills/purchasely-integrate\",\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-QKFt3G/.config/opencode/references\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d514b467433472f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d2c226f70656e636f6465223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d514b467433472f2e636f6e6669672f6f70656e636f64652f736b696c6c732f70757263686173656c792d696e74656772617465222c222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d514b467433472f2e636f6e6669672f6f70656e636f64652f7265666572656e636573225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -1390,7 +1408,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc84b448ded5d81ebe6fd68387c1e64a0513957487ab64fc3d4855f4b3d3f73bc368f510c61de21217b56a8210929c3bdb51ec4644d86edc7ec7c8c19c482118d7a383b0e40cb79c4dddc05558a55990e85399a9751897ccd3d3a6d392e3bb4b71f6e37f0245ce3c0be7ea024b8ff538653de25242a8477b52b6b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d28b0677658bdebc6dad7ebf5b64e2f257fb5fdf8773a558f5dd578b714cff8f7a79ae7f2eb8d63f7fb53328e1ccf55f92ffe1be342cf7934e8a61ecff044b82c0ff6d50e0ffcce3940af0ffc653a2ff5cf5354b81b1ff13842802ffb741b5fce7a52051539528addeb47a0c73ff6708f6ff7628f07f413d8e28f87fe3a9a6ff5cf5a7940273ff2718f6ff7630f5ff7416469181f73f62eeffda81c0ffad50b4ffe73d2630f87fe3a9a6ff9dea4f7d0c30f77f4c29f8bf158cf2ff5247a813c6997a48824c15c630f77f4905f47fac50e0ff9c53c261ffdf7c8cf4ff92ea2b140573ffe74c42ffc70af5f39f1785d1177f3070e793c318fa7e08c60cfc9f224109f8bf0d8afcdfc308fa3f67407dfd17a93ee798fe91c007fe2f84e02da7f68b27553873fd8f9472eed72a49c3459c7e7defba5dfd79d2ee4b27b3cedfc33ac91f40a8cdc2b8fffba415f8fca7511cc3b8fe13a91740fdb741d1ff3f8209d283fadf788cf55f59f53947eb3f1287cf7f180ba8ff36d8a61ad40700007076fc017574cd2f00320000"
+                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc64696ded5a633cfebeb1470c83cd950a262ae90e57c9f87b90aae867a7ef7786d1ea218c3bc4252e6ad50421243977b6a3d88d88b0ddb8ddc7c8c19c4889a4de950ec29253d6723675035761956641a22f65a6d6615cb24e2f9b4e4be6773fc5d98fff091439f32c9cab0b2c3de6114f52ee62ce740a7a52b4b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d2270deeca4e7af3b6b5fafd6e9189cb5fed7f7d1fce9562d5775f2dc631fd3feae5b9feb9605afffcd5aea08433d77f49fe87fbd2b0dc2f3a2986b1ff132c3105ffb74181ff63420827e0ff8da744ffb9ea6b960263ff277a9e82ffdba05afef35290a8a94a94566f5a3d86b9ff3304efff7628f07f223c4c24f87fe3a9a6ff5cf5a7940273ff2718deffed60eaffe92c8c2203ef7fc4dcffa97e00c0ff6d50d4ffe9712ac1ff9b4f35fdef547fea6780b9ff634ac0ffad6094ff973a429d30ced4431264aa3086b9ff6b1782fe8f158afa3f92ea63f0ffc663a4ff97545fa12898fb3f6702fa3f56a89fffbc288cbef883813b9f1cc6d0f7433066e0ff1409c2c1ff6d50d4ff2188f738f87fe3a9afff22d5e71cd33f12f8c0ff8510a8e5d4fee34915ce5cff23a59cfbb54ad27011a75fdfbb6e576f4fda7de964d6f93bad93fc0184da2c8cfbbf4f5a81cf1f8de218c6f59f48c425d47f1b14d57f8f118ca1fe371e63fd57567dced1fa8fc4e1f71fc618eabf0db6a906f50100009c1d7f00b4a624cc00320000"
               }
             }
           ],
@@ -1454,9 +1472,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-IDiCzi/cache/ai/release-C2IewN/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-n8hrnk/cache/ai/release-L2UgFE/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-IDiCzi/cache/ai/release-C2IewN"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-n8hrnk/cache/ai/release-L2UgFE"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1472,7 +1490,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    },\n    {\n      \"agent\": \"opencode\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nReload the Cursor window.\n"
         }
       ]
     },
@@ -1487,13 +1505,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-aLOZuV"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hcxsQB"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hcxsQB"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1664,7 +1685,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc84b448ded5d81ebe6fd68387c1e64a0513957487ab64fc3d4855f4b3d3f73bc368f510c61de21217b56a8210929c3bdb51ec4644d86edc7ec7c8c19c482118d7a383b0e40cb79c4dddc05558a55990e85399a9751897ccd3d3a6d392e3bb4b71f6e37f0245ce3c0be7ea024b8ff538653de25242a8477b52b6b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d28b0677658bdebc6dad7ebf5b64e2f257fb5fdf8773a558f5dd578b714cff8f7a79ae7f2eb8d63f7fb53328e1ccf55f92ffe1be342cf7934e8a61ecff044b82c0ff6d50e0ffcce3940af0ffc653a2ff5cf5354b81b1ff13842802ffb741b5fce7a52051539528addeb47a0c73ff6708f6ff7628f07f413d8e28f87fe3a9a6ff5cf5a7940273ff2718f6ff7630f5ff7416469181f73f62eeffda81c0ffad50b4ffe73d2630f87fe3a9a6ff9dea4f7d0c30f77f4c29f8bf158cf2ff5247a813c6997a48824c15c630f77f4905f47fac50e0ff9c53c261ffdf7c8cf4ff92ea2b140573ffe74c42ffc70af5f39f1785d1177f3070e793c318fa7e08c60cfc9f224109f8bf0d8afcdfc308fa3f67407dfd17a93ee798fe91c007fe2f84e02da7f68b27553873fd8f9472eed72a49c3459c7e7defba5dfd79d2ee4b27b3cedfc33ac91f40a8cdc2b8fffba415f8fca7511cc3b8fe13a91740fdb741d1ff3f8209d283fadf788cf55f59f53947eb3f1287cf7f180ba8ff36d8a61ad40700007076fc017574cd2f00320000"
+                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc64696ded5a633cfebeb1470c83cd950a262ae90e57c9f87b90aae867a7ef7786d1ea218c3bc4252e6ad50421243977b6a3d88d88b0ddb8ddc7c8c19c4889a4de950ec29253d6723675035761956641a22f65a6d6615cb24e2f9b4e4be6773fc5d98fff091439f32c9cab0b2c3de6114f52ee62ce740a7a52b4b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d2270deeca4e7af3b6b5fafd6e9189cb5fed7f7d1fce9562d5775f2dc631fd3feae5b9feb9605afffcd5aea08433d77f49fe87fbd2b0dc2f3a2986b1ff132c3105ffb74181ff63420827e0ff8da744ffb9ea6b960263ff277a9e82ffdba05afef35290a8a94a94566f5a3d86b9ff3304efff7628f07f223c4c24f87fe3a9a6ff5cf5a7940273ff2718deffed60eaffe92c8c2203ef7fc4dcffa97e00c0ff6d50d4ffe9712ac1ff9b4f35fdef547fea6780b9ff634ac0ffad6094ff973a429d30ced4431264aa3086b9ff6b1782fe8f158afa3f92ea63f0ffc663a4ff97545fa12898fb3f6702fa3f56a89fffbc288cbef883813b9f1cc6d0f7433066e0ff1409c2c1ff6d50d4ff2188f738f87fe3a9afff22d5e71cd33f12f8c0ff8510a8e5d4fee34915ce5cff23a59cfbb54ad27011a75fdfbb6e576f4fda7de964d6f93bad93fc0184da2c8cfbbf4f5a81cf1f8de218c6f59f48c425d47f1b14d57f8f118ca1fe371e63fd57567dced1fa8fc4e1f71fc618eabf0db6a906f50100009c1d7f00b4a624cc00320000"
               }
             }
           ],
@@ -1750,9 +1771,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xJx4Gk/cache/ai/release-jNORZW/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-0AYsnO/cache/ai/release-vBmAAl/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-xJx4Gk/cache/ai/release-jNORZW"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-0AYsnO/cache/ai/release-vBmAAl"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -1768,7 +1789,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed_by_hand\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"message\": \"claude: a plugin is already here that ai install did not install. Nothing was changed.\"\n    },\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed_by_hand\",\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"message\": \"cursor: a plugin is already here that ai install did not install. Nothing was changed.\"\n    },\n    {\n      \"agent\": \"opencode\",\n      \"action\": \"installed_by_hand\",\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"message\": \"opencode: a plugin is already here that ai install did not install. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -1778,13 +1799,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-aLOZuV"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hcxsQB"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hcxsQB"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -1967,7 +1991,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -1982,13 +2006,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-P2YyZx"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CPflZQ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CPflZQ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2175,7 +2202,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -2185,13 +2212,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-P2YyZx"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CPflZQ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CPflZQ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2282,7 +2312,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin was replaced since ai install. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin was replaced since ai install. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin was replaced since ai install. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -2292,13 +2322,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-1F0sOl"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fXFQMb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fXFQMb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2485,7 +2518,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -2495,13 +2528,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-1F0sOl"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fXFQMb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-fXFQMb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2592,7 +2628,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -2602,13 +2638,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-A1i8hq"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jaVuQP"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jaVuQP"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2795,7 +2834,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -2805,13 +2844,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-A1i8hq"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jaVuQP"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jaVuQP"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -2902,7 +2944,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the list of installed plugins could not be read. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the list of installed plugins could not be read. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the list of installed plugins could not be read. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -2912,13 +2954,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jageM5"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-TH6MFp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-TH6MFp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3105,7 +3150,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -3115,13 +3160,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jageM5"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-TH6MFp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-TH6MFp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3212,7 +3260,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin is gone from the agent. The record was dropped.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is gone from the agent. The record was dropped.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is gone from the agent. The record was dropped.\"]}}\n"
         },
         {
           "argv": [
@@ -3222,13 +3270,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-aCZJjV"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-E0KeI1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-E0KeI1"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3415,7 +3466,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -3425,13 +3476,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-aCZJjV"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-E0KeI1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-E0KeI1"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3503,7 +3557,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin was replaced since ai install. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin was replaced since ai install. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin was replaced since ai install. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -3513,13 +3567,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6yI0GH"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AXIjOX"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AXIjOX"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3706,7 +3763,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -3716,13 +3773,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-6yI0GH"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AXIjOX"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-AXIjOX"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3794,7 +3854,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is installed more than once (for example in the user and the project scope). Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -3804,13 +3864,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Jsge1o"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-bGA6MC"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-bGA6MC"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -3997,7 +4060,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -4007,13 +4070,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Jsge1o"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-bGA6MC"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-bGA6MC"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4085,7 +4151,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the list of installed plugins could not be read. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the list of installed plugins could not be read. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the list of installed plugins could not be read. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -4095,13 +4161,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Kmxpwe"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-YQeqW3"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-YQeqW3"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4288,7 +4357,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nRestart Claude Code to load the new plugin.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nRestart Claude Code to load the new plugin.\n"
         },
         {
           "argv": [
@@ -4298,13 +4367,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Kmxpwe"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-YQeqW3"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-YQeqW3"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4376,7 +4448,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin is gone from the agent. The record was dropped.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is gone from the agent. The record was dropped.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin is gone from the agent. The record was dropped.\"]}}\n"
         },
         {
           "argv": [
@@ -4386,13 +4458,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UiYiIf"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4428,8 +4503,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UiYiIf/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5569596949662f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d67363248475a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4533,7 +4608,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc84b448ded5d81ebe6fd68387c1e64a0513957487ab64fc3d4855f4b3d3f73bc368f510c61de21217b56a8210929c3bdb51ec4644d86edc7ec7c8c19c482118d7a383b0e40cb79c4dddc05558a55990e85399a9751897ccd3d3a6d392e3bb4b71f6e37f0245ce3c0be7ea024b8ff538653de25242a8477b52b6b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d28b0677658bdebc6dad7ebf5b64e2f257fb5fdf8773a558f5dd578b714cff8f7a79ae7f2eb8d63f7fb53328e1ccf55f92ffe1be342cf7934e8a61ecff044b82c0ff6d50e0ffcce3940af0ffc653a2ff5cf5354b81b1ff13842802ffb741b5fce7a52051539528addeb47a0c73ff6708f6ff7628f07f413d8e28f87fe3a9a6ff5cf5a7940273ff2718f6ff7630f5ff7416469181f73f62eeffda81c0ffad50b4ffe73d2630f87fe3a9a6ff9dea4f7d0c30f77f4c29f8bf158cf2ff5247a813c6997a48824c15c630f77f4905f47fac50e0ff9c53c261ffdf7c8cf4ff92ea2b140573ffe74c42ffc70af5f39f1785d1177f3070e793c318fa7e08c60cfc9f224109f8bf0d8afcdfc308fa3f67407dfd17a93ee798fe91c007fe2f84e02da7f68b27553873fd8f9472eed72a49c3459c7e7defba5dfd79d2ee4b27b3cedfc33ac91f40a8cdc2b8fffba415f8fca7511cc3b8fe13a91740fdb741d1ff3f8209d283fadf788cf55f59f53947eb3f1287cf7f180ba8ff36d8a61ad40700007076fc017574cd2f00320000"
+                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc64696ded5a633cfebeb1470c83cd950a262ae90e57c9f87b90aae867a7ef7786d1ea218c3bc4252e6ad50421243977b6a3d88d88b0ddb8ddc7c8c19c4889a4de950ec29253d6723675035761956641a22f65a6d6615cb24e2f9b4e4be6773fc5d98fff091439f32c9cab0b2c3de6114f52ee62ce740a7a52b4b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d2270deeca4e7af3b6b5fafd6e9189cb5fed7f7d1fce9562d5775f2dc631fd3feae5b9feb9605afffcd5aea08433d77f49fe87fbd2b0dc2f3a2986b1ff132c3105ffb74181ff63420827e0ff8da744ffb9ea6b960263ff277a9e82ffdba05afef35290a8a94a94566f5a3d86b9ff3304efff7628f07f223c4c24f87fe3a9a6ff5cf5a7940273ff2718deffed60eaffe92c8c2203ef7fc4dcffa97e00c0ff6d50d4ffe9712ac1ff9b4f35fdef547fea6780b9ff634ac0ffad6094ff973a429d30ced4431264aa3086b9ff6b1782fe8f158afa3f92ea63f0ffc663a4ff97545fa12898fb3f6702fa3f56a89fffbc288cbef883813b9f1cc6d0f7433066e0ff1409c2c1ff6d50d4ff2188f738f87fe3a9afff22d5e71cd33f12f8c0ff8510a8e5d4fee34915ce5cff23a59cfbb54ad27011a75fdfbb6e576f4fda7de964d6f93bad93fc0184da2c8cfbbf4f5a81cf1f8de218c6f59f48c425d47f1b14d57f8f118ca1fe371e63fd57567dced1fa8fc4e1f71fc618eabf0db6a906f50100009c1d7f00b4a624cc00320000"
               }
             }
           ],
@@ -4592,9 +4667,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-N3epy8/cache/ai/release-5T38P0/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-evzs1l/cache/ai/release-Hl0JGW/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-N3epy8/cache/ai/release-5T38P0"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-evzs1l/cache/ai/release-Hl0JGW"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -4610,7 +4685,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nReload the Cursor window.\n"
         },
         {
           "argv": [
@@ -4620,13 +4695,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UiYiIf"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4652,8 +4730,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UiYiIf/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5569596949662f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d67363248475a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4736,8 +4814,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-UiYiIf/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d5569596949662f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-g62HGZ/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d67363248475a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4833,7 +4911,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\",\n      \"message\": \"cursor: the installed files changed since ai install. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -4843,13 +4921,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vA30uz"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -4885,8 +4966,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vA30uz/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d76413330757a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d537673777a592f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -4990,7 +5071,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc84b448ded5d81ebe6fd68387c1e64a0513957487ab64fc3d4855f4b3d3f73bc368f510c61de21217b56a8210929c3bdb51ec4644d86edc7ec7c8c19c482118d7a383b0e40cb79c4dddc05558a55990e85399a9751897ccd3d3a6d392e3bb4b71f6e37f0245ce3c0be7ea024b8ff538653de25242a8477b52b6b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d28b0677658bdebc6dad7ebf5b64e2f257fb5fdf8773a558f5dd578b714cff8f7a79ae7f2eb8d63f7fb53328e1ccf55f92ffe1be342cf7934e8a61ecff044b82c0ff6d50e0ffcce3940af0ffc653a2ff5cf5354b81b1ff13842802ffb741b5fce7a52051539528addeb47a0c73ff6708f6ff7628f07f413d8e28f87fe3a9a6ff5cf5a7940273ff2718f6ff7630f5ff7416469181f73f62eeffda81c0ffad50b4ffe73d2630f87fe3a9a6ff9dea4f7d0c30f77f4c29f8bf158cf2ff5247a813c6997a48824c15c630f77f4905f47fac50e0ff9c53c261ffdf7c8cf4ff92ea2b140573ffe74c42ffc70af5f39f1785d1177f3070e793c318fa7e08c60cfc9f224109f8bf0d8afcdfc308fa3f67407dfd17a93ee798fe91c007fe2f84e02da7f68b27553873fd8f9472eed72a49c3459c7e7defba5dfd79d2ee4b27b3cedfc33ac91f40a8cdc2b8fffba415f8fca7511cc3b8fe13a91740fdb741d1ff3f8209d283fadf788cf55f59f53947eb3f1287cf7f180ba8ff36d8a61ad40700007076fc017574cd2f00320000"
+                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc64696ded5a633cfebeb1470c83cd950a262ae90e57c9f87b90aae867a7ef7786d1ea218c3bc4252e6ad50421243977b6a3d88d88b0ddb8ddc7c8c19c4889a4de950ec29253d6723675035761956641a22f65a6d6615cb24e2f9b4e4be6773fc5d98fff091439f32c9cab0b2c3de6114f52ee62ce740a7a52b4b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d2270deeca4e7af3b6b5fafd6e9189cb5fed7f7d1fce9562d5775f2dc631fd3feae5b9feb9605afffcd5aea08433d77f49fe87fbd2b0dc2f3a2986b1ff132c3105ffb74181ff63420827e0ff8da744ffb9ea6b960263ff277a9e82ffdba05afef35290a8a94a94566f5a3d86b9ff3304efff7628f07f223c4c24f87fe3a9a6ff5cf5a7940273ff2718deffed60eaffe92c8c2203ef7fc4dcffa97e00c0ff6d50d4ffe9712ac1ff9b4f35fdef547fea6780b9ff634ac0ffad6094ff973a429d30ced4431264aa3086b9ff6b1782fe8f158afa3f92ea63f0ffc663a4ff97545fa12898fb3f6702fa3f56a89fffbc288cbef883813b9f1cc6d0f7433066e0ff1409c2c1ff6d50d4ff2188f738f87fe3a9afff22d5e71cd33f12f8c0ff8510a8e5d4fee34915ce5cff23a59cfbb54ad27011a75fdfbb6e576f4fda7de964d6f93bad93fc0184da2c8cfbbf4f5a81cf1f8de218c6f59f48c425d47f1b14d57f8f118ca1fe371e63fd57567dced1fa8fc4e1f71fc618eabf0db6a906f50100009c1d7f00b4a624cc00320000"
               }
             }
           ],
@@ -5049,9 +5130,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-gLTG2z/cache/ai/release-85MylC/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-h13Pdc/cache/ai/release-hmUImc/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-gLTG2z/cache/ai/release-85MylC"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-h13Pdc/cache/ai/release-hmUImc"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5067,7 +5148,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nReload the Cursor window.\n"
         },
         {
           "argv": [
@@ -5077,13 +5158,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vA30uz"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5109,8 +5193,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vA30uz/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d76413330757a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d537673777a592f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5193,8 +5277,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-vA30uz/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d76413330757a2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-SvswzY/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000,\"last_error\":\"cursor: the installed files changed since ai install. Nothing was changed.\"}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d537673777a592f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030302c226c6173745f6572726f72223a22637572736f723a2074686520696e7374616c6c65642066696c6573206368616e6765642073696e636520616920696e7374616c6c2e204e6f7468696e6720776173206368616e6765642e227d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5271,7 +5355,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\",\n      \"message\": \"cursor: the installed files changed since ai install. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"cursor: the installed files changed since ai install. Nothing was changed.\"]}}\n"
         }
       ]
     },
@@ -5286,13 +5370,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5328,8 +5415,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d564f374e6e4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4f416d6d7a622f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5433,7 +5520,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc84b448ded5d81ebe6fd68387c1e64a0513957487ab64fc3d4855f4b3d3f73bc368f510c61de21217b56a8210929c3bdb51ec4644d86edc7ec7c8c19c482118d7a383b0e40cb79c4dddc05558a55990e85399a9751897ccd3d3a6d392e3bb4b71f6e37f0245ce3c0be7ea024b8ff538653de25242a8477b52b6b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d28b0677658bdebc6dad7ebf5b64e2f257fb5fdf8773a558f5dd578b714cff8f7a79ae7f2eb8d63f7fb53328e1ccf55f92ffe1be342cf7934e8a61ecff044b82c0ff6d50e0ffcce3940af0ffc653a2ff5cf5354b81b1ff13842802ffb741b5fce7a52051539528addeb47a0c73ff6708f6ff7628f07f413d8e28f87fe3a9a6ff5cf5a7940273ff2718f6ff7630f5ff7416469181f73f62eeffda81c0ffad50b4ffe73d2630f87fe3a9a6ff9dea4f7d0c30f77f4c29f8bf158cf2ff5247a813c6997a48824c15c630f77f4905f47fac50e0ff9c53c261ffdf7c8cf4ff92ea2b140573ffe74c42ffc70af5f39f1785d1177f3070e793c318fa7e08c60cfc9f224109f8bf0d8afcdfc308fa3f67407dfd17a93ee798fe91c007fe2f84e02da7f68b27553873fd8f9472eed72a49c3459c7e7defba5dfd79d2ee4b27b3cedfc33ac91f40a8cdc2b8fffba415f8fca7511cc3b8fe13a91740fdb741d1ff3f8209d283fadf788cf55f59f53947eb3f1287cf7f180ba8ff36d8a61ad40700007076fc017574cd2f00320000"
+                "hex": "1f8b0800000000000003ed9acf6eda4010c669a55e780a1fdb0366ff2f3ee440ab54b1ca8104295214f5e0c2925a18836c43e9bbf6397aee06549ca0d87871b455cdfc64696ded5a633cfebeb1470c83cd950a262ae90e57c9f87b90aae867a7ef7786d1ea218c3bc4252e6ad50421243977b6a3d88d88b0ddb8ddc7c8c19c4889a4de950ec29253d6723675035761956641a22f65a6d6615cb24e2f9b4e4be6773fc5d98fff091439f32c9cab0b2c3de6114f52ee62ce740a7a52b4b97406fec7fecda72bfff6d2dd045996b8e3c5dc0d96cb48b9cb64b15671108fd545ffdaef4fa6779fbfd16b7233f9d1669e33d2270deeca4e7af3b6b5fafd6e9189cb5fed7f7d1fce9562d5775f2dc631fd3feae5b9feb9605afffcd5aea08433d77f49fe87fbd2b0dc2f3a2986b1ff132c3105ffb74181ff63420827e0ff8da744ffb9ea6b960263ff277a9e82ffdba05afef35290a8a94a94566f5a3d86b9ff3304efff7628f07f223c4c24f87fe3a9a6ff5cf5a7940273ff2718deffed60eaffe92c8c2203ef7fc4dcffa97e00c0ff6d50d4ffe9712ac1ff9b4f35fdef547fea6780b9ff634ac0ffad6094ff973a429d30ced4431264aa3086b9ff6b1782fe8f158afa3f92ea63f0ffc663a4ff97545fa12898fb3f6702fa3f56a89fffbc288cbef883813b9f1cc6d0f7433066e0ff1409c2c1ff6d50d4ff2188f738f87fe3a9afff22d5e71cd33f12f8c0ff8510a8e5d4fee34915ce5cff23a59cfbb54ad27011a75fdfbb6e576f4fda7de964d6f93bad93fc0184da2c8cfbbf4f5a81cf1f8de218c6f59f48c425d47f1b14d57f8f118ca1fe371e63fd57567dced1fa8fc4e1f71fc618eabf0db6a906f50100009c1d7f00b4a624cc00320000"
               }
             }
           ],
@@ -5492,9 +5579,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Sl9HRa/cache/ai/release-KBIbiy/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-580g5S/cache/ai/release-7tDwGW/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Sl9HRa/cache/ai/release-KBIbiy"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-580g5S/cache/ai/release-7tDwGW"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5510,7 +5597,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\nReload the Cursor window.\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\nReload the Cursor window.\n"
         },
         {
           "argv": [
@@ -5520,13 +5607,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5552,8 +5642,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d564f374e6e4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb/.cursor/plugins/local/purchasely\"],\"version\":\"2.2.0\",\"updated_at\":1700000000000}},\"latest\":\"2.2.0\"}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4f416d6d7a622f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e322e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e322e30227d"
               },
               {
                 "path": "state",
@@ -5636,8 +5726,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d564f374e6e4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4f416d6d7a622f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
               },
               {
                 "path": "state/update.purchasely.check.json",
@@ -5763,7 +5853,7 @@
               "reply": {
                 "status": 200,
                 "headers": {},
-                "hex": "1f8b0800000000000003ed9acd6eda40148569a56e780a2fdb85cdfc8fbdc88256a982ca8204a9525475e1c2905a8041b6a1f45dfb1c5977022a0e14ff0c8e5c15df4f4883e4b1aef1e59c331e18f89b1be58f55d419aca2d1773f56b39f76b7670f66ab8720b489431dd4aa084248726e6d47b11b1161bb71fb1e230b732285605c8f16c29233d2b236550b976115277ea42f65aad64198334f4f9b4c728eef3e8ab51fff1328b2e649305757587acce594b9bae5c4e32ef1186e7369f57befbb771f6e7a9faf9d8d9f2491335acc1d7fb99c2967192dd62af4c391baeadef6bae3c9fdc76ff496dc8d7fb499670df549fdfbbc935ebd6ead1edf2c1271fdabfdafef4353c9567de7c56a14e9ff492f87fae7826bfdf317bb821c1aaeff9cfe0ff6d1b0dc4f3aab46a1ff2379d87f822591e0ff7540bc93fe2fa48739d8ffe593a3ff54f515a3c0d8ff09421483ffd741b9fea75110a9898a94966f5cbe46b1ff8ba3fe33c4c0ff6b81b827fd5fba8881fd378072fa4f557f4e1498fb3fc1b0feaf0753ff8fa7c16c66e0fd4f98afff29a108fcbf0eb2d6ff8c0958ff378072fadfa9fedcc70073ffc79482ffd78251ff4fed08d94198a887c84f54668d42ff3fdeff27920a0cfe5f0719fbff12bb8840005c3e46fa3fa5fa12a160eeff9c49d8ffa985eafd4f4361f8a9d7ef3bf3f1710d7d3ff47ad2c0ff29129482ffd74196ff33ec6209fe7ff154d77f96ea538af48f043ef27fa1695995ff78528686eb7fa894f565ada2385884f1d7b78ed3d1af67db7df1786aff39ac9bfc0e847a5918efff3edb0a3cfc6a64d730ce7f2291e090ff759091fffae9cfe51ee4ffc563acffd2aa4f29ccffbf7effe5184bc8ff3ad8b61ad4070000d0387e03178be33f00320000"
+                "hex": "1f8b0800000000000003ed9acd6eda40148569a56e780a2fdb85cdfc0f5e6441ab544165418214298aba7061482dc020db50faae7d8eae3b808a13848d074753d5dc4f4863c946d7f872ceb12ff483f58d0a462a6ef597f1f07b90a8e94fb7d375fbd3e55318b9c4a31e6a540421243977b6abd8ad88b0ddbadd46d2c19c488924c17a1b61c9196d38ebaa85cbb04cd220d6a73251ab302a384e1f361e17ecdf7d1467bffe2710df99a5e14c5d61e9339ff892720f0b8cb944b4c9a5d3eb7eecdc7dbae9de5f7beb204d636f389f79c1623155de229eaf5414444375d5b9ed7646e387cfdfe82db91bfd6832df19e837f51e8adef4e66d63f9fbdd3c15d7bf9afffa325c2cf9aa6fbd5a8d53fadfe8e5a5feb960bce1f0573b83022e5cff05fdefefa361b13fe8ac1a27fd1f1ff49f608919f8bf0d283aeaff442bb0ed4300d49e02fd67aaaf1805c6fe4f36fbc1ff6d50aeff5914c46aac62a5d59b94af61eeff0c510efe6f831cffa702f9e0ff174039fd67aa3f270accfd9f60b8ffb783a9ff2793703a35f0fe0de6fe4f0906ffb742defd3f21ba19e0ffb5a79cfe77aa3ff731c0dcff3125e0ff5630eaffb189901b46a97a8a8354e5d630f77fed4230ffb1429efffb924bf801a0fe18e9ff98ea4b8482b9ff732660fe6385eafdcf4261f0a5dbeb79b3d1610d7d3d046306fe4f912002fcdf0679f31f427dd606ffaf3dd5f59fa7fa8c53fa47021ff8bf1002379cca7f3c29c385eb7fa094f3b8527112cea3e4eb7bcf6be9d7b3715f329ab87f77eb267f00a1d60be3f9efb351e0cbaf467e0de3fc27120904f96f83bcfc6f73ec43fed71f63fd97567dc6c9fc47e2f0f90f6302f96f836dab417d00000017c71ff4690b1f00320000"
               }
             }
           ],
@@ -5772,9 +5862,9 @@
               "file": "tar",
               "args": [
                 "-xzf",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Sl9HRa/cache/ai/release-y1gjhg/plugin.tgz",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-580g5S/cache/ai/release-CmNsH1/plugin.tgz",
                 "-C",
-                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-Sl9HRa/cache/ai/release-y1gjhg"
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-580g5S/cache/ai/release-CmNsH1"
               ],
               "opts": {
                 "timeoutMs": 120000
@@ -5790,7 +5880,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -5800,13 +5890,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -5832,8 +5925,8 @@
                 "path": "state/ai.plugin.json",
                 "mode": 384,
                 "directory": false,
-                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-VO7NnL/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
-                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d564f374e6e4c2f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
+                "text": "{\"agents\":{\"cursor\":{\"method\":\"copy\",\"targets\":[\"/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-OAmmzb/.cursor/plugins/local/purchasely\"],\"version\":\"2.3.0\",\"updated_at\":1700000000000}},\"latest\":\"2.3.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226167656e7473223a7b22637572736f72223a7b226d6574686f64223a22636f7079222c2274617267657473223a5b222f7661722f666f6c646572732f7a662f366738633133706e367673356c6a667a63386c786630667730303030676e2f542f636c692d61692d686f6d652d4f416d6d7a622f2e637572736f722f706c7567696e732f6c6f63616c2f70757263686173656c79225d2c2276657273696f6e223a22322e332e30222c22757064617465645f6174223a313730303030303030303030307d7d2c226c6174657374223a22322e332e30222c22636865636b65645f6174223a313730303030303030303030307d"
               },
               {
                 "path": "state/update.purchasely.check.json",
@@ -5967,7 +6060,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"removed\",\n      \"version\": \"2.3.0\",\n      \"follows\": \"release tag\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -5982,13 +6075,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-mwr3tE"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hxXAzs"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-hxXAzs"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6122,7 +6218,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": true,\n      \"installed_by_hand\": false,\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"last_error\": \"claude: the plugin update failed (exit 1). Run \\\"x\\\" yourself to see why.\"\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -6137,13 +6233,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-YlaSeX"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jDfMux"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-jDfMux"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6311,7 +6410,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": true,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": \"unknown\",\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -6326,13 +6425,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-tSWODv"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Aq2nTq"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Aq2nTq"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6466,7 +6568,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": true,\n      \"installed_by_hand\": false,\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": \"unknown\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -6481,13 +6583,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Q4Atv4"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6584,7 +6689,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -6594,13 +6699,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Q4Atv4"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6733,7 +6841,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": true,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -6743,13 +6851,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-Q4Atv4"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-JQFZ0O"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -6896,7 +7007,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": true,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -6912,13 +7023,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-w1glui"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7056,8 +7170,8 @@
           ],
           "prompts": [],
           "code": 0,
-          "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    },\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"release tag\",\n      \"ops\": [\n        \"fetch https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/2.1.1\",\n        \"copy to /var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-w1glui/.cursor/plugins/local/purchasely and write .purchasely-cli\"\n      ]\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    },\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"release tag\",\n      \"ops\": [\n        \"fetch https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/2.1.1\",\n        \"copy to /var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb/.cursor/plugins/local/purchasely and write .purchasely-cli\"\n      ]\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7068,13 +7182,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-w1glui"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7158,7 +7275,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7169,13 +7286,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-w1glui"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-7evtBb"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7259,7 +7379,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin uninstall purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7270,13 +7390,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-yMfjfL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7414,8 +7537,8 @@
           ],
           "prompts": [],
           "code": 0,
-          "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    },\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"release tag\",\n      \"ops\": [\n        \"fetch https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/2.1.1\",\n        \"copy to /var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-yMfjfL/.cursor/plugins/local/purchasely and write .purchasely-cli\"\n      ]\n    }\n  ]\n}\n",
-          "err": "acme env=prod surface=management identity=- key=…T123\n"
+          "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    },\n    {\n      \"agent\": \"cursor\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"release tag\",\n      \"ops\": [\n        \"fetch https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/2.1.1\",\n        \"copy to /var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp/.cursor/plugins/local/purchasely and write .purchasely-cli\"\n      ]\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7426,13 +7549,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-yMfjfL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7516,7 +7642,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin marketplace update Purchasely-AI-Plugin\",\n        \"claude plugin update purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    }\n  ]\n}\n",
-          "err": "acme env=prod surface=management identity=- key=…T123\n"
+          "err": "acme env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7527,13 +7653,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-yMfjfL"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uhFXzp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "acme",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7617,7 +7746,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"planned\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"ops\": [\n        \"claude plugin uninstall purchasely@Purchasely-AI-Plugin -s user\"\n      ]\n    }\n  ]\n}\n",
-          "err": "acme env=prod surface=management identity=- key=…T123\n"
+          "err": "acme env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -7632,13 +7761,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-zTsRo8"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uEaCpJ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uEaCpJ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7820,7 +7952,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7830,13 +7962,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-zTsRo8"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uEaCpJ"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uEaCpJ"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -7904,7 +8039,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -7914,13 +8049,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-nCIauE"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I4pjEt"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-I4pjEt"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8094,7 +8232,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -8109,14 +8247,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8150,7 +8291,7 @@
           "prompts": [],
           "code": 2,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"PURCHASELY_OFFLINE=1 is set: the ai commands need the network.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"PURCHASELY_OFFLINE=1 is set: the ai commands need the network.\"]}}\n"
         },
         {
           "argv": [
@@ -8160,14 +8301,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8207,7 +8351,7 @@
           "prompts": [],
           "code": 2,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"PURCHASELY_OFFLINE=1 is set: the ai commands need the network.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"PURCHASELY_OFFLINE=1 is set: the ai commands need the network.\"]}}\n"
         },
         {
           "argv": [
@@ -8217,14 +8361,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8334,7 +8481,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"detected\": true,\n      \"managed\": true,\n      \"installed_by_hand\": false,\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"codex\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"copilot\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"gemini\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"cursor\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    },\n    {\n      \"agent\": \"opencode\",\n      \"detected\": false,\n      \"managed\": false,\n      \"installed_by_hand\": false,\n      \"version\": null,\n      \"follows\": \"release tag\",\n      \"last_error\": null\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -8344,14 +8491,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8428,7 +8578,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -8437,14 +8587,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8528,7 +8681,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"kind\": \"npm\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"9.9.9\",\n  \"action\": \"up_to_date\"\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -8538,14 +8691,17 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-4HSbH1",
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn",
             "PURCHASELY_OFFLINE": "1"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ZuPxVn"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8650,7 +8806,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"removed\",\n      \"version\": \"2.1.1\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -8665,13 +8821,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-IRLuch"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ipqyhp"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ipqyhp"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -8834,7 +8993,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"claude\",\n      \"action\": \"failed\",\n      \"version\": null,\n      \"follows\": \"default branch\",\n      \"message\": \"claude: the plugin install failed (exit 1). Run \\\"claude plugin install purchasely@Purchasely-AI-Plugin -s user\\\" yourself to see why.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin install failed (exit 1). Run \\\"claude plugin install purchasely@Purchasely-AI-Plugin -s user\\\" yourself to see why.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"claude: the plugin install failed (exit 1). Run \\\"claude plugin install purchasely@Purchasely-AI-Plugin -s user\\\" yourself to see why.\"]}}\n"
         },
         {
           "argv": [
@@ -8844,13 +9003,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-uycs8m"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-DAvhqA"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-DAvhqA"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9015,7 +9177,7 @@
           "prompts": [],
           "code": 0,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         }
       ]
     },
@@ -9030,13 +9192,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-P6vsQJ"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ggylXf"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ggylXf"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9101,7 +9266,7 @@
           "prompts": [],
           "code": 1,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_RELEASE_UNREADABLE\",\"messages\":[\"could not read the latest plugin release. Check your network.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_RELEASE_UNREADABLE\",\"messages\":[\"could not read the latest plugin release. Check your network.\"]}}\n"
         },
         {
           "argv": [
@@ -9111,13 +9276,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-ki1hYJ"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CGM8AR"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-CGM8AR"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9182,7 +9350,7 @@
           "prompts": [],
           "code": 1,
           "out": "",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_RELEASE_UNREADABLE\",\"messages\":[\"could not read the latest plugin release. Check your network.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_RELEASE_UNREADABLE\",\"messages\":[\"could not read the latest plugin release. Check your network.\"]}}\n"
         }
       ]
     },
@@ -9197,13 +9365,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-9ZOscu"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9360,7 +9531,7 @@
               },
               "result": {
                 "code": 0,
-                "stdout": "✓ purchasely (1.0.0)\n Path: /x/purchasely\n",
+                "stdout": "\u2713 purchasely (1.0.0)\n Path: /x/purchasely\n",
                 "stderr": "",
                 "timedOut": false
               }
@@ -9369,7 +9540,7 @@
           "prompts": [],
           "code": 0,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"installed\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
         },
         {
           "argv": [
@@ -9379,13 +9550,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-9ZOscu"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9458,7 +9632,7 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions update purchasely\\\" yourself. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions update purchasely\\\" yourself. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions update purchasely\\\" yourself. Nothing was changed.\"]}}\n"
         },
         {
           "argv": [
@@ -9468,13 +9642,16 @@
           "env": {
             "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
             "PURCHASELY_DISABLE_AUTOUPDATE": "1",
-            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-9ZOscu"
+            "HOME": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
+          },
+          "tmp_roots": {
+            "<TMP0>": "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/cli-ai-home-okMrHa"
           },
           "is_tty": false,
           "stdin": "",
           "answers": [],
           "name": "purchasely",
-          "pid": 25877,
+          "pid": 76881,
           "version": "9.9.9",
           "host": "https://cli.test",
           "platform": "darwin",
@@ -9528,10 +9705,14 @@
           "prompts": [],
           "code": 1,
           "out": "{\n  \"agents\": [\n    {\n      \"agent\": \"gemini\",\n      \"action\": \"refused\",\n      \"version\": \"2.2.0\",\n      \"follows\": \"default branch\",\n      \"message\": \"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"\n    }\n  ]\n}\n",
-          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"]}}\n"
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n{\"error\":{\"code\":\"AI_FAILED\",\"messages\":[\"gemini: the gemini list cannot show who owns the extension. Run \\\"gemini extensions uninstall purchasely\\\" yourself. Nothing was changed.\"]}}\n"
         }
       ]
     },
-    {"test": "ai::ai > the parent spawns when only the plugin is due", "steps": [], "unit": "purchasely::core::update::tests::the_parent_spawns_when_only_the_plugin_is_due"}
+    {
+      "test": "ai::ai > the parent spawns when only the plugin is due",
+      "steps": [],
+      "unit": "purchasely::core::update::tests::the_parent_spawns_when_only_the_plugin_is_due"
+    }
   ]
 }

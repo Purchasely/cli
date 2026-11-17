@@ -1,6 +1,11 @@
 use super::{CliError, Command, Parsed};
 
 pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
+    parse_in(command, argv, None)
+}
+
+/// `root`: the program name when `command` is a group under the root, `None` for the root itself.
+fn parse_in(command: &Command, argv: &[String], root: Option<&str>) -> Result<Parsed, CliError> {
     let mut out = Parsed::default();
     let mut i = 0;
     let mut literal = false;
@@ -92,7 +97,18 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         {
             let nested = argv[i + 1..].to_vec();
             // Commander assigns options before a subcommand to the parent. Do not silently pass them to the leaf.
-            let mut parsed = parse(sub, &nested)?;
+            let mut parsed = parse_in(sub, &nested, Some(root.unwrap_or(&command.name)))?;
+            // run.ts preAction, after the parse of the leaf: a group under the root parses the options
+            // before its subcommand for itself and the leaf never sees them, so they are refused.
+            if let Some(root) = root
+                && !out.option_sources.is_empty()
+                && sub.action.is_some()
+            {
+                return Err(CliError(format!(
+                    "error: Put the options after the subcommand: {root} {} {} --app ...",
+                    command.name, sub.name
+                )));
+            }
             parsed.command.insert(0, sub.name.clone());
             for (k, v) in out.options {
                 parsed.options.insert(k, v);

@@ -208,7 +208,6 @@ mod tests {
         assert!(require_terminal("games", true).is_ok());
     }
 
-    #[test]
     /// game-term.test.ts "play on a small terminal > ${name} reports the size the terminal needs, and that
     /// size works", for its 6 rows. `play` gives the game one row less than the terminal: so does this.
     #[test]

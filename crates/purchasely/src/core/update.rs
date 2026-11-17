@@ -588,7 +588,7 @@ mod tests {
                 )
                 .unwrap();
         };
-        let mut go = |rt: &mut Runtime, top: &str| {
+        let go = |rt: &mut Runtime, top: &str| {
             spawned.lock().unwrap().clear();
             auto_update(rt, top);
             spawned.lock().unwrap().clone()

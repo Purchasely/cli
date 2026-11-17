@@ -34,7 +34,8 @@ pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
         if !literal && (arg == "-V" || arg == "--version") && command.version.is_some() {
             return Err(CliError(command.version.clone().unwrap()));
         }
-        if !literal && arg.starts_with('-') {
+        // commander `maybeOption`: a lone `-` is an argument (stdin), not an option.
+        if !literal && arg.len() > 1 && arg.starts_with('-') {
             let (flag, inline) = arg
                 .split_once('=')
                 .map_or((arg.as_str(), None), |(a, b)| (a, Some(b)));
@@ -243,6 +244,21 @@ mod tests {
                 .0
                 .contains("Allowed choices")
         );
+    }
+
+    #[test]
+    fn a_lone_dash_is_an_argument() {
+        let c = Command::new("note")
+            .argument(crate::cli::Argument::required("<id>", "id"))
+            .argument(crate::cli::Argument::required("<text>", "text"))
+            .option(OptionDef::value("--env <env>", "env"));
+        let parsed = parse(
+            &c,
+            &["id".into(), "-".into(), "--env".into(), "prod".into()],
+        )
+        .unwrap();
+        assert_eq!(parsed.arguments, ["id", "-"]);
+        assert_eq!(parsed.opt("env"), Some("prod"));
     }
 
     #[test]

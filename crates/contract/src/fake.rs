@@ -588,7 +588,7 @@ fn normalize_text(text: &str, step: &Value, root: &Path) -> String {
         mapped = mapped.replace(&path, &token);
     }
     crate::normalize::normalize(
-        &mapped,
+        &crate::replay::collapse_repo(&mapped),
         &root.to_string_lossy(),
         step["pid"].as_u64().unwrap_or(u32::MAX as u64) as u32,
         step["version"]

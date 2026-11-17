@@ -13,6 +13,82 @@ use std::{
 
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
+/// What a case directory tells about the machine that recorded it: the repo root of the replay (for `<REPO>`)
+/// and the temp dirs of the TS run (the parents of its `purchasely-cli-` roots).
+struct Recording {
+    repo: Option<PathBuf>,
+    ts_tmp: Vec<String>,
+}
+static RECORDING: std::sync::Mutex<Recording> = std::sync::Mutex::new(Recording {
+    repo: None,
+    ts_tmp: Vec::new(),
+});
+
+/// `<REPO>` (a repo path that the recorder wrote relative to its clone) becomes the repo root of the replay.
+fn expand_repo(value: &str) -> String {
+    match &RECORDING.lock().expect("recording lock").repo {
+        Some(repo) if value.contains("<REPO>") => value.replace("<REPO>", &repo.to_string_lossy()),
+        _ => value.to_owned(),
+    }
+}
+/// The repo root of the replay becomes `<REPO>` in a comparison.
+pub(crate) fn collapse_repo(value: &str) -> String {
+    match &RECORDING.lock().expect("recording lock").repo {
+        Some(repo) => value.replace(&*repo.to_string_lossy(), "<REPO>"),
+        None => value.to_owned(),
+    }
+}
+/// The parents of the `purchasely-cli-` roots that the recorded text names: the temp dirs of the TS run.
+fn ts_tmp_dirs(text: &str) -> Vec<String> {
+    let mut dirs = Vec::<String>::new();
+    let path_char = |c: char| c.is_ascii_alphanumeric() || "/._-+".contains(c);
+    let mut rest = text;
+    while let Some(index) = rest.find("/purchasely-cli-") {
+        let head = &rest[..index];
+        let start = head
+            .char_indices()
+            .rev()
+            .take_while(|(_, c)| path_char(*c))
+            .last()
+            .map_or(index, |(i, _)| i);
+        let dir = &head[start..];
+        if dir.starts_with('/') && dir.len() > 1 && !dirs.iter().any(|d| d == dir) {
+            dirs.push(dir.to_owned());
+        }
+        rest = &rest[index + 1..];
+    }
+    dirs
+}
+/// A recorded input path that no root maps reaches a file of the recording machine: a replay elsewhere would
+/// not find it. `tokenized` is the input after the root tokens replaced the recorded roots.
+fn check_unmapped(tokenized: &str) -> Result<(), ReplayError> {
+    let recording = RECORDING.lock().expect("recording lock");
+    for dir in &recording.ts_tmp {
+        if let Some(at) = tokenized.find(&format!("{dir}/")) {
+            let path: String = tokenized[at..]
+                .chars()
+                .take_while(|c| !c.is_whitespace() && !"\"'`".contains(*c))
+                .collect();
+            return Err(ReplayError(format!(
+                "unmapped TS temp path {path}: record its folder as a root (tmp_roots) or create it under the setup root"
+            )));
+        }
+    }
+    // A home path is a clone or a user folder of the recording machine; the recorder writes the repo as `<REPO>`.
+    for home in ["/Users/", "/home/"] {
+        if let Some(at) = tokenized.find(home) {
+            let path: String = tokenized[at..]
+                .chars()
+                .take_while(|c| !c.is_whitespace() && !"\"'`".contains(*c))
+                .collect();
+            return Err(ReplayError(format!(
+                "unmapped recording path {path}: record repo paths as <REPO>"
+            )));
+        }
+    }
+    Ok(())
+}
+
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct ReplayReport {
     pub run: usize,
@@ -196,6 +272,12 @@ pub fn run_case_directory(
         .iter()
         .flat_map(|(_, cases)| cases.iter().cloned())
         .collect::<Vec<_>>();
+    {
+        let mut recording = RECORDING.lock().expect("recording lock");
+        // `contract/cases` sits in the repo root.
+        recording.repo = directory.join("../..").canonicalize().ok();
+        recording.ts_tmp = ts_tmp_dirs(&Value::Array(flat.clone()).to_string());
+    }
     let selected = selected(&flat, filter)?;
     let mut report = ReplayReport {
         filtered: flat.len() - selected.len(),
@@ -284,14 +366,18 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
         let mut argv: Vec<String> =
             serde_json::from_value(step.get("argv").cloned().unwrap_or(json!([])))
                 .unwrap_or_default();
-        let tmp = ts_tmp_roots(step);
+        let mut tmp = ts_tmp_roots(step);
+        // The longest path first: a root can hold another one.
+        tmp.sort_by_key(|(path, _)| std::cmp::Reverse(path.len()));
         // The extra roots first: one can be the `purchasely-cli-` root of another setup, not this step's root.
-        let to_replay = |s: &str| {
+        let to_replay = |s: &str| -> Result<String, ReplayError> {
             let mut s = s.to_owned();
             for (path, token) in &tmp {
                 s = s.replace(path, token);
             }
-            expand_tokens(&crate::normalize::map_ts_root(&s, "<ROOT>"), &roots)
+            let s = crate::normalize::map_ts_root(&s, "<ROOT>");
+            check_unmapped(&s)?;
+            Ok(expand_tokens(&s, &roots))
         };
         // A restored text file can hold a TS temp path (the targets of ai.plugin.json): it gets the replay path.
         let mut files_before = step.get("files_before").cloned().unwrap_or(Value::Null);
@@ -307,7 +393,7 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
                 .and_then(decode_hex)
                 .is_some_and(|b| String::from_utf8(b).is_ok());
             if let (true, Some(text)) = (utf8, entry["text"].as_str()) {
-                entry["text"] = json!(to_replay(text));
+                entry["text"] = json!(to_replay(text)?);
                 if let Some(o) = entry.as_object_mut() {
                     o.remove("hex");
                 }
@@ -315,13 +401,13 @@ pub fn replay_step(step: &Map<String, Value>) -> Result<Value, ReplayError> {
         }
         apply_snapshots(&files_before, &roots)?;
         for arg in &mut argv {
-            *arg = to_replay(arg);
+            *arg = to_replay(arg)?;
         }
         let mut replay_step = step.clone();
         if let Some(env) = replay_step.get_mut("env").and_then(Value::as_object_mut) {
             for value in env.values_mut() {
                 if let Some(s) = value.as_str() {
-                    *value = json!(to_replay(s));
+                    *value = json!(to_replay(s)?);
                 }
             }
         }
@@ -527,7 +613,7 @@ pub(crate) fn ts_tmp_roots(step: &Map<String, Value>) -> Vec<(String, String)> {
     out
 }
 pub(crate) fn expand_tokens(value: &str, roots: &[(String, PathBuf)]) -> String {
-    let mut result = value.to_owned();
+    let mut result = expand_repo(value);
     for (token, path) in roots {
         result = result.replace(token, &path.to_string_lossy());
     }
@@ -557,6 +643,7 @@ fn normalize_transcript(
     for (path, token) in ts_tmp_roots(step) {
         serialized = serialized.replace(&path, &token);
     }
+    let serialized = collapse_repo(&serialized);
     let normalized = crate::normalize::normalize(&serialized, "__NO_ROOT_MATCH__", pid, version)
         .replace("purchasely-cli-<MKDTEMP>", "<ROOT>");
     serde_json::from_str(&normalized).unwrap_or(value.clone())
@@ -892,6 +979,32 @@ mod tests {
             "bless"
         );
         let _ = fs::remove_file(p);
+    }
+    #[test]
+    fn ts_tmp_dirs_are_the_parents_of_the_recorded_roots() {
+        assert_eq!(
+            ts_tmp_dirs(
+                r#"["/var/t/purchasely-cli-ab12/x","/var/t/purchasely-cli-cd34","purchasely-cli-<MKDTEMP>"]"#
+            ),
+            vec!["/var/t".to_owned()]
+        );
+    }
+    #[test]
+    fn an_unmapped_recording_path_fails_the_step() {
+        RECORDING.lock().unwrap().ts_tmp = vec!["/rec-tmp".into()];
+        let err = check_unmapped("--in=/rec-tmp/dump-Ab12Cd/x.jsonl").unwrap_err();
+        assert!(err.0.contains("/rec-tmp/dump-Ab12Cd/x.jsonl"), "{}", err.0);
+        assert!(check_unmapped("--in=<TMP0>/x.jsonl").is_ok());
+        assert!(check_unmapped("/Users/me/clone/test/fixtures").is_err());
+        assert!(check_unmapped("<REPO>/test/fixtures").is_ok());
+        let step =
+            json!({"argv":["--in","/rec-tmp/dump-Ab12Cd"],"env":{},"code":0,"out":"","err":""});
+        assert!(
+            replay_step(step.as_object().unwrap())
+                .unwrap_err()
+                .0
+                .contains("unmapped TS temp path")
+        );
     }
     #[test]
     fn filter_rejects_unmatched_prefix() {

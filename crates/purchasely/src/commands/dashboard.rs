@@ -395,6 +395,9 @@ fn fmt(value: f64) -> String {
     result
 }
 
+const SUMMARY_DESCRIPTION: &str =
+    "Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts";
+
 fn dashboard_items(name: &str) -> Vec<(spec::Command, Vec<String>)> {
     let (_, ops) = spec::embedded_spec();
     spec::derive_commands(&ops)
@@ -423,9 +426,18 @@ fn dashboard_items(name: &str) -> Vec<(spec::Command, Vec<String>)> {
 
 fn list_value(name: &str) -> Value {
     let mut rows = vec![Value::Object(vec![
-        ("command".into(), Value::from(format!("{name} dashboard summary"))),
-        ("description".into(), Value::from("Analytics dashboard of an app: MRR, subscriptions, viewers, conversions with trend charts".to_owned())),
-        ("required_flags".into(), Value::Array(vec![Value::from("--app".to_owned())])),
+        (
+            "command".into(),
+            Value::from(format!("{name} dashboard summary")),
+        ),
+        (
+            "description".into(),
+            Value::from(SUMMARY_DESCRIPTION.to_owned()),
+        ),
+        (
+            "required_flags".into(),
+            Value::Array(vec![Value::from("--app".to_owned())]),
+        ),
     ])];
     rows.extend(dashboard_items(name).into_iter().map(|(c, flags)| {
         Value::Object(vec![
@@ -553,18 +565,31 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
                 .all(|f| ["--app", "--date-range", "--periodicity"].contains(&f.as_str()))
         })
         .collect::<Vec<_>>();
-    let lines = fillable
+    // `summary` is first, as in the JSON list; the generated dashboards follow.
+    let names = std::iter::once(("summary", SUMMARY_DESCRIPTION))
+        .chain(
+            fillable
+                .iter()
+                .map(|(c, _)| (c.action.as_str(), c.summary.as_str())),
+        )
+        .map(|(name, description)| (format!("dashboard {name}"), description))
+        .collect::<Vec<_>>();
+    let width = names
         .iter()
-        .map(|(c, _)| format!("dashboard {}  {}", c.action, c.summary))
+        .map(|(n, _)| n.chars().count())
+        .max()
+        .unwrap_or(0);
+    let lines = names
+        .iter()
+        .map(|(name, description)| format!("{name:<width$}  {description}"))
         .collect::<Vec<_>>();
     let selected = term::choose(&lines, "Dashboards", "run", rt.d.host.io(), &mut |s| {
         rt.d.host.stderr(s)
     });
     let Some(index) = selected else { return Ok(()) };
-    let (item, _) = fillable[index];
     let now = rt.d.host.now();
     let (from, to) = date_range(now, 30);
-    if item.action == "summary" {
+    let Some(index) = index.checked_sub(1) else {
         rt.d.host.stderr(&format!(
             "{} dashboard summary --app {app} --days 30 --output table{}\n",
             rt.d.name,
@@ -575,10 +600,12 @@ fn menu(rt: &mut Runtime, p: &Parsed) -> Result<(), CliError> {
         args.options.insert("days".into(), vec!["30".into()]);
         args.options.insert("output".into(), vec!["table".into()]);
         return summary(rt, &args);
-    }
+    };
+    let (item, required) = fillable[index];
     let ctx = context(rt, p)?;
     let dated = item.options.iter().any(|o| o.name == "date_range");
-    let daily = item.options.iter().any(|o| o.name == "periodicity");
+    // TS sets the periodicity only when the dashboard requires it.
+    let daily = required.iter().any(|f| f == "--periodicity");
     let mut vals = BTreeMap::from([("application_id".into(), Value::from(app.clone()))]);
     if dated {
         vals.insert(

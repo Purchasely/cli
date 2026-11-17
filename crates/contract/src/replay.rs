@@ -121,9 +121,16 @@ pub fn normalize_case(case: &Value) -> Value {
                 .filter(|v| !v.is_empty())
                 .unwrap_or("__NO_VERSION_MATCH__");
             let version = version.to_owned();
-            // The pid field goes first: "pid":<PID> is not valid JSON.
+            // The pid field goes first: "pid":<PID> is not valid JSON. The platform is the recording
+            // machine (the drift job runs on Linux), a machine fact like the pid.
             if let Some(obj) = step.as_object_mut() {
                 obj.remove("pid");
+                obj.remove("platform");
+                for side in ["files_before", "files_after"] {
+                    if let Some(roots) = obj.get_mut(side).and_then(Value::as_object_mut) {
+                        roots.values_mut().for_each(drop_hex_of_text_files);
+                    }
+                }
             }
             let text = step.to_string();
             let text = crate::normalize::normalize(&text, "__NO_ROOT_MATCH__", pid, &version)
@@ -133,6 +140,15 @@ pub fn normalize_case(case: &Value) -> Value {
     }
     normalized
 }
+/// A file entry with `text` also has `hex`, the raw bytes: the normalizer masks the text, not the hex.
+fn drop_hex_of_text_files(entries: &mut Value) {
+    for entry in entries.as_array_mut().into_iter().flatten() {
+        if let Some(obj) = entry.as_object_mut().filter(|o| o.contains_key("text")) {
+            obj.remove("hex");
+        }
+    }
+}
+
 pub fn compare_drift_case(committed: &Value, fresh: &Value) -> Result<(), String> {
     let expected = normalize_case(committed);
     let actual = normalize_case(fresh);

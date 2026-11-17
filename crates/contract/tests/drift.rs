@@ -52,3 +52,13 @@ fn normalized_json_keeps_test_id_and_removes_runtime_pid() {
     assert!(actual.to_string().contains("pid=<PID>"));
     assert!(actual["steps"][0].get("pid").is_none());
 }
+
+#[test]
+fn drift_ignores_platform_and_the_hex_of_a_text_file() {
+    let id = "123e4567-e89b-42d3-a456-426614174000";
+    let other = "00000000-0000-4000-8000-000000000000";
+    let step = |platform: &str, uuid: &str| json!({"platform": platform, "files_after": {"<ROOT>": [{"path": "a", "text": uuid, "hex": uuid.as_bytes().iter().map(|b| format!("{b:02x}")).collect::<String>()}]}});
+    let committed = json!({"test": "x::y", "steps": [step("darwin", id)]});
+    let fresh = json!({"test": "x::y", "steps": [step("linux", other)]});
+    assert!(compare_drift_case(&committed, &fresh).is_ok());
+}

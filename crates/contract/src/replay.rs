@@ -168,6 +168,11 @@ pub fn run_case_directory(
     }
     // `read_dir` order differs between file systems (sorted on APFS, not on ext4): replay in one order.
     files.sort_by(|a, b| a.0.cmp(&b.0));
+    // CONTRACT_ORDER=reverse replays the files last to first: a case that fails only then reads state
+    // that an earlier case left in the process.
+    if std::env::var("CONTRACT_ORDER").is_ok_and(|v| v == "reverse") {
+        files.reverse();
+    }
     let flat = files
         .iter()
         .flat_map(|(_, cases)| cases.iter().cloned())

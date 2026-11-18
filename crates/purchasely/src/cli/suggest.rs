@@ -10,7 +10,7 @@ pub fn suggest(input: &str, choices: &[&str]) -> Option<String> {
         .map(|(_, c)| (*c).to_owned())
 }
 
-fn distance(a: &str, b: &str) -> usize {
+pub(crate) fn distance(a: &str, b: &str) -> usize {
     let a = a.chars().collect::<Vec<_>>();
     let b = b.chars().collect::<Vec<_>>();
     let mut d = vec![vec![0; b.len() + 1]; a.len() + 1];

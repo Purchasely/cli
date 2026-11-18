@@ -1,168 +1,407 @@
-use super::{CliError, Command, Parsed};
+use super::{CliError, Command, OptionDef, Parsed};
 
+/// commander 15 `parse`: each command reads the options it knows anywhere in its words (no positional
+/// options), then dispatches to the subcommand named by its first operand. A request for help is the error
+/// `HELP:<path>` (the names below the root, joined by spaces); `-V` is the error holding the version.
 pub fn parse(command: &Command, argv: &[String]) -> Result<Parsed, CliError> {
-    parse_in(command, argv, None)
+    let mut path = Vec::new();
+    parse_command(command, &[], &[], argv.to_vec(), &mut path)
 }
 
-/// `root`: the program name when `command` is a group under the root, `None` for the root itself.
-fn parse_in(command: &Command, argv: &[String], root: Option<&str>) -> Result<Parsed, CliError> {
+fn help(path: &[String]) -> CliError {
+    CliError(format!("HELP:{}", path.join(" ")))
+}
+
+fn find_command<'a>(command: &'a Command, name: &str) -> Option<&'a Command> {
+    command
+        .commands
+        .iter()
+        .find(|c| c.name == name || c.aliases.iter().any(|a| a == name))
+}
+
+/// commander `_parseCommand`.
+fn parse_command(
+    command: &Command,
+    ancestors: &[&Command],
+    operands_in: &[String],
+    unknown_in: Vec<String>,
+    path: &mut Vec<String>,
+) -> Result<Parsed, CliError> {
     let mut out = Parsed::default();
-    let mut i = 0;
-    let mut literal = false;
-    let mut positional = 0;
-    // commander `unknown`: with allowUnknownOption, an unknown option switches the destination of the next words.
-    let mut unknown: Vec<String> = Vec::new();
-    while i < argv.len() {
-        let arg = &argv[i];
-        if !literal && arg == "--" {
-            literal = true;
-            i += 1;
+    let (operands_p, unknown) = parse_options(command, ancestors, &unknown_in, &mut out)?;
+    let operands: Vec<String> = operands_in.iter().cloned().chain(operands_p).collect();
+    let args: Vec<String> = operands.iter().chain(&unknown).cloned().collect();
+
+    if let Some(sub) = operands
+        .first()
+        .and_then(|name| find_command(command, name))
+    {
+        path.push(sub.name.clone());
+        let mut lineage = ancestors.to_vec();
+        lineage.push(command);
+        let mut parsed = parse_command(sub, &lineage, &operands[1..], unknown, path)?;
+        // run.ts preAction: a group under the root parses the options before its subcommand for itself and
+        // the leaf never sees them, so they are refused.
+        if !ancestors.is_empty()
+            && !out.option_sources.is_empty()
+            && sub.action.is_some()
+            && parsed.command.is_empty()
+        {
+            let root = ancestors[0].name.as_str();
+            return Err(CliError(format!(
+                "error: Put the options after the subcommand: {root} {} {} --app ...",
+                command.name, sub.name
+            )));
+        }
+        parsed.command.insert(0, sub.name.clone());
+        for (k, v) in out.options {
+            parsed.options.insert(k, v);
+        }
+        for (k, v) in out.option_sources {
+            parsed.option_sources.insert(k, v);
+        }
+        return Ok(parsed);
+    }
+    // commander `_dispatchHelpCommand`; a group's `help({ error: true })` prints on stdout (run.ts `stdoutHelp`).
+    if super::help::has_help_command(command) && operands.first().is_some_and(|a| a == "help") {
+        if let Some(sub) = operands.get(1).and_then(|name| find_command(command, name)) {
+            path.push(sub.name.clone());
+        }
+        return Err(help(path));
+    }
+    if !command.commands.is_empty() && args.is_empty() && command.action.is_none() {
+        return Err(help(path));
+    }
+    if !command.no_help_option && unknown.iter().any(|a| a == "-h" || a == "--help") {
+        return Err(help(path));
+    }
+    fill_defaults(command, &mut out)?;
+    let check_unknown = || -> Result<(), CliError> {
+        match unknown.first() {
+            Some(flag) if !command.allow_unknown_option => {
+                Err(unknown_option(command, ancestors, flag))
+            }
+            _ => Ok(()),
+        }
+    };
+    if command.action.is_some() {
+        check_unknown()?;
+        process_arguments(command, !ancestors.is_empty(), args, &mut out)?;
+    } else if !operands.is_empty() {
+        if !command.commands.is_empty() {
+            let names = command
+                .commands
+                .iter()
+                .filter(|c| !c.hidden)
+                .flat_map(|c| {
+                    std::iter::once(c.name.as_str()).chain(c.aliases.first().map(String::as_str))
+                })
+                .collect::<Vec<_>>();
+            return Err(CliError(format!(
+                "error: unknown command '{}'{}",
+                operands[0],
+                suggestion(&operands[0], &names)
+            )));
+        }
+        check_unknown()?;
+        process_arguments(command, !ancestors.is_empty(), args, &mut out)?;
+    } else if !command.commands.is_empty() {
+        check_unknown()?;
+        return Err(help(path));
+    } else {
+        check_unknown()?;
+        process_arguments(command, !ancestors.is_empty(), args, &mut out)?;
+    }
+    Ok(out)
+}
+
+/// commander `suggestSimilar`, with its `\n(Did you mean ...?)` text.
+fn suggestion(word: &str, candidates: &[&str]) -> String {
+    let options = word.starts_with("--");
+    let strip = |s: &str| -> String {
+        if options {
+            s.strip_prefix("--").unwrap_or(s).to_owned()
+        } else {
+            s.to_owned()
+        }
+    };
+    let word = strip(word);
+    let mut seen = Vec::new();
+    let mut similar: Vec<String> = Vec::new();
+    let mut best = 3;
+    for candidate in candidates {
+        let candidate = strip(candidate);
+        if seen.contains(&candidate) || candidate.chars().count() <= 1 {
             continue;
         }
-        if !literal && !command.no_help_option && (arg == "-h" || arg == "--help") {
-            return Err(CliError(format!("HELP:{}", command.name)));
-        }
-        if !literal && arg == "help" && super::help::has_help_command(command) {
-            let mut node = command;
-            for name in argv.iter().skip(i + 1) {
-                let Some(sub) = node
-                    .commands
-                    .iter()
-                    .find(|c| c.name == *name || c.aliases.contains(name))
-                else {
-                    return Err(CliError(format!("error: unknown command '{}'", name)));
-                };
-                node = sub;
-            }
-            return Err(CliError(format!("HELP:{}", node.name)));
-        }
-        if !literal && (arg == "-V" || arg == "--version") && command.version.is_some() {
-            return Err(CliError(command.version.clone().unwrap()));
-        }
-        // commander `maybeOption`: a lone `-` is an argument (stdin), not an option.
-        if !literal && arg.len() > 1 && arg.starts_with('-') {
-            let (flag, inline) = arg
-                .split_once('=')
-                .map_or((arg.as_str(), None), |(a, b)| (a, Some(b)));
-            let found = command
-                .options
-                .iter()
-                .find(|o| o.long() == flag || o.short() == Some(flag));
-            let Some(opt) = found else {
-                if command.allow_unknown_option {
-                    unknown.push(arg.clone());
-                    i += 1;
-                    continue;
-                }
-                return Err(CliError(format!("error: unknown option '{}'", flag)));
-            };
-            let key = opt.key();
-            let value = if opt.boolean {
-                inline.unwrap_or("true").to_owned()
-            } else {
-                let v = inline
-                    .map(str::to_owned)
-                    // commander: a `<value>` option takes the next argument, also `-` or `-5`.
-                    .or_else(|| argv.get(i + 1).cloned())
-                    .ok_or_else(|| {
-                        CliError(format!("error: option '{}' argument missing", flag))
-                    })?;
-                if inline.is_none() {
-                    i += 1;
-                }
-                if !opt.choices.is_empty() && !opt.choices.contains(&v) {
-                    return Err(CliError(format!(
-                        "error: option '{}' argument '{}' is invalid. Allowed choices are {}.",
-                        flag,
-                        v,
-                        opt.choices.join(", ")
-                    )));
-                }
-                v
-            };
-            if !opt.repeat && out.options.contains_key(&key) {
-                return Err(CliError(format!(
-                    "error: option '{}' argument is not allowed more than once",
-                    flag
-                )));
-            }
-            out.options.entry(key.clone()).or_default().push(value);
-            out.option_sources.insert(key, "cli");
-        } else if !unknown.is_empty() && !literal {
-            unknown.push(arg.clone());
-        } else if let Some(sub) = command
-            .commands
-            .iter()
-            .find(|c| c.name == *arg || c.aliases.contains(arg))
-        {
-            let nested = argv[i + 1..].to_vec();
-            // Commander assigns options before a subcommand to the parent. Do not silently pass them to the leaf.
-            let mut parsed = parse_in(sub, &nested, Some(root.unwrap_or(&command.name)))?;
-            // run.ts preAction, after the parse of the leaf: a group under the root parses the options
-            // before its subcommand for itself and the leaf never sees them, so they are refused.
-            if let Some(root) = root
-                && !out.option_sources.is_empty()
-                && sub.action.is_some()
-            {
-                return Err(CliError(format!(
-                    "error: Put the options after the subcommand: {root} {} {} --app ...",
-                    command.name, sub.name
-                )));
-            }
-            parsed.command.insert(0, sub.name.clone());
-            for (k, v) in out.options {
-                parsed.options.insert(k, v);
-            }
-            for (k, v) in out.option_sources {
-                parsed.option_sources.insert(k, v);
-            }
-            return Ok(parsed);
-        } else {
-            let specs = &command.arguments;
-            if let Some(spec) = specs.get(positional) {
-                out.arguments.push(arg.clone());
-                if !spec.variadic {
-                    positional += 1;
-                }
-            } else if !command.commands.is_empty() {
-                let names = command
-                    .commands
-                    .iter()
-                    .filter(|c| !c.hidden)
-                    .map(|c| c.name.as_str())
-                    .collect::<Vec<_>>();
-                let hint = super::suggest::suggest(arg, &names)
-                    .map(|s| format!("\n(Did you mean {}?)", s))
-                    .unwrap_or_default();
-                return Err(CliError(format!(
-                    "error: unknown command '{}'{}",
-                    arg, hint
-                )));
-            } else {
-                return Err(CliError(format!(
-                    "error: too many arguments. Expected {} argument(s) but got {}.",
-                    specs.len(),
-                    out.arguments.len() + 1
-                )));
+        seen.push(candidate.clone());
+        let distance = super::suggest::distance(&word, &candidate);
+        let length = word.chars().count().max(candidate.chars().count());
+        if (length - distance) as f64 / length as f64 > 0.4 {
+            if distance < best {
+                best = distance;
+                similar = vec![candidate];
+            } else if distance == best {
+                similar.push(candidate);
             }
         }
-        i += 1;
     }
-    out.arguments.extend(unknown);
-    for (idx, spec) in command.arguments.iter().enumerate() {
-        if spec.required && out.arguments.get(idx).is_none() {
+    similar.sort();
+    let similar: Vec<String> = similar
+        .into_iter()
+        .map(|c| if options { format!("--{c}") } else { c })
+        .collect();
+    match similar.len() {
+        0 => String::new(),
+        1 => format!("\n(Did you mean {}?)", similar[0]),
+        _ => format!("\n(Did you mean one of {}?)", similar.join(", ")),
+    }
+}
+
+/// commander `unknownOption`: the suggestion lists the visible long options of the command and its ancestors.
+fn unknown_option(command: &Command, ancestors: &[&Command], flag: &str) -> CliError {
+    let mut candidates: Vec<&str> = Vec::new();
+    if flag.starts_with("--") {
+        // commander walks up from the command and stops at an ancestor with positional options.
+        let walk = ancestors
+            .iter()
+            .rev()
+            .copied()
+            .take_while(|c| !c.positional_options);
+        for c in std::iter::once(command).chain(walk) {
+            if c.version.is_some() {
+                candidates.push("--version");
+            }
+            candidates.extend(
+                c.options
+                    .iter()
+                    .filter(|o| !o.hidden && o.long().starts_with("--"))
+                    .map(OptionDef::long),
+            );
+            if !c.no_help_option {
+                candidates.push("--help");
+            }
+        }
+    }
+    CliError(format!(
+        "error: unknown option '{flag}'{}",
+        suggestion(flag, &candidates)
+    ))
+}
+
+fn negative_number(arg: &str, command: &Command, ancestors: &[&Command]) -> bool {
+    let rest = &arg[1..];
+    let (mantissa, exponent) = match rest.find('e') {
+        Some(i) => (&rest[..i], Some(&rest[i + 1..])),
+        None => (rest, None),
+    };
+    let digits = |s: &str| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit());
+    let mantissa_ok = digits(mantissa)
+        || mantissa
+            .split_once('.')
+            .is_some_and(|(a, b)| (a.is_empty() || digits(a)) && digits(b));
+    let exponent_ok = exponent.is_none_or(|e| digits(e.strip_prefix(['+', '-']).unwrap_or(e)));
+    mantissa_ok
+        && exponent_ok
+        && !std::iter::once(command)
+            .chain(ancestors.iter().copied())
+            .flat_map(|c| &c.options)
+            .any(|o| {
+                o.short()
+                    .is_some_and(|s| s.len() == 2 && s.as_bytes()[1].is_ascii_digit())
+            })
+}
+
+/// commander `parseOptions`: the options of `command` anywhere in `args`; the rest is operands and unknown.
+fn parse_options(
+    command: &Command,
+    ancestors: &[&Command],
+    args: &[String],
+    out: &mut Parsed,
+) -> Result<(Vec<String>, Vec<String>), CliError> {
+    let maybe_option = |a: &str| a.len() > 1 && a.starts_with('-');
+    let find = |flag: &str| -> Option<&OptionDef> {
+        command
+            .options
+            .iter()
+            .find(|o| o.long() == flag || o.short() == Some(flag))
+    };
+    let version = |flag: &str| command.version.is_some() && (flag == "-V" || flag == "--version");
+    let mut operands = Vec::new();
+    let mut unknown = Vec::new();
+    let mut to_unknown = false;
+    let mut group: Option<String> = None;
+    let mut i = 0;
+    while i < args.len() || group.is_some() {
+        let arg = match group.take() {
+            Some(g) => g,
+            None => {
+                i += 1;
+                args[i - 1].clone()
+            }
+        };
+        if arg == "--" {
+            let dest = if to_unknown {
+                &mut unknown
+            } else {
+                &mut operands
+            };
+            if to_unknown {
+                dest.push(arg);
+            }
+            dest.extend(args[i..].iter().cloned());
+            break;
+        }
+        if maybe_option(&arg) {
+            if version(&arg) {
+                return Err(CliError(command.version.clone().unwrap_or_default()));
+            }
+            if let Some(opt) = find(&arg) {
+                if opt.boolean {
+                    set(out, opt, "true".into())?;
+                } else {
+                    let Some(value) = args.get(i).cloned() else {
+                        return Err(CliError(format!(
+                            "error: option '{}' argument missing",
+                            opt.flags
+                        )));
+                    };
+                    i += 1;
+                    set(out, opt, value)?;
+                }
+                continue;
+            }
+        }
+        if arg.len() > 2 && arg.starts_with('-') && !arg.starts_with("--") {
+            let short = &arg[..2];
+            if version(short) {
+                return Err(CliError(command.version.clone().unwrap_or_default()));
+            }
+            if let Some(opt) = find(short) {
+                if opt.boolean {
+                    set(out, opt, "true".into())?;
+                    group = Some(format!("-{}", &arg[2..]));
+                } else {
+                    set(out, opt, arg[2..].to_owned())?;
+                }
+                continue;
+            }
+        }
+        if let Some(index) = arg.find('=')
+            && arg.starts_with("--")
+            && index > 2
+            && let Some(opt) = find(&arg[..index])
+            && !opt.boolean
+        {
+            set(out, opt, arg[index + 1..].to_owned())?;
+            continue;
+        }
+        if !to_unknown
+            && maybe_option(&arg)
+            && !(command.commands.is_empty() && negative_number(&arg, command, ancestors))
+        {
+            to_unknown = true;
+        }
+        if command.positional_options && operands.is_empty() && unknown.is_empty() {
+            if find_command(command, &arg).is_some() {
+                operands.push(arg);
+                unknown.extend(args[i..].iter().cloned());
+                break;
+            }
+            if arg == "help" && super::help::has_help_command(command) {
+                operands.push(arg);
+                operands.extend(args[i..].iter().cloned());
+                break;
+            }
+        }
+        if to_unknown {
+            unknown.push(arg);
+        } else {
+            operands.push(arg);
+        }
+    }
+    Ok((operands, unknown))
+}
+
+/// commander `option:<name>` event: choices are checked, a repeated value replaces the last unless collected.
+fn set(out: &mut Parsed, opt: &OptionDef, value: String) -> Result<(), CliError> {
+    if !opt.choices.is_empty() && !opt.choices.contains(&value) {
+        return Err(CliError(format!(
+            "error: option '{}' argument '{}' is invalid. Allowed choices are {}.",
+            opt.flags,
+            value,
+            opt.choices.join(", ")
+        )));
+    }
+    let key = opt.key();
+    let values = out.options.entry(key.clone()).or_default();
+    if !opt.repeat {
+        values.clear();
+    }
+    values.push(value);
+    out.option_sources.insert(key, "cli");
+    Ok(())
+}
+
+/// The defaults of the options not given, and commander `_checkForMissingMandatoryOptions`.
+fn fill_defaults(command: &Command, out: &mut Parsed) -> Result<(), CliError> {
+    for opt in &command.options {
+        let key = opt.key();
+        if out.options.contains_key(&key) {
+            continue;
+        }
+        if let Some(v) = &opt.default {
+            // The `[]` default of a repeated option (commander shows `(default: [])`) is an empty list.
+            if !(opt.repeat && v == "[]") {
+                out.options.entry(key).or_default().push(v.clone());
+            }
+        } else if opt.required {
+            return Err(CliError(format!(
+                "error: required option '{}' not specified",
+                opt.flags
+            )));
+        } else if opt.boolean {
+            out.options.entry(key).or_default().push("false".into());
+        }
+    }
+    Ok(())
+}
+
+/// commander `_processArguments`: the count, then the choices of each argument.
+fn process_arguments(
+    command: &Command,
+    has_parent: bool,
+    args: Vec<String>,
+    out: &mut Parsed,
+) -> Result<(), CliError> {
+    let specs = &command.arguments;
+    for (idx, spec) in specs.iter().enumerate() {
+        if spec.required && args.get(idx).is_none() {
             return Err(CliError(format!(
                 "error: missing required argument '{}'",
                 spec.syntax.trim_matches(['<', '>', '[', ']', '.'])
             )));
         }
     }
+    if args.len() > specs.len() && !specs.last().is_some_and(|a| a.variadic) {
+        let expected = specs.len();
+        return Err(CliError(format!(
+            "error: too many arguments{}. Expected {expected} argument{} but got {}: {}.",
+            if has_parent {
+                format!(" for '{}'", command.name)
+            } else {
+                String::new()
+            },
+            if expected == 1 { "" } else { "s" },
+            args.len(),
+            args.join(", ")
+        )));
+    }
     // commander `Argument.choices()`: the message names the argument without its brackets.
-    for (idx, value) in out.arguments.iter().enumerate() {
-        let Some(spec) = command
-            .arguments
+    for (idx, value) in args.iter().enumerate() {
+        let Some(spec) = specs
             .get(idx)
-            .or_else(|| command.arguments.last().filter(|a| a.variadic))
+            .or_else(|| specs.last().filter(|a| a.variadic))
         else {
             continue;
         };
@@ -174,25 +413,8 @@ fn parse_in(command: &Command, argv: &[String], root: Option<&str>) -> Result<Pa
             )));
         }
     }
-    for opt in &command.options {
-        let key = opt.key();
-        if !out.options.contains_key(&key) {
-            if let Some(v) = &opt.default {
-                // The `[]` default of a repeated option (commander shows `(default: [])`) is an empty list.
-                if !(opt.repeat && v == "[]") {
-                    out.options.entry(key).or_default().push(v.clone());
-                }
-            } else if opt.required {
-                return Err(CliError(format!(
-                    "error: required option '{}' not specified",
-                    opt.flags
-                )));
-            } else if opt.boolean {
-                out.options.entry(key).or_default().push("false".into());
-            }
-        }
-    }
-    Ok(out)
+    out.arguments = args;
+    Ok(())
 }
 
 #[cfg(test)]
@@ -308,6 +530,54 @@ mod tests {
             .command(Command::new("summary"));
         let parsed = parse(&command, &["help".into(), "summary".into()]).unwrap_err();
         assert_eq!(parsed.0, "HELP:summary");
+        let unknown = parse(&command, &["help".into(), "nope".into()]).unwrap_err();
+        assert_eq!(unknown.0, "HELP:");
+    }
+
+    /// commander 15 texts and rules, checked side by side against the TS program.
+    #[test]
+    fn commander_parity_of_errors_and_repeats() {
+        let words = |list: &[&str]| list.iter().map(|w| w.to_string()).collect::<Vec<_>>();
+        let leaf = Command::new("list")
+            .option(OptionDef::value("--app <app_id>", "app"))
+            .option(OptionDef::value("--reason <why>", "reason"))
+            .option(OptionDef::boolean("--dry-run", "dry"))
+            .action(|_, _| Ok(()));
+        let root = Command::new("purchasely")
+            .version("1.0.0")
+            .positional_options()
+            .command(Command::new("screens").command(leaf));
+        let err = |argv: &[&str]| parse(&root, &words(argv)).unwrap_err().0;
+        // m1: a repeated option keeps the last value.
+        let p = parse(&root, &words(&["screens", "list", "--app=x", "--app", "y"])).unwrap();
+        assert_eq!(p.options["app"], ["y"]);
+        // m2: the texts of commander.
+        assert_eq!(
+            err(&["screens", "list", "--app"]),
+            "error: option '--app <app_id>' argument missing"
+        );
+        assert_eq!(
+            err(&["screens", "list", "extra"]),
+            "error: too many arguments for 'list'. Expected 0 arguments but got 1: extra."
+        );
+        assert_eq!(
+            err(&["screens", "list", "--ap", "x"]),
+            "error: unknown option '--ap'\n(Did you mean --app?)"
+        );
+        assert_eq!(
+            err(&["screens", "list", "--version"]),
+            "error: unknown option '--version'\n(Did you mean --reason?)"
+        );
+        // m3: help of an unknown command is the root help; an option before the subcommand is unknown.
+        assert_eq!(err(&["nope", "--help"]), "HELP:");
+        assert_eq!(err(&["help", "nope"]), "HELP:");
+        assert_eq!(err(&[]), "HELP:");
+        assert_eq!(err(&["screens", "list", "-h"]), "HELP:screens list");
+        assert_eq!(
+            err(&["--env", "staging", "screens", "list"]),
+            "error: unknown option '--env'"
+        );
+        assert_eq!(err(&["--version", "screens"]), "1.0.0");
     }
 
     #[test]

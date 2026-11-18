@@ -202,3 +202,19 @@ fn every_documented_row_is_in_the_tree() {
         assert!(doc.contains(w), "{w}");
     }
 }
+
+/// A bare program prints the root help on stdout and exits 0, as commander with no subcommand.
+#[test]
+fn bare_program_prints_the_root_help() {
+    let home = temp_home("bare");
+    let out = bin_command(&home, &[]).output().unwrap();
+    let stdout = String::from_utf8_lossy(&out.stdout);
+    assert_eq!(out.status.code(), Some(0));
+    assert!(
+        stdout.starts_with("Usage: purchasely [options] [command]\n"),
+        "{stdout}"
+    );
+    assert!(stdout.contains("\nCommands:\n"));
+    assert!(out.stderr.is_empty());
+    let _ = std::fs::remove_dir_all(home);
+}

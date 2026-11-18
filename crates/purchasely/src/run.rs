@@ -8,7 +8,7 @@ use crate::{
         deps::{Deps, Host},
         errors::{CliError, EXIT},
         real::RealHost,
-        runtime::{Runtime, add_globals},
+        runtime::Runtime,
     },
 };
 use std::{
@@ -101,15 +101,12 @@ pub fn build(rt: &mut Runtime) -> (Command, usize) {
 }
 
 fn root_command(name: &str, version: &str) -> Command {
-    let mut root = Command::new(name)
+    // TS: `menuGroup` (dashboard) calls `program.enablePositionalOptions()`.
+    let root = Command::new(name)
         .description("Purchasely command line tool")
-        .version(version);
-    // TS has no root options: commander passes an option before the subcommand on to it. The Rust parser reads
-    // them at the root, so they exist there but stay out of the root help.
-    add_globals(&mut root);
-    for option in &mut root.options {
-        option.hidden = true;
-    }
+        .version(version)
+        .positional_options();
+    // TS has no root option but -V and -h: an option before the subcommand is an unknown option.
     root.after_help(intro(name))
 }
 
@@ -159,19 +156,21 @@ pub fn run(argv: Vec<String>, d: Deps) -> i32 {
     let parsed = match cli::parse(&root, &argv) {
         Ok(parsed) => parsed,
         Err(error) if error.0.starts_with("HELP:") => {
-            // The parse error names the leaf only: walk argv to the command that asked for help.
-            let mut command = &root;
-            let mut ancestors = Vec::new();
-            for arg in &argv {
-                if let Some(sub) = command
-                    .commands
-                    .iter()
-                    .find(|c| c.name == *arg || c.aliases.contains(arg))
-                {
-                    ancestors.push(command.name.as_str());
-                    command = sub;
-                }
-            }
+            // The path below the root of the command whose help commander prints.
+            let path: Vec<String> = error.0["HELP:".len()..]
+                .split(' ')
+                .filter(|s| !s.is_empty())
+                .map(str::to_owned)
+                .collect();
+            let command = root.find(&path).unwrap_or(&root);
+            let ancestors: Vec<&str> = std::iter::once(root.name.as_str())
+                .chain(
+                    path.iter()
+                        .take(path.len().saturating_sub(1))
+                        .map(String::as_str),
+                )
+                .collect();
+            let ancestors = if path.is_empty() { vec![] } else { ancestors };
             rt.d.host
                 .stdout(&cli::help::help(command, &ancestors, width));
             return EXIT::OK;
@@ -188,39 +187,11 @@ pub fn run(argv: Vec<String>, d: Deps) -> i32 {
             );
         }
     };
-    if !parsed.command.is_empty() {
-        return match dispatch(&root, builtin, &parsed, &mut rt, width) {
-            Ok(()) => EXIT::OK,
-            Err(error) => fail(&rt, &error),
-        };
+    // commander: the root has no action, so a parse that succeeds always names a command.
+    match dispatch(&root, builtin, &parsed, &mut rt, width) {
+        Ok(()) => EXIT::OK,
+        Err(error) => fail(&rt, &error),
     }
-    if let Some(output) = parsed.opt("output")
-        && output != "json"
-        && output != "table"
-    {
-        return fail(
-            &rt,
-            &CliError::new(
-                EXIT::USAGE,
-                "USAGE",
-                vec!["--output must be json or table.".into()],
-            ),
-        );
-    }
-    if let Some(env) = parsed.opt("env")
-        && let Err(error) = rt.env(Some(env))
-    {
-        return fail(&rt, &error);
-    }
-    if parsed.arguments.is_empty() && parsed.options.is_empty() {
-        rt.d.host.stdout(&cli::help::help(&root, &[], width));
-    } else if !parsed.arguments.is_empty() {
-        return fail(
-            &rt,
-            &CliError::new(EXIT::USAGE, "USAGE", vec!["too many arguments".into()]),
-        );
-    }
-    EXIT::OK
 }
 
 /// Runs the action of the parsed command after the preAction rules of `run.ts`.

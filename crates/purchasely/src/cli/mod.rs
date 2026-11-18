@@ -35,6 +35,8 @@ pub struct Command {
     pub allow_unknown_option: bool,
     /// commander `.helpOption(false)`: `-h`/`--help` are ordinary options, the action handles them.
     pub no_help_option: bool,
+    /// commander `.enablePositionalOptions()`: the options of this command stop at its subcommand.
+    pub positional_options: bool,
 }
 
 impl Command {
@@ -45,6 +47,11 @@ impl Command {
 
     pub fn no_help_option(mut self) -> Self {
         self.no_help_option = true;
+        self
+    }
+
+    pub fn positional_options(mut self) -> Self {
+        self.positional_options = true;
         self
     }
 
@@ -116,21 +123,27 @@ pub struct Argument {
 }
 impl Argument {
     pub fn required(s: impl Into<String>, d: impl Into<String>) -> Self {
+        let syntax: String = s.into();
+        // commander `Argument`: a name that ends with `...` is variadic.
+        let variadic = syntax.trim_end_matches(['>', ']']).ends_with("...");
         Self {
-            syntax: s.into(),
+            syntax,
             description: d.into(),
             choices: Vec::new(),
             required: true,
-            variadic: false,
+            variadic,
         }
     }
     pub fn optional(s: impl Into<String>, d: impl Into<String>) -> Self {
+        let syntax: String = s.into();
+        // commander `Argument`: a name that ends with `...` is variadic.
+        let variadic = syntax.trim_end_matches(['>', ']']).ends_with("...");
         Self {
-            syntax: s.into(),
+            syntax,
             description: d.into(),
             choices: Vec::new(),
             required: false,
-            variadic: false,
+            variadic,
         }
     }
     pub fn variadic(mut self) -> Self {

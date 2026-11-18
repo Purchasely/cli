@@ -856,7 +856,7 @@ mod tests {
         let cases = vec![
             case(json!({"test":"auth-status::wait","pending":"P5b","steps":[]})),
             case(
-                json!({"test":"search::empty","steps":[{"argv":[],"env":{},"code":0,"out":"","err":"","calls":[],"execs":[],"prompts":[],"pid_probes":[],"files_before":{"<ROOT>":[]},"files_after":{"<ROOT>":[]}}]}),
+                json!({"test":"search::empty","steps":[{"argv":["--version"],"env":{},"version":"9.9.9","code":0,"out":"9.9.9\n","err":"","calls":[],"execs":[],"prompts":[],"pid_probes":[],"files_before":{"<ROOT>":[]},"files_after":{"<ROOT>":[]}}]}),
             ),
         ];
         let report = run_cases(&cases, Some("auth-status::,search::")).unwrap();
@@ -934,7 +934,7 @@ mod tests {
     #[test]
     fn replay_step_restores_and_compares_file_snapshot() {
         let bytes = b"initial";
-        let step = json!({"argv":[],"env":{},"name":"purchasely","version":"9.9.9","host":"https://cli.test","code":0,"out":"","err":"","calls":[],"execs":[],"prompts":[],"pid_probes":[],"files_before":{"<ROOT>":[{"path":"sample.txt","mode":384,"directory":false,"text":"initial","hex":"696e697469616c"}]},"files_after":{"<ROOT>":[{"path":"sample.txt","mode":384,"directory":false,"text":"initial","hex":"696e697469616c"}]}});
+        let step = json!({"argv":["--version"],"env":{},"name":"purchasely","version":"9.9.9","host":"https://cli.test","code":0,"out":"9.9.9\n","err":"","calls":[],"execs":[],"prompts":[],"pid_probes":[],"files_before":{"<ROOT>":[{"path":"sample.txt","mode":384,"directory":false,"text":"initial","hex":"696e697469616c"}]},"files_after":{"<ROOT>":[{"path":"sample.txt","mode":384,"directory":false,"text":"initial","hex":"696e697469616c"}]}});
         let _ = bytes;
         assert!(replay_step(step.as_object().unwrap()).is_ok());
     }

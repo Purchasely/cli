@@ -16,7 +16,7 @@ use crate::{
 };
 use std::{fs, path::Path};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Globals {
     pub env: Option<String>,
     pub dry_run: bool,

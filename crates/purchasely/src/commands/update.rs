@@ -6,11 +6,12 @@ use crate::{
 
 fn update(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let background = p.flag("background");
+    let g = crate::management::exec::Globals::from(p);
     if background {
-        let _ = run_update(rt, true);
+        let _ = run_update(rt, true, &g);
         let _ = ai::update_plugins(rt, true);
     } else {
-        run_update(rt, false)?;
+        run_update(rt, false, &g)?;
         ai::update_plugins(rt, false)?;
     }
     Ok(())

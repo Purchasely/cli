@@ -279,7 +279,12 @@ pub fn auto_update(rt: &mut Runtime, top_level: &str) {
     }
 }
 
-pub fn run_update(rt: &mut Runtime, background: bool) -> Result<(), CliError> {
+/// `g`: the parsed options of `update`; TS `emit(d, g, ..., { env: rt.env(g), key: null, name: "update" })`.
+pub fn run_update(
+    rt: &mut Runtime,
+    background: bool,
+    g: &crate::management::exec::Globals,
+) -> Result<(), CliError> {
     let kind = install_kind_for(&rt.d);
     let store = update_store(&rt.d);
     let now = rt.d.host.now();
@@ -391,8 +396,11 @@ pub fn run_update(rt: &mut Runtime, background: bool) -> Result<(), CliError> {
             &rt.d,
             &value,
             &super::output::EmitOptions {
-                env: "prod".into(),
+                table: g.output.as_deref() == Some("table"),
+                out: g.out.clone(),
+                env: rt.env(g.env.as_deref())?,
                 name: "update".into(),
+                width: rt.d.columns.unwrap_or(120) as usize,
                 ..Default::default()
             },
         )?;
@@ -572,7 +580,7 @@ mod tests {
         rt.d.host = Box::new(Held(std::sync::atomic::AtomicI64::new(DAY_MS * 3)));
         std::fs::create_dir_all(dir.join("state")).unwrap();
         std::fs::write(dir.join("state/update.purchasely.lock"), "424242").unwrap();
-        let e = run_update(&mut rt, false).unwrap_err();
+        let e = run_update(&mut rt, false, &Default::default()).unwrap_err();
         assert_eq!(
             (e.code.as_str(), e.messages.clone()),
             ("INTERNAL_ERROR", vec!["state lock timeout".to_owned()])
@@ -797,15 +805,34 @@ mod tests {
         assert!(!should_run_installer(InstallKind::Brew, "1.0.0", "0.7.2"));
     }
 
+    /// TS `emit(d, g, ...)`: `update --out <file>` writes the result to that file.
+    #[test]
+    fn update_keeps_the_out_option() {
+        let dir =
+            std::env::temp_dir().join(format!("purchasely-update-out-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("update.json");
+        let mut rt = brew_runtime(&dir, Arc::default());
+        let g = crate::management::exec::Globals {
+            out: Some(file.to_string_lossy().into_owned()),
+            ..Default::default()
+        };
+        run_update(&mut rt, false, &g).unwrap();
+        let text = std::fs::read_to_string(&file).unwrap();
+        assert!(text.contains("\"kind\": \"brew\""), "{text}");
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
     #[test]
     fn brew_foreground_and_background_updates_skip_installer_with_managed_root() {
         let dir =
             std::env::temp_dir().join(format!("purchasely-brew-update-{}", std::process::id()));
         let execs = Arc::new(AtomicUsize::new(0));
         let mut rt = brew_runtime(&dir, execs.clone());
-        run_update(&mut rt, false).unwrap();
+        run_update(&mut rt, false, &Default::default()).unwrap();
         let mut rt = brew_runtime(&dir.join("background"), execs.clone());
-        run_update(&mut rt, true).unwrap();
+        run_update(&mut rt, true, &Default::default()).unwrap();
         assert_eq!(execs.load(Ordering::SeqCst), 0);
         let _ = std::fs::remove_dir_all(dir);
     }

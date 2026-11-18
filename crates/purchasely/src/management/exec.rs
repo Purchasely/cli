@@ -302,48 +302,132 @@ fn response_error(status: u16, headers: &[(String, String)], text: &str) -> CliE
     e
 }
 
+/// TS `checkAllowlist`: when the env has a list, the app in the pathname of the URL must be in it.
 pub fn allowlist(rt: &Runtime, env: &str, url: &str) -> Result<(), CliError> {
-    if let Some(apps) = rt.cfg.write_allowlist.as_ref().and_then(|v| get(v, env)) {
-        let app = url
-            .split("/applications/")
-            .nth(1)
-            .and_then(|s| s.split('/').next())
-            .unwrap_or("");
-        let app = decode(app);
-        let allowed = if let Value::Array(a) = apps {
-            a.iter().any(|v| v.as_str().as_deref() == Some(&app))
-        } else {
-            true
-        };
-        if !allowed {
-            return Err(errors::CliError::new(
-                EXIT::REFUSED,
-                "REFUSED",
-                vec![format!(
-                    "{app} is not in write_allowlist.{env} of the config. Writes go to the listed apps only."
-                )],
-            ));
-        }
+    let Some(apps) = rt.cfg.write_allowlist.as_ref().and_then(|v| get(v, env)) else {
+        return Ok(());
+    };
+    if matches!(apps, Value::Null | Value::Bool(false)) {
+        return Ok(());
+    }
+    let refused = |m: String| CliError::new(EXIT::REFUSED, "REFUSED", vec![m]);
+    // TS `/\/applications\/([^/?]+)/.exec(new URL(url).pathname)`.
+    let href = fetch_url(url);
+    let path = pathname(&href);
+    let app = path
+        .match_indices("/applications/")
+        .map(|(i, m)| path[i + m.len()..].split('/').next().unwrap_or(""))
+        .find(|a| !a.is_empty());
+    let Some(app) = app else {
+        return Err(refused(format!(
+            "write_allowlist.{env} is set in the config, and this write targets no app. Writes go to the listed apps only."
+        )));
+    };
+    let app = decode_component(app).ok_or_else(|| {
+        CliError::new(
+            EXIT::GENERIC,
+            "INTERNAL_ERROR",
+            vec!["URI malformed".into()],
+        )
+    })?;
+    let allowed = if let Value::Array(a) = apps {
+        a.iter().any(|v| v.as_str().as_deref() == Some(&app))
+    } else {
+        true
+    };
+    if !allowed {
+        return Err(refused(format!(
+            "{app} is not in write_allowlist.{env} of the config. Writes go to the listed apps only."
+        )));
     }
     Ok(())
 }
-fn decode(s: &str) -> String {
-    let mut out = String::new();
-    let b = s.as_bytes();
-    let mut i = 0;
-    while i < b.len() {
-        if b[i] == b'%'
-            && i + 2 < b.len()
-            && let Ok(v) = u8::from_str_radix(&s[i + 1..i + 3], 16)
-        {
-            out.push(v as char);
-            i += 3;
-            continue;
+
+/// The URL that fetch sends (WHATWG URL parser, http and https only): tab and newline removed, `\\` read as
+/// `/`, dot segments resolved, the path and the query percent-encoded, no fragment.
+pub(crate) fn fetch_url(url: &str) -> String {
+    let url: String = url
+        .trim_matches(|c: char| c <= ' ')
+        .chars()
+        .filter(|c| !matches!(c, '\t' | '\n' | '\r'))
+        .collect();
+    let Some(after) = url.find("://").map(|i| i + 3) else {
+        return url;
+    };
+    let rest = &url[after..];
+    let auth = rest.find(['/', '\\', '?', '#']).unwrap_or(rest.len());
+    let origin = &url[..after + auth];
+    let rest = rest[auth..].split('#').next().unwrap_or("");
+    let (path, query) = match rest.find('?') {
+        Some(i) => (&rest[..i], Some(&rest[i + 1..])),
+        None => (rest, None),
+    };
+    let segments: Vec<&str> = path.split(['/', '\\']).skip(1).collect();
+    let mut out: Vec<String> = Vec::new();
+    for (i, seg) in segments.iter().enumerate() {
+        let last = i + 1 == segments.len();
+        let lower = seg.to_ascii_lowercase();
+        let dots = match lower.as_str() {
+            "." | "%2e" => 1,
+            ".." | ".%2e" | "%2e." | "%2e%2e" => 2,
+            _ => 0,
+        };
+        if dots == 2 {
+            out.pop();
         }
-        out.push(b[i] as char);
-        i += 1;
+        if dots == 0 {
+            out.push(percent_encode(seg, b"\"<>`{}"));
+        } else if last {
+            out.push(String::new());
+        }
+    }
+    let mut href = format!("{origin}/{}", out.join("/"));
+    if let Some(q) = query {
+        href.push('?');
+        href.push_str(&percent_encode(q, b"\"<>'"));
+    }
+    href
+}
+
+/// The pathname of an absolute URL: from the first `/` after the host to the query.
+fn pathname(url: &str) -> &str {
+    let rest = url.find("://").map_or(url, |i| &url[i + 3..]);
+    let rest = rest.find('/').map_or("", |i| &rest[i..]);
+    rest.split(['?', '#']).next().unwrap_or("")
+}
+
+/// Encode the C0 controls, the space, the bytes of `extra` and every byte above 0x7E. A `%` stays.
+fn percent_encode(s: &str, extra: &[u8]) -> String {
+    let mut out = String::new();
+    for b in s.bytes() {
+        if b <= b' ' || b > 0x7e || extra.contains(&b) {
+            out.push_str(&format!("%{b:02X}"));
+        } else {
+            out.push(b as char);
+        }
     }
     out
+}
+
+/// TS `decodeURIComponent`: `None` where it throws (a bad `%` sequence, or bytes that are not UTF-8).
+pub(crate) fn decode_component(s: &str) -> Option<String> {
+    let b = s.as_bytes();
+    let mut out = Vec::with_capacity(b.len());
+    let mut i = 0;
+    while i < b.len() {
+        if b[i] == b'%' {
+            let hex = s.get(i + 1..i + 3)?;
+            if !hex.bytes().all(|h| h.is_ascii_hexdigit()) {
+                return None;
+            }
+            out.push(u8::from_str_radix(hex, 16).ok()?);
+            i += 3;
+        } else {
+            out.push(b[i]);
+            i += 1;
+        }
+    }
+    String::from_utf8(out).ok()
 }
 fn get<'a>(v: &'a Value, k: &str) -> Option<&'a Value> {
     if let Value::Object(o) = v {
@@ -368,7 +452,9 @@ pub fn validate_api_path(raw: &str) -> Result<String, CliError> {
         return Err(bad());
     }
     for seg in path[1..].split('/') {
-        let dec = decode(seg);
+        let Some(dec) = decode_component(seg) else {
+            return Err(bad());
+        };
         if dec.is_empty()
             || dec == "."
             || dec == ".."
@@ -481,6 +567,26 @@ mod tests {
                 .code,
             "USAGE"
         );
+    }
+    /// Oracle: `new URL(u).href` in Node 22, without the fragment (fetch does not send it).
+    #[test]
+    fn fetch_url_matches_the_whatwg_parser() {
+        for (raw, href) in [
+            (
+                "https://a.io/x/./y/../z?q=a b\"é#f",
+                "https://a.io/x/z?q=a%20b%22%C3%A9",
+            ),
+            ("https://a.io/x/%2E%2e/y/.", "https://a.io/y/"),
+            ("https://a.io/x\\y/{c}é", "https://a.io/x/y/%7Bc%7D%C3%A9"),
+            ("https://a.io", "https://a.io/"),
+            ("https://a.io/a/..", "https://a.io/"),
+            (" https://a.io/a/b\tc?x='1'", "https://a.io/a/bc?x=%271%27"),
+        ] {
+            assert_eq!(fetch_url(raw), href, "{raw}");
+        }
+        assert_eq!(decode_component("caf%C3%A9").as_deref(), Some("café"));
+        assert_eq!(decode_component("%FF"), None);
+        assert_eq!(decode_component("%+1"), None);
     }
     #[test]
     fn accepts_management_prefix() {

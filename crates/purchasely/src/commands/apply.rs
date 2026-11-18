@@ -158,7 +158,8 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             .unwrap();
         let env = strv(&r, "env");
         let method = strv(&r, "method");
-        let url = strv(&r, "url");
+        // TS fetch sends the URL as the WHATWG parser writes it: check and send that same destination.
+        let url = exec::fetch_url(&strv(&r, "url"));
         let body = get(&r, "body").and_then(Value::as_str);
         let confirm = get(&r, "confirm").and_then(Value::as_str);
         let path = get(&r, "pathTemplate")
@@ -478,6 +479,85 @@ mod tests {
             Some(&Value::Number(2.0))
         );
         let _ = std::fs::remove_dir_all(root);
+    }
+    /// A hand-edited plan: fetch sends the URL with its dot segments resolved, so the allowlist checks that
+    /// destination, and the request goes to the same one.
+    #[test]
+    fn allowlist_checks_the_normalized_destination() {
+        let root = std::env::temp_dir().join(format!("apply-dots-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).unwrap();
+        let plan = root.join("plan.json");
+        let url = |path: &str| {
+            format!(
+                r#"{{"command":"placements update","env":"prod","method":"PATCH","url":"https://api.purchasely.io/management/v1/applications/{path}","body":"{{}}"}}"#
+            )
+        };
+        let seen = Rc::new(RefCell::new(Seen::default()));
+        let mut rt = apply_runtime(&root, seen.clone());
+        rt.cfg.write_allowlist = Some(json::parse(r#"{"prod":["allowed"]}"#).unwrap());
+        std::fs::write(
+            &plan,
+            format!(
+                r#"{{"version":1,"requests":[{}]}}"#,
+                url("allowed/../blocked/placements/p")
+            ),
+        )
+        .unwrap();
+        let e = run_apply(&mut rt, &[plan.to_str().unwrap(), "--yes"]).unwrap_err();
+        assert_eq!(e.code, "REFUSED");
+        assert!(
+            e.messages
+                .iter()
+                .any(|m| m.contains("blocked is not in write_allowlist.prod")),
+            "{:?}",
+            e.messages
+        );
+        assert!(seen.borrow().urls.is_empty());
+        std::fs::write(
+            &plan,
+            format!(
+                r#"{{"version":1,"requests":[{}]}}"#,
+                url("blocked/../allowed/placements/p")
+            ),
+        )
+        .unwrap();
+        run_apply(&mut rt, &[plan.to_str().unwrap(), "--yes"]).unwrap();
+        assert_eq!(
+            seen.borrow().urls,
+            ["https://api.purchasely.io/management/v1/applications/allowed/placements/p"]
+        );
+        let _ = std::fs::remove_dir_all(root);
+    }
+    fn apply_runtime(root: &std::path::Path, seen: Rc<RefCell<Seen>>) -> Runtime {
+        let mut env = BTreeMap::new();
+        env.insert("PURCHASELY_API_KEY".into(), "pk_mgmt_live_SECRET123".into());
+        Runtime::new(Deps {
+            host: Box::new(H(seen)),
+            env,
+            is_tty: false,
+            config_dir: root.join("config"),
+            state_dir: root.join("state"),
+            cache_dir: root.join("cache"),
+            version: "9.9.9".into(),
+            pid: std::process::id(),
+            name: "purchasely".into(),
+            host_url: "https://cli.test".into(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "linux",
+            stdout_tty: false,
+            columns: None,
+        })
+    }
+    fn run_apply(rt: &mut Runtime, args: &[&str]) -> Result<(), CliError> {
+        let mut program = Command::new("purchasely");
+        register(&mut program, rt);
+        let mut argv = vec!["apply".to_owned()];
+        argv.extend(args.iter().map(|s| (*s).to_owned()));
+        let p = crate::cli::parse(&program, &argv).unwrap();
+        let leaf = program.find(&p.command).unwrap();
+        (leaf.action.as_ref().unwrap().0)(&p, rt)
     }
     #[test]
     fn apply_plan_rejects_untrusted_host() {

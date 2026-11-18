@@ -261,6 +261,55 @@ mod tests {
             columns: None,
         })
     }
+    fn run_api(rt: &mut Runtime, args: &[&str]) -> Result<(), CliError> {
+        let mut root = Command::new("purchasely");
+        register(&mut root, rt);
+        let argv: Vec<String> = args.iter().map(|s| (*s).to_owned()).collect();
+        let p = crate::cli::parse(&root, &argv).unwrap();
+        let leaf = root.find(&p.command).unwrap();
+        (leaf.action.as_ref().unwrap().0)(&p, rt)
+    }
+    /// TS `checkAllowlist` reads the app in `new URL(url).pathname`: the query is not part of it.
+    #[test]
+    fn allowlist_reads_the_pathname_not_the_query() {
+        let mut rt = runtime(Rc::new(RefCell::new(Vec::new())));
+        rt.cfg.write_allowlist =
+            Some(crate::core::json::parse(r#"{"staging":["app_1"]}"#).unwrap());
+        let args = [
+            "api",
+            "PATCH",
+            "/applications/app_1",
+            "--query",
+            "expand=true",
+            "--data",
+            "{}",
+            "--env",
+            "staging",
+            "--dry-run",
+        ];
+        run_api(&mut rt, &args).unwrap();
+        let e = run_api(
+            &mut rt,
+            &[
+                "api",
+                "POST",
+                "/applications",
+                "--data",
+                "{}",
+                "--env",
+                "staging",
+                "--dry-run",
+            ],
+        )
+        .unwrap_err();
+        assert_eq!(e.code, "REFUSED");
+        assert_eq!(
+            e.messages,
+            [
+                "write_allowlist.staging is set in the config, and this write targets no app. Writes go to the listed apps only."
+            ]
+        );
+    }
     #[test]
     fn api_path_validation_blocks_encoded_traversal() {
         assert_eq!(

@@ -47,15 +47,8 @@ pub fn valid_tag(tag: &str) -> bool {
 fn version_tag(tag: &str) -> &str {
     tag.strip_prefix('v').unwrap_or(tag)
 }
-fn newer(a: &str, b: &str) -> bool {
-    let nums = |s: &str| {
-        version_tag(s)
-            .split('.')
-            .map(|n| n.parse::<u64>().unwrap_or(0))
-            .collect::<Vec<_>>()
-    };
-    nums(a) > nums(b)
-}
+/// TS `ai.ts` imports `newer` from `update.ts`.
+use super::update::newer;
 pub fn latest_tag(d: &Deps) -> Result<String, CliError> {
     let r = d.host.fetch(Request {
         method: "GET".into(),

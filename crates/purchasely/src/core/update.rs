@@ -40,20 +40,33 @@ pub fn install_kind_for(d: &Deps) -> InstallKind {
     )
 }
 
+/// TS `newer`: `Number()` of each dot part; a pre-release part is NaN, which is never higher or lower.
 pub fn newer(a: &str, b: &str) -> bool {
-    let parse = |s: &str| {
+    let parts = |s: &str| -> Vec<f64> {
         s.strip_prefix('v')
             .unwrap_or(s)
             .split('.')
-            .take(3)
-            .map(|part| part.parse::<u64>().unwrap_or(0))
-            .collect::<Vec<_>>()
+            .map(|part| {
+                let part = part.trim();
+                if part.is_empty() {
+                    0.0
+                } else {
+                    part.parse::<f64>().unwrap_or(f64::NAN)
+                }
+            })
+            .collect()
     };
-    let (a, b) = (parse(a), parse(b));
-    (0..3).any(|i| {
-        a.get(i).copied().unwrap_or(0) > b.get(i).copied().unwrap_or(0)
-            && (0..i).all(|j| a.get(j) == b.get(j))
-    })
+    let (x, y) = (parts(a), parts(b));
+    for i in 0..3 {
+        // A missing part is `undefined`: unequal to a number, and never greater.
+        match (x.get(i), y.get(i)) {
+            (Some(p), Some(q)) if p == q => continue,
+            (Some(p), Some(q)) => return p > q,
+            (None, None) => continue,
+            _ => return false,
+        }
+    }
+    false
 }
 
 pub fn stable_version(value: &str) -> Option<String> {
@@ -295,13 +308,19 @@ pub fn run_update(rt: &mut Runtime, background: bool) -> Result<(), CliError> {
         Err(error) => return Err(error),
     };
     if let Some(version) = latest.as_ref() {
-        let _ = merge_record(
-            &store,
-            vec![
-                ("latest".into(), Value::from(version.clone())),
-                ("checked_at".into(), Value::Number(now as f64)),
-            ],
-        );
+        // TS `s.withLock(() => mergeRecord(...))`: a lock timeout or a failed write is an error.
+        store
+            .with_lock(|| {
+                merge_record(
+                    &store,
+                    vec![
+                        ("latest".into(), Value::from(version.clone())),
+                        ("checked_at".into(), Value::Number(rt.d.host.now() as f64)),
+                    ],
+                )
+            })
+            .and_then(|written| written)
+            .map_err(super::breaker::state_error)?;
     } else if !background {
         rt.d.host
             .stderr("No stable release found, nothing to compare with.\n");
@@ -497,6 +516,70 @@ mod tests {
         })
     }
 
+    /// TS `newer`: `Number()` of each dot part, so a pre-release part is NaN and never higher.
+    #[test]
+    fn newer_follows_ts_number_parts() {
+        assert!(!newer("1.0.1", "1.0.0-rc.1"));
+        assert!(!newer("1.0.0", "1.0.0-rc.1"));
+        assert!(newer("1.0.0-rc.1", "0.9.0"));
+        assert!(newer("v1.2.0", "1.1.9"));
+        assert!(!newer("1.1", "1.1.0"));
+        assert!(!newer("1.0.0", "1.0.0"));
+    }
+    /// A host whose clock moves with `sleep` and whose lock holder is alive.
+    struct Held(std::sync::atomic::AtomicI64);
+    impl Host for Held {
+        fn fetch(&self, r: Request) -> Result<Response, NetError> {
+            UpdateHost(Arc::default()).fetch(r)
+        }
+        fn exec(&self, _: &str, _: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            Ok(ExecResult::default())
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            self.0.load(Ordering::SeqCst)
+        }
+        fn wall_now(&self) -> i64 {
+            self.now()
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            true
+        }
+        fn sleep(&self, ms: i64) {
+            self.0.fetch_add(ms.max(1), Ordering::SeqCst);
+        }
+        fn stdout(&self, _: &str) {}
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+    /// TS `check`: `s.withLock(() => mergeRecord(s, { latest, checked_at }))`, so a held lock is an error.
+    #[test]
+    fn latest_merge_takes_the_state_lock() {
+        let dir =
+            std::env::temp_dir().join(format!("purchasely-merge-lock-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let mut rt = brew_runtime(&dir, Arc::default());
+        rt.d.host = Box::new(Held(std::sync::atomic::AtomicI64::new(DAY_MS * 3)));
+        std::fs::create_dir_all(dir.join("state")).unwrap();
+        std::fs::write(dir.join("state/update.purchasely.lock"), "424242").unwrap();
+        let e = run_update(&mut rt, false).unwrap_err();
+        assert_eq!(
+            (e.code.as_str(), e.messages.clone()),
+            ("INTERNAL_ERROR", vec!["state lock timeout".to_owned()])
+        );
+        assert!(!dir.join("state/update.purchasely.check.json").exists());
+        let _ = std::fs::remove_dir_all(dir);
+    }
     #[test]
     fn native_field_first() {
         assert_eq!(

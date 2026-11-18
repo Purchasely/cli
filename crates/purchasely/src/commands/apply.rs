@@ -50,6 +50,8 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         .filter(|(_, r)| !get(r, "applied_at").is_some_and(truthy))
         .map(|(i, _)| i)
         .collect();
+    // The destination as fetch sends it, checked once: the dry run, the approval and the send all show it.
+    let mut urls = Vec::new();
     for &i in &pending {
         let r = &get(&plan, "requests")
             .and_then(|v| {
@@ -60,12 +62,13 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                 }
             })
             .unwrap();
-        validate(r, i + 1)?;
+        urls.push(validate(r, i + 1)?);
     }
     let list = Value::Array(
         pending
             .iter()
-            .map(|&i| {
+            .zip(&urls)
+            .map(|(&i, url)| {
                 let r = get(&plan, "requests")
                     .and_then(|v| {
                         if let Value::Array(a) = v {
@@ -86,7 +89,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
                         "method".into(),
                         get(r, "method").cloned().unwrap_or(Value::Null),
                     ),
-                    ("url".into(), get(r, "url").cloned().unwrap_or(Value::Null)),
+                    ("url".into(), Value::from(url.clone())),
                     (
                         "body".into(),
                         get(r, "body")
@@ -107,7 +110,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             "apply",
         );
     }
-    for &i in &pending {
+    for (&i, url) in pending.iter().zip(&urls) {
         let r = get(&plan, "requests")
             .and_then(|v| {
                 if let Value::Array(a) = v {
@@ -118,11 +121,10 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             })
             .unwrap();
         rt.d.host.stderr(&format!(
-            "#{} {} {} {}\n",
+            "#{} {} {} {url}\n",
             i + 1,
             strv(r, "env"),
             strv(r, "method"),
-            strv(r, "url")
         ));
     }
     let approved = g.yes
@@ -146,7 +148,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         ));
     }
     let mut applied = Vec::new();
-    for &i in &pending {
+    for (&i, url) in pending.iter().zip(&urls) {
         let r = get(&plan, "requests")
             .and_then(|v| {
                 if let Value::Array(a) = v {
@@ -158,8 +160,7 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             .unwrap();
         let env = strv(&r, "env");
         let method = strv(&r, "method");
-        // TS fetch sends the URL as the WHATWG parser writes it: check and send that same destination.
-        let url = exec::fetch_url(&strv(&r, "url"));
+        let url = url.clone();
         let body = get(&r, "body").and_then(Value::as_str);
         let confirm = get(&r, "confirm").and_then(Value::as_str);
         let path = get(&r, "pathTemplate")
@@ -275,7 +276,8 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     )
 }
 
-fn validate(r: &Value, n: usize) -> Result<(), CliError> {
+/// Returns the URL as the WHATWG parser writes it (as fetch sends it), checked after normalisation.
+fn validate(r: &Value, n: usize) -> Result<String, CliError> {
     let bad = |s: String| {
         CliError::new(
             EXIT::REFUSED,
@@ -293,15 +295,18 @@ fn validate(r: &Value, n: usize) -> Result<(), CliError> {
     if !["POST", "PUT", "PATCH", "DELETE"].contains(&method.as_str()) {
         return Err(bad(format!("has method \"{method}\", not a write")));
     }
-    let url = strv(r, "url");
+    // A dot segment can remove the Management prefix: check the URL that is sent, not the stored one.
+    let raw = strv(r, "url");
+    let url = exec::fetch_url(&raw);
     let expected = if env == "prod" {
         "https://api.purchasely.io/management/v1/"
     } else {
         "https://api-staging.purchasely.io/management/v1/"
     };
-    if !url.starts_with(expected) {
+    // TS checks the stored string: keep that check, and also check the URL that is sent.
+    if !raw.starts_with(expected) || !url.starts_with(expected) {
         return Err(bad(format!(
-            "goes to {url}, not to the Management API of {env}"
+            "goes to {raw}, not to the Management API of {env}"
         )));
     }
     if let Some(v) = get(r, "body") {
@@ -318,7 +323,7 @@ fn validate(r: &Value, n: usize) -> Result<(), CliError> {
     {
         return Err(bad("has an unknown confirm placement".into()));
     }
-    Ok(())
+    Ok(url)
 }
 fn write_plan(file: &str, v: &Value) -> Result<(), CliError> {
     exec::write_plan(std::path::Path::new(file), v)
@@ -626,6 +631,42 @@ mod tests {
         let p = crate::cli::parse(&program, &argv).unwrap();
         let leaf = program.find(&p.command).unwrap();
         (leaf.action.as_ref().unwrap().0)(&p, rt)
+    }
+    /// The prefix check runs on the URL that is sent: dot segments that remove /management/v1 refuse
+    /// the plan, and the dry run shows the normalized destination.
+    #[test]
+    fn apply_checks_the_management_prefix_after_normalisation() {
+        let r = json::parse(
+            r#"{"env":"prod","method":"DELETE","url":"https://api.purchasely.io/management/v1/../../admin/x"}"#,
+        )
+        .unwrap();
+        let e = validate(&r, 1).unwrap_err();
+        assert_eq!(e.exit, EXIT::REFUSED);
+        let r = json::parse(
+            r#"{"env":"prod","method":"DELETE","url":"https://api.purchasely.io/x/../management/v1/y"}"#,
+        )
+        .unwrap();
+        assert_eq!(validate(&r, 1).unwrap_err().exit, EXIT::REFUSED);
+        assert!(
+            e.messages[0].contains("not to the Management API of prod"),
+            "{:?}",
+            e.messages
+        );
+        let plan = one_request_plan("normalized", "");
+        let text = std::fs::read_to_string(&plan)
+            .unwrap()
+            .replace("applications/app_1/", "applications/x/../app_1/");
+        std::fs::write(&plan, text).unwrap();
+        let seen = Rc::new(RefCell::new(Seen::default()));
+        let mut rt = apply_runtime(plan.parent().unwrap(), seen.clone());
+        run_apply(&mut rt, &[plan.to_str().unwrap(), "--dry-run"]).unwrap();
+        let out = seen.borrow().stdout.clone();
+        assert!(
+            out.contains("https://api.purchasely.io/management/v1/applications/app_1/placements/p"),
+            "{out}"
+        );
+        assert!(!out.contains(".."), "{out}");
+        let _ = std::fs::remove_dir_all(plan.parent().unwrap());
     }
     #[test]
     fn apply_plan_rejects_untrusted_host() {

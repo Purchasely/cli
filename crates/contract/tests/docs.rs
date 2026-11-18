@@ -147,6 +147,7 @@ fn landing_page_sharing_head_reference_links_404_and_robots() {
     let lower = site.to_lowercase();
     assert!(!lower.contains("@placement.json"));
     assert!(site.contains("brew tap purchasely/cli https://github.com/Purchasely/cli"));
+    assert!(site.contains("brew trust purchasely/cli"));
     assert!(!site.contains("Install with <code>brew install purchasely</code>"));
     let not_found = read("site/404.html");
     assert!(not_found.contains("href=\"/\""));

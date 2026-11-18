@@ -381,11 +381,18 @@ impl Host for FakeHost {
             });
         };
         let expected_call = json!({"method":expected["method"],"url":expected["url"],"headers":lower_headers(&expected["headers"]),"body":expected["body"],"refuse_redirect":expected["refuse_redirect"],"at":expected["at"]});
-        let actual_headers: Map<String, Value> = req
-            .headers
-            .iter()
-            .map(|(k, v)| (k.to_ascii_lowercase(), json!(v)))
-            .collect();
+        // As fetch `Headers`: a name sent twice joins its values, so a duplicate does not collapse.
+        let mut actual_headers: Map<String, Value> = Map::new();
+        for (k, v) in &req.headers {
+            let joined = match actual_headers
+                .get(&k.to_ascii_lowercase())
+                .and_then(Value::as_str)
+            {
+                Some(old) => format!("{old}, {v}"),
+                None => v.clone(),
+            };
+            actual_headers.insert(k.to_ascii_lowercase(), json!(joined));
+        }
         let actual_call = json!({"method":req.method,"url":req.url,"headers":actual_headers,"body":req.body.as_ref().map(|b|String::from_utf8_lossy(b).into_owned()),"refuse_redirect":req.refuse_redirect,"at":self.now()});
         let expected_call = normalize_value(&expected_call, &self.inner.step, &self.inner.root);
         let actual_call = normalize_value(&actual_call, &self.inner.step, &self.inner.root);
@@ -832,6 +839,24 @@ mod tests {
         assert_eq!(response.status, 201);
         assert_eq!(response.body, b"ok");
         host.finish().unwrap();
+    }
+    /// A header sent twice is visible: fetch `Headers` joins the values, the recorded call has one.
+    #[test]
+    fn fetch_sees_a_duplicate_header() {
+        let host = FakeHost::from_step(
+            &json!({"calls":[{"at":0,"method":"GET","url":"/x","headers":{"User-Agent":"a"},"body":null,"refuse_redirect":false,"reply":{"status":200,"text":"ok"}}]}),
+        );
+        let r = Request {
+            method: "GET".into(),
+            url: "/x".into(),
+            headers: vec![
+                ("User-Agent".into(), "a".into()),
+                ("user-agent".into(), "a".into()),
+            ],
+            ..Request::default()
+        };
+        assert!(host.fetch(r).is_err());
+        assert!(host.finish().is_err());
     }
     #[test]
     fn exec_replays_options_and_result() {

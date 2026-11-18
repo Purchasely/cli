@@ -352,6 +352,10 @@ fn normalize_version_tokens(input: &str) -> String {
             if dots >= 2 {
                 out.push_str("<VERSION>");
                 i = j + prerelease_len(&bytes[j..]);
+                // As without a suffix: the token also takes a following sentence period.
+                while i < bytes.len() && (bytes[i].is_ascii_digit() || bytes[i] == b'.') {
+                    i += 1;
+                }
                 continue;
             }
             out.push_str(&input[start..j]);
@@ -417,6 +421,10 @@ mod tests {
             "ply-<VERSION>-darwin-arm64.tar.gz"
         );
         assert_eq!(normalize_version_tokens("1.0.0-rc"), "<VERSION>-rc");
+        assert_eq!(
+            normalize_version_tokens("ply 0.9.0. Each"),
+            normalize_version_tokens("ply 1.0.0-rc.1. Each")
+        );
     }
     #[test]
     fn binary_runner_replays_recorded_output_comparison() {

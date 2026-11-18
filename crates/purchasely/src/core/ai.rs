@@ -1212,11 +1212,10 @@ pub fn update_plugins(rt: &Runtime, background: bool) -> Result<(), CliError> {
             return Ok(());
         }
     }
-    let Ok(raw_tag) = latest_tag(&rt.d) else {
-        return Ok(());
-    };
+    // TS: a failed lookup, lock or write throws out of `updatePlugins`; the background caller drops it.
+    let raw_tag = latest_tag(&rt.d)?;
     let tag = version_tag(&raw_tag);
-    if !store
+    store
         .with_lock_timeout(timeout, || {
             let current = plugin(&rt.d);
             let mut fields = if let Value::Object(fields) = current {
@@ -1230,12 +1229,12 @@ pub fn update_plugins(rt: &Runtime, background: bool) -> Result<(), CliError> {
                 "checked_at",
                 Value::Number(rt.d.host.now() as f64),
             );
-            store.write("plugin", &Value::Object(fields)).is_ok()
+            store
+                .write("plugin", &Value::Object(fields))
+                .map_err(|e| e.to_string())
         })
-        .unwrap_or(false)
-    {
-        return Ok(());
-    }
+        .and_then(|written| written)
+        .map_err(super::breaker::state_error)?;
     let mut payload = None;
     for agent in AGENTS {
         let Some(record) = registration(&rt.d, agent) else {
@@ -1298,6 +1297,13 @@ mod tests {
     }
     impl Host for H {
         fn fetch(&self, r: Request) -> Result<Response, NetError> {
+            // An empty tarball stands for GitHub out of reach.
+            if self.tgz.is_empty() {
+                return Err(NetError {
+                    message: "offline".into(),
+                    ..NetError::default()
+                });
+            }
             let body = if r.url == API {
                 b"{\"tag_name\":\"v2.3.0\"}".to_vec()
             } else {
@@ -1431,6 +1437,24 @@ mod tests {
             json::stringify(&reg, None)
                 .unwrap()
                 .contains("purchasely-integrate")
+        );
+        let _ = fs::remove_dir_all(root);
+    }
+    /// TS `updatePlugins` propagates a failed release lookup to the foreground `update`; only the
+    /// detached background child drops it.
+    #[test]
+    fn foreground_plugin_update_reports_a_failed_lookup() {
+        let (root, mut rt) = sandbox("lookup");
+        fs::create_dir_all(root.join("state")).unwrap();
+        fs::write(
+            root.join("state/ai.plugin.json"),
+            r#"{"agents":{"opencode":{"method":"copy","targets":[],"version":"2.2.0","updated_at":1}}}"#,
+        )
+        .unwrap();
+        rt.d.host = Box::new(H { tgz: vec![] });
+        assert_eq!(
+            update_plugins(&rt, false).unwrap_err().code,
+            "AI_RELEASE_UNREADABLE"
         );
         let _ = fs::remove_dir_all(root);
     }

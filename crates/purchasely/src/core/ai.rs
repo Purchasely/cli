@@ -503,15 +503,33 @@ fn layout(d: &Deps, agent: &str, src: &Path) -> Result<Vec<(PathBuf, PathBuf)>, 
     Ok(out)
 }
 /// TS `rmSync(p, { recursive: true, force: true })`: a missing path is fine, any other failure throws.
+/// The dir moves aside in its parent first, and moves back with its marker if its removal fails: the
+/// retry still owns the target.
 fn rm_force(p: &Path) -> Result<(), CliError> {
-    match fs::remove_dir_all(p) {
-        Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(CliError::new(
+    let fail = |e: std::io::Error| {
+        CliError::new(
             EXIT::GENERIC,
             "INTERNAL_ERROR",
             vec![format!("{e}, rm '{}'", p.display())],
-        )),
-        _ => Ok(()),
+        )
+    };
+    let mark = fs::read(p.join(MARKER)).ok();
+    let mut aside = p.as_os_str().to_owned();
+    aside.push(format!(".purchasely-rm-{}", std::process::id()));
+    let aside = PathBuf::from(aside);
+    match fs::rename(p, &aside) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(e) => return Err(fail(e)),
+        Ok(()) => {}
     }
+    fs::remove_dir_all(&aside).map_err(|e| {
+        if fs::rename(&aside, p).is_ok()
+            && let Some(m) = &mark
+        {
+            let _ = fs::write(p.join(MARKER), m);
+        }
+        fail(e)
+    })
 }
 fn copy_layout(
     d: &Deps,
@@ -1492,9 +1510,43 @@ mod tests {
         let result = command_result(&rt, Verb::Uninstall, Some("cursor"), false);
         fs::set_permissions(&local, fs::Permissions::from_mode(0o755)).unwrap();
         assert!(result.is_err(), "{result:?}");
-        // As rmSync, the contents can go first: the dir that stays is still registered.
-        assert!(target.is_dir());
+        assert!(target.join(MARKER).exists());
         assert!(registration(&rt.d, "cursor").is_some());
+        // TS: once the permissions are fixed, the retry owns the target and removes it.
+        let rows = command_result(&rt, Verb::Uninstall, Some("cursor"), false).unwrap();
+        let Value::Array(rows) = rows else { panic!() };
+        assert_eq!(get_string(&rows[0], "action").as_deref(), Some("removed"));
+        assert!(!target.exists());
+        assert!(registration(&rt.d, "cursor").is_none());
+        let _ = fs::remove_dir_all(root);
+    }
+    /// A failure inside the target (after the marker may have gone) puts the dir and its marker back.
+    #[test]
+    fn uninstall_restores_the_marker_when_a_nested_removal_fails() {
+        use std::os::unix::fs::PermissionsExt;
+        let (root, rt) = sandbox("rm-nested");
+        let target = root.join("home/.cursor/plugins/local/purchasely");
+        let locked = target.join("skills");
+        fs::create_dir_all(&locked).unwrap();
+        fs::write(locked.join("file.md"), "x").unwrap();
+        fs::write(target.join(MARKER), "2.2.0\n").unwrap();
+        fs::create_dir_all(root.join("state")).unwrap();
+        fs::write(
+            root.join("state/ai.plugin.json"),
+            format!(
+                r#"{{"agents":{{"cursor":{{"method":"copy","targets":["{}"],"version":"2.2.0","updated_at":1}}}}}}"#,
+                target.display()
+            ),
+        )
+        .unwrap();
+        fs::set_permissions(&locked, fs::Permissions::from_mode(0o555)).unwrap();
+        let result = command_result(&rt, Verb::Uninstall, Some("cursor"), false);
+        fs::set_permissions(&locked, fs::Permissions::from_mode(0o755)).unwrap();
+        assert!(result.is_err(), "{result:?}");
+        assert_eq!(marker(&target).as_deref(), Some("2.2.0"));
+        command_result(&rt, Verb::Uninstall, Some("cursor"), false).unwrap();
+        assert!(!target.exists());
+        assert!(registration(&rt.d, "cursor").is_none());
         let _ = fs::remove_dir_all(root);
     }
     /// TS `install` checks the marker of every destination of `layout(d, a, src)` before any copy.

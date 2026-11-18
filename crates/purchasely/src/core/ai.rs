@@ -160,7 +160,12 @@ fn set(fields: &mut Vec<(String, Value)>, key: &str, value: Value) {
     }
 }
 /// TS `Session.put`: re-read, change the one agent, set `latest` when known, write.
-fn write_registration(d: &Deps, agent: &str, value: Option<Value>, latest: Option<&str>) {
+fn write_registration(
+    d: &Deps,
+    agent: &str,
+    value: Option<Value>,
+    latest: Option<&str>,
+) -> Result<(), CliError> {
     let old = plugin(d);
     let mut entries = if let Value::Object(xs) = agent_map(&old) {
         xs
@@ -180,8 +185,10 @@ fn write_registration(d: &Deps, agent: &str, value: Option<Value>, latest: Optio
     if let Some(tag) = latest {
         set(&mut root, "latest", Value::from(tag.to_owned()));
     }
-    let store = state_store(d);
-    let _ = store.write("plugin", &Value::Object(root));
+    // TS `Session.put` lets the write throw: the command fails instead of reporting a lost record.
+    state_store(d)
+        .write("plugin", &Value::Object(root))
+        .map_err(|e| super::breaker::state_error(e.to_string()))
 }
 fn arr_str(v: &[String]) -> Value {
     Value::Array(v.iter().cloned().map(Value::from).collect())
@@ -319,15 +326,24 @@ fn identity(d: &Deps, agent: &str, label: &str) -> Result<Value, String> {
             .join(" ")
     ))
 }
-fn refuse(d: &Deps, agent: &str, reg: &Value, reason: &str, drop: bool) -> Value {
+fn refuse(
+    d: &Deps,
+    agent: &str,
+    reg: &Value,
+    reason: &str,
+    drop: bool,
+    dry_run: bool,
+) -> Result<Value, CliError> {
     let version = get_string(reg, "version");
     let message = if drop {
         format!("{agent}: the plugin is gone from the agent. The record was dropped.")
     } else {
         format!("{agent}: {reason}. Nothing was changed.")
     };
-    if drop {
-        write_registration(d, agent, None, None);
+    // TS `refused`: a dry run changes no state.
+    if dry_run {
+    } else if drop {
+        write_registration(d, agent, None, None)?;
     } else {
         let mut updated = if let Value::Object(xs) = reg.clone() {
             xs
@@ -336,9 +352,9 @@ fn refuse(d: &Deps, agent: &str, reg: &Value, reason: &str, drop: bool) -> Value
         };
         updated.retain(|(k, _)| k != "last_error");
         updated.push(("last_error".into(), Value::from(message.clone())));
-        write_registration(d, agent, Some(Value::Object(updated)), None);
+        write_registration(d, agent, Some(Value::Object(updated)), None)?;
     }
-    agent_row(agent, "refused", version, Some(message), vec![])
+    Ok(agent_row(agent, "refused", version, Some(message), vec![]))
 }
 fn marker(path: &Path) -> Option<String> {
     fs::read_to_string(path.join(MARKER))
@@ -461,8 +477,9 @@ fn download_error() -> CliError {
         vec!["could not download the plugin release. Check your network.".into()],
     )
 }
-fn copy_layout(d: &Deps, agent: &str, src: &Path, version: &str) -> Result<Vec<PathBuf>, CliError> {
-    let dirs: Vec<(PathBuf, PathBuf)> = if agent == "cursor" {
+/// TS `layout(d, a, src)`: every (source, destination) dir of a copy agent, read from the payload.
+fn layout(d: &Deps, agent: &str, src: &Path) -> Vec<(PathBuf, PathBuf)> {
+    if agent == "cursor" {
         vec![(src.to_path_buf(), cursor_target(d))]
     } else {
         let mut out = Vec::new();
@@ -480,7 +497,10 @@ fn copy_layout(d: &Deps, agent: &str, src: &Path, version: &str) -> Result<Vec<P
         }
         out.push((src.join("references"), opencode_root(d).join("references")));
         out
-    };
+    }
+}
+fn copy_layout(d: &Deps, agent: &str, src: &Path, version: &str) -> Result<Vec<PathBuf>, CliError> {
+    let dirs = layout(d, agent, src);
     let mut written = Vec::new();
     for (from, to) in dirs {
         copy_to(&from, &to, version, d.pid).map_err(|_| download_error())?;
@@ -573,14 +593,14 @@ pub fn command_result(
                 tag,
                 raw_tag.as_deref(),
                 &mut payload,
-            ));
+            )?);
         } else {
             let store = state_store(&rt.d);
             let result = store.with_lock_timeout(300_000, || {
                 process_agent(&rt.d, a, verb, false, tag, raw_tag.as_deref(), &mut payload)
             });
             rows.push(match result {
-                Ok(value) => value,
+                Ok(value) => value?,
                 Err(_) => agent_row(
                     a,
                     "refused",
@@ -632,7 +652,7 @@ fn process_agent(
     tag: Option<&str>,
     raw_tag: Option<&str>,
     payload: &mut Option<(PathBuf, PathBuf)>,
-) -> Value {
+) -> Result<Value, CliError> {
     let current = registration(d, agent);
     let version = current.as_ref().and_then(|r| get_string(r, "version"));
     if verb == Verb::Install && current.is_none() {
@@ -640,7 +660,7 @@ fn process_agent(
             let found = is_good(d, agent, &native_list(agent))
                 .and_then(|r| native_entries(agent, &r.stdout));
             let Some(found) = found else {
-                return agent_row(
+                return Ok(agent_row(
                     agent,
                     "refused",
                     None,
@@ -648,10 +668,10 @@ fn process_agent(
                         "{agent}: the list of installed plugins could not be read. Nothing was changed."
                     )),
                     vec![],
-                );
+                ));
             };
             if !found.is_empty() {
-                return agent_row(
+                return Ok(agent_row(
                     agent,
                     "installed_by_hand",
                     None,
@@ -659,10 +679,10 @@ fn process_agent(
                         "{agent}: a plugin is already here that ai install did not install. Nothing was changed."
                     )),
                     vec![],
-                );
+                ));
             }
             if dry_run {
-                return planned_native(d, agent, verb, tag);
+                return Ok(planned_native(d, agent, verb, tag));
             }
             if agent != "gemini" {
                 let add = vec![
@@ -697,18 +717,18 @@ fn process_agent(
                         "Purchasely-AI-Plugin"
                     };
                     if !l.is_some_and(|r| r.stdout.contains(needle)) {
-                        return failed_step(agent, "marketplace add", &add, 1);
+                        return Ok(failed_step(agent, "marketplace add", &add, 1));
                     }
                 }
             }
             for args in agent_args(agent, Verb::Install) {
                 if is_good(d, agent, &args).is_none() {
-                    return failed_step(agent, "install", &args, 1);
+                    return Ok(failed_step(agent, "install", &args, 1));
                 }
             }
             let probe = match identity(d, agent, "install") {
                 Ok(v) => v,
-                Err(e) => return agent_row(agent, "failed", None, Some(e), vec![]),
+                Err(e) => return Ok(agent_row(agent, "failed", None, Some(e), vec![])),
             };
             let mut fields = vec![
                 ("method".into(), Value::from("native".to_owned())),
@@ -733,17 +753,23 @@ fn process_agent(
                 Value::from(tag.unwrap_or_default().to_owned()),
             ));
             fields.push(("updated_at".into(), Value::Number(d.host.now() as f64)));
-            write_registration(d, agent, Some(Value::Object(fields)), tag);
-            return agent_row(agent, "installed", tag.map(str::to_owned), None, vec![]);
+            write_registration(d, agent, Some(Value::Object(fields)), tag)?;
+            return Ok(agent_row(
+                agent,
+                "installed",
+                tag.map(str::to_owned),
+                None,
+                vec![],
+            ));
         }
         if dry_run {
             if targets(d, agent)
                 .iter()
                 .any(|p| p.exists() && marker(p).is_none())
             {
-                return hand_row(agent);
+                return Ok(hand_row(agent));
             }
-            return planned_copy(d, agent, verb, tag);
+            return Ok(planned_copy(d, agent, verb, tag));
         }
         let (dir, src) = match payload {
             Some(p) => p.clone(),
@@ -753,34 +779,55 @@ fn process_agent(
                     p
                 }
                 Err(e) => {
-                    return agent_row(agent, "failed", None, e.messages.first().cloned(), vec![]);
+                    return Ok(agent_row(
+                        agent,
+                        "failed",
+                        None,
+                        e.messages.first().cloned(),
+                        vec![],
+                    ));
                 }
             },
         };
         let _ = dir;
-        if targets(d, agent)
+        // TS `install`: the ownership marker of every destination is checked before any copy.
+        if layout(d, agent, &src)
             .iter()
-            .any(|p| p.exists() && marker(p).is_none())
+            .any(|(_, p)| p.exists() && marker(p).is_none())
         {
-            return hand_row(agent);
+            return Ok(hand_row(agent));
         }
         let written = match copy_layout(d, agent, &src, tag.unwrap_or_default()) {
             Ok(v) => v,
-            Err(e) => return agent_row(agent, "failed", None, e.messages.first().cloned(), vec![]),
+            Err(e) => {
+                return Ok(agent_row(
+                    agent,
+                    "failed",
+                    None,
+                    e.messages.first().cloned(),
+                    vec![],
+                ));
+            }
         };
         write_registration(
             d,
             agent,
             Some(copy_record(&written, tag.unwrap_or_default(), d.host.now())),
             tag,
-        );
-        return agent_row(agent, "installed", tag.map(str::to_owned), None, vec![]);
+        )?;
+        return Ok(agent_row(
+            agent,
+            "installed",
+            tag.map(str::to_owned),
+            None,
+            vec![],
+        ));
     }
     if verb == Verb::Install && current.is_some() {
         return process_agent(d, agent, Verb::Update, dry_run, tag, raw_tag, payload);
     }
     let Some(reg) = current else {
-        return agent_row(agent, "not_detected", None, None, vec![]);
+        return Ok(agent_row(agent, "not_detected", None, None, vec![]));
     };
     if matches!(agent, "gemini") && matches!(verb, Verb::Update | Verb::Uninstall) {
         let args = agent_args(agent, verb)[0].clone();
@@ -796,15 +843,16 @@ fn process_agent(
                     .join(" ")
             ),
             false,
+            dry_run,
         );
     }
     let own = owns(d, agent, &reg);
     if let Err((reason, drop)) = own {
-        return refuse(d, agent, &reg, &reason, drop);
+        return refuse(d, agent, &reg, &reason, drop, dry_run);
     }
     if verb == Verb::Uninstall {
         if dry_run {
-            return planned_agent(d, agent, verb, tag, Some(&reg));
+            return Ok(planned_agent(d, agent, verb, tag, Some(&reg)));
         }
         if matches!(agent, "claude" | "codex" | "copilot") {
             for args in agent_args(agent, verb) {
@@ -817,16 +865,16 @@ fn process_agent(
                 let _ = fs::remove_dir_all(p);
             }
         }
-        write_registration(d, agent, None, None);
-        return agent_row(agent, "removed", version, None, vec![]);
+        write_registration(d, agent, None, None)?;
+        return Ok(agent_row(agent, "removed", version, None, vec![]));
     }
     if matches!(agent, "cursor" | "opencode")
         && tag.is_some_and(|t| !newer(t, version.as_deref().unwrap_or("0.0.0")))
     {
-        return agent_row(agent, "up_to_date", version, None, vec![]);
+        return Ok(agent_row(agent, "up_to_date", version, None, vec![]));
     }
     if dry_run {
-        return planned_agent(d, agent, Verb::Update, tag, Some(&reg));
+        return Ok(planned_agent(d, agent, Verb::Update, tag, Some(&reg)));
     }
     if matches!(agent, "claude" | "codex" | "copilot") {
         for args in agent_args(agent, Verb::Update) {
@@ -860,7 +908,7 @@ fn process_agent(
             "updated_at",
             Value::Number(d.host.now() as f64),
         );
-        write_registration(d, agent, Some(Value::Object(fields)), tag);
+        write_registration(d, agent, Some(Value::Object(fields)), tag)?;
     } else {
         let (dir, src) = match payload {
             Some(p) => p.clone(),
@@ -901,9 +949,15 @@ fn process_agent(
             agent,
             Some(copy_record(&written, tag.unwrap_or_default(), d.host.now())),
             tag,
-        );
+        )?;
     }
-    agent_row(agent, "updated", tag.map(str::to_owned), None, vec![])
+    Ok(agent_row(
+        agent,
+        "updated",
+        tag.map(str::to_owned),
+        None,
+        vec![],
+    ))
 }
 
 fn failed_step(agent: &str, step: &str, args: &[String], code: i32) -> Value {
@@ -921,7 +975,12 @@ fn failed_step(agent: &str, step: &str, args: &[String], code: i32) -> Value {
         vec![],
     )
 }
-fn failed_registered(d: &Deps, agent: &str, reg: &Value, message: String) -> Value {
+fn failed_registered(
+    d: &Deps,
+    agent: &str,
+    reg: &Value,
+    message: String,
+) -> Result<Value, CliError> {
     let mut fields = if let Value::Object(fields) = reg.clone() {
         fields
     } else {
@@ -929,14 +988,14 @@ fn failed_registered(d: &Deps, agent: &str, reg: &Value, message: String) -> Val
     };
     fields.retain(|(key, _)| key != "last_error");
     fields.push(("last_error".into(), Value::from(message.clone())));
-    write_registration(d, agent, Some(Value::Object(fields)), None);
-    agent_row(
+    write_registration(d, agent, Some(Value::Object(fields)), None)?;
+    Ok(agent_row(
         agent,
         "failed",
         get_string(reg, "version"),
         Some(message),
         vec![],
-    )
+    ))
 }
 fn failed_registered_step(
     d: &Deps,
@@ -945,7 +1004,7 @@ fn failed_registered_step(
     step: &str,
     args: &[String],
     code: i32,
-) -> Value {
+) -> Result<Value, CliError> {
     let failed = failed_step(agent, step, args, code);
     failed_registered(
         d,
@@ -1107,11 +1166,11 @@ pub fn validate_request(
 }
 
 /// Update plugins that have a newer release. Native agent updates do not need the tarball.
-pub fn update_plugins(rt: &Runtime, background: bool) {
+pub fn update_plugins(rt: &Runtime, background: bool) -> Result<(), CliError> {
     if offline(&rt.d)
         || !matches!(agent_map(&plugin(&rt.d)), Value::Object(ref values) if !values.is_empty())
     {
-        return;
+        return Ok(());
     }
     let store = state_store(&rt.d);
     let timeout = if background { -1 } else { 300_000 };
@@ -1138,11 +1197,11 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
             store.write("plugin", &Value::Object(fields)).is_ok()
         });
         if !reserved.unwrap_or(false) {
-            return;
+            return Ok(());
         }
     }
     let Ok(raw_tag) = latest_tag(&rt.d) else {
-        return;
+        return Ok(());
     };
     let tag = version_tag(&raw_tag);
     if !store
@@ -1163,7 +1222,7 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
         })
         .unwrap_or(false)
     {
-        return;
+        return Ok(());
     }
     let mut payload = None;
     for agent in AGENTS {
@@ -1187,7 +1246,18 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
                 &mut payload,
             )
         });
-        if let Ok(row) = result
+        // TS: a failed state write throws out of `updatePlugins`.
+        let row = match result {
+            Ok(Ok(row)) => Some(row),
+            Ok(Err(e)) => {
+                if let Some((dir, _)) = payload {
+                    let _ = fs::remove_dir_all(dir);
+                }
+                return Err(e);
+            }
+            Err(_) => None,
+        };
+        if let Some(row) = row
             && !background
         {
             let action = get_string(&row, "action").unwrap_or_default();
@@ -1202,11 +1272,174 @@ pub fn update_plugins(rt: &Runtime, background: bool) {
     if let Some((dir, _)) = payload {
         let _ = fs::remove_dir_all(dir);
     }
+    Ok(())
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::deps::*;
+    use std::{collections::BTreeMap, process::Command};
+    /// GitHub and the agents, faked: the release is v2.3.0, its tarball is `tgz`, only opencode is detected.
+    struct H {
+        tgz: Vec<u8>,
+    }
+    impl Host for H {
+        fn fetch(&self, r: Request) -> Result<Response, NetError> {
+            let body = if r.url == API {
+                b"{\"tag_name\":\"v2.3.0\"}".to_vec()
+            } else {
+                self.tgz.clone()
+            };
+            Ok(Response {
+                status: 200,
+                body,
+                ..Response::default()
+            })
+        }
+        fn exec(&self, file: &str, args: &[String], _: ExecOpts) -> Result<ExecResult, ExecError> {
+            let code = match file {
+                "tar" => Command::new("tar")
+                    .args(args)
+                    .status()
+                    .map_or(1, |s| s.code().unwrap_or(1)),
+                "opencode" => 0,
+                _ => 1,
+            };
+            Ok(ExecResult {
+                code,
+                ..ExecResult::default()
+            })
+        }
+        fn prompt(&self, _: &str, _: bool) -> String {
+            String::new()
+        }
+        fn read_stdin(&self) -> String {
+            String::new()
+        }
+        fn now(&self) -> i64 {
+            1_700_000_000_000
+        }
+        fn wall_now(&self) -> i64 {
+            1_700_000_000_000
+        }
+        fn pid_alive(&self, _: u32) -> bool {
+            false
+        }
+        fn sleep(&self, _: i64) {}
+        fn stdout(&self, _: &str) {}
+        fn stderr(&self, _: &str) {}
+        fn keychain(&self) -> Option<&dyn Keychain> {
+            None
+        }
+        fn io(&self) -> Option<&dyn Io> {
+            None
+        }
+    }
+    /// A sandbox HOME, state and cache, and a two-skill plugin release.
+    fn sandbox(name: &str) -> (PathBuf, Runtime) {
+        let root = std::env::temp_dir().join(format!("ai-{name}-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&root);
+        let pkg = root.join("pkg/Purchasely-AI-Plugin-2.3.0/purchasely");
+        for dir in [
+            "skills/purchasely-integrate",
+            "skills/purchasely-extra",
+            "references",
+        ] {
+            fs::create_dir_all(pkg.join(dir)).unwrap();
+            fs::write(pkg.join(dir).join("file.md"), "release").unwrap();
+        }
+        let tgz = root.join("plugin.tgz");
+        let packed = Command::new("tar")
+            .arg("-czf")
+            .arg(&tgz)
+            .arg("-C")
+            .arg(root.join("pkg"))
+            .arg("Purchasely-AI-Plugin-2.3.0")
+            .status()
+            .unwrap();
+        assert!(packed.success());
+        let home = root.join("home");
+        fs::create_dir_all(&home).unwrap();
+        let mut env = BTreeMap::new();
+        env.insert("HOME".into(), home.to_string_lossy().into_owned());
+        let rt = Runtime::new(Deps {
+            host: Box::new(H {
+                tgz: fs::read(&tgz).unwrap(),
+            }),
+            env,
+            is_tty: false,
+            config_dir: root.join("config"),
+            state_dir: root.join("state"),
+            cache_dir: root.join("cache"),
+            version: "9.9.9".into(),
+            pid: std::process::id(),
+            name: "purchasely".into(),
+            host_url: String::new(),
+            ext: None,
+            self_exe: PathBuf::new(),
+            platform: "darwin",
+            stdout_tty: false,
+            columns: None,
+        });
+        (root, rt)
+    }
+    /// TS `install` checks the marker of every destination of `layout(d, a, src)` before any copy.
+    #[test]
+    fn opencode_install_keeps_an_unmarked_skill_of_the_payload() {
+        let (root, rt) = sandbox("hand-skill");
+        let mine = root.join("home/.config/opencode/skills/purchasely-extra");
+        fs::create_dir_all(&mine).unwrap();
+        fs::write(mine.join("my-content.md"), "mine").unwrap();
+        let rows = command_result(&rt, Verb::Install, Some("opencode"), false).unwrap();
+        let Value::Array(rows) = rows else { panic!() };
+        assert_eq!(
+            get_string(&rows[0], "action").as_deref(),
+            Some("installed_by_hand")
+        );
+        assert_eq!(
+            fs::read_to_string(mine.join("my-content.md")).unwrap(),
+            "mine"
+        );
+        assert!(
+            !root
+                .join("home/.config/opencode/skills/purchasely-integrate")
+                .exists()
+        );
+        assert!(registration(&rt.d, "opencode").is_none());
+        let _ = fs::remove_dir_all(root);
+    }
+    /// TS `refused` changes the record only when `!s.dry`.
+    #[test]
+    fn dry_run_refusal_leaves_the_record() {
+        let (root, rt) = sandbox("dry-refusal");
+        fs::create_dir_all(root.join("home/.cursor")).unwrap();
+        fs::create_dir_all(root.join("state")).unwrap();
+        let state = root.join("state/ai.plugin.json");
+        let gone = root.join("home/.cursor/plugins/local/purchasely");
+        let text = format!(
+            r#"{{"agents":{{"cursor":{{"method":"copy","targets":["{}"],"version":"2.2.0","updated_at":1}},"opencode":{{"method":"copy","targets":["{}"],"version":"2.2.0","updated_at":1}}}}}}"#,
+            gone.display(),
+            root.join("state").display()
+        );
+        fs::write(&state, &text).unwrap();
+        for agent in ["cursor", "opencode"] {
+            let rows = command_result(&rt, Verb::Update, Some(agent), true).unwrap();
+            let Value::Array(rows) = rows else { panic!() };
+            assert_eq!(get_string(&rows[0], "action").as_deref(), Some("refused"));
+        }
+        assert_eq!(fs::read_to_string(&state).unwrap(), text);
+        let _ = fs::remove_dir_all(root);
+    }
+    /// TS `Session.put` lets the state write throw: no "installed" without its record.
+    #[test]
+    fn failed_registration_write_fails_the_install() {
+        let (root, rt) = sandbox("record-write");
+        fs::create_dir_all(root.join("state/ai.plugin.json")).unwrap();
+        let e = command_result(&rt, Verb::Install, Some("opencode"), false).unwrap_err();
+        assert_eq!((e.exit, e.code.as_str()), (EXIT::GENERIC, "INTERNAL_ERROR"));
+        let _ = fs::remove_dir_all(root);
+    }
     #[test]
     fn agent_table_has_six_agents() {
         assert_eq!(AGENTS.len(), 6);

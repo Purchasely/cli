@@ -8,10 +8,10 @@ fn update(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let background = p.flag("background");
     if background {
         let _ = run_update(rt, true);
-        ai::update_plugins(rt, true);
+        let _ = ai::update_plugins(rt, true);
     } else {
         run_update(rt, false)?;
-        ai::update_plugins(rt, false);
+        ai::update_plugins(rt, false)?;
     }
     Ok(())
 }

@@ -13,6 +13,7 @@ jobs:
     outputs:
       version: ${{ steps.release.outputs.version }}
       native_count: ${{ steps.release.outputs.native_count }}
+      bridge_releases: ${{ steps.release.outputs.bridge_releases }}
       prerelease: ${{ steps.release.outputs.prerelease }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -28,8 +29,9 @@ jobs:
           echo "bridge_releases=$bridge_releases" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           if [[ "$version" == *-* ]]; then echo 'prerelease=true' >> "$GITHUB_OUTPUT"; else echo 'prerelease=false' >> "$GITHUB_OUTPUT"; fi
-          # --paginate applies --jq to each page: add the per-page counts.
-          count=$(gh api repos/${GITHUB_REPOSITORY}/releases --paginate --jq '[.[] | select(.draft == false and .prerelease == false and .tag_name != "v0.9.0" and (.tag_name | ltrimstr("v") | split(".")[0] | tonumber) >= 1)] | length' | awk '{ n += $1 } END { print n + 0 }')
+          # --paginate applies --jq to each page: add the per-page counts. A rerun finds its own tag published:
+          # it is not a previous release.
+          count=$(gh api repos/${GITHUB_REPOSITORY}/releases --paginate --jq '[.[] | select(.draft == false and .prerelease == false and .tag_name != "v0.9.0" and .tag_name != "'"$GITHUB_REF_NAME"'" and (.tag_name | ltrimstr("v") | split(".")[0] | tonumber) >= 1)] | length' | awk '{ n += $1 } END { print n + 0 }')
           echo "native_count=$count" >> "$GITHUB_OUTPUT"
 
   build:
@@ -62,7 +64,28 @@ jobs:
           # No checkout in this job: gh needs the repository by name.
           GH_REPO: ${{ github.repository }}
           VERSION: ${{ needs.prepare.outputs.version }}
+          NATIVE_COUNT: ${{ needs.prepare.outputs.native_count }}
+          BRIDGE_RELEASES: ${{ needs.prepare.outputs.bridge_releases }}
         run: |
+          if [ "$VERSION" = 0.9.0 ]; then
+            expected=$(printf '%s\n' SHA256SUMS purchasely-0.9.0.tgz | LC_ALL=C sort)
+          else
+            expected=$(printf '%s\n' SHA256SUMS purchasely-"$VERSION"-darwin-arm64.tar.gz purchasely-"$VERSION"-darwin-x64.tar.gz purchasely-"$VERSION"-linux-arm64.tar.gz purchasely-"$VERSION"-linux-x64.tar.gz | LC_ALL=C sort)
+          fi
+          # A rerun finds the release published: its assets are immutable. Check them and change nothing.
+          if gh release view "v$VERSION" --json tagName >/dev/null 2>&1; then
+            published="$RUNNER_TEMP/published"
+            rm -rf "$published"
+            gh release download "v$VERSION" -D "$published"
+            test "$(cd "$published" && ls | LC_ALL=C sort)" = "$expected"
+            (cd "$published" && sha256sum -c SHA256SUMS)
+            exit 0
+          fi
+          # Plan 4.6: the 2 window releases and the third native release tell a stranded copy to reinstall.
+          notes=
+          if [[ "$VERSION" != *-* ]] && [ "$VERSION" != 0.9.0 ] && [ "$((NATIVE_COUNT + 1))" -le "$((BRIDGE_RELEASES + 1))" ]; then
+            notes="A copy older than 0.9.0 updates through the 0.9.0 bridge during the first $BRIDGE_RELEASES native releases. A copy that did not start in that time cannot update itself. Install it again: \`curl -fsSL https://cli.purchasely.io/install.sh | sh\`."
+          fi
           if [ "$VERSION" = 0.9.0 ]; then
             gh release create "v$VERSION" "out/purchasely-0.9.0.tgz" "out/SHA256SUMS" --title "Purchasely $VERSION" --notes "Bridge release."
           else
@@ -70,7 +93,7 @@ jobs:
             if [[ "$VERSION" == *-* ]]; then
               gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes --prerelease
             else
-              gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes
+              gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes --notes "$notes"
             fi
           fi
 
@@ -128,6 +151,8 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add Formula/purchasely.rb
+          # A rerun of the release finds the formula already written.
+          if git diff --cached --quiet; then exit 0; fi
           git commit -m "chore(formula): purchasely $VERSION"
           for attempt in 1 2 3; do
             git fetch origin main

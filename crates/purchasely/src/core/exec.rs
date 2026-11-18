@@ -58,6 +58,8 @@ pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult
     .stdout(Stdio::piped())
     .stderr(Stdio::piped());
     let mut child = spawn(&mut c).map_err(exec_error)?;
+    // TS `execFile`: the timeout starts at spawn, and the input is written while the parent waits.
+    let start = Instant::now();
     let input = opts.input.take();
     let mut stdout = child
         .stdout
@@ -69,12 +71,13 @@ pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult
         .ok_or_else(|| ExecError::Other("missing child stderr".into()))?;
     let out_thread = std::thread::spawn(move || read_bounded(&mut stdout));
     let err_thread = std::thread::spawn(move || read_bounded(&mut stderr));
-    if let Some(input) = input
-        && let Some(mut stdin) = child.stdin.take()
-    {
-        let _ = stdin.write_all(input.as_bytes());
-    }
-    let start = Instant::now();
+    // The child may exit or be killed before it reads the input: the write error is ignored, as in TS.
+    let in_thread = match (input, child.stdin.take()) {
+        (Some(input), Some(mut stdin)) => Some(std::thread::spawn(move || {
+            let _ = stdin.write_all(input.as_bytes());
+        })),
+        _ => None,
+    };
     let mut timed = false;
     let mut status = None;
     loop {
@@ -109,6 +112,9 @@ pub fn run(file: &str, args: &[String], mut opts: ExecOpts) -> Result<ExecResult
             break;
         }
         std::thread::sleep(Duration::from_millis(5));
+    }
+    if let Some(t) = in_thread {
+        let _ = t.join();
     }
     let (out_res, out) = out_thread
         .join()
@@ -172,6 +178,28 @@ mod tests {
             run("/path/that/does/not/exist", &[], ExecOpts::default()).unwrap_err(),
             ExecError::NotFound
         )
+    }
+    /// TS `execFile` starts the timeout at spawn and writes `input` while it waits: a child that never
+    /// reads its stdin still times out.
+    #[test]
+    fn timeout_covers_the_write_of_stdin() {
+        let start = Instant::now();
+        let r = run(
+            "sh",
+            &["-c".into(), "exec sleep 5".into()],
+            ExecOpts {
+                input: Some("x".repeat(1 << 20)),
+                timeout_ms: 50,
+                ..ExecOpts::default()
+            },
+        )
+        .unwrap();
+        assert!(r.timed_out);
+        assert!(
+            start.elapsed() < Duration::from_secs(3),
+            "{:?}",
+            start.elapsed()
+        );
     }
     #[test]
     fn timeout_terminates_child() {

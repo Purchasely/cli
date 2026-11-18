@@ -10,6 +10,12 @@ const TARGETS: [&str; 4] = ["darwin-arm64", "darwin-x64", "linux-arm64", "linux-
 
 struct Sandbox(PathBuf);
 
+impl Drop for Sandbox {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
+}
+
 impl Sandbox {
     fn new() -> Self {
         let path = std::env::temp_dir().join(format!(
@@ -439,5 +445,141 @@ fn reference_page_and_man_page_are_bundled() {
     assert_eq!(
         String::from_utf8_lossy(&man.stdout).trim(),
         ".TH PURCHASELY 1"
+    );
+}
+
+/// The `run:` script of the step `name` in a workflow, dedented.
+fn step_script(workflow: &str, name: &str) -> String {
+    let lines: Vec<&str> = workflow.lines().collect();
+    let at = lines
+        .iter()
+        .position(|l| l.trim() == format!("- name: {name}"))
+        .unwrap_or_else(|| panic!("no step {name}"));
+    let run = (at..lines.len())
+        .find(|&i| lines[i].trim() == "run: |")
+        .unwrap();
+    let indent = |l: &str| l.len() - l.trim_start().len();
+    let body: Vec<&str> = lines[run + 1..]
+        .iter()
+        .take_while(|l| l.trim().is_empty() || indent(l) > indent(lines[run]))
+        .copied()
+        .collect();
+    let cut = body
+        .iter()
+        .filter(|l| !l.trim().is_empty())
+        .map(|l| indent(l))
+        .min()
+        .unwrap();
+    body.iter()
+        .map(|l| l.get(cut..).unwrap_or(""))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// The jobs of a workflow, by name, with their text.
+fn jobs(workflow: &str) -> Vec<(String, String)> {
+    let mut out: Vec<(String, String)> = Vec::new();
+    let mut inside = false;
+    for line in workflow.lines() {
+        if line == "jobs:" {
+            inside = true;
+            continue;
+        }
+        if !inside {
+            continue;
+        }
+        let name = line
+            .strip_prefix("  ")
+            .filter(|l| !l.starts_with(' ') && l.ends_with(':'));
+        match name {
+            Some(n) => out.push((n.trim_end_matches(':').to_owned(), String::new())),
+            None => {
+                if let Some((_, text)) = out.last_mut() {
+                    text.push_str(line);
+                    text.push('\n');
+                }
+            }
+        }
+    }
+    out
+}
+
+/// A job that runs `gh release` outside a checkout must name its repository, or gh stops with
+/// "not a git repository".
+#[test]
+fn release_jobs_give_gh_its_repository() {
+    for file in ["release.yml", "build.yml"] {
+        let workflow = fs::read_to_string(repo().join(".github/workflows").join(file)).unwrap();
+        for (job, text) in jobs(&workflow) {
+            if text.contains("gh release ") {
+                assert!(
+                    text.contains("actions/checkout@")
+                        || text.contains("GH_REPO: ${{ github.repository }}"),
+                    "{file} job {job} runs gh release without a repository"
+                );
+            }
+        }
+    }
+}
+
+/// The pack step of build.yml, run as on a runner: the window build downloads the immutable v0.9.0
+/// bridge next to a freshly packed one, and ships the downloaded one.
+#[test]
+fn bridge_window_step_ships_the_published_bridge() {
+    let sandbox = Sandbox::new();
+    let work = sandbox.path("work");
+    fs::create_dir_all(&work).unwrap();
+    for entry in fs::read_dir(repo()).unwrap() {
+        let entry = entry.unwrap();
+        let name = entry.file_name();
+        if name != "out" && name != "target" && name != ".git" {
+            std::os::unix::fs::symlink(entry.path(), work.join(&name)).unwrap();
+        }
+    }
+    let published = sandbox.path("published");
+    fs::create_dir_all(&published).unwrap();
+    fs::write(
+        published.join("purchasely-0.9.0.tgz"),
+        "published v0.9.0 bridge",
+    )
+    .unwrap();
+    let fakebin = sandbox.path("fakebin");
+    fs::create_dir_all(&fakebin).unwrap();
+    // As gh: a download refuses to replace an existing file without --clobber.
+    executable(
+        &fakebin.join("gh"),
+        "#!/bin/sh\n[ \"$1 $2\" = 'release download' ] || exit 1\ndest=.; pat=; prev=\nfor a in \"$@\"; do [ \"$prev\" = -D ] && dest=$a; [ \"$prev\" = -p ] && pat=$a; prev=$a; done\nmkdir -p \"$dest\"\nif [ -e \"$dest/$pat\" ]; then echo \"$dest/$pat already exists\" >&2; exit 1; fi\ncp \"$FAKE_RELEASE/$pat\" \"$dest/$pat\"\n",
+    );
+    let runner_temp = sandbox.path("runner-temp");
+    fs::create_dir_all(&runner_temp).unwrap();
+    let workflow = fs::read_to_string(repo().join(".github/workflows/build.yml")).unwrap();
+    let script = step_script(&workflow, "Pack release and bridge");
+    let output = Command::new("bash")
+        .args(["-e", "-c", &script])
+        .current_dir(&work)
+        .env(
+            "PATH",
+            format!("{}:/usr/bin:/bin:/usr/sbin:/sbin", fakebin.display()),
+        )
+        .env("FAKE_RELEASE", &published)
+        .env("RUNNER_TEMP", &runner_temp)
+        .env("GH_TOKEN", "dummy")
+        .env("P12B_BIN_DIR", sandbox.path("bins"))
+        .env(
+            "P12B_REFERENCE_BIN",
+            sandbox.path("bins/linux-x64/purchasely"),
+        )
+        .env("VERSION", "1.0.0")
+        .env("PREVIOUS_NATIVE_RELEASES", "0")
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(
+        fs::read_to_string(work.join("out/native/purchasely-0.9.0.tgz")).unwrap(),
+        "published v0.9.0 bridge"
     );
 }

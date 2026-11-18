@@ -152,10 +152,15 @@ jobs:
           test "$bridge_bytes" -le 25165824
           # A PR build has no VERSION: it packs only, the bridge window needs the published v0.9.0.
           if [ -n "$VERSION" ] && [ "$version" != 0.9.0 ] && [ "$((${PREVIOUS_NATIVE_RELEASES:-0} + 1))" -le "$bridge_releases" ]; then
-            gh release download v0.9.0 -p purchasely-0.9.0.tgz -D out/bridge
+            # out/bridge holds the bridge packed above: the window ships the published, immutable asset.
+            published="$RUNNER_TEMP/published-bridge"
+            rm -rf "$published"
+            gh release download v0.9.0 -p purchasely-0.9.0.tgz -D "$published"
             count=$((PREVIOUS_NATIVE_RELEASES + 1))
-            P12B_BRIDGE_ARCHIVE=out/bridge/purchasely-0.9.0.tgz sh scripts/pack-release.sh --version "$version" --native "$version" --native-release-count "$count" out/window
-            mv out/window/* out/native/
+            P12B_BRIDGE_ARCHIVE="$published/purchasely-0.9.0.tgz" sh scripts/pack-release.sh --version "$version" --native "$version" --native-release-count "$count" out/window
+            # The window pack is a whole native pack plus the bridge: it replaces out/native (both hold assets/).
+            rm -rf out/native
+            mv out/window out/native
           fi
       - name: Verify bridge with the frozen installer and real binaries
         if: inputs.version == '0.9.0' || inputs.version == ''

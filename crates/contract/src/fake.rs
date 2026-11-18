@@ -377,7 +377,7 @@ impl FakeHost {
             code: result["code"].as_i64().unwrap_or(0) as i32,
             stdout: result["stdout"].as_str().unwrap_or_default().into(),
             stderr: result["stderr"].as_str().unwrap_or_default().into(),
-            timed_out: result["timed_out"].as_bool().unwrap_or(false),
+            timed_out: result["timedOut"].as_bool().unwrap_or(false),
         })
     }
 }
@@ -869,10 +869,11 @@ mod tests {
         assert!(host.fetch(r).is_err());
         assert!(host.finish().is_err());
     }
+    /// The recordings keep the field of the TS exec result: `timedOut`.
     #[test]
     fn exec_replays_options_and_result() {
         let host = FakeHost::from_step(
-            &json!({"execs":[{"file":"cmd","args":["a"],"opts":{"timeoutMs":50,"detach":false},"result":{"code":3,"stdout":"out","stderr":"err","timed_out":true}}]}),
+            &json!({"execs":[{"file":"cmd","args":["a"],"opts":{"timeoutMs":50,"detach":false},"result":{"code":3,"stdout":"out","stderr":"err","timedOut":true}}]}),
         );
         let result = host
             .exec(

@@ -12,21 +12,28 @@ fn cell(v: &Value) -> String {
         _ => json::stringify(v, None).unwrap_or_default(),
     }
 }
+/// TS `grid`: lengths, cuts and padding count UTF-16 code units, as JS strings do.
 fn grid(rows: &[Vec<String>], width: usize) -> String {
     if rows.is_empty() {
         return String::new();
     }
+    let rows: Vec<Vec<Vec<u16>>> = rows
+        .iter()
+        .map(|r| r.iter().map(|c| c.encode_utf16().collect()).collect())
+        .collect();
     let n = rows[0].len();
     let mut widths: Vec<usize> = (0..n)
         .map(|i| {
             rows.iter()
-                .map(|r| r.get(i).map_or(0, String::len))
+                .map(|r| r.get(i).map_or(0, Vec::len))
                 .max()
                 .unwrap_or(0)
         })
         .collect();
     while widths.iter().sum::<usize>() + 2 * n.saturating_sub(1) > width {
-        let Some((i, _)) = widths.iter().enumerate().max_by_key(|(_, w)| *w) else {
+        // `widths.indexOf(Math.max(...widths))`: the first widest column.
+        let max = widths.iter().copied().max().unwrap_or(0);
+        let Some(i) = widths.iter().position(|w| *w == max) else {
             break;
         };
         if widths[i] <= 3 {
@@ -40,12 +47,15 @@ fn grid(rows: &[Vec<String>], width: usize) -> String {
                 .enumerate()
                 .map(|(i, c)| {
                     let w = widths[i];
-                    let cut = if c.len() > w {
-                        format!("{}...", &c[..w.saturating_sub(3)])
+                    let mut cut = if c.len() > w {
+                        // `c.slice(0, w - 3)`: a cut surrogate pair prints as U+FFFD.
+                        format!("{}...", String::from_utf16_lossy(&c[..w.saturating_sub(3)]))
                     } else {
-                        c.clone()
+                        String::from_utf16_lossy(c)
                     };
-                    format!("{cut:<w$}")
+                    let units = c.len().min(w);
+                    cut.extend(std::iter::repeat_n(' ', w - units));
+                    cut
                 })
                 .collect::<Vec<_>>()
                 .join("  ")
@@ -263,6 +273,26 @@ pub fn emit(d: &Deps, value: &Value, opts: &EmitOptions) -> Result<(), super::er
 }
 #[cfg(test)]
 mod tests {
+    /// Oracle: TS `grid` in Node 22. Widths, cuts and padding count UTF-16 code units, the widest column
+    /// is the first one of that width, and a cut surrogate pair prints as U+FFFD.
+    #[test]
+    fn grid_counts_utf16_units_like_js() {
+        let e = "é".repeat(100);
+        let five = format!("{}x", "😀".repeat(5));
+        let ten = "😀".repeat(10);
+        let rows = [
+            ("name", e.as_str()),
+            ("emoji", five.as_str()),
+            ("cut", ten.as_str()),
+            ("aaaaaaaaaa", "bbbbbbbbbb"),
+        ];
+        assert_eq!(
+            to_table(&rows, 30),
+            "key         value\nname        ééééééééééééééé...\nemoji       😀😀😀😀😀x\ncut         😀😀😀😀😀😀😀\u{fffd}...\naaaaaaaaaa  bbbbbbbbbb"
+        );
+        assert_eq!(to_table(&[("aaaaa", "bbbbb")], 9), "key  v...\n...  b...");
+    }
+
     use super::*;
     #[test]
     fn table_falls_back_to_key_value_as_in_ts() {

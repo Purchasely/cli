@@ -669,3 +669,51 @@ fn bridge_acceptance_step_runs_in_a_runner_layout() {
         "0.9.0"
     );
 }
+
+/// Every `uses: <action>@<sha> # <version>` pin: the same action and version must have the same commit
+/// (a swapped character makes a commit that does not exist, and the job fails when it starts).
+fn check_action_pins(folders: &[PathBuf]) {
+    let mut seen: std::collections::BTreeMap<(String, String), (String, String)> =
+        Default::default();
+    let mut count = 0;
+    for folder in folders {
+        for entry in fs::read_dir(folder).unwrap() {
+            let path = entry.unwrap().path();
+            if path.extension().is_none_or(|e| e != "yml") {
+                continue;
+            }
+            for line in fs::read_to_string(&path).unwrap().lines() {
+                let Some(rest) = line.trim().trim_start_matches("- ").strip_prefix("uses: ") else {
+                    continue;
+                };
+                if rest.starts_with("./") {
+                    continue;
+                }
+                let (spec, version) = rest.split_once(" # ").unwrap_or((rest, ""));
+                let (action, sha) = spec.split_once('@').unwrap();
+                // A tag ref (not a commit) has nothing to compare.
+                if !(sha.len() == 40 && sha.bytes().all(|b| b.is_ascii_hexdigit())) {
+                    continue;
+                }
+                count += 1;
+                let key = (action.to_owned(), version.trim().to_owned());
+                let here = format!("{}", path.display());
+                if let Some((other, at)) = seen.get(&key) {
+                    assert_eq!(
+                        sha, other,
+                        "{action} {} differs between {at} and {here}",
+                        key.1
+                    );
+                } else {
+                    seen.insert(key, (sha.to_owned(), here));
+                }
+            }
+        }
+    }
+    assert!(count > 0);
+}
+
+#[test]
+fn action_pins_agree() {
+    check_action_pins(&[repo().join(".github/workflows")]);
+}

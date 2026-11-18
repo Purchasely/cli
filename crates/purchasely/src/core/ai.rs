@@ -502,6 +502,17 @@ fn layout(d: &Deps, agent: &str, src: &Path) -> Result<Vec<(PathBuf, PathBuf)>, 
     out.push((src.join("references"), opencode_root(d).join("references")));
     Ok(out)
 }
+/// TS `rmSync(p, { recursive: true, force: true })`: a missing path is fine, any other failure throws.
+fn rm_force(p: &Path) -> Result<(), CliError> {
+    match fs::remove_dir_all(p) {
+        Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(CliError::new(
+            EXIT::GENERIC,
+            "INTERNAL_ERROR",
+            vec![format!("{e}, rm '{}'", p.display())],
+        )),
+        _ => Ok(()),
+    }
+}
 fn copy_layout(
     d: &Deps,
     dirs: Vec<(PathBuf, PathBuf)>,
@@ -873,7 +884,7 @@ fn process_agent(
             }
         } else {
             for p in record_targets(d, &reg) {
-                let _ = fs::remove_dir_all(p);
+                rm_force(&p)?;
             }
         }
         write_registration(d, agent, None, None)?;
@@ -953,7 +964,7 @@ fn process_agent(
         };
         for old in record_targets(d, &reg) {
             if !written.contains(&old) {
-                let _ = fs::remove_dir_all(old);
+                rm_force(&old)?;
             }
         }
         write_registration(
@@ -1456,6 +1467,34 @@ mod tests {
             update_plugins(&rt, false).unwrap_err().code,
             "AI_RELEASE_UNREADABLE"
         );
+        let _ = fs::remove_dir_all(root);
+    }
+    /// TS `rmSync` throws when a target cannot be removed, before `s.put(a, null)`: the plugin and its
+    /// registration stay, so the user can try again.
+    #[test]
+    fn uninstall_keeps_the_registration_when_removal_fails() {
+        use std::os::unix::fs::PermissionsExt;
+        let (root, rt) = sandbox("rm-fails");
+        let local = root.join("home/.cursor/plugins/local");
+        let target = local.join("purchasely");
+        fs::create_dir_all(&target).unwrap();
+        fs::write(target.join(MARKER), "2.2.0\n").unwrap();
+        fs::create_dir_all(root.join("state")).unwrap();
+        fs::write(
+            root.join("state/ai.plugin.json"),
+            format!(
+                r#"{{"agents":{{"cursor":{{"method":"copy","targets":["{}"],"version":"2.2.0","updated_at":1}}}}}}"#,
+                target.display()
+            ),
+        )
+        .unwrap();
+        fs::set_permissions(&local, fs::Permissions::from_mode(0o555)).unwrap();
+        let result = command_result(&rt, Verb::Uninstall, Some("cursor"), false);
+        fs::set_permissions(&local, fs::Permissions::from_mode(0o755)).unwrap();
+        assert!(result.is_err(), "{result:?}");
+        // As rmSync, the contents can go first: the dir that stays is still registered.
+        assert!(target.is_dir());
+        assert!(registration(&rt.d, "cursor").is_some());
         let _ = fs::remove_dir_all(root);
     }
     /// TS `install` checks the marker of every destination of `layout(d, a, src)` before any copy.

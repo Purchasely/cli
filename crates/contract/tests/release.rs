@@ -583,3 +583,89 @@ fn bridge_window_step_ships_the_published_bridge() {
         "published v0.9.0 bridge"
     );
 }
+
+/// The real-bridge acceptance step of build.yml, run as on an Ubuntu runner (dash as sh, no SHELL, no
+/// token) with crate version 0.9.0: the frozen installer installs the packed bridge.
+#[test]
+fn bridge_acceptance_step_runs_in_a_runner_layout() {
+    let which = |program: &str| {
+        let out = Command::new("sh")
+            .args(["-c", &format!("command -v {program}")])
+            .output()
+            .unwrap();
+        String::from_utf8_lossy(&out.stdout).trim().to_owned()
+    };
+    let node = which("node");
+    if node.is_empty() {
+        eprintln!("skip: node is unavailable for the frozen installer check");
+        return;
+    }
+    let sandbox = Sandbox::new();
+    let work = sandbox.path("work");
+    fs::create_dir_all(work.join("crates/purchasely")).unwrap();
+    fs::create_dir_all(work.join("crates/contract/tests")).unwrap();
+    for entry in fs::read_dir(repo()).unwrap() {
+        let entry = entry.unwrap();
+        let name = entry.file_name();
+        if !["out", "target", ".git", "crates"].contains(&name.to_str().unwrap()) {
+            std::os::unix::fs::symlink(entry.path(), work.join(&name)).unwrap();
+        }
+    }
+    fs::write(
+        work.join("crates/purchasely/Cargo.toml"),
+        "[package]\nname = \"purchasely\"\nversion = \"0.9.0\"\n",
+    )
+    .unwrap();
+    std::os::unix::fs::symlink(
+        repo().join("crates/contract/tests/fixtures"),
+        work.join("crates/contract/tests/fixtures"),
+    )
+    .unwrap();
+    let packed = sandbox.pack(&["--bridge", work.join("out/bridge").to_str().unwrap()]);
+    assert!(
+        packed.status.success(),
+        "{}",
+        String::from_utf8_lossy(&packed.stderr)
+    );
+    let shbin = sandbox.path("shbin");
+    fs::create_dir_all(&shbin).unwrap();
+    let dash = which("dash");
+    if !dash.is_empty() {
+        std::os::unix::fs::symlink(&dash, shbin.join("sh")).unwrap();
+    }
+    let runner_temp = sandbox.path("runner-temp");
+    fs::create_dir_all(&runner_temp).unwrap();
+    let node_dir = Path::new(&node).parent().unwrap().to_path_buf();
+    let workflow = fs::read_to_string(repo().join(".github/workflows/build.yml")).unwrap();
+    let script = step_script(
+        &workflow,
+        "Verify bridge with the frozen installer and real binaries",
+    );
+    let output = Command::new("bash")
+        .args(["-e", "-c", &script])
+        .current_dir(&work)
+        .env_clear()
+        .env(
+            "PATH",
+            format!(
+                "{}:{}:/usr/bin:/bin:/usr/sbin:/sbin",
+                shbin.display(),
+                node_dir.display()
+            ),
+        )
+        .env("RUNNER_TEMP", &runner_temp)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(
+        fs::read_to_string(runner_temp.join("bridge-root/current-version"))
+            .unwrap()
+            .trim(),
+        "0.9.0"
+    );
+}

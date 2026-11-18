@@ -292,16 +292,7 @@ fn dispatch(
 
 fn default_deps(program: Program) -> Deps {
     let env: BTreeMap<String, String> = std::env::vars().collect();
-    let home = env
-        .get("HOME")
-        .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from("."));
-    let xdg = |name: &str, fallback: PathBuf| {
-        env.get(name)
-            .map(PathBuf::from)
-            .unwrap_or(fallback)
-            .join("purchasely")
-    };
+    let [config_dir, state_dir, cache_dir] = data_dirs(&env, account_home);
     let host: Box<dyn Host> = Box::new(RealHost::new(env.clone()));
     let columns = terminal_columns();
     let platform = if cfg!(target_os = "macos") {
@@ -313,9 +304,9 @@ fn default_deps(program: Program) -> Deps {
         host,
         env: env.clone(),
         is_tty: io::stdin().is_terminal() && io::stderr().is_terminal(),
-        config_dir: xdg("XDG_CONFIG_HOME", home.join(".config")),
-        state_dir: xdg("XDG_STATE_HOME", home.join(".local/state")),
-        cache_dir: xdg("XDG_CACHE_HOME", home.join(".cache")),
+        config_dir,
+        state_dir,
+        cache_dir,
         version: program.version.to_owned(),
         pid: std::process::id(),
         name: program.name.to_owned(),
@@ -326,6 +317,52 @@ fn default_deps(program: Program) -> Deps {
         stdout_tty: io::stdout().is_terminal(),
         columns,
     }
+}
+
+/// The home directory of the account in the user database (libuv `uv_os_homedir` without HOME).
+fn account_home() -> PathBuf {
+    let mut buf = vec![0 as libc::c_char; 16384];
+    let mut pwd = std::mem::MaybeUninit::<libc::passwd>::zeroed();
+    let mut found = std::ptr::null_mut();
+    // SAFETY: getpwuid_r writes into pwd and buf, which outlive the read of pw_dir below.
+    let rc = unsafe {
+        libc::getpwuid_r(
+            libc::getuid(),
+            pwd.as_mut_ptr(),
+            buf.as_mut_ptr(),
+            buf.len(),
+            &mut found,
+        )
+    };
+    if rc != 0 || found.is_null() {
+        return PathBuf::from(".");
+    }
+    let dir = unsafe { std::ffi::CStr::from_ptr((*found).pw_dir) };
+    PathBuf::from(<std::ffi::OsStr as std::os::unix::ffi::OsStrExt>::from_bytes(dir.to_bytes()))
+}
+
+/// TS `main.ts`: `join(env.XDG_CONFIG_HOME || join(homedir(), ".config"), "purchasely")`, and the same for state
+/// and cache. `homedir()` reads HOME when it is set, else the account database.
+fn data_dirs(
+    env: &BTreeMap<String, String>,
+    account_home: impl FnOnce() -> PathBuf,
+) -> [PathBuf; 3] {
+    let home = env
+        .get("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(account_home);
+    let xdg = |name: &str, fallback: PathBuf| {
+        env.get(name)
+            .filter(|v| !v.is_empty())
+            .map(PathBuf::from)
+            .unwrap_or(fallback)
+            .join("purchasely")
+    };
+    [
+        xdg("XDG_CONFIG_HOME", home.join(".config")),
+        xdg("XDG_STATE_HOME", home.join(".local/state")),
+        xdg("XDG_CACHE_HOME", home.join(".cache")),
+    ]
 }
 
 fn terminal_columns() -> Option<u16> {
@@ -382,6 +419,60 @@ fn catch_run(f: impl FnOnce() -> i32) -> RunResult {
 mod tests {
     use super::*;
     use crate::core::{deps::ExecOpts, real::RealHost};
+
+    fn env_of(pairs: &[(&str, &str)]) -> BTreeMap<String, String> {
+        pairs
+            .iter()
+            .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+            .collect()
+    }
+
+    /// TS `main.ts` uses `env.XDG_CONFIG_HOME || ...`: an empty value falls back to the home directory.
+    #[test]
+    fn empty_xdg_values_fall_back_to_the_home_dirs() {
+        let env = env_of(&[
+            ("HOME", "/h"),
+            ("XDG_CONFIG_HOME", ""),
+            ("XDG_STATE_HOME", ""),
+            ("XDG_CACHE_HOME", ""),
+        ]);
+        assert_eq!(
+            data_dirs(&env, || unreachable!()),
+            [
+                PathBuf::from("/h/.config/purchasely"),
+                PathBuf::from("/h/.local/state/purchasely"),
+                PathBuf::from("/h/.cache/purchasely"),
+            ]
+        );
+        let env = env_of(&[
+            ("HOME", "/h"),
+            ("XDG_CONFIG_HOME", "/c"),
+            ("XDG_STATE_HOME", "/s"),
+            ("XDG_CACHE_HOME", "/k"),
+        ]);
+        assert_eq!(
+            data_dirs(&env, || unreachable!()),
+            [
+                PathBuf::from("/c/purchasely"),
+                PathBuf::from("/s/purchasely"),
+                PathBuf::from("/k/purchasely"),
+            ]
+        );
+    }
+
+    /// TS `homedir()` reads the account database when HOME is not set.
+    #[test]
+    fn no_home_uses_the_account_home() {
+        let env = env_of(&[("XDG_CONFIG_HOME", "")]);
+        assert_eq!(
+            data_dirs(&env, || PathBuf::from("/account")),
+            [
+                PathBuf::from("/account/.config/purchasely"),
+                PathBuf::from("/account/.local/state/purchasely"),
+                PathBuf::from("/account/.cache/purchasely"),
+            ]
+        );
+    }
 
     #[test]
     fn plumbing_group_reuses_command_and_keeps_apps_alias() {

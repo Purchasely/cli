@@ -390,7 +390,7 @@ pub(crate) fn fetch_url(url: &str) -> String {
 }
 
 /// The pathname of an absolute URL: from the first `/` after the host to the query.
-fn pathname(url: &str) -> &str {
+pub(crate) fn pathname(url: &str) -> &str {
     let rest = url.find("://").map_or(url, |i| &url[i + 3..]);
     let rest = rest.find('/').map_or("", |i| &rest[i..]);
     rest.split(['?', '#']).next().unwrap_or("")

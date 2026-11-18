@@ -138,14 +138,20 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
     let query = query.clone();
     let build = move |env: &str, t: Option<&str>| {
         let base = request::base_url(env);
-        let mut u = format!(
+        // TS `new URL(...)`: send the serialized URL, and only when its path is the path that was checked.
+        let mut u = exec::fetch_url(&format!(
             "{base}{full}{}",
             if query.is_empty() {
                 String::new()
             } else {
                 format!("?{}", query.join("&"))
             }
-        );
+        ));
+        if !u.starts_with(&format!("{base}/")) || exec::pathname(&u) != full {
+            return Err(usage(
+                "The path must be under /management/v1, with no dot segment after normalisation.",
+            ));
+        }
         let mut b = body.clone();
         if let Some(tok) = t {
             let (nu, nb) = request::with_token(op.confirm.as_deref(), &u, b.as_deref(), Some(tok))?;
@@ -361,6 +367,57 @@ mod tests {
         assert_eq!(
             calls.borrow()[0].url,
             "https://api.purchasely.io/management/v1/applications/caf%C3%A9"
+        );
+    }
+    /// TS compares `new URL(...).pathname` with the checked path: the parser encodes `{` and `}`, so
+    /// the path is refused. The query is sent as `url.href` writes it.
+    #[test]
+    fn api_sends_the_serialized_url_of_the_checked_path() {
+        let calls = Rc::new(RefCell::new(Vec::new()));
+        let mut rt = runtime(calls.clone());
+        let e = run_api(&mut rt, &["api", "GET", "/applications/entry{v}"]).unwrap_err();
+        assert_eq!((e.code.as_str(), e.exit), ("USAGE", 2));
+        let args = [
+            "api",
+            "PATCH",
+            "/applications/entry{v}",
+            "--data",
+            "{}",
+            "--env",
+            "staging",
+            "--dry-run",
+        ];
+        assert_eq!(run_api(&mut rt, &args).unwrap_err().exit, 2);
+        let plan = std::env::temp_dir().join(format!("api-braces-{}.json", std::process::id()));
+        let _ = std::fs::remove_file(&plan);
+        let args = [
+            "api",
+            "PATCH",
+            "/applications/entry{v}",
+            "--data",
+            "{}",
+            "--env",
+            "staging",
+            "--plan",
+            plan.to_str().unwrap(),
+        ];
+        assert_eq!(run_api(&mut rt, &args).unwrap_err().exit, 2);
+        assert!(!plan.exists());
+        assert!(calls.borrow().is_empty());
+        run_api(
+            &mut rt,
+            &[
+                "api",
+                "GET",
+                "/applications/app_1",
+                "--query",
+                "name=O'Brien",
+            ],
+        )
+        .unwrap();
+        assert_eq!(
+            calls.borrow()[0].url,
+            "https://api.purchasely.io/management/v1/applications/app_1?name=O%27Brien"
         );
     }
     /// TS `execute(..., { name: \`api-${method.toLowerCase()}\` })`: the plan keeps the method in the command.

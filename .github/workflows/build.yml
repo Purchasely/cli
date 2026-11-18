@@ -185,6 +185,16 @@ jobs:
           # The frozen installer reads SHELL under set -u, and a runner may not export it (dash does not set it).
           SHELL="${SHELL:-/bin/sh}" PATH="$RUNNER_TEMP/bridge-bin:$PATH" HOME="$RUNNER_TEMP/bridge-home" XDG_DATA_HOME="$RUNNER_TEMP/bridge-home/xdg" TMPDIR="$RUNNER_TEMP" FAKE_SITE="$PWD/out/old-site" sh "$RUNNER_TEMP/old-install.sh" --version 0.9.0 --root "$RUNNER_TEMP/bridge-root"
           test "$(cat "$RUNNER_TEMP/bridge-root/current-version")" = 0.9.0
+          # The first start goes through the Node launcher of the old installer: the shim writes the native launcher.
+          launcher="$RUNNER_TEMP/bridge-root/bin/purchasely"
+          grep -q 'exec node' "$launcher"
+          run_launcher() { HOME="$RUNNER_TEMP/bridge-home" XDG_CONFIG_HOME="$RUNNER_TEMP/bridge-home/config" XDG_STATE_HOME="$RUNNER_TEMP/bridge-home/state" XDG_CACHE_HOME="$RUNNER_TEMP/bridge-home/cache" TMPDIR="$RUNNER_TEMP" PURCHASELY_DISABLE_AUTOUPDATE=1 "$launcher" --version; }
+          test "$(run_launcher)" = 0.9.0
+          ! grep -q node "$launcher"
+          # The next start runs the native binary with no Node on PATH.
+          nodeless=$(printf '%s\n' "$PATH" | tr ':' '\n' | while read -r d; do [ -x "$d/node" ] || printf '%s:' "$d"; done)
+          test "$(PATH="$nodeless" sh -c 'command -v node' || true)" = ""
+          test "$(PATH="$nodeless" run_launcher)" = 0.9.0
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: inputs.version != '0.9.0'
         with:

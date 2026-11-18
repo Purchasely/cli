@@ -717,3 +717,67 @@ fn check_action_pins(folders: &[PathBuf]) {
 fn action_pins_agree() {
     check_action_pins(&[repo().join(".github/workflows")]);
 }
+
+/// The release count of the prepare job, with two pages of releases: gh applies --jq to each page,
+/// so the step must add the per-page counts.
+#[test]
+fn release_count_adds_the_pages() {
+    if !Command::new("sh")
+        .args(["-c", "command -v jq"])
+        .output()
+        .unwrap()
+        .status
+        .success()
+    {
+        eprintln!("skip: jq is unavailable for the fake gh");
+        return;
+    }
+    let sandbox = Sandbox::new();
+    let pages = sandbox.path("pages");
+    fs::create_dir_all(&pages).unwrap();
+    let page = |n: usize, from: usize| {
+        (from..from + n)
+            .map(|i| format!(r#"{{"tag_name":"v1.{i}.0","draft":false,"prerelease":false}}"#))
+            .collect::<Vec<_>>()
+            .join(",")
+    };
+    fs::write(pages.join("1.json"), format!("[{}]", page(30, 0))).unwrap();
+    fs::write(pages.join("2.json"), format!("[{}]", page(2, 30))).unwrap();
+    let fakebin = sandbox.path("fakebin");
+    fs::create_dir_all(&fakebin).unwrap();
+    executable(
+        &fakebin.join("gh"),
+        "#!/bin/sh\nf=; prev=\nfor a in \"$@\"; do [ \"$prev\" = --jq ] && f=$a; prev=$a; done\nfor p in \"$PAGES\"/*.json; do jq -r \"$f\" \"$p\"; done\n",
+    );
+    let work = sandbox.path("work");
+    fs::create_dir_all(work.join("packaging")).unwrap();
+    fs::write(
+        work.join("packaging/bridge.env"),
+        "BRIDGE_VERSION=0.9.0\nBRIDGE_RELEASES=2\n",
+    )
+    .unwrap();
+    let output_file = sandbox.path("github-output");
+    let workflow = fs::read_to_string(repo().join(".github/workflows/release.yml")).unwrap();
+    let o = Command::new("bash")
+        .args([
+            "-e",
+            "-o",
+            "pipefail",
+            "-c",
+            &step_script(&workflow, "Read the release"),
+        ])
+        .current_dir(&work)
+        .env(
+            "PATH",
+            format!("{}:/usr/bin:/bin:/opt/homebrew/bin", fakebin.display()),
+        )
+        .env("PAGES", &pages)
+        .env("GITHUB_REF_NAME", "v1.40.0")
+        .env("GITHUB_REPOSITORY", "Purchasely/x")
+        .env("GITHUB_OUTPUT", &output_file)
+        .output()
+        .unwrap();
+    assert!(o.status.success(), "{}", String::from_utf8_lossy(&o.stderr));
+    let out = fs::read_to_string(&output_file).unwrap();
+    assert!(out.contains("native_count=32\n"), "{out}");
+}

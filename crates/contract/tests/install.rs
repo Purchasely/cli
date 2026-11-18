@@ -509,10 +509,11 @@ fn relaunch_returns_three_when_lock_held() {
     let s = Sandbox::new();
     let lock = s.root().join("staging/lock");
     fs::create_dir_all(&lock).unwrap();
-    fs::write(lock.join("pid"), "held\n").unwrap();
+    let held = format!("{}\n", std::process::id());
+    fs::write(lock.join("pid"), &held).unwrap();
     let o = s.run(&["--relaunch", "--root", s.root().to_str().unwrap()], &[]);
     assert_eq!(o.status.code(), Some(3));
-    assert_eq!(fs::read_to_string(lock.join("pid")).unwrap(), "held\n");
+    assert_eq!(fs::read_to_string(lock.join("pid")).unwrap(), held);
 }
 
 #[test]
@@ -955,4 +956,121 @@ fn asset_download_count(s: &Sandbox) -> usize {
         .lines()
         .filter(|line| line.contains(".tar.gz") || line.contains(".tgz"))
         .count()
+}
+
+/// The `name() { ... }` function of the installer, at two spaces of indent, as text.
+fn installer_function(name: &str) -> String {
+    let source = fs::read_to_string(file("install.sh")).unwrap();
+    let start = source
+        .find(&format!("\n  {name}() {{\n"))
+        .unwrap_or_else(|| panic!("no {name} in install.sh"));
+    let end = source[start + 1..].find("\n  }\n").unwrap() + start + 1;
+    source[start + 1..end + 4].to_owned()
+}
+
+/// install.sh `is_newer` orders versions as `semver_js` of the old installer, under each POSIX shell found.
+#[test]
+fn is_newer_orders_as_the_old_installer() {
+    let pairs = [
+        ("1.0.0", "1.0.0-rc.1"),
+        ("1.0.0-rc.2", "1.0.0-rc.1"),
+        ("1.0.0-rc.1", "1.0.0-rc.2"),
+        ("1.0.0-rc.1", "1.0.0"),
+        ("1.0.1", "1.0.0-rc.1"),
+        ("1.10.0", "1.9.9"),
+        ("1.2", "1.1.9"),
+        ("1.1", "1.1.0"),
+        ("1.0.0", "1.0.0"),
+        ("0.9.0", "1.0.0"),
+        ("2.0.0-beta", "2.0.0-alpha"),
+        ("1.0.0-", "1.0.0"),
+    ];
+    let old = fs::read_to_string(file("crates/contract/tests/fixtures/old-install.sh")).unwrap();
+    let js = old
+        .split("semver_js='")
+        .nth(1)
+        .and_then(|s| s.split('\'').next())
+        .unwrap()
+        .to_owned();
+    let function = installer_function("is_newer");
+    let node = Command::new("node").arg("--version").output().is_ok();
+    for shell in ["sh", "dash", "bash"] {
+        if Command::new("sh")
+            .args(["-c", &format!("command -v {shell}")])
+            .output()
+            .map(|o| !o.status.success())
+            .unwrap_or(true)
+        {
+            eprintln!("skip: {shell} is not installed");
+            continue;
+        }
+        for (a, b) in pairs {
+            let ours = Command::new(shell)
+                .args(["-c", &format!("set -eu\n{function}\nif is_newer \"$1\" \"$2\"; then echo yes; else echo no; fi"), "is_newer", a, b])
+                .output()
+                .unwrap();
+            let ours = String::from_utf8_lossy(&ours.stdout).trim().to_owned();
+            let expected = if node {
+                let reference = Command::new("node")
+                    .args([
+                        "-e",
+                        &format!(
+                            "{js}console.log(cmp(process.argv[1],process.argv[2])>0?'yes':'no')"
+                        ),
+                        a,
+                        b,
+                    ])
+                    .output()
+                    .unwrap();
+                String::from_utf8_lossy(&reference.stdout).trim().to_owned()
+            } else {
+                String::new()
+            };
+            if node {
+                assert_eq!(ours, expected, "{shell}: is_newer {a} {b}");
+            }
+        }
+    }
+}
+
+#[test]
+fn relaunch_removes_a_stale_lock() {
+    let s = Sandbox::new();
+    let path = s.root().join("releases/0.9.0/bin");
+    fs::create_dir_all(&path).unwrap();
+    executable(&path.join(NAME), "#!/bin/sh\necho native\n");
+    fs::write(s.root().join("current-version"), "0.9.0\n").unwrap();
+    let lock = s.root().join("staging/lock");
+    fs::create_dir_all(&lock).unwrap();
+    fs::write(lock.join("pid"), "99999999\n").unwrap();
+    let o = s.run(&["--relaunch", "--root", s.root().to_str().unwrap()], &[]);
+    assert!(o.status.success(), "{}", output(&o));
+    assert!(s.root().join("bin/purchasely").exists());
+    assert!(!lock.exists());
+}
+
+/// A fresh install with no SHELL (a Docker build) edits ~/.profile and succeeds. dash, as the sh of
+/// Debian and Ubuntu: bash would set SHELL itself.
+#[test]
+fn fresh_install_without_shell() {
+    if Command::new("sh")
+        .args(["-c", "command -v dash"])
+        .output()
+        .map(|o| !o.status.success())
+        .unwrap_or(true)
+    {
+        eprintln!("skip: dash is not installed");
+        return;
+    }
+    let s = Sandbox::new();
+    s.native(VER, "linux-x64", VER);
+    let o = Command::new("dash")
+        .arg(&s.script)
+        .envs(s.env())
+        .env("PURCHASELY_BIN_DIR", "")
+        .env_remove("SHELL")
+        .output()
+        .unwrap();
+    assert!(o.status.success(), "{}", output(&o));
+    assert!(s.home.join(".profile").exists());
 }

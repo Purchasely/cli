@@ -417,13 +417,13 @@ mod tests {
             "v<VERSION> ok"
         );
         assert_eq!(
-            normalize_version_tokens("ply-1.0.0-darwin-arm64.tar.gz"),
-            "ply-<VERSION>-darwin-arm64.tar.gz"
+            normalize_version_tokens("purchasely-1.0.0-darwin-arm64.tar.gz"),
+            "purchasely-<VERSION>-darwin-arm64.tar.gz"
         );
         assert_eq!(normalize_version_tokens("1.0.0-rc"), "<VERSION>-rc");
         assert_eq!(
-            normalize_version_tokens("ply 0.9.0. Each"),
-            normalize_version_tokens("ply 1.0.0-rc.1. Each")
+            normalize_version_tokens("purchasely 0.9.0. Each"),
+            normalize_version_tokens("purchasely 1.0.0-rc.1. Each")
         );
     }
     #[test]

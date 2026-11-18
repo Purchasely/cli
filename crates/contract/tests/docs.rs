@@ -140,12 +140,14 @@ fn landing_page_sharing_head_reference_links_404_and_robots() {
     assert!(root().join("site/assets/og.png").exists());
     assert!(site.contains("href=\"/reference\""));
     assert!(site.contains("href=\"https://docs.purchasely.com/docs/management-api\""));
-    // The dry-run sample shows the real User-Agent form, and no install promise without a date.
+    // The dry-run sample shows the real User-Agent form. The formula lives in this repo, so brew needs the tap URL.
     assert!(site.contains(
         "\"User-Agent\": \"purchasely-cli/&lt;version&gt; (-; -; placements update; tty)\""
     ));
     let lower = site.to_lowercase();
-    assert!(!lower.contains("homebrew") && !lower.contains("@placement.json"));
+    assert!(!lower.contains("@placement.json"));
+    assert!(site.contains("brew tap purchasely/cli https://github.com/Purchasely/cli"));
+    assert!(!site.contains("Install with <code>brew install purchasely</code>"));
     let not_found = read("site/404.html");
     assert!(not_found.contains("href=\"/\""));
     // Served at any depth: assets need absolute paths.

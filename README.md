@@ -18,7 +18,7 @@ The CLI checks for a new version once a day and updates itself in the background
 purchasely update
 ```
 
-To stop the daily check, set `PURCHASELY_DISABLE_AUTOUPDATE=1` or `PURCHASELY_OFFLINE=1`, or put `"auto_update": false` in `~/.config/purchasely/config.json`. The check also stays off when `CI` is set. Install with Homebrew by tapping `purchasely/cli` and running `brew install purchasely`.
+To stop the daily check, set `PURCHASELY_DISABLE_AUTOUPDATE=1` or `PURCHASELY_OFFLINE=1`, or put `"auto_update": false` in `~/.config/purchasely/config.json`. The check also stays off when `CI` is set. Install with Homebrew: `brew tap purchasely/cli https://github.com/Purchasely/cli`, then `brew install purchasely`.
 
 ## Use with your AI agent
 

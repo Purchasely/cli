@@ -10,6 +10,8 @@ use std::{
 pub struct RealHost {
     env: BTreeMap<String, String>,
     warned_tls: AtomicBool,
+    /// One agent per process: requests share its connection pool.
+    agent: std::sync::OnceLock<ureq::Agent>,
     /// TS `main.ts` `keychain: defaultKeychain()`: the real keychain belongs to the real host only.
     keychain: Option<super::credentials::SecurityKeychain>,
 }
@@ -25,12 +27,30 @@ impl RealHost {
         Self {
             env,
             warned_tls: AtomicBool::new(false),
+            agent: std::sync::OnceLock::new(),
             keychain: super::credentials::default_keychain(if cfg!(target_os = "macos") {
                 "darwin"
             } else {
                 "linux"
             }),
         }
+    }
+
+    fn agent(&self) -> &ureq::Agent {
+        self.agent.get_or_init(|| {
+            let tls = super::tls::config(&self.env, |s| {
+                if !self.warned_tls.swap(true, Ordering::Relaxed) {
+                    let _ = writeln!(io::stderr(), "{s}");
+                }
+            });
+            ureq::Agent::config_builder()
+                // Node `fetch` read no proxy variable: ureq would read ALL_PROXY, HTTPS_PROXY, HTTP_PROXY.
+                .proxy(None)
+                .http_status_as_error(false)
+                .tls_config(tls)
+                .build()
+                .new_agent()
+        })
     }
 
     fn write_stdout(&self, value: &str) {
@@ -50,18 +70,7 @@ fn stdout_error_is_fatal(error: &io::Error) -> bool {
 
 impl Host for RealHost {
     fn fetch(&self, req: Request) -> Result<Response, NetError> {
-        let tls = super::tls::config(&self.env, |s| {
-            if !self.warned_tls.swap(true, Ordering::Relaxed) {
-                let _ = writeln!(io::stderr(), "{s}");
-            }
-        });
-        let agent = ureq::Agent::config_builder()
-            .http_status_as_error(false)
-            .max_redirects(if req.refuse_redirect { 0 } else { 20 })
-            .timeout_global(Some(Duration::from_millis(req.timeout_ms)))
-            .tls_config(tls)
-            .build()
-            .new_agent();
+        let agent = self.agent();
         let mut request = ureq::http::Request::builder()
             .method(req.method.as_str())
             .uri(req.url.as_str());
@@ -74,6 +83,11 @@ impl Host for RealHost {
                 message: e.to_string(),
                 ..NetError::default()
             })?;
+        let request = agent
+            .configure_request(request)
+            .max_redirects(if req.refuse_redirect { 0 } else { 20 })
+            .timeout_global(Some(Duration::from_millis(req.timeout_ms)))
+            .build();
         let response = agent.run(request).map_err(net_error)?;
         let (parts, body) = response.into_parts();
         let headers = parts
@@ -268,6 +282,43 @@ mod tests {
         }
     }
 
+    /// Node `fetch` ignored proxy variables: a proxy in the environment must not reroute or break requests.
+    #[test]
+    fn proxy_variables_change_nothing() {
+        let names = [
+            "ALL_PROXY",
+            "HTTPS_PROXY",
+            "HTTP_PROXY",
+            "all_proxy",
+            "https_proxy",
+            "http_proxy",
+        ];
+        // SAFETY: a test-only write; the other tests of this crate do not read these variables.
+        unsafe {
+            for name in names {
+                std::env::set_var(name, "http://127.0.0.1:9");
+            }
+        }
+        let url = server(
+            b"HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok".to_vec(),
+            Duration::ZERO,
+        );
+        let result = RealHost::default().fetch(request(url));
+        unsafe {
+            for name in names {
+                std::env::remove_var(name);
+            }
+        }
+        assert_eq!(result.unwrap().body, b"ok");
+    }
+    /// One agent per process: a second request reuses the agent (and its connection pool).
+    #[test]
+    fn one_agent_per_host() {
+        let host = RealHost::default();
+        let first: *const ureq::Agent = host.agent();
+        assert!(std::ptr::eq(first, host.agent()));
+        assert!(host.agent().config().proxy().is_none());
+    }
     #[test]
     fn status_and_headers_are_preserved() {
         let url = server(b"HTTP/1.1 201 Created\r\nX-Trace: abc\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok".to_vec(), Duration::ZERO);

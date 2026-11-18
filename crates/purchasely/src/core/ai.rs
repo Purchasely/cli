@@ -475,30 +475,38 @@ fn download_error() -> CliError {
         vec!["could not download the plugin release. Check your network.".into()],
     )
 }
-/// TS `layout(d, a, src)`: every (source, destination) dir of a copy agent, read from the payload.
-fn layout(d: &Deps, agent: &str, src: &Path) -> Vec<(PathBuf, PathBuf)> {
+/// TS `layout(d, a, src)`: every (source, destination) dir of a copy agent, read from the payload. As
+/// `readdirSync`, a skills dir that cannot be listed is an error: nothing is copied or pruned.
+fn layout(d: &Deps, agent: &str, src: &Path) -> Result<Vec<(PathBuf, PathBuf)>, CliError> {
     if agent == "cursor" {
-        vec![(src.to_path_buf(), cursor_target(d))]
-    } else {
-        let mut out = Vec::new();
-        let skills = src.join("skills");
-        if let Ok(entries) = fs::read_dir(&skills) {
-            for entry in entries
-                .flatten()
-                .filter(|e| e.file_type().is_ok_and(|t| t.is_dir()))
-            {
-                out.push((
-                    entry.path(),
-                    opencode_root(d).join("skills").join(entry.file_name()),
-                ));
-            }
-        }
-        out.push((src.join("references"), opencode_root(d).join("references")));
-        out
+        return Ok(vec![(src.to_path_buf(), cursor_target(d))]);
     }
+    let skills = src.join("skills");
+    let unreadable = |e: std::io::Error| {
+        CliError::new(
+            EXIT::GENERIC,
+            "INTERNAL_ERROR",
+            vec![format!("{e}, scandir '{}'", skills.display())],
+        )
+    };
+    let mut out = Vec::new();
+    for entry in fs::read_dir(&skills).map_err(unreadable)? {
+        let entry = entry.map_err(unreadable)?;
+        if entry.file_type().map_err(unreadable)?.is_dir() {
+            out.push((
+                entry.path(),
+                opencode_root(d).join("skills").join(entry.file_name()),
+            ));
+        }
+    }
+    out.push((src.join("references"), opencode_root(d).join("references")));
+    Ok(out)
 }
-fn copy_layout(d: &Deps, agent: &str, src: &Path, version: &str) -> Result<Vec<PathBuf>, CliError> {
-    let dirs = layout(d, agent, src);
+fn copy_layout(
+    d: &Deps,
+    dirs: Vec<(PathBuf, PathBuf)>,
+    version: &str,
+) -> Result<Vec<PathBuf>, CliError> {
     let mut written = Vec::new();
     for (from, to) in dirs {
         copy_to(&from, &to, version, d.pid).map_err(|_| download_error())?;
@@ -598,7 +606,14 @@ pub fn command_result(
                 process_agent(&rt.d, a, verb, false, tag, raw_tag.as_deref(), &mut payload)
             });
             rows.push(match result {
-                Ok(value) => value?,
+                Ok(Ok(value)) => value,
+                // TS `finally { s.done() }`: the downloaded payload goes on an error too.
+                Ok(Err(e)) => {
+                    if let Some((dir, _)) = payload {
+                        let _ = fs::remove_dir_all(dir);
+                    }
+                    return Err(e);
+                }
                 Err(_) => agent_row(
                     a,
                     "refused",
@@ -789,13 +804,11 @@ fn process_agent(
         };
         let _ = dir;
         // TS `install`: the ownership marker of every destination is checked before any copy.
-        if layout(d, agent, &src)
-            .iter()
-            .any(|(_, p)| p.exists() && marker(p).is_none())
-        {
+        let dirs = layout(d, agent, &src)?;
+        if dirs.iter().any(|(_, p)| p.exists() && marker(p).is_none()) {
             return Ok(hand_row(agent));
         }
-        let written = match copy_layout(d, agent, &src, tag.unwrap_or_default()) {
+        let written = match copy_layout(d, dirs, tag.unwrap_or_default()) {
             Ok(v) => v,
             Err(e) => {
                 return Ok(agent_row(
@@ -926,7 +939,8 @@ fn process_agent(
             },
         };
         let _ = dir;
-        let written = match copy_layout(d, agent, &src, tag.unwrap_or_default()) {
+        let dirs = layout(d, agent, &src)?;
+        let written = match copy_layout(d, dirs, tag.unwrap_or_default()) {
             Ok(v) => v,
             Err(e) => {
                 return failed_registered(
@@ -1336,14 +1350,22 @@ mod tests {
     }
     /// A sandbox HOME, state and cache, and a two-skill plugin release.
     fn sandbox(name: &str) -> (PathBuf, Runtime) {
+        sandbox_with(
+            name,
+            &[
+                "skills/purchasely-integrate",
+                "skills/purchasely-extra",
+                "references",
+            ],
+        )
+    }
+    /// The sandbox with a release that holds only `dirs`.
+    fn sandbox_with(name: &str, dirs: &[&str]) -> (PathBuf, Runtime) {
         let root = std::env::temp_dir().join(format!("ai-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         let pkg = root.join("pkg/Purchasely-AI-Plugin-2.3.0/purchasely");
-        for dir in [
-            "skills/purchasely-integrate",
-            "skills/purchasely-extra",
-            "references",
-        ] {
+        fs::create_dir_all(&pkg).unwrap();
+        for dir in dirs.iter().copied() {
             fs::create_dir_all(pkg.join(dir)).unwrap();
             fs::write(pkg.join(dir).join("file.md"), "release").unwrap();
         }
@@ -1381,6 +1403,36 @@ mod tests {
             columns: None,
         });
         (root, rt)
+    }
+    /// TS `layout` lets `readdirSync(src/skills)` throw: a release with no skills dir changes nothing,
+    /// neither the registered skills on disk nor their registration.
+    #[test]
+    fn opencode_update_keeps_the_skills_when_the_release_has_none() {
+        let (root, rt) = sandbox_with("no-skills", &["references"]);
+        let oc = root.join("home/.config/opencode");
+        let skill = oc.join("skills/purchasely-integrate");
+        for dir in [&skill, &oc.join("references")] {
+            fs::create_dir_all(dir).unwrap();
+            fs::write(dir.join(MARKER), "2.2.0\n").unwrap();
+        }
+        fs::create_dir_all(root.join("state")).unwrap();
+        let text = format!(
+            r#"{{"agents":{{"opencode":{{"method":"copy","targets":["{}","{}"],"version":"2.2.0","updated_at":1}}}}}}"#,
+            skill.display(),
+            oc.join("references").display()
+        );
+        fs::write(root.join("state/ai.plugin.json"), &text).unwrap();
+        let result = command_result(&rt, Verb::Update, Some("opencode"), false);
+        assert!(result.is_err(), "{result:?}");
+        assert!(skill.join(MARKER).exists());
+        let reg = registration(&rt.d, "opencode").unwrap();
+        assert_eq!(get_string(&reg, "version").as_deref(), Some("2.2.0"));
+        assert!(
+            json::stringify(&reg, None)
+                .unwrap()
+                .contains("purchasely-integrate")
+        );
+        let _ = fs::remove_dir_all(root);
     }
     /// TS `install` checks the marker of every destination of `layout(d, a, src)` before any copy.
     #[test]

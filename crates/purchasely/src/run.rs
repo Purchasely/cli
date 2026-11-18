@@ -78,8 +78,14 @@ pub fn build(rt: &mut Runtime) -> (Command, usize) {
             crate::core::credentials::define_surface(*id, *def);
         }
     }
+    // commander `copyInheritedSettings`: a command made after `program.enablePositionalOptions()` (run by the
+    // dashboard module) inherits positional options from its parent. Names of the commands made before.
+    let mut before_positional = Vec::new();
     for register in MODULES {
         register(&mut root, rt);
+        if std::ptr::fn_addr_eq(register, commands::dashboard::register as Register) {
+            before_positional = root.commands.iter().map(|c| c.name.clone()).collect();
+        }
     }
     let builtin = root.commands.len();
     let ext =
@@ -89,6 +95,13 @@ pub fn build(rt: &mut Runtime) -> (Command, usize) {
             .unwrap_or_default();
     for register in ext {
         register(&mut root, rt);
+    }
+    for command in root
+        .commands
+        .iter_mut()
+        .filter(|c| !before_positional.contains(&c.name))
+    {
+        inherit_positional(command);
     }
     // TS `rt.extTop`: the top-level commands that an extension module added.
     rt.extension_top = root.commands[builtin..]
@@ -108,6 +121,12 @@ fn root_command(name: &str, version: &str) -> Command {
         .positional_options();
     // TS has no root option but -V and -h: an option before the subcommand is an unknown option.
     root.after_help(intro(name))
+}
+
+/// A command and every command under it were made under a parent with positional options.
+fn inherit_positional(command: &mut Command) {
+    command.positional_options = true;
+    command.commands.iter_mut().for_each(inherit_positional);
 }
 
 /// TS `intro` of `run.ts`.

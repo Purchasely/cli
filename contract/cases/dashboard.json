@@ -1,0 +1,1274 @@
+{
+  "cases": [
+    {
+      "test": "dashboard::dashboard summary > sends 3 requests and returns the panels as JSON",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "30"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000002500,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000003750,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030333735302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"77092e47-b004-4823-aab1-79733207bf1d\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"a419c352-2473-4cd4-b734-a25de6cd9b9c\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"a69e9bf0-0a92-44e3-8746-11998f8d428c\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237373039326534372d623030342d343832332d616162312d373937333332303762663164227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2261343139633335322d323437332d346364342d623733342d613235646536636439623963227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2261363965396266302d306139322d343465332d383734362d313139393866386434323863227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "77092e47-b004-4823-aab1-79733207bf1d"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2026-10-01\",\"date_kinds\":[\"date_period\"],\"value\":10},{\"period\":\"2026-10-02\",\"date_kinds\":[\"date_period\"],\"value\":20},{\"period\":\"2026-10-03\",\"date_kinds\":[\"date_period\"],\"value\":30}],\"by_month\":[]},\"variations\":[]}}}}"
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "a419c352-2473-4cd4-b734-a25de6cd9b9c"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"subscription_evolution\":[{\"period\":\"2026-10-01\",\"group_by\":null,\"count\":1},{\"period\":\"2026-10-02\",\"group_by\":null,\"count\":2},{\"period\":\"2026-10-03\",\"group_by\":null,\"count\":3}]}"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "a69e9bf0-0a92-44e3-8746-11998f8d428c"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"conversion\":{\"kpi\":[{\"unique_viewers_count\":42}],\"primary_metric_by_period\":[{\"period\":\"2026-10-01\",\"unique_viewers_count\":1},{\"period\":\"2026-10-02\",\"unique_viewers_count\":2},{\"period\":\"2026-10-03\",\"unique_viewers_count\":3}],\"secondary_metric_by_period\":[{\"period\":\"2026-10-01\",\"total_conversions_count\":1},{\"period\":\"2026-10-02\",\"total_conversions_count\":2},{\"period\":\"2026-10-03\",\"total_conversions_count\":3}]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"app\": \"app_1\",\n  \"from\": \"2023-10-16\",\n  \"to\": \"2023-11-14\",\n  \"periodicity\": \"DAY\",\n  \"panels\": [\n    {\n      \"name\": \"MRR\",\n      \"value\": 30,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 10\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 20\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 30\n        }\n      ]\n    },\n    {\n      \"name\": \"Active subscriptions\",\n      \"value\": 3,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    },\n    {\n      \"name\": \"Paywall unique viewers\",\n      \"value\": 42,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    },\n    {\n      \"name\": \"Conversions\",\n      \"value\": 6,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > draws a sparkline per metric with --output table",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000002500,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000003750,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030333735302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"85eab6dd-d030-4c46-a331-281d030163ec\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"5b689ab1-9a4d-4869-9ffe-e538a529c65e\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"2aad5fd7-9300-49b5-a10c-611bfb92ee07\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238356561623664642d643033302d346334362d613333312d323831643033303136336563227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235623638396162312d396134642d343836392d396666652d653533386135323963363565227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2232616164356664372d393330302d343962352d613130632d363131626662393265653037227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "85eab6dd-d030-4c46-a331-281d030163ec"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2026-10-01\",\"date_kinds\":[\"date_period\"],\"value\":10},{\"period\":\"2026-10-02\",\"date_kinds\":[\"date_period\"],\"value\":20},{\"period\":\"2026-10-03\",\"date_kinds\":[\"date_period\"],\"value\":30}],\"by_month\":[]},\"variations\":[]}}}}"
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "5b689ab1-9a4d-4869-9ffe-e538a529c65e"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"subscription_evolution\":[{\"period\":\"2026-10-01\",\"group_by\":null,\"count\":1},{\"period\":\"2026-10-02\",\"group_by\":null,\"count\":2},{\"period\":\"2026-10-03\",\"group_by\":null,\"count\":3}]}"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "2aad5fd7-9300-49b5-a10c-611bfb92ee07"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"conversion\":{\"kpi\":[{\"unique_viewers_count\":42}],\"primary_metric_by_period\":[{\"period\":\"2026-10-01\",\"unique_viewers_count\":1},{\"period\":\"2026-10-02\",\"unique_viewers_count\":2},{\"period\":\"2026-10-03\",\"unique_viewers_count\":3}],\"secondary_metric_by_period\":[{\"period\":\"2026-10-01\",\"total_conversions_count\":1},{\"period\":\"2026-10-02\",\"total_conversions_count\":2},{\"period\":\"2026-10-03\",\"total_conversions_count\":3}]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "app_1  2023-10-16 to 2023-11-14  (DAY)\n\nMRR                     30  ▁▄▇\nActive subscriptions     3  ▁▄▇\nPaywall unique viewers  42  ▁▄▇\nConversions              6  ▁▄▇\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > survives all zeros and empty series",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000002500,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000003750,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030333735302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"8f3233fe-46d2-46df-87ad-e323fb1dee25\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"f124f5dd-cc6e-4d9d-bf61-8865795a0629\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"00b69696-d479-4d07-8029-4d8c2c36a37b\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238663332333366652d343664322d343664662d383761642d653332336662316465653235227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2266313234663564642d636336652d346439642d626636312d383836353739356130363239227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2230306236393639362d643437392d346430372d383032392d346438633263333661333762227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "8f3233fe-46d2-46df-87ad-e323fb1dee25"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{}}"
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "f124f5dd-cc6e-4d9d-bf61-8865795a0629"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"subscription_evolution\":[]}"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "00b69696-d479-4d07-8029-4d8c2c36a37b"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"conversion\":{}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "app_1  2023-10-16 to 2023-11-14  (DAY)\n\nMRR                     0  (no data)\nActive subscriptions    0  (no data)\nPaywall unique viewers  0  (no data)\nConversions             0  (no data)\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > reads today's MRR apart above 60 days, because a WEEK bucket starts on its first day",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "61"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000003750,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000005000,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030353030302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"8475b501-cff6-4e0f-a9e8-e4144cc5627e\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"9a22c23c-cde1-497b-92e4-6a2162c20aca\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"b2674530-7047-47e6-961f-d2af5247f939\"}\n{\"ts\":\"2023-11-14T22:13:23.750Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"8c7b5020-9d31-464e-ab0d-09bff5908e33\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238343735623530312d636666362d346530662d613965382d653431343463633536323765227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2239613232633233632d636465312d343937622d393265342d366132313632633230616361227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2262323637343533302d373034372d343765362d393631662d643261663532343766393339227d0a7b227473223a22323032332d31312d31345432323a31333a32332e3735305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2238633762353032302d396433312d343634652d616230642d303962666635393038653333227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-09-15&date_range[]=2023-11-14&periodicity=WEEK",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "8475b501-cff6-4e0f-a9e8-e4144cc5627e"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2026-10-01\",\"date_kinds\":[\"date_period\"],\"value\":10},{\"period\":\"2026-10-02\",\"date_kinds\":[\"date_period\"],\"value\":20},{\"period\":\"2026-10-03\",\"date_kinds\":[\"date_period\"],\"value\":30}],\"by_month\":[]},\"variations\":[]}}}}"
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-09-15&date_range[]=2023-11-14&periodicity=WEEK",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "9a22c23c-cde1-497b-92e4-6a2162c20aca"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"subscription_evolution\":[{\"period\":\"2026-10-01\",\"group_by\":null,\"count\":1},{\"period\":\"2026-10-02\",\"group_by\":null,\"count\":2},{\"period\":\"2026-10-03\",\"group_by\":null,\"count\":3}]}"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-09-15&date_range[]=2023-11-14&periodicity=WEEK",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "b2674530-7047-47e6-961f-d2af5247f939"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"conversion\":{\"kpi\":[{\"unique_viewers_count\":42}],\"primary_metric_by_period\":[{\"period\":\"2026-10-01\",\"unique_viewers_count\":1},{\"period\":\"2026-10-02\",\"unique_viewers_count\":2},{\"period\":\"2026-10-03\",\"unique_viewers_count\":3}],\"secondary_metric_by_period\":[{\"period\":\"2026-10-01\",\"total_conversions_count\":1},{\"period\":\"2026-10-02\",\"total_conversions_count\":2},{\"period\":\"2026-10-03\",\"total_conversions_count\":3}]}}"
+              }
+            },
+            {
+              "at": 1700000003750,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-11-14&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "8c7b5020-9d31-464e-ab0d-09bff5908e33"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2023-11-14\",\"value\":99}]}}}}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"app\": \"app_1\",\n  \"from\": \"2023-09-15\",\n  \"to\": \"2023-11-14\",\n  \"periodicity\": \"WEEK\",\n  \"panels\": [\n    {\n      \"name\": \"MRR\",\n      \"value\": 99,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 10\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 20\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 30\n        }\n      ]\n    },\n    {\n      \"name\": \"Active subscriptions\",\n      \"value\": 3,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    },\n    {\n      \"name\": \"Paywall unique viewers\",\n      \"value\": 42,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    },\n    {\n      \"name\": \"Conversions\",\n      \"value\": 6,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        },\n        {\n          \"period\": \"2026-10-02\",\n          \"value\": 2\n        },\n        {\n          \"period\": \"2026-10-03\",\n          \"value\": 3\n        }\n      ]\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "184"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000003750,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000005000,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030353030302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"d32c36ba-62df-412a-95bb-18576ab76505\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"a9f49ea4-d646-4779-87e9-544018959c3e\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"cfc4caf7-0548-430f-9c54-e27cd26d7255\"}\n{\"ts\":\"2023-11-14T22:13:23.750Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"ee27f6d8-e487-4387-9630-8f8a0bf42f4f\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2264333263333662612d363264662d343132612d393562622d313835373661623736353035227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2261396634396561342d643634362d343737392d383765392d353434303138393539633365227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263666334636166372d303534382d343330662d396335342d653237636432366437323535227d0a7b227473223a22323032332d31312d31345432323a31333a32332e3735305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2265653237663664382d653438372d343338372d393633302d386638613062663432663466227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-05-15&date_range[]=2023-11-14&periodicity=MONTH",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "d32c36ba-62df-412a-95bb-18576ab76505"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2026-10-01\",\"date_kinds\":[\"date_period\"],\"value\":10}],\"by_month\":[]},\"variations\":[]}}}}"
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-05-15&date_range[]=2023-11-14&periodicity=MONTH",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "a9f49ea4-d646-4779-87e9-544018959c3e"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"subscription_evolution\":[{\"period\":\"2026-10-01\",\"group_by\":null,\"count\":1}]}"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-05-15&date_range[]=2023-11-14&periodicity=MONTH",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "cfc4caf7-0548-430f-9c54-e27cd26d7255"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"conversion\":{\"kpi\":[{\"unique_viewers_count\":42}],\"primary_metric_by_period\":[{\"period\":\"2026-10-01\",\"unique_viewers_count\":1}],\"secondary_metric_by_period\":[{\"period\":\"2026-10-01\",\"total_conversions_count\":1}]}}"
+              }
+            },
+            {
+              "at": 1700000003750,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-11-14&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "ee27f6d8-e487-4387-9630-8f8a0bf42f4f"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"mrr_evolution_live\":{\"data\":{\"mrr\":{\"values\":{\"by_day\":[{\"period\":\"2023-11-14\",\"value\":99}]}}}}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"app\": \"app_1\",\n  \"from\": \"2023-05-15\",\n  \"to\": \"2023-11-14\",\n  \"periodicity\": \"MONTH\",\n  \"panels\": [\n    {\n      \"name\": \"MRR\",\n      \"value\": 99,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 10\n        }\n      ]\n    },\n    {\n      \"name\": \"Active subscriptions\",\n      \"value\": 1,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        }\n      ]\n    },\n    {\n      \"name\": \"Paywall unique viewers\",\n      \"value\": 42,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        }\n      ]\n    },\n    {\n      \"name\": \"Conversions\",\n      \"value\": 1,\n      \"series\": [\n        {\n          \"period\": \"2026-10-01\",\n          \"value\": 1\n        }\n      ]\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > names the app when it is not found, before the server message",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_9"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":404,\"rate_limited\":false,\"request_id\":\"316a80e2-0c24-433d-91d2-49c2078c3d9e\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3430342c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2233313661383065322d306332342d343333642d393164322d343963323037386333643965227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_9/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "316a80e2-0c24-433d-91d2-49c2078c3d9e"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 404,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"Not found\"]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 6,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"NOT_FOUND\",\"messages\":[\"application \\\"app_9\\\" not found\",\"Not found\"],\"status\":404}}\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > --dry-run prints the requests and sends nothing",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"method\": \"GET\",\n    \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY\",\n    \"headers\": {\n      \"Authorization\": \"Bearer <redacted>\",\n      \"Accept\": \"application/json\",\n      \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; dashboard summary; script)\"\n    }\n  },\n  {\n    \"method\": \"GET\",\n    \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY\",\n    \"headers\": {\n      \"Authorization\": \"Bearer <redacted>\",\n      \"Accept\": \"application/json\",\n      \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; dashboard summary; script)\"\n    }\n  },\n  {\n    \"method\": \"GET\",\n    \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY\",\n    \"headers\": {\n      \"Authorization\": \"Bearer <redacted>\",\n      \"Accept\": \"application/json\",\n      \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; dashboard summary; script)\"\n    }\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > maps an API error to its exit code, and an empty body to no data",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000001250,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030313235302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":403,\"rate_limited\":false,\"request_id\":\"c8fbdf84-c17f-432a-a652-58c869c39d8b\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3430332c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2263386662646638342d633137662d343332612d613635322d353863383639633339643862227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "c8fbdf84-c17f-432a-a652-58c869c39d8b"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 403,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"error\":{\"code\":\"FORBIDDEN\",\"messages\":[\"no scope\"]}}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 4,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"FORBIDDEN\",\"messages\":[\"no scope\"],\"status\":403}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--output",
+            "table"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000002500,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/prod-management-a5cc40633d7b.limiter.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"next_at\":1700000003750,\"next_write_at\":0,\"inflight\":[]}",
+                "hex": "7b226e6578745f6174223a313730303030303030333735302c226e6578745f77726974655f6174223a302c22696e666c69676874223a5b5d7d"
+              },
+              {
+                "path": "state/usage.jsonl",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"ts\":\"2023-11-14T22:13:20.000Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\"status\":200,\"rate_limited\":false,\"request_id\":\"5b297958-912a-4533-b502-96df419ddc14\"}\n{\"ts\":\"2023-11-14T22:13:21.250Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\"status\":200,\"rate_limited\":false,\"request_id\":\"594a81be-eb26-4608-9be6-e9007c5d9425\"}\n{\"ts\":\"2023-11-14T22:13:22.500Z\",\"env\":\"prod\",\"surface\":\"management\",\"key\":\"a5cc40633d7b\",\"method\":\"GET\",\"path\":\"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\"status\":200,\"rate_limited\":false,\"request_id\":\"7ebe19e4-70b7-4053-803c-8e7439849ff8\"}\n",
+                "hex": "7b227473223a22323032332d31312d31345432323a31333a32302e3030305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172642f6d72725f65766f6c7574696f6e5f6c697665222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235623239373935382d393132612d343533332d623530322d393664663431396464633134227d0a7b227473223a22323032332d31312d31345432323a31333a32312e3235305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f737562736372697074696f6e5f65766f6c7574696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2235393461383162652d656232362d343630382d396265362d653930303763356439343235227d0a7b227473223a22323032332d31312d31345432323a31333a32322e3530305a222c22656e76223a2270726f64222c2273757266616365223a226d616e6167656d656e74222c226b6579223a22613563633430363333643762222c226d6574686f64223a22474554222c2270617468223a222f6d616e6167656d656e742f76312f6170706c69636174696f6e732f7b6170706c69636174696f6e5f69647d2f64617368626f6172645f76322f636f6e76657273696f6e222c22737461747573223a3230302c22726174655f6c696d69746564223a66616c73652c22726571756573745f6964223a2237656265313965342d373062372d343035332d383033632d386537343339383439666638227d0a"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard/mrr_evolution_live?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "5b297958-912a-4533-b502-96df419ddc14"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": ""
+              }
+            },
+            {
+              "at": 1700000001250,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/subscription_evolution?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "594a81be-eb26-4608-9be6-e9007c5d9425"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "null"
+              }
+            },
+            {
+              "at": 1700000002500,
+              "url": "https://api.purchasely.io/management/v1/applications/app_1/dashboard_v2/conversion?date_range[]=2023-10-16&date_range[]=2023-11-14&periodicity=DAY",
+              "method": "GET",
+              "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer pk_mgmt_live_SECRET123",
+                "User-Agent": "purchasely-cli/9.9.9 (-; -; dashboard summary; script)",
+                "X-Request-Id": "7ebe19e4-70b7-4053-803c-8e7439849ff8"
+              },
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "not json"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "app_1  2023-10-16 to 2023-11-14  (DAY)\n\nMRR                     0  (no data)\nActive subscriptions    0  (no data)\nPaywall unique viewers  0  (no data)\nConversions             0  (no data)\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dashboard::dashboard summary > checks --app and --days before any request",
+      "steps": [
+        {
+          "argv": [
+            "dashboard",
+            "summary"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"dashboard summary needs --app <app_id>.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "1"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--days must be a whole number from 2 to 730.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "731"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--days must be a whole number from 2 to 730.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "1e2"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--days must be a whole number from 2 to 730.\"]}}\n"
+        },
+        {
+          "argv": [
+            "dashboard",
+            "summary",
+            "--app",
+            "app_1",
+            "--days",
+            "0x1e"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 47663,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"USAGE\",\"messages\":[\"--days must be a whole number from 2 to 730.\"]}}\n"
+        }
+      ]
+    },
+    {"test": "dashboard::dashboard summary > never draws a full block, so the rows of a table keep a gap", "steps": [], "unit": "purchasely::commands::dashboard::tests::sparkline_never_draws_a_full_block"}
+  ]
+}

@@ -1,0 +1,752 @@
+{
+  "cases": [
+    {
+      "test": "search::search finds every command > finds the generated commands that a hand-written command shadows",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "list screens",
+            "--limit",
+            "30"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely screens list --app app_xxx\",\n    \"summary\": \"List screens\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions list --app app_xxx --screen-id <screen-id>\",\n    \"summary\": \"List screen versions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screens create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a screen\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/screens\",\n    \"scope\": \"experiences.screens:create\"\n  },\n  {\n    \"command\": \"purchasely screens get --app app_xxx --id <id>\",\n    \"summary\": \"Get a screen\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screens delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a screen\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}\",\n    \"scope\": \"experiences.screens:delete\"\n  },\n  {\n    \"command\": \"purchasely screens duplicate --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Duplicate a screen\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/duplicate\",\n    \"scope\": \"experiences.screens:create\"\n  },\n  {\n    \"command\": \"purchasely screens make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default screen\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/make_default\",\n    \"scope\": \"experiences.screens:publish\"\n  },\n  {\n    \"command\": \"purchasely screens publish --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Publish a screen draft\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/publish\",\n    \"scope\": \"experiences.screens:publish\"\n  },\n  {\n    \"command\": \"purchasely screens update-draft --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a screen draft\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/update_draft\",\n    \"scope\": \"experiences.screens:edit\"\n  },\n  {\n    \"command\": \"purchasely screens validate --app app_xxx --id <id>\",\n    \"summary\": \"Validate a screen draft\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/validate\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions get --app app_xxx --screen-id <screen-id> --id <id>\",\n    \"summary\": \"Get a screen version\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions/{id}\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions restore --app app_xxx --screen-id <screen-id> --id <id> --env prod\",\n    \"summary\": \"Restore a screen version\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions/{id}/restore\",\n    \"scope\": \"experiences.screens:restore\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  },\n  {\n    \"command\": \"purchasely answers list --app app_xxx --survey-id <survey-id>\",\n    \"summary\": \"List survey answers\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/answers\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely applications list\",\n    \"summary\": \"List applications\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely audiences list --app app_xxx\",\n    \"summary\": \"List audiences\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/audiences\",\n    \"scope\": \"targeting.audiences:view\"\n  },\n  {\n    \"command\": \"purchasely campaigns list --app app_xxx\",\n    \"summary\": \"List campaigns\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns\",\n    \"scope\": \"targeting.campaigns:view\"\n  },\n  {\n    \"command\": \"purchasely category-tags list --app app_xxx\",\n    \"summary\": \"List category tags\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/category_tags\",\n    \"scope\": \"experiences.category_tags:view\"\n  },\n  {\n    \"command\": \"purchasely client-errors list --app app_xxx\",\n    \"summary\": \"List client errors\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/client_errors\",\n    \"scope\": \"lookups.client_errors:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties list --app app_xxx\",\n    \"summary\": \"List custom event properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-events list --app app_xxx\",\n    \"summary\": \"List custom events\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_events\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-properties list --app app_xxx\",\n    \"summary\": \"List custom properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:view\"\n  },\n  {\n    \"command\": \"purchasely flows list --app app_xxx\",\n    \"summary\": \"List in-app flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows\",\n    \"scope\": \"experiences.flows:view\"\n  },\n  {\n    \"command\": \"purchasely web-activations screen --app app_xxx --id <id>\",\n    \"summary\": \"Get the web activation of a screen\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/web_activation\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely fonts list --app app_xxx\",\n    \"summary\": \"List custom fonts\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/fonts\",\n    \"scope\": \"setup.fonts:view\"\n  },\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely plans list --app app_xxx --product-id <product-id>\",\n    \"summary\": \"List plans\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions list --app app_xxx --plan-id <plan-id>\",\n    \"summary\": \"List store distributions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely products list --app app_xxx\",\n    \"summary\": \"List products\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/products\",\n    \"scope\": \"setup.products:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "get placements",
+            "--limit",
+            "30"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely placements get --app app_xxx --id <id>\",\n    \"summary\": \"Get a placement\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a placement\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a placement\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:delete\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete-audience --app app_xxx --id <id> --audience-id <audience-id> --env prod\",\n    \"summary\": \"Remove an audience from a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences/{audience_id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements duplicate --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Duplicate a placement's targeting\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/duplicate\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default placement\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/make_default\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely applications get --app app_xxx\",\n    \"summary\": \"Get an application\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely ab-tests get --app app_xxx --id <id>\",\n    \"summary\": \"Get an AB test\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests/{id}\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  },\n  {\n    \"command\": \"purchasely campaigns get --app app_xxx --id <id>\",\n    \"summary\": \"Get a campaign\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns/{id}\",\n    \"scope\": \"targeting.campaigns:view\"\n  },\n  {\n    \"command\": \"purchasely category-tags get --app app_xxx --id <id>\",\n    \"summary\": \"Get a category tag\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/category_tags/{id}\",\n    \"scope\": \"experiences.category_tags:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties get --app app_xxx --id <id>\",\n    \"summary\": \"Get a custom event property\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties/{id}\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-events get --app app_xxx --id <id>\",\n    \"summary\": \"Get a custom event\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_events/{id}\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-properties get --app app_xxx --id <id>\",\n    \"summary\": \"Get a custom property\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties/{id}\",\n    \"scope\": \"setup.user_attributes:view\"\n  },\n  {\n    \"command\": \"purchasely flows get --app app_xxx --id <id>\",\n    \"summary\": \"Get an in-app flow\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows/{id}\",\n    \"scope\": \"experiences.flows:view\"\n  },\n  {\n    \"command\": \"purchasely fonts get --app app_xxx --id <id>\",\n    \"summary\": \"Get a custom font\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/fonts/{id}\",\n    \"scope\": \"setup.fonts:view\"\n  },\n  {\n    \"command\": \"purchasely plans get --app app_xxx --id <id>\",\n    \"summary\": \"Get a plan\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{id}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions get --app app_xxx --plan-id <plan-id> --store <store>\",\n    \"summary\": \"Get a store distribution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely platforms get --app app_xxx --store <store>\",\n    \"summary\": \"Get a store platform\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms/{store}\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely products get --app app_xxx --id <id>\",\n    \"summary\": \"Get a product\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/products/{id}\",\n    \"scope\": \"setup.products:view\"\n  },\n  {\n    \"command\": \"purchasely one-time-purchases get --app app_xxx --id <id>\",\n    \"summary\": \"Get a one-time purchase\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_one_time_purchases/{id}\",\n    \"scope\": \"lookups.one_time_purchases:view\"\n  },\n  {\n    \"command\": \"purchasely subscriptions get --app app_xxx --id <id>\",\n    \"summary\": \"Get a subscription\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_subscriptions/{id}\",\n    \"scope\": \"lookups.subscriptions:view\"\n  },\n  {\n    \"command\": \"purchasely screens get --app app_xxx --id <id>\",\n    \"summary\": \"Get a screen\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions get --app app_xxx --screen-id <screen-id> --id <id>\",\n    \"summary\": \"Get a screen version\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions/{id}\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely surveys get --app app_xxx --id <id>\",\n    \"summary\": \"Get a survey\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/surveys/{id}\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely users get --app app_xxx --id <id>\",\n    \"summary\": \"Get a user profile\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/users/{id}\",\n    \"scope\": \"lookups.users:view\"\n  },\n  {\n    \"command\": \"purchasely web-flows get --app app_xxx --id <id>\",\n    \"summary\": \"Get a web flow\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/web_flows/{id}\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely webhook-deliveries get --app app_xxx --id <id>\",\n    \"summary\": \"Get webhook delivery details\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/webhook_deliveries/{id}\",\n    \"scope\": \"integrations.webhook_deliveries:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "list applications",
+            "--limit",
+            "30"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely applications list\",\n    \"summary\": \"List applications\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  },\n  {\n    \"command\": \"purchasely audiences list --app app_xxx\",\n    \"summary\": \"List audiences\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/audiences\",\n    \"scope\": \"targeting.audiences:view\"\n  },\n  {\n    \"command\": \"purchasely campaigns list --app app_xxx\",\n    \"summary\": \"List campaigns\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns\",\n    \"scope\": \"targeting.campaigns:view\"\n  },\n  {\n    \"command\": \"purchasely category-tags list --app app_xxx\",\n    \"summary\": \"List category tags\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/category_tags\",\n    \"scope\": \"experiences.category_tags:view\"\n  },\n  {\n    \"command\": \"purchasely client-errors list --app app_xxx\",\n    \"summary\": \"List client errors\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/client_errors\",\n    \"scope\": \"lookups.client_errors:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties list --app app_xxx\",\n    \"summary\": \"List custom event properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-events list --app app_xxx\",\n    \"summary\": \"List custom events\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_events\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-properties list --app app_xxx\",\n    \"summary\": \"List custom properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:view\"\n  },\n  {\n    \"command\": \"purchasely flows list --app app_xxx\",\n    \"summary\": \"List in-app flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows\",\n    \"scope\": \"experiences.flows:view\"\n  },\n  {\n    \"command\": \"purchasely fonts list --app app_xxx\",\n    \"summary\": \"List custom fonts\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/fonts\",\n    \"scope\": \"setup.fonts:view\"\n  },\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely products list --app app_xxx\",\n    \"summary\": \"List products\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/products\",\n    \"scope\": \"setup.products:view\"\n  },\n  {\n    \"command\": \"purchasely one-time-purchases list --app app_xxx\",\n    \"summary\": \"List one-time purchases\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_one_time_purchases\",\n    \"scope\": \"lookups.one_time_purchases:view\"\n  },\n  {\n    \"command\": \"purchasely subscriptions list --app app_xxx\",\n    \"summary\": \"List subscriptions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_subscriptions\",\n    \"scope\": \"lookups.subscriptions:view\"\n  },\n  {\n    \"command\": \"purchasely screens list --app app_xxx\",\n    \"summary\": \"List screens\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely surveys list --app app_xxx\",\n    \"summary\": \"List surveys\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/surveys\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely web-flows list --app app_xxx\",\n    \"summary\": \"List web flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/web_flows\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely answers list --app app_xxx --survey-id <survey-id>\",\n    \"summary\": \"List survey answers\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/answers\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely applications get --app app_xxx\",\n    \"summary\": \"Get an application\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely applications update --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Update an application\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}\",\n    \"scope\": \"setup.apps:edit\"\n  },\n  {\n    \"command\": \"purchasely applications colors-palette --app app_xxx\",\n    \"summary\": \"Get an application's colors palette\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/colors_palette\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely plans list --app app_xxx --product-id <product-id>\",\n    \"summary\": \"List plans\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions list --app app_xxx --plan-id <plan-id>\",\n    \"summary\": \"List store distributions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions list --app app_xxx --screen-id <screen-id>\",\n    \"summary\": \"List screen versions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely applications update-colors-palette --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Replace an application's colors palette\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/update_colors_palette\",\n    \"scope\": \"setup.apps:edit\"\n  },\n  {\n    \"command\": \"purchasely webhook-deliveries list --user-id <user-id>\",\n    \"summary\": \"List webhook deliveries for a user\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/users/{user_id}/webhook_deliveries\",\n    \"scope\": \"integrations.webhook_deliveries:view\"\n  },\n  {\n    \"command\": \"purchasely translations list --app app_xxx\",\n    \"summary\": \"Get translation status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/translations\",\n    \"scope\": \"setup.translations:view\"\n  },\n  {\n    \"command\": \"purchasely webhooks list --app app_xxx\",\n    \"summary\": \"Get webhook event settings\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/webhooks\",\n    \"scope\": \"integrations.webhooks:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        }
+      ]
+    },
+    {
+      "test": "search::search finds every command > lists the hand-written commands",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "usage",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely usage\",\n    \"summary\": \"Requests of the last hour, rejections, limiter and breaker state\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "purge",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely purge\",\n    \"summary\": \"Delete the cached client data\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "auth login",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth status\",\n    \"summary\": \"Show where the credential comes from\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth logout\",\n    \"summary\": \"Delete the stored credential\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "auth status",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely auth status\",\n    \"summary\": \"Show where the credential comes from\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth logout\",\n    \"summary\": \"Delete the stored credential\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely ai status\",\n    \"summary\": \"Show the agents, the plugin version and how each one follows releases\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Live subscription and user status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely translations list --app app_xxx\",\n    \"summary\": \"Get translation status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/translations\",\n    \"scope\": \"setup.translations:view\"\n  },\n  {\n    \"command\": \"purchasely web-activations flow --app app_xxx --id <id>\",\n    \"summary\": \"Get the web activation of a flow\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows/{id}/web_activation\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely web-activations screen --app app_xxx --id <id>\",\n    \"summary\": \"Get the web activation of a screen\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}/web_activation\",\n    \"scope\": \"experiences.web2app:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "auth logout",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely auth logout\",\n    \"summary\": \"Delete the stored credential\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth status\",\n    \"summary\": \"Show where the credential comes from\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "dashboard summary",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely dashboard summary --app app_xxx --output table\",\n    \"summary\": \"Analytics dashboard of an app: key metrics with trend charts\",\n    \"method\": \"GET\",\n    \"path\": \"-\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard composition-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription composition\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/composition_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard events --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Event counts by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/events\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard flow-paths --app app_xxx --date-range <date-range> --flow-id <flow-id>\",\n    \"summary\": \"Flow paths funnel\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/flow_paths\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard funnel --app app_xxx --date-range <date-range> --dimension <dimension>\",\n    \"summary\": \"Conversion funnel\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/funnel\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Live subscription and user status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard header-today --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Today's key figures\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/header_today\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard mrr-evolution-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"MRR evolution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/mrr_evolution_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-revenues --app app_xxx --date-range <date-range>\",\n    \"summary\": \"One-time purchase revenue by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/one_time_purchases_revenues\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard one-time-purchases-stats --app app_xxx --date-range <date-range>\",\n    \"summary\": \"One-time purchase sales and refunds\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/one_time_purchases_stats\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscriptions-revenues --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription revenue by period\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/subscriptions_revenues\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscriptions-stats --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription counts, churn and refunds\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/subscriptions_stats\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard trials-live --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Trials and intro offers\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard/trials_live\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard conversion --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Paywall conversion\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/conversion\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard mau-reports --app app_xxx\",\n    \"summary\": \"Monthly active users\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/mau_reports\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard paid-subscription-movements --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Paid subscription movements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/paid_subscription_movements\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard paid-subscription-retention --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Paid-subscription retention cohort matrix for a single application\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/paid_subscription_retention\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard paywall-latency --app app_xxx\",\n    \"summary\": \"Paywall latency\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/paywall_latency\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard sdk-evolution --app app_xxx --date-range <date-range>\",\n    \"summary\": \"SDK version adoption over time\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/sdk_evolution\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard sdk-versions --app app_xxx --date-range <date-range>\",\n    \"summary\": \"SDK versions in use\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/sdk_versions\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-activations --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription activations\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/subscription_activations\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-evolution --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Active subscription base\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/subscription_evolution\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely dashboard subscription-reactivations --app app_xxx --date-range <date-range>\",\n    \"summary\": \"Subscription reactivations\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/dashboard_v2/subscription_reactivations\",\n    \"scope\": \"analytics.dashboards:view\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "api",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely api\",\n    \"summary\": \"Send a raw Management API request\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely auth login\",\n    \"summary\": \"Store the Management API key\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "reference",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely reference\",\n    \"summary\": \"Print the full command reference of this version (Markdown, man, HTML or JSON)\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        }
+      ]
+    },
+    {
+      "test": "search::search finds every command > returns no duplicate and no help entry",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "list placements",
+            "--limit",
+            "200"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely placements list --app app_xxx\",\n    \"summary\": \"List placements\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements audiences --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Replace a placement's audiences\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Create a placement\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements get --app app_xxx --id <id>\",\n    \"summary\": \"Get a placement\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:view\"\n  },\n  {\n    \"command\": \"purchasely placements update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a placement\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}\",\n    \"scope\": \"targeting.placements:delete\"\n  },\n  {\n    \"command\": \"purchasely placements delete-audience --app app_xxx --id <id> --audience-id <audience-id> --env prod\",\n    \"summary\": \"Remove an audience from a placement\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/audiences/{audience_id}\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely placements duplicate --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Duplicate a placement's targeting\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/duplicate\",\n    \"scope\": \"targeting.placements:create\"\n  },\n  {\n    \"command\": \"purchasely placements make-default --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Set the default placement\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/placements/{id}/make_default\",\n    \"scope\": \"targeting.placements:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests list --app app_xxx\",\n    \"summary\": \"List AB tests\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests\",\n    \"scope\": \"experimentation.ab_tests:view\"\n  },\n  {\n    \"command\": \"purchasely answers list --app app_xxx --survey-id <survey-id>\",\n    \"summary\": \"List survey answers\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/answers\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely applications list\",\n    \"summary\": \"List applications\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications\",\n    \"scope\": \"setup.apps:view\"\n  },\n  {\n    \"command\": \"purchasely audiences list --app app_xxx\",\n    \"summary\": \"List audiences\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/audiences\",\n    \"scope\": \"targeting.audiences:view\"\n  },\n  {\n    \"command\": \"purchasely campaigns list --app app_xxx\",\n    \"summary\": \"List campaigns\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns\",\n    \"scope\": \"targeting.campaigns:view\"\n  },\n  {\n    \"command\": \"purchasely category-tags list --app app_xxx\",\n    \"summary\": \"List category tags\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/category_tags\",\n    \"scope\": \"experiences.category_tags:view\"\n  },\n  {\n    \"command\": \"purchasely client-errors list --app app_xxx\",\n    \"summary\": \"List client errors\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/client_errors\",\n    \"scope\": \"lookups.client_errors:view\"\n  },\n  {\n    \"command\": \"purchasely custom-event-properties list --app app_xxx\",\n    \"summary\": \"List custom event properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_event_properties\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-events list --app app_xxx\",\n    \"summary\": \"List custom events\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_events\",\n    \"scope\": \"setup.custom_events:view\"\n  },\n  {\n    \"command\": \"purchasely custom-properties list --app app_xxx\",\n    \"summary\": \"List custom properties\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/custom_properties\",\n    \"scope\": \"setup.user_attributes:view\"\n  },\n  {\n    \"command\": \"purchasely flows list --app app_xxx\",\n    \"summary\": \"List in-app flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/flows\",\n    \"scope\": \"experiences.flows:view\"\n  },\n  {\n    \"command\": \"purchasely fonts list --app app_xxx\",\n    \"summary\": \"List custom fonts\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/fonts\",\n    \"scope\": \"setup.fonts:view\"\n  },\n  {\n    \"command\": \"purchasely plans list --app app_xxx --product-id <product-id>\",\n    \"summary\": \"List plans\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions list --app app_xxx --plan-id <plan-id>\",\n    \"summary\": \"List store distributions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely products list --app app_xxx\",\n    \"summary\": \"List products\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/products\",\n    \"scope\": \"setup.products:view\"\n  },\n  {\n    \"command\": \"purchasely one-time-purchases list --app app_xxx\",\n    \"summary\": \"List one-time purchases\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_one_time_purchases\",\n    \"scope\": \"lookups.one_time_purchases:view\"\n  },\n  {\n    \"command\": \"purchasely subscriptions list --app app_xxx\",\n    \"summary\": \"List subscriptions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/purchasely_subscriptions\",\n    \"scope\": \"lookups.subscriptions:view\"\n  },\n  {\n    \"command\": \"purchasely screens list --app app_xxx\",\n    \"summary\": \"List screens\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely screen-versions list --app app_xxx --screen-id <screen-id>\",\n    \"summary\": \"List screen versions\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{screen_id}/screen_versions\",\n    \"scope\": \"experiences.screens:view\"\n  },\n  {\n    \"command\": \"purchasely surveys list --app app_xxx\",\n    \"summary\": \"List surveys\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/surveys\",\n    \"scope\": \"setup.surveys:view\"\n  },\n  {\n    \"command\": \"purchasely web-flows list --app app_xxx\",\n    \"summary\": \"List web flows\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/web_flows\",\n    \"scope\": \"experiences.web2app:view\"\n  },\n  {\n    \"command\": \"purchasely webhook-deliveries list --user-id <user-id>\",\n    \"summary\": \"List webhook deliveries for a user\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/users/{user_id}/webhook_deliveries\",\n    \"scope\": \"integrations.webhook_deliveries:view\"\n  },\n  {\n    \"command\": \"purchasely translations list --app app_xxx\",\n    \"summary\": \"Get translation status\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/translations\",\n    \"scope\": \"setup.translations:view\"\n  },\n  {\n    \"command\": \"purchasely users list --app app_xxx --identifier <identifier>\",\n    \"summary\": \"Find a user by ID\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/users\",\n    \"scope\": \"lookups.users:view\"\n  },\n  {\n    \"command\": \"purchasely webhooks list --app app_xxx\",\n    \"summary\": \"Get webhook event settings\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/webhooks\",\n    \"scope\": \"integrations.webhooks:view\"\n  },\n  {\n    \"command\": \"purchasely ab-tests update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update an AB test\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests/{id}\",\n    \"scope\": \"experimentation.ab_tests:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests start --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Start an AB test\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests/{id}/start\",\n    \"scope\": \"experimentation.ab_tests:edit\"\n  },\n  {\n    \"command\": \"purchasely ab-tests terminate --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Terminate an AB test\",\n    \"method\": \"PUT\",\n    \"path\": \"/management/v1/applications/{application_id}/ab_tests/{id}/terminate\",\n    \"scope\": \"experimentation.ab_tests:edit\"\n  },\n  {\n    \"command\": \"purchasely audiences discard --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Discard an audience\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/audiences/{id}/discard\",\n    \"scope\": \"targeting.audiences:delete\"\n  },\n  {\n    \"command\": \"purchasely campaigns update --app app_xxx --id <id> --data @body.json --env prod\",\n    \"summary\": \"Update a campaign\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/campaigns/{id}\",\n    \"scope\": \"targeting.campaigns:edit\"\n  },\n  {\n    \"command\": \"purchasely screens delete --app app_xxx --id <id> --env prod\",\n    \"summary\": \"Discard a screen\",\n    \"method\": \"DELETE\",\n    \"path\": \"/management/v1/applications/{application_id}/screens/{id}\",\n    \"scope\": \"experiences.screens:delete\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        }
+      ]
+    },
+    {
+      "test": "search::search finds every command > finds games first for a game task, and never a hidden command",
+      "steps": [
+        {
+          "argv": [
+            "search",
+            "play a game",
+            "--limit",
+            "50"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely games\",\n    \"summary\": \"Play a game in the terminal\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely distributions get --app app_xxx --plan-id <plan-id> --store <store>\",\n    \"summary\": \"Get a store distribution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions update --app app_xxx --plan-id <plan-id> --store <store> --data @body.json --env prod\",\n    \"summary\": \"Update a store distribution\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely platforms create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Add a store platform\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:edit\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        },
+        {
+          "argv": [
+            "search",
+            "play game terminal",
+            "--limit",
+            "200"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 73188,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "prod:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "[\n  {\n    \"command\": \"purchasely games\",\n    \"summary\": \"Play a game in the terminal\",\n    \"method\": \"-\",\n    \"path\": \"-\",\n    \"scope\": \"cli\"\n  },\n  {\n    \"command\": \"purchasely dashboard summary --app app_xxx --output table\",\n    \"summary\": \"Analytics dashboard of an app: key metrics with trend charts\",\n    \"method\": \"GET\",\n    \"path\": \"-\",\n    \"scope\": \"analytics.dashboards:view\"\n  },\n  {\n    \"command\": \"purchasely distributions get --app app_xxx --plan-id <plan-id> --store <store>\",\n    \"summary\": \"Get a store distribution\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:view\"\n  },\n  {\n    \"command\": \"purchasely distributions update --app app_xxx --plan-id <plan-id> --store <store> --data @body.json --env prod\",\n    \"summary\": \"Update a store distribution\",\n    \"method\": \"PATCH\",\n    \"path\": \"/management/v1/applications/{application_id}/plans/{plan_id}/distributions/{store}\",\n    \"scope\": \"setup.plans:edit\"\n  },\n  {\n    \"command\": \"purchasely platforms list --app app_xxx\",\n    \"summary\": \"List store platforms\",\n    \"method\": \"GET\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:view\"\n  },\n  {\n    \"command\": \"purchasely platforms create --app app_xxx --data @body.json --env prod\",\n    \"summary\": \"Add a store platform\",\n    \"method\": \"POST\",\n    \"path\": \"/management/v1/applications/{application_id}/platforms\",\n    \"scope\": \"setup.platforms:edit\"\n  }\n]\n",
+          "err": "purchasely env=prod surface=management identity=- key=-\n"
+        }
+      ]
+    }
+  ]
+}

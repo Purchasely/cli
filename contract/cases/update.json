@@ -1,0 +1,2959 @@
+{
+  "cases": [
+    {
+      "test": "update::daily background check > spawns one detached child a day and treats a generated update action as a command",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              },
+              "run_child": true
+            },
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\nacme env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700003600000,
+          "t_after": 1700003600000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700090000000,
+          "t_after": 1700090000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700090000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303039303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              },
+              "run_child": true
+            },
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\nacme env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--app",
+            "a",
+            "--id",
+            "b",
+            "--data",
+            "{}",
+            "--env",
+            "staging",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700180000000,
+          "t_after": 1700180000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700090000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303039303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700180000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303138303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              },
+              "run_child": true
+            },
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"method\": \"PATCH\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/a/placements/b\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements update; script)\",\n    \"Content-Type\": \"application/json\"\n  },\n  \"body\": {}\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\nacme env=staging surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::daily background check > does not spawn for the top-level update command",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"9.9.9\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a22392e392e39222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"npm\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"9.9.9\",\n  \"action\": \"up_to_date\"\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::daily background check > never fails a command: a state file that is not JSON, a held lock",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "not json",
+                "hex": "6e6f74206a736f6e"
+              },
+              {
+                "path": "state/update.acme.lock",
+                "mode": 420,
+                "directory": false,
+                "text": "17709",
+                "hex": "3137373039"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "not json",
+                "hex": "6e6f74206a736f6e"
+              },
+              {
+                "path": "state/update.acme.lock",
+                "mode": 420,
+                "directory": false,
+                "text": "17709",
+                "hex": "3137373039"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::opt-outs > CI records no exec and writes no state",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "",
+            "CI": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::opt-outs > PURCHASELY_DISABLE_AUTOUPDATE records no exec and writes no state",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::opt-outs > PURCHASELY_OFFLINE records no exec and writes no state",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "",
+            "PURCHASELY_OFFLINE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::opt-outs > config auto_update false records no exec and writes no state",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"auto_update\":false}",
+                "hex": "7b226175746f5f757064617465223a66616c73657d"
+              },
+              {
+                "path": "config",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "config/config.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"auto_update\":false}",
+                "hex": "7b226175746f5f757064617465223a66616c73657d"
+              },
+              {
+                "path": "config",
+                "mode": 493,
+                "directory": true
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::notice once a day > prints the npm line once a day, never for a managed install",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely 10.0.0 is available: curl -fsSL https://cli.test/install.sh | sh\npurchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700086400001,
+          "t_after": 1700086400001,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700086400001}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303038363430303030317d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "error": "ENOENT"
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely 10.0.0 is available: curl -fsSL https://cli.test/install.sh | sh\npurchasely env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::notice once a day > keeps both fields when the child result and the parent notice both write",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v11.0.0\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "11.0.0"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1699913599999}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313639393931333539393939397d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"11.0.0\",\"checked_at\":1700000000000,\"notified_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231312e302e30222c22636865636b65645f6174223a313730303030303030303030302c226e6f7469666965645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              },
+              "run_child": true
+            },
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v11.0.0\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "acme 10.0.0 is available: npm install -g acme\nacme env=prod surface=management identity=- key=…T123\nacme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::managed update runs the installer > passes the version, keep, root and upgrade-only to install.sh",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v10.0.0\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "10.0.0"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v10.0.0\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            },
+            {
+              "file": "sh",
+              "args": [
+                "/r/releases/9.9.9/install.sh",
+                "--version",
+                "10.0.0",
+                "--keep",
+                "9.9.9",
+                "--root",
+                "/r",
+                "--upgrade-only"
+              ],
+              "opts": {
+                "timeoutMs": 600000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"managed\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"10.0.0\",\n  \"action\": \"updated\"\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::managed update runs the installer > exits 1 when the installer fails",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v10.0.0\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "10.0.0"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v10.0.0\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            },
+            {
+              "file": "sh",
+              "args": [
+                "/r/releases/9.9.9/install.sh",
+                "--version",
+                "10.0.0",
+                "--keep",
+                "9.9.9",
+                "--root",
+                "/r",
+                "--upgrade-only"
+              ],
+              "opts": {
+                "timeoutMs": 600000
+              },
+              "result": {
+                "code": 1,
+                "stdout": "",
+                "stderr": "install failed\n",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 1,
+          "out": "",
+          "err": "acme env=prod surface=management identity=- key=…T123\ninstall failed\n{\"error\":{\"code\":\"UPDATE_FAILED\",\"messages\":[\"install failed\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "update::up to date > runs no installer when the latest is the current",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"9.9.9\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a22392e392e39222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"managed\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"9.9.9\",\n  \"action\": \"up_to_date\"\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::up to date > gives a notice, and no install, for an npm install",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v10.0.0\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "10.0.0"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"10.0.0\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a2231302e302e30222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v10.0.0\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"npm\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"10.0.0\",\n  \"action\": \"notice\"\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\nacme 10.0.0 is available: npm install -g acme\n"
+        }
+      ]
+    },
+    {
+      "test": "update::up to date > treats a prerelease tag as no update and writes nothing",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v10.0.0-rc1\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": null
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v10.0.0-rc1\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"managed\",\n  \"current\": \"9.9.9\",\n  \"latest\": null,\n  \"action\": \"up_to_date\"\n}\n",
+          "err": "acme env=prod surface=management identity=- key=…T123\nNo stable release found, nothing to compare with.\n"
+        }
+      ]
+    },
+    {
+      "test": "update::background is silent > exits 0 with empty stdout when gh fails",
+      "steps": [
+        {
+          "argv": [
+            "update",
+            "--background"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 1,
+                    "stdout": "",
+                    "stderr": "boom\n",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "error": "could not check the latest version"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 1,
+                "stdout": "",
+                "stderr": "boom\n",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::background is silent > exits 0 when the installer fails and gives it a log file",
+      "steps": [
+        {
+          "argv": [
+            "update",
+            "--background"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v10.0.0\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "10.0.0"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"10.0.0\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a2231302e302e30227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v10.0.0\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            },
+            {
+              "file": "sh",
+              "args": [
+                "/r/releases/9.9.9/install.sh",
+                "--version",
+                "10.0.0",
+                "--keep",
+                "9.9.9",
+                "--root",
+                "/r",
+                "--upgrade-only",
+                "--log",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-bfvUwC/state/update.acme.log"
+              ],
+              "opts": {
+                "timeoutMs": 600000
+              },
+              "result": {
+                "code": 1,
+                "stdout": "",
+                "stderr": "x\n",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::background is silent > skips when another child already reserved the day",
+      "steps": [
+        {
+          "argv": [
+            "update",
+            "--background"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": null
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 420,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 493,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::public channel > purchasely reads latest.json over HTTPS",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"latest\":\"9.9.10\",\"checked_at\":1700000000000}",
+                "hex": "7b226c6174657374223a22392e392e3130222c22636865636b65645f6174223a313730303030303030303030307d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"version\":\"9.9.10\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}"
+              }
+            }
+          ],
+          "execs": [
+            {
+              "file": "sh",
+              "args": [
+                "/r/releases/9.9.9/install.sh",
+                "--version",
+                "9.9.10",
+                "--keep",
+                "9.9.9",
+                "--root",
+                "/r",
+                "--upgrade-only"
+              ],
+              "opts": {
+                "timeoutMs": 600000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"managed\",\n  \"current\": \"9.9.9\",\n  \"latest\": \"9.9.10\",\n  \"action\": \"updated\"\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::public channel > purchasely: a bad latest.json is a fixed error",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 500,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "SECRET_BODY"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"UPDATE_CHECK_FAILED\",\"messages\":[\"could not check the latest version. Check your network, then try again.\"]}}\n"
+        },
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "<html>SECRET_BODY"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"UPDATE_CHECK_FAILED\",\"messages\":[\"could not check the latest version. Check your network, then try again.\"]}}\n"
+        },
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "error": "SECRET_BODY"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"UPDATE_CHECK_FAILED\",\"messages\":[\"could not check the latest version. Check your network, then try again.\"]}}\n"
+        },
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"sha256\":\"x\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 1,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n{\"error\":{\"code\":\"UPDATE_CHECK_FAILED\",\"messages\":[\"could not check the latest version. Check your network, then try again.\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "update::public channel > purchasely: a version that is not x.y.z is no release",
+      "steps": [
+        {
+          "argv": [
+            "update"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"version\":\"10.0.0-rc1\"}"
+              }
+            }
+          ],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"kind\": \"npm\",\n  \"current\": \"9.9.9\",\n  \"latest\": null,\n  \"action\": \"up_to_date\"\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\nNo stable release found, nothing to compare with.\n"
+        }
+      ]
+    },
+    {
+      "test": "update::public channel > each program has its own update record",
+      "steps": [
+        {
+          "argv": [
+            "update",
+            "--background"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": {
+            "surfaces": {},
+            "identity": true,
+            "section": {
+              "title": "More commands",
+              "note": "Only in `acme`."
+            },
+            "npm_update": "npm install -g acme",
+            "latest": {
+              "execs": [
+                {
+                  "file": "gh",
+                  "args": [
+                    "release",
+                    "view"
+                  ],
+                  "opts": {
+                    "timeoutMs": 15000
+                  },
+                  "result": {
+                    "code": 0,
+                    "stdout": "v9.9.9\n",
+                    "stderr": "",
+                    "timedOut": false
+                  }
+                }
+              ],
+              "result": "9.9.9"
+            }
+          },
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "gh",
+              "args": [
+                "release",
+                "view"
+              ],
+              "opts": {
+                "timeoutMs": 15000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "v9.9.9\n",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "",
+          "err": "acme env=prod surface=management identity=- key=…T123\n"
+        },
+        {
+          "argv": [
+            "update",
+            "--background"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1",
+            "PURCHASELY_MANAGED_INSTALL_ROOT": "/r"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state/update.acme.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"9.9.9\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a22392e392e39227d"
+              },
+              {
+                "path": "state/update.purchasely.check.json",
+                "mode": 384,
+                "directory": false,
+                "text": "{\"checked_at\":1700000000000,\"latest\":\"10.0.0\"}",
+                "hex": "7b22636865636b65645f6174223a313730303030303030303030302c226c6174657374223a2231302e302e30227d"
+              },
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [
+            {
+              "at": 1700000000000,
+              "url": "https://cli.test/latest.json",
+              "method": "GET",
+              "headers": {},
+              "body": null,
+              "refuse_redirect": false,
+              "reply": {
+                "status": 200,
+                "headers": {
+                  "content-type": "text/plain;charset=UTF-8"
+                },
+                "text": "{\"version\":\"10.0.0\"}"
+              }
+            }
+          ],
+          "execs": [
+            {
+              "file": "sh",
+              "args": [
+                "/r/releases/9.9.9/install.sh",
+                "--version",
+                "10.0.0",
+                "--keep",
+                "9.9.9",
+                "--root",
+                "/r",
+                "--upgrade-only",
+                "--log",
+                "/var/folders/zf/6g8c13pn6vs5ljfzc8lxf0fw0000gn/T/purchasely-cli-1KYMQ9/state/update.purchasely.log"
+              ],
+              "opts": {
+                "timeoutMs": 600000
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {
+      "test": "update::public channel > spawns the running bundle",
+      "steps": [
+        {
+          "argv": [
+            "usage"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": ""
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17709,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": [
+              {
+                "path": "state",
+                "mode": 448,
+                "directory": true
+              }
+            ]
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [
+            {
+              "file": "<SELF>",
+              "args": [
+                "update",
+                "--background"
+              ],
+              "opts": {
+                "timeoutMs": 0,
+                "detach": true
+              },
+              "result": {
+                "code": 0,
+                "stdout": "",
+                "stderr": "",
+                "timedOut": false
+              }
+            }
+          ],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"last_hour\": [],\n  \"current\": {\n    \"env\": \"prod\",\n    \"surface\": \"management\",\n    \"key\": \"a5cc40633d7b\",\n    \"label\": \"…T123\",\n    \"rate\": 0.8,\n    \"in_flight\": 0,\n    \"breaker\": {\n      \"paused_until\": null,\n      \"rate_factor\": 1,\n      \"rejections_last_5_min\": 0\n    }\n  },\n  \"surfaces\": [\n    {\n      \"env\": \"prod\",\n      \"surface\": \"management\",\n      \"key\": \"a5cc40633d7b\",\n      \"label\": \"…T123\",\n      \"rate\": 0.8,\n      \"in_flight\": 0,\n      \"breaker\": {\n        \"paused_until\": null,\n        \"rate_factor\": 1,\n        \"rejections_last_5_min\": 0\n      }\n    }\n  ]\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=…T123\n"
+        }
+      ]
+    },
+    {"test": "update::install kind > tells managed, brew and npm", "steps": [], "unit": "purchasely::core::update::tests::tells_managed_brew_and_npm"},
+    {"test": "update::newer > compares x.y.z numerically", "steps": [], "unit": "purchasely::core::update::tests::newer_compares_x_y_z_numerically"},
+    {"test": "update::notice once a day > notice matrix per program and install kind", "steps": [], "unit": "purchasely::core::update::tests::notice_matrix_per_program_and_install_kind"},
+    {"test": "update::detach > a blocked child does not delay the parent's exit", "steps": [], "unit": "purchasely::core::real::tests::a_detached_child_that_blocks_does_not_delay_the_caller"}
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "cases": [
+    {
+      "test": "install::install.sh > fresh install: stages, switches, links and runs",
+      "steps": [],
+      "unit": "install::fresh_install_native"
+    },
+    {
+      "test": "install::install.sh > bad checksum: nothing is switched and nothing is left behind",
+      "steps": [],
+      "unit": "install::bad_checksum_leaves_no_release_or_switch"
+    },
+    {
+      "test": "install::install.sh > smoke test fails: exit 1 and current-version is unchanged",
+      "steps": [],
+      "unit": "install::smoke_failure_preserves_current_release"
+    },
+    {
+      "test": "install::install.sh > already current: no download",
+      "steps": [],
+      "unit": "install::already_current_does_not_download_again"
+    },
+    {
+      "test": "install::install.sh > update keeps running and previous: prunes to the 3 newest plus the current and --keep",
+      "steps": [],
+      "unit": "install::prune_keeps_three_newest_current_and_keep"
+    },
+    {
+      "test": "install::install.sh > update keeps running and previous: never prunes the current release, even when it is old",
+      "steps": [],
+      "unit": "install::prune_keeps_three_newest_current_and_keep"
+    },
+    {
+      "test": "install::install.sh > lock held: a live pid blocks, a dead pid is taken over",
+      "steps": [],
+      "unit": "install::installer_lock_live_pid_blocks"
+    },
+    {
+      "test": "install::install.sh > upgrade-only: runs under the lock and never goes backwards",
+      "steps": [],
+      "unit": "install::upgrade_only_never_downgrades"
+    },
+    {
+      "test": "install::install.sh > custom root: an update through the launcher keeps the custom root and does not move the symlink",
+      "steps": [],
+      "unit": "install::custom_root_launcher_preserves_managed_root"
+    },
+    {
+      "test": "install::install.sh > prerequisites: Node 22.12 and curl",
+      "steps": [],
+      "unit": "install::no_node_on_path_and_native_launcher_runs"
+    },
+    {
+      "test": "install::install.sh > log file: all messages go to the file",
+      "steps": [],
+      "unit": "install::log_file_captures_output"
+    },
+    {
+      "test": "install::install.sh > rejects a version that could escape the releases dir",
+      "steps": [],
+      "unit": "install::rejects_escaping_versions"
+    },
+    {
+      "test": "install::install.sh channels > public channel installs from latest.json with curl",
+      "steps": [],
+      "unit": "install::public_channel_uses_curl_and_refuses_old_release"
+    },
+    {
+      "test": "install::install.sh channels > public channel: a missing gzip is a prerequisite error",
+      "steps": [],
+      "unit": "install::missing_gzip_is_a_prerequisite_error"
+    },
+    {
+      "test": "install::install.sh channels > public channel refuses a bad checksum",
+      "steps": [],
+      "unit": "install::bad_checksum_leaves_no_release_or_switch"
+    },
+    {
+      "test": "install::install.sh channels > public channel: curl errors use a fixed message",
+      "steps": [],
+      "unit": "install::curl_errors_are_fixed_and_redacted"
+    },
+    {
+      "test": "install::install.sh channels > a truncated script runs nothing",
+      "steps": [],
+      "unit": "install::truncated_script_runs_nothing"
+    },
+    {
+      "test": "install::install.sh PATH and profile > bin dir already on PATH: no profile edit",
+      "steps": [],
+      "unit": "install::bin_dir_already_on_path_has_no_profile_edit"
+    },
+    {
+      "test": "install::install.sh PATH and profile > no bin dir on PATH: one profile line, once",
+      "steps": [],
+      "unit": "install::profile_path_added_once"
+    },
+    {
+      "test": "install::install.sh PATH and profile > fish or unknown shell uses .profile",
+      "steps": [],
+      "unit": "install::fish_shell_uses_profile"
+    },
+    {
+      "test": "install::install.sh PATH and profile > upgrade-only changes no PATH and no profile",
+      "steps": [],
+      "unit": "install::upgrade_only_never_downgrades"
+    },
+    {
+      "test": "install::install.sh man page > man page: installed in the XDG man dir and replaced by an update",
+      "steps": [],
+      "unit": "install::man_page_installs_and_updates"
+    },
+    {
+      "test": "install::install.sh man page > man page: a release without one installs and leaves no file",
+      "steps": [],
+      "unit": "install::man_page_absence_is_noop"
+    },
+    {
+      "test": "install::install.sh man page > man page: the same version installed again repairs a missing or changed page",
+      "steps": [],
+      "unit": "install::man_page_repairs_same_version"
+    },
+    {
+      "test": "install::install.sh man page > man page: --upgrade-only on the same version restores a deleted page, without a hint",
+      "steps": [],
+      "unit": "install::man_page_upgrade_only_restores_page"
+    },
+    {
+      "test": "install::install.sh man page > man page: a failed copy warns and does not fail the install, the next run installs it",
+      "steps": [],
+      "unit": "install::man_page_copy_failure_is_nonfatal"
+    },
+    {
+      "test": "install::install.sh man page > man page: man -w runs with the bin dir on PATH, and the hint shows only when man does not find the page",
+      "steps": [],
+      "unit": "install::man_page_searches_with_bin_path"
+    },
+    {
+      "test": "install::install.sh man page > man page: no man check when the release has no page, nor on an upgrade-only run",
+      "steps": [],
+      "unit": "install::man_page_absence_is_noop"
+    },
+    {
+      "test": "install::install.sh man page > without man (best effort: the rule man uses) > man page: MANPATH unset or empty or with an empty component: the bin dir decides",
+      "steps": [],
+      "unit": "install::manpath_empty_components_use_bin_layout"
+    },
+    {
+      "test": "install::install.sh man page > without man (best effort: the rule man uses) > man page: a MANPATH with no empty component is the whole search path, the bin dir does not count",
+      "steps": [],
+      "unit": "install::manpath_nonempty_excludes_bin_layout"
+    },
+    {
+      "test": "install::install.sh man page > without man (best effort: the rule man uses) > man page: an explicit man dir in MANPATH counts",
+      "steps": [],
+      "unit": "install::manpath_explicit_man_dir_counts"
+    },
+    {
+      "test": "install::install.sh man page > man page: man finds it from PATH",
+      "steps": [],
+      "unit": "install::man_page_searches_with_bin_path"
+    }
+  ]
+}

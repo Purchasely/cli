@@ -1,19 +1,15 @@
 # Release
 
-1. Bump `version` in `package.json`, commit.
-2. Tag `v<version>` (it must equal the version) and push the tag.
-3. `.github/workflows/release.yml` runs on every `v*` tag, with `contents: read` (and `id-token: write`, `attestations: write` for the `build` job only):
-   - `build`: `npm ci`, a check that the tag equals the `package.json` version, `npm run typecheck`, `npm test`, `npm run build`, then `sh scripts/pack-release.sh out`. It signs a build provenance for `purchasely-<ver>.tgz` and `install.sh` (`actions/attest-build-provenance`; check it with `gh attestation verify <file> -R Purchasely/cli`). It uploads `out/` as the artifact `site`.
-   - `deploy`: downloads the artifact and deploys it with `npx --yes wrangler@4.148.0 pages deploy out --project-name=purchasely-cli --branch=main` to the Cloudflare Pages project `purchasely-cli` (`cli.purchasely.io` and `cli.purchasely.com`). It is skipped for a tag that has a `-`.
+1. Set the version in `crates/purchasely/Cargo.toml` and commit it.
+2. Push the matching `v<version>` tag. Pull requests also build all four targets.
+3. `.github/workflows/release.yml` calls `.github/workflows/build.yml`. The matrix builds darwin-arm64, darwin-x64, linux-x64 and linux-arm64; strips and ad hoc signs macOS binaries; checks the file architecture; and runs `--version` on available target runners. It packs and smoke checks the release before publishing. Linux binaries use static musl.
+4. The release workflow publishes immutable GitHub assets, then deploys the checked files to Pages with `npx --yes wrangler@4.148.0 pages deploy out --project-name=purchasely-cli --branch=main`.
+5. For stable versions after 0.9.0, the workflow verifies each immutable asset against `SHA256SUMS`, renders `Formula/purchasely.rb`, checks it with `ruby -c`, and commits it to `main` as `chore(formula): purchasely <version>`. The bridge release has no formula. Install with `brew tap purchasely/cli https://github.com/Purchasely/cli` and `brew install purchasely`.
 
-`scripts/pack-release.sh <outdir>` needs an empty `<outdir>`. It fails when `site/_headers` exists, because the release files own `_headers`. The output is `site/` (without `*.md` files and `.DS_Store`) plus the release files: `install.sh` (with the `HOST` line set), `latest.json` (`{"version","sha256"}`), `purchasely-<ver>.tgz` (the bundle, `spec/management.json`, `man/purchasely.1`, a minimal `package.json` and `README.md`), `SHA256SUMS` and `_headers` (no-cache for `install.sh`, `latest.json` and `SHA256SUMS`). Pages deploys a whole snapshot, so the site holds the latest version only.
+`scripts/pack-release.sh` writes target archives containing `bin/purchasely`, the man page, `README.md`, `LICENSE` and the native `install.sh`. The bridge mode creates the 0.9.0 legacy archive for existing managed installs. During the first two stable native releases, Pages also serves that bridge archive and `latest.json` keeps `version` at `0.9.0` with the native version in `native`. From the third stable native release, the site publishes only the current native release.
 
-The script also generates two files from the built bundle, never by hand: `man/purchasely.1` in the tarball (`reference --format man`, dated with the pack date) and `reference.html` (`purchasely reference --format html`, served at `/reference`).
+The workflow attests the release archives and `install.sh`; verify an asset with `gh attestation verify <file> -R Purchasely/cli`. The Pages snapshot contains the landing page, `reference.html`, `install.sh`, `latest.json`, `SHA256SUMS`, `_headers` and the target archives. The packer rejects output over the 24 MiB bridge safety threshold. `install.sh` has the `HOST` and bridge version written into it by the packer.
 
-Each action is pinned to a commit SHA. Dependabot (`.github/dependabot.yml`) proposes the updates every week.
+Every action is pinned to a commit SHA. The wrangler version is pinned in the deploy command. Repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are required for Pages deployment.
 
-The deploy needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The host value lives in `package.json` `config.host` only.
-
-- A failed job: fix the cause, then re-run the failed job from the Actions page. The deploy is safe to repeat.
-- Rollback: tag a new patch version with the fix. Never move or delete a published tag, because the public host holds one version.
-- After a release: install on a clean machine, then check one background update.
+A failed release is corrected with a new version and tag. Never move a published tag or rebuild its immutable assets.

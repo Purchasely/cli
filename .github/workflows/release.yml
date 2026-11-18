@@ -8,49 +8,241 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-    # A signed provenance for the tarball and the installer: `gh attestation verify <file> -R Purchasely/cli`.
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      native_count: ${{ steps.release.outputs.native_count }}
+      bridge_releases: ${{ steps.release.outputs.bridge_releases }}
+      prerelease: ${{ steps.release.outputs.prerelease }}
+      promote: ${{ steps.release.outputs.promote }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - name: Read the release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          bridge_releases=$(sed -n 's/^BRIDGE_RELEASES=//p' packaging/bridge.env)
+          echo "bridge_releases=$bridge_releases" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" == *-* ]]; then echo 'prerelease=true' >> "$GITHUB_OUTPUT"; else echo 'prerelease=false' >> "$GITHUB_OUTPUT"; fi
+          # --paginate applies --jq to each page: add the per-page counts. A rerun finds its own tag published:
+          # it is not a previous release.
+          count=$(gh api repos/${GITHUB_REPOSITORY}/releases --paginate --jq '[.[] | select(.draft == false and .prerelease == false and .tag_name != "v0.9.0" and .tag_name != "'"$GITHUB_REF_NAME"'" and (.tag_name | ltrimstr("v") | split(".")[0] | tonumber) >= 1)] | length' | awk '{ n += $1 } END { print n + 0 }')
+          echo "native_count=$count" >> "$GITHUB_OUTPUT"
+          # A late rerun of an older version must not move Pages and the formula back from a newer stable release.
+          latest=$(gh api repos/${GITHUB_REPOSITORY}/releases --paginate --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name | ltrimstr("v")' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -1)" != "$version" ]; then
+            echo "::notice::v$version is older than the latest stable v$latest: the Pages and formula jobs are skipped."
+            echo 'promote=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'promote=true' >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: prepare
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      native_release_count: ${{ needs.prepare.outputs.native_count }}
+
+  github-release:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          node-version: 22
-          cache: npm
-      - run: sudo apt-get update && sudo apt-get install -y mandoc
-      - run: npm ci
-      - name: Tag matches package.json version
-        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-      - run: sh scripts/pack-release.sh out
+          name: release-files
+          path: out
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: |
-            out/purchasely-*.tgz
+            out/purchasely-*
             out/install.sh
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: site
-          path: out/
+      - name: Publish immutable release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # No checkout in this job: gh needs the repository by name.
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          NATIVE_COUNT: ${{ needs.prepare.outputs.native_count }}
+          PROMOTE: ${{ needs.prepare.outputs.promote }}
+          BRIDGE_RELEASES: ${{ needs.prepare.outputs.bridge_releases }}
+        run: |
+          if [ "$VERSION" = 0.9.0 ]; then
+            assets=(out/purchasely-0.9.0.tgz out/SHA256SUMS)
+          else
+            assets=(out/purchasely-"$VERSION"-darwin-arm64.tar.gz out/purchasely-"$VERSION"-darwin-x64.tar.gz out/purchasely-"$VERSION"-linux-arm64.tar.gz out/purchasely-"$VERSION"-linux-x64.tar.gz out/SHA256SUMS)
+          fi
+          expected=$(for a in "${assets[@]}"; do basename "$a"; done | LC_ALL=C sort)
+          # An older version and a prerelease must not take the "Latest" mark.
+          latest_flag=--latest=true
+          if [ "$PROMOTE" != true ] || [[ "$VERSION" == *-* ]]; then latest_flag=--latest=false; fi
+          # Download the release assets and check each one against the release SHA256SUMS.
+          verify() {
+            local published="$RUNNER_TEMP/published"
+            rm -rf "$published"
+            gh release download "v$VERSION" -D "$published"
+            test "$(cd "$published" && ls | LC_ALL=C sort)" = "$expected"
+            for f in $expected; do
+              [ "$f" = SHA256SUMS ] || awk -v f="$f" '$2 == f { found = 1 } END { exit !found }' "$published/SHA256SUMS"
+            done
+            # A window SHA256SUMS also lists the bridge, which is an asset of its own immutable tag v0.9.0.
+            if [ "$VERSION" != 0.9.0 ] && awk '$2 == "purchasely-0.9.0.tgz" { found = 1 } END { exit !found }' "$published/SHA256SUMS"; then
+              gh release download v0.9.0 -p purchasely-0.9.0.tgz -D "$published"
+            fi
+            (cd "$published" && sha256sum -c SHA256SUMS)
+          }
+          # A rerun finds the release: published assets are immutable, so check them and change nothing.
+          # A draft is what an interrupted gh release create leaves: nothing is public yet, so this run's
+          # assets replace the draft assets, then the draft is checked and published.
+          if draft=$(gh release view "v$VERSION" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$draft" = true ]; then
+              gh release upload "v$VERSION" "${assets[@]}" --clobber
+              verify
+              gh release edit "v$VERSION" --draft=false "$latest_flag"
+            else
+              verify
+            fi
+            exit 0
+          fi
+          # Plan 4.6: the 2 window releases and the third native release tell a stranded copy to reinstall.
+          notes=
+          if [[ "$VERSION" != *-* ]] && [ "$VERSION" != 0.9.0 ] && [ "$((NATIVE_COUNT + 1))" -le "$((BRIDGE_RELEASES + 1))" ]; then
+            notes="A copy older than 0.9.0 updates through the 0.9.0 bridge during the first $BRIDGE_RELEASES native releases. A copy that did not start in that time cannot update itself. Install it again: \`curl -fsSL https://cli.purchasely.io/install.sh | sh\`."
+          fi
+          if [ "$VERSION" = 0.9.0 ]; then
+            gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --notes "Bridge release." "$latest_flag"
+          elif [[ "$VERSION" == *-* ]]; then
+            gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes --prerelease
+          else
+            gh release create "v$VERSION" "${assets[@]}" --title "Purchasely $VERSION" --generate-notes --notes "$notes" "$latest_flag"
+          fi
 
-  # The site: a pre-release tag (with a dash) never deploys.
   deploy:
-    needs: build
-    if: ${{ !contains(github.ref_name, '-') }}
+    needs: [prepare, github-release, build]
+    if: needs.prepare.outputs.prerelease == 'false' && needs.prepare.outputs.promote == 'true'
     runs-on: ubuntu-latest
     steps:
+      - name: Gate on the newest stable release
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          # A rerun of failed jobs keeps the prepare outputs of its first attempt: check again before promoting.
+          latest=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name | ltrimstr("v")' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$VERSION" | sort -V | tail -1)" != "$VERSION" ]; then
+            echo "::notice::v$VERSION is older than the latest stable v$latest: this job does not promote it."
+            echo 'promote=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'promote=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: steps.gate.outputs.promote == 'true'
         with:
-          name: site
+          name: release-files
           path: out
-      - name: Deploy to Cloudflare Pages
+      - name: Use the published release assets
+        if: steps.gate.outputs.promote == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # No checkout in this job: gh needs the repository by name.
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          # A rerun rebuilds archives with other bytes: Pages serves the published release assets instead.
+          old_sums=$(sha256sum out/SHA256SUMS | cut -d' ' -f1)
+          old=$(jq -r .sha256 out/latest.json)
+          # latest.json holds the hash of SHA256SUMS, or of one archive listed in it (the bridge).
+          if [ "$old" = "$old_sums" ]; then name=SHA256SUMS; else name=$(awk -v h="$old" '$1 == h { print $2 }' out/SHA256SUMS); fi
+          test -n "$name"
+          gh release download "v$VERSION" -D out --clobber
+          (cd out && sha256sum -c SHA256SUMS)
+          jq -c --arg h "$(sha256sum "out/$name" | cut -d' ' -f1)" '.sha256 = $h' out/latest.json > "$RUNNER_TEMP/latest.json"
+          mv "$RUNNER_TEMP/latest.json" out/latest.json
+      # Node runs wrangler, the Pages deploy tool, here only. The CLI itself needs no Node.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.gate.outputs.promote == 'true'
+        with:
+          node-version: 22
+      - name: Deploy Pages snapshot
+        if: steps.gate.outputs.promote == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx --yes wrangler@4.148.0 pages deploy out --project-name=purchasely-cli --branch=main
+
+  formula:
+    needs: [prepare, github-release, deploy]
+    if: needs.prepare.outputs.prerelease == 'false' && needs.prepare.outputs.promote == 'true' && needs.prepare.outputs.version != '0.9.0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Gate on the newest stable release
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          # A rerun of failed jobs keeps the prepare outputs of its first attempt: check again before promoting.
+          latest=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name | ltrimstr("v")' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$VERSION" | sort -V | tail -1)" != "$VERSION" ]; then
+            echo "::notice::v$VERSION is older than the latest stable v$latest: this job does not promote it."
+            echo 'promote=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'promote=true' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.gate.outputs.promote == 'true'
+        with:
+          ref: main
+      - name: Verify immutable assets and checksums
+        if: steps.gate.outputs.promote == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          mkdir -p out
+          gh release download "v$VERSION" -p SHA256SUMS -D out
+          for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
+            file="purchasely-$VERSION-$target.tar.gz"
+            gh release download "v$VERSION" -p "$file" -D out
+            (cd out && sha256sum -c SHA256SUMS --ignore-missing)
+          done
+          for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
+            grep -q "  purchasely-$VERSION-$target.tar.gz$" out/SHA256SUMS
+          done
+      - if: steps.gate.outputs.promote == 'true'
+        run: sh scripts/update-formula.sh '${{ needs.prepare.outputs.version }}' out/SHA256SUMS > Formula/purchasely.rb
+      - if: steps.gate.outputs.promote == 'true'
+        run: ruby -c Formula/purchasely.rb
+      - name: Commit formula to main
+        if: steps.gate.outputs.promote == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Formula/purchasely.rb
+          # A rerun of the release finds the formula already written.
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore(formula): purchasely $VERSION"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort || true
+          done
+          exit 1

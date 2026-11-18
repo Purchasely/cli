@@ -1,0 +1,214 @@
+name: Build
+
+on:
+  pull_request:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      native_release_count:
+        required: false
+        type: string
+        default: '0'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: darwin-arm64
+            triple: aarch64-apple-darwin
+            arch: arm64
+            runner: macos-latest
+          - target: darwin-x64
+            triple: x86_64-apple-darwin
+            arch: x86_64
+            runner: macos-latest
+          - target: linux-x64
+            triple: x86_64-unknown-linux-musl
+            arch: x86-64
+            runner: ubuntu-latest
+          - target: linux-arm64
+            triple: aarch64-unknown-linux-musl
+            arch: aarch64
+            runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@d1031067263f94b142dd6c0ce24c5eb9d02d52a0
+        with:
+          toolchain: 1.99.1
+          targets: ${{ matrix.triple }}
+      - if: startsWith(matrix.target, 'linux-')
+        uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
+      - if: startsWith(matrix.target, 'linux-')
+        run: cargo install cargo-zigbuild --locked
+      - name: Build binary
+        shell: bash
+        run: |
+          if [[ '${{ matrix.target }}' == linux-* ]]; then
+            cargo zigbuild --release -p purchasely --bin purchasely --target '${{ matrix.triple }}'
+          else
+            cargo build --release -p purchasely --bin purchasely --target '${{ matrix.triple }}'
+          fi
+          mkdir -p "out/${{ matrix.target }}"
+          cp "target/${{ matrix.triple }}/release/purchasely" "out/${{ matrix.target }}/purchasely"
+      - name: Sign and verify macOS binary
+        if: startsWith(matrix.target, 'darwin-')
+        shell: bash
+        run: |
+          strip "out/${{ matrix.target }}/purchasely"
+          if [[ '${{ matrix.target }}' == darwin-x64 ]]; then codesign -s - -f "out/${{ matrix.target }}/purchasely"; fi
+          codesign -v "out/${{ matrix.target }}/purchasely"
+      - name: Check binary architecture
+        run: file "out/${{ matrix.target }}/purchasely" | grep -F '${{ matrix.arch }}'
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: binary-${{ matrix.target }}
+          path: out/${{ matrix.target }}/purchasely
+          if-no-files-found: error
+
+  smoke:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: darwin-arm64
+            runner: macos-latest
+          - target: darwin-x64
+            runner: macos-latest
+          - target: linux-x64
+            runner: ubuntu-latest
+          - target: linux-arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: binary-${{ matrix.target }}
+          path: out
+      - name: Smoke target binary
+        env:
+          VERSION: ${{ inputs.version }}
+        shell: bash
+        run: |
+          if [[ '${{ matrix.target }}' == darwin-x64 ]] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
+            echo 'Rosetta unavailable; skipping darwin-x64 runtime smoke'
+          else
+            chmod +x out/purchasely
+            actual=$(PURCHASELY_DISABLE_AUTOUPDATE=1 ./out/purchasely --version)
+            echo "$actual"
+            test -n "$actual"
+            if [ -n "$VERSION" ]; then test "$actual" = "$VERSION"; fi
+          fi
+
+  pack:
+    needs: [build, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@d1031067263f94b142dd6c0ce24c5eb9d02d52a0
+        with:
+          toolchain: 1.99.1
+          targets: x86_64-unknown-linux-musl
+      - run: sudo apt-get update && sudo apt-get install -y mandoc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: binary-*
+          path: out/bins
+          merge-multiple: false
+      - name: Arrange target binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p target/release-bins
+          for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
+            mkdir -p "target/release-bins/$target"
+            cp "out/bins/binary-$target/purchasely" "target/release-bins/$target/purchasely"
+          done
+      # Artifacts lose the executable bit. The linux-x64 binary also generates the reference.
+      - name: Make the binaries executable
+        run: chmod +x target/release-bins/*/purchasely
+      - name: Pack release and bridge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          P12B_BIN_DIR: target/release-bins
+          P12B_REFERENCE_BIN: target/release-bins/linux-x64/purchasely
+          VERSION: ${{ inputs.version }}
+          PREVIOUS_NATIVE_RELEASES: ${{ inputs.native_release_count }}
+        run: |
+          bridge_releases=$(sed -n 's/^BRIDGE_RELEASES=//p' packaging/bridge.env)
+          version="$VERSION"
+          if [ -z "$version" ]; then version="$(grep '^version =' crates/purchasely/Cargo.toml | head -1 | cut -d'"' -f2)"; fi
+          sh scripts/pack-release.sh --version "$version" out/native
+          sh scripts/pack-release.sh --bridge --version 0.9.0 out/bridge
+          bridge_bytes=$(wc -c < out/bridge/purchasely-0.9.0.tgz)
+          test "$bridge_bytes" -le 25165824
+          # A PR build has no VERSION: it packs only, the bridge window needs the published v0.9.0.
+          if [ -n "$VERSION" ] && [ "$version" != 0.9.0 ] && [ "$((${PREVIOUS_NATIVE_RELEASES:-0} + 1))" -le "$bridge_releases" ]; then
+            # out/bridge holds the bridge packed above: the window ships the published, immutable asset.
+            published="$RUNNER_TEMP/published-bridge"
+            rm -rf "$published"
+            gh release download v0.9.0 -p purchasely-0.9.0.tgz -D "$published"
+            count=$((PREVIOUS_NATIVE_RELEASES + 1))
+            P12B_BRIDGE_ARCHIVE="$published/purchasely-0.9.0.tgz" sh scripts/pack-release.sh --version "$version" --native "$version" --native-release-count "$count" out/window
+            # The window pack is a whole native pack plus the bridge: it replaces out/native (both hold assets/).
+            rm -rf out/native
+            mv out/window out/native
+          fi
+      - name: Verify bridge with the frozen installer and real binaries
+        if: inputs.version == '0.9.0' || inputs.version == ''
+        run: |
+          # Node stays for this check only: the frozen old installer (install.sh of the Node CLI, before the bridge)
+          # runs node, as on an old managed install that the bridge must upgrade. It needs Node 22.12 or newer from
+          # the runner image.
+          # The bridge runs the native binary, which prints its crate version; the old installer wants 0.9.0.
+          # Before the crate is 0.9.0, the test release::bridge_tgz_accepted_by_old_installer covers this with fakes.
+          crate=$(grep '^version =' crates/purchasely/Cargo.toml | head -1 | cut -d'"' -f2)
+          if [ "$crate" != 0.9.0 ]; then echo "skip: crate version $crate is not the bridge version 0.9.0"; exit 0; fi
+          mkdir -p out/old-site "$RUNNER_TEMP/bridge-home" "$RUNNER_TEMP/bridge-root" "$RUNNER_TEMP/bridge-bin"
+          cp out/bridge/purchasely-0.9.0.tgz out/bridge/latest.json out/bridge/SHA256SUMS out/old-site/
+          sed 's|^HOST=$|HOST=https://cli.test|' crates/contract/tests/fixtures/old-install.sh > "$RUNNER_TEMP/old-install.sh"
+          cat > "$RUNNER_TEMP/bridge-bin/curl" <<'CURL'
+          #!/bin/sh
+          out=; prev=; url=
+          for a in "$@"; do [ "$prev" = -o ] && out=$a; prev=$a; url=$a; done
+          cp "$FAKE_SITE/${url##*/}" "$out"
+          CURL
+          chmod +x "$RUNNER_TEMP/bridge-bin/curl"
+          # The frozen installer reads SHELL under set -u, and a runner may not export it (dash does not set it).
+          SHELL="${SHELL:-/bin/sh}" PATH="$RUNNER_TEMP/bridge-bin:$PATH" HOME="$RUNNER_TEMP/bridge-home" XDG_DATA_HOME="$RUNNER_TEMP/bridge-home/xdg" TMPDIR="$RUNNER_TEMP" FAKE_SITE="$PWD/out/old-site" sh "$RUNNER_TEMP/old-install.sh" --version 0.9.0 --root "$RUNNER_TEMP/bridge-root"
+          test "$(cat "$RUNNER_TEMP/bridge-root/current-version")" = 0.9.0
+          # The first start goes through the Node launcher of the old installer: the shim writes the native launcher.
+          launcher="$RUNNER_TEMP/bridge-root/bin/purchasely"
+          grep -q 'exec node' "$launcher"
+          run_launcher() { HOME="$RUNNER_TEMP/bridge-home" XDG_CONFIG_HOME="$RUNNER_TEMP/bridge-home/config" XDG_STATE_HOME="$RUNNER_TEMP/bridge-home/state" XDG_CACHE_HOME="$RUNNER_TEMP/bridge-home/cache" TMPDIR="$RUNNER_TEMP" PURCHASELY_DISABLE_AUTOUPDATE=1 "$launcher" --version; }
+          test "$(run_launcher)" = 0.9.0
+          ! grep -q node "$launcher"
+          # The next start runs the native binary with no Node on PATH.
+          nodeless=$(printf '%s\n' "$PATH" | tr ':' '\n' | while read -r d; do [ -x "$d/node" ] || printf '%s:' "$d"; done)
+          test "$(PATH="$nodeless" sh -c 'command -v node' || true)" = ""
+          test "$(PATH="$nodeless" run_launcher)" = 0.9.0
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: inputs.version != '0.9.0'
+        with:
+          name: release-files
+          path: out/native/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: inputs.version == '0.9.0'
+        with:
+          name: release-files
+          path: out/bridge/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: legacy-bridge
+          path: out/bridge/purchasely-0.9.0.tgz
+          if-no-files-found: error

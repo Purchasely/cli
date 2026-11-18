@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {"test": "game-pong::pong > bounces the ball on the paddle", "steps": [], "unit": "purchasely::games::pong::tests::bounces_the_ball_on_the_paddle"},
+    {"test": "game-pong::pong > bounces the ball on the top wall", "steps": [], "unit": "purchasely::games::pong::tests::bounces_the_ball_on_the_top_wall"},
+    {"test": "game-pong::pong > keeps the paddle in the court", "steps": [], "unit": "purchasely::games::pong::tests::keeps_the_paddle_in_the_court"},
+    {"test": "game-pong::pong > refuses a small terminal", "steps": [], "unit": "purchasely::games::pong::tests::refuses_a_small_terminal"},
+    {"test": "game-pong::pong > scores a miss and ends at 7", "steps": [], "unit": "purchasely::games::pong::tests::scores_a_miss_and_ends_at_seven"}
+  ]
+}

@@ -1,0 +1,28 @@
+use crate::{
+    cli::Command,
+    core::{deps::Deps, runtime::Runtime},
+};
+
+pub struct Program {
+    pub name: &'static str,
+    pub version: &'static str,
+    pub host: &'static str,
+    pub ext: Option<Extension>,
+}
+pub type LatestFn = fn(&Deps) -> Result<Option<String>, CliError>;
+
+pub struct Extension {
+    pub modules: Vec<Register>,
+    pub surface: &'static str,
+    pub surfaces: Vec<(&'static str, &'static str)>,
+    /// TS defineSurface(): surface id and its definition.
+    pub surface_defs: Vec<(&'static str, SurfaceDef)>,
+    pub identity: bool,
+    pub section: (&'static str, &'static str),
+    pub latest: Option<LatestFn>,
+    pub npm_update: Option<&'static str>,
+}
+/// `&mut Runtime`: a module reserves its names in `rt.taken`. Handlers get the runtime again at dispatch.
+pub type Register = fn(&mut Command, &mut Runtime);
+pub use super::credentials::SurfaceDef;
+pub use super::errors::CliError;

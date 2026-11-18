@@ -1,0 +1,121 @@
+{
+  "cases": [
+    {
+      "test": "dryrun::--dry-run > prints the request, redacts the key and does not call fetch",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "update",
+            "--env",
+            "prod",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--data",
+            "{\"name\":\"X\"}",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56071,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"method\": \"PATCH\",\n  \"url\": \"https://api.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements update; script)\",\n    \"Content-Type\": \"application/json\"\n  },\n  \"body\": {\n    \"name\": \"X\"\n  }\n}\n",
+          "err": "purchasely env=prod surface=management identity=- key=\u2026T123\n"
+        }
+      ]
+    },
+    {
+      "test": "dryrun::--dry-run > works without an API key",
+      "steps": [
+        {
+          "argv": [
+            "placements",
+            "delete",
+            "--env",
+            "staging",
+            "--app",
+            "app_1",
+            "--id",
+            "plc_1",
+            "--dry-run"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 56071,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": [
+              {
+                "op": "get",
+                "args": [
+                  "purchasely-cli",
+                  "staging:management"
+                ],
+                "result": null
+              }
+            ]
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "{\n  \"method\": \"DELETE\",\n  \"url\": \"https://api-staging.purchasely.io/management/v1/applications/app_1/placements/plc_1\",\n  \"headers\": {\n    \"Authorization\": \"Bearer <redacted>\",\n    \"Accept\": \"application/json\",\n    \"User-Agent\": \"purchasely-cli/9.9.9 (-; -; placements delete; script)\"\n  },\n  \"body\": null\n}\n",
+          "err": "purchasely env=staging surface=management identity=- key=-\n"
+        }
+      ]
+    }
+  ]
+}

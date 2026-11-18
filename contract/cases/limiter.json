@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {"test": "limiter::limiter (fake clock) > 50 parallel callers never exceed the rate nor 4 in flight", "steps": [], "unit": "purchasely::core::limiter::tests::fifty_parallel_callers_never_exceed_the_rate_nor_4_in_flight"},
+    {"test": "limiter::limiter (fake clock) > spaces writes by 7 s", "steps": [], "unit": "purchasely::core::limiter::tests::spaces_writes_by_7_s"},
+    {"test": "limiter::limiter (fake clock) > frees the slots of a dead process", "steps": [], "unit": "purchasely::core::limiter::tests::frees_the_slots_of_a_dead_process"},
+    {"test": "limiter::limiter (fake clock) > breaks the lock of a dead process", "steps": [], "unit": "purchasely::core::limiter::tests::breaks_the_lock_of_a_dead_process"},
+    {"test": "limiter::limiter (8 real processes) > keeps the same guarantees across processes", "steps": [], "unit": "purchasely::core::limiter::tests::keeps_the_same_guarantees_across_8_processes"}
+  ]
+}

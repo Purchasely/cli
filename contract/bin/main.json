@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "argv": [
+        "--version"
+      ],
+      "code": 0,
+      "env": {},
+      "err": "",
+      "out": "<VERSION>\n",
+      "stdin": "",
+      "test": "main::version"
+    },
+    {
+      "argv": [
+        "--bogus"
+      ],
+      "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown option '--bogus'\"]}}\n",
+      "out": "",
+      "stdin": "",
+      "test": "main::unknown_root_option"
+    },
+    {
+      "argv": [
+        "lst"
+      ],
+      "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'lst'\"]}}\n",
+      "out": "",
+      "stdin": "",
+      "test": "main::unknown_command"
+    },
+    {
+      "argv": [
+        "some",
+        "command"
+      ],
+      "code": 2,
+      "env": {},
+      "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"unknown command 'some'\"]}}\n",
+      "out": "",
+      "stdin": "",
+      "test": "main::usage_error"
+    }
+  ]
+}

@@ -9,18 +9,24 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  rust:
     strategy:
       matrix:
-        node: [22, 24]
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: dtolnay/rust-toolchain@d1031067263f94b142dd6c0ce24c5eb9d02d52a0
         with:
-          node-version: ${{ matrix.node }}
-          cache: npm
-      - run: sudo apt-get update && sudo apt-get install -y mandoc
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm test
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+      - run: cargo fmt --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      # The man page lint test needs mandoc; macOS ships it in /usr/bin.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y mandoc
+      # The binary contract suite runs target/debug/purchasely: build it first.
+      - run: cargo build -p purchasely --bins
+      # release::bridge_tgz_accepted_by_old_installer runs the frozen installer of the Node CLI (before the bridge),
+      # which needs Node 22.12 or newer from the runner image (`which node`). The CLI itself needs no Node.
+      - run: cargo test --workspace

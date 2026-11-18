@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "test": "reference-html::reference page > uses the tokens and fonts of the landing page",
+      "steps": [],
+      "unit":"purchasely::core::reference_html::tests::html_page_matches_brand_font_tokens_and_phone_gutter"
+    },
+    {
+      "test": "reference-html::reference page > has the brand nav, a group index and an anchor per command",
+      "steps": [],
+      "unit":"purchasely::core::reference_html::tests::html_has_brand_nav_index_and_extension_section"
+    },
+    {
+      "test": "reference-html::reference page > has no script and no filter input",
+      "steps": [],
+      "unit":"purchasely::core::reference_html::tests::html_has_brand_nav_index_and_extension_section"
+    }
+  ]
+}

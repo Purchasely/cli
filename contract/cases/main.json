@@ -1,0 +1,5 @@
+{
+  "cases": [
+    {"test": "main::main > ignores EPIPE on stdout, so `reference | head` prints no stack", "steps": [], "unit": "purchasely::core::real::tests::epipe_on_stdout_is_ignored_and_another_error_is_fatal"}
+  ]
+}

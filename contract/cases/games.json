@@ -1,0 +1,350 @@
+{
+  "cases": [
+    {
+      "test": "games::games > is in the help, and play is not",
+      "steps": [
+        {
+          "argv": [
+            "--help"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely [options] [command]\n\nPurchasely command line tool\n\nOptions:\n  -V, --version                  output the version number\n  -h, --help                     display help for command\n\nCommands:\n  auth                           Manage the Management API key\n  usage [options]                Requests of the last hour, rejections, limiter\n                                 and breaker state\n  purge [options]                Delete the cached client data\n  search [options] <task>        Find a command for a task\n  reference [options]            Print the full command reference of this\n                                 version (Markdown, man, HTML or JSON)\n  ai                             Install the Purchasely AI plugin in your coding\n                                 agents\n  update [options]               Check for a new version and install it (managed\n                                 install) or print the upgrade command\n  games [game]                   Play a game in the terminal\n  completion <shell>             Print a shell completion script (bash, zsh or\n                                 fish)\n  api [options] <method> <path>  Send a raw Management API request\n  apply [options] <file>         Send the writes of a plan file, after a person\n                                 reads them\n  doctor [options]               Check the install, the key, the network and the\n                                 version\n  dashboard [options]            Analytics dashboards. Start with: dashboard\n                                 summary --app <app_id> --output table\n  demo [options]                 Try the CLI with no key: sample data of a\n                                 fictional app, for a first test\n  ab-tests                       Management API: ab-tests\n  answers                        Management API: answers\n  applications|apps              Management API: applications\n  audiences                      Management API: audiences\n  campaigns                      Management API: campaigns\n  category-tags                  Management API: category-tags\n  client-errors                  Management API: client-errors\n  custom-event-properties        Management API: custom-event-properties\n  custom-events                  Management API: custom-events\n  custom-properties              Management API: custom-properties\n  flows                          Management API: flows\n  web-activations                Management API: web-activations\n  fonts                          Management API: fonts\n  placements                     Management API: placements\n  plans                          Management API: plans\n  distributions                  Management API: distributions\n  platforms                      Management API: platforms\n  products                       Management API: products\n  one-time-purchases             Management API: one-time-purchases\n  subscriptions                  Management API: subscriptions\n  screens                        Management API: screens\n  screen-versions                Management API: screen-versions\n  surveys                        Management API: surveys\n  translations                   Management API: translations\n  users                          Management API: users\n  web-flows                      Management API: web-flows\n  webhook-deliveries             Management API: webhook-deliveries\n  webhooks                       Management API: webhooks\n  help [command]                 display help for command\n\nConventions:\n  JSON goes to stdout. An error goes to stderr as one JSON object.\n  A command is <resource> <action>. The resource is the lowercase tag of the spec (ab-tests, custom-events).\n  The action is list, get, create, update, delete, or a verb such as start or make-default. apps is an alias of applications.\n  --app <id> is the application id (--app-id is an alias). A command that exists with and without an application\n  (placements list) calls the global endpoint when you omit --app.\n  The other path parameters are flags: --id, --plan-id, --store.\n  The query parameters are flags in kebab case. An array takes --fields id,name or a repeated flag.\n  --data '<json>', --data @file.json or --data - (stdin) is the body.\n  --dry-run prints { method, url, headers, body } and sends nothing. It needs no key.\n  --env is mandatory on every write (POST, PUT, PATCH, DELETE), also with --dry-run. Exit 10 without it.\n  A risky change returns CONFIRMATION_REQUIRED with its impact and a confirm_token (valid 5 minutes, tied to the exact request).\n  A JSON output over 200 KB is not printed. It goes to a file in the cache directory and the CLI prints {\"file\": \"...\", \"bytes\": 123}.\n  --out <file> chooses the file. --out - forces stdout.\n\nExamples:\n  purchasely placements list --app app_xxx --fields id,vendor_id | jq -r '.placements[].id'\n  purchasely screens list --app app_xxx\n  purchasely placements get --app app_xxx --id <placement>\n  purchasely placements update --app app_xxx --id plc_xxx --data @placement.json --env prod --dry-run\n  purchasely reference --format man\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "games::games > the help lists the games, the keys and the limits",
+      "steps": [
+        {
+          "argv": [
+            "games",
+            "--help"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "pk_mgmt_live_SECRET123",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 0,
+          "out": "Usage: purchasely games [options] [game]\n\nPlay a game in the terminal\n\nArguments:\n  game        The name of the game. Without a name, a menu shows the games\n\nOptions:\n  -h, --help  display help for command\n\nGames: 2048, invaders, minesweeper, pong, snake, tetris.\nKeys: arrows or WASD move, space acts, q, Esc or Ctrl-C quits.\nIt needs an interactive terminal. It uses no key and sends no request.\nExample:\n  purchasely games snake\n\n",
+          "err": ""
+        }
+      ]
+    },
+    {
+      "test": "games::games > refuses an unknown game before any key or request, under both names and in both programs",
+      "steps": [
+        {
+          "argv": [
+            "games",
+            "nope"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"Unknown game \\\"nope\\\". Games: 2048, invaders, minesweeper, pong, snake, tetris.\"]}}\n"
+        },
+        {
+          "argv": [
+            "play",
+            "nope"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"Unknown game \\\"nope\\\". Games: 2048, invaders, minesweeper, pong, snake, tetris.\"]}}\n"
+        },
+        {
+          "argv": [
+            "games",
+            "nope"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"Unknown game \\\"nope\\\". Games: 2048, invaders, minesweeper, pong, snake, tetris.\"]}}\n"
+        },
+        {
+          "argv": [
+            "play",
+            "nope"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "acme",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"Unknown game \\\"nope\\\". Games: 2048, invaders, minesweeper, pong, snake, tetris.\"]}}\n"
+        }
+      ]
+    },
+    {
+      "test": "games::games > needs a terminal for the menu",
+      "steps": [
+        {
+          "argv": [
+            "games"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"games needs an interactive terminal.\"]}}\n"
+        },
+        {
+          "argv": [
+            "play"
+          ],
+          "env": {
+            "PURCHASELY_API_KEY": "",
+            "PURCHASELY_DISABLE_AUTOUPDATE": "1"
+          },
+          "is_tty": false,
+          "stdin": "",
+          "answers": [],
+          "name": "purchasely",
+          "pid": 17208,
+          "version": "9.9.9",
+          "host": "https://cli.test",
+          "platform": "darwin",
+          "columns": null,
+          "ext": null,
+          "t_before": 1700000000000,
+          "t_after": 1700000000000,
+          "wall": "2026-01-15T12:00:00.000Z",
+          "pid_probes": [],
+          "files_before": {
+            "<ROOT>": []
+          },
+          "files_after": {
+            "<ROOT>": []
+          },
+          "keychain": {
+            "before": {},
+            "after": {},
+            "ops": []
+          },
+          "calls": [],
+          "execs": [],
+          "prompts": [],
+          "code": 2,
+          "out": "",
+          "err": "{\"error\":{\"code\":\"USAGE\",\"messages\":[\"play needs an interactive terminal.\"]}}\n"
+        }
+      ]
+    },
+    {"test": "games::games > the menu wraps and returns the chosen name", "steps": [], "unit": "purchasely::games::term::tests::menu_wraps_and_returns_the_chosen_name"}
+  ]
+}

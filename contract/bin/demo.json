@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "argv": [
+        "demo"
+      ],
+      "code": 0,
+      "env": {},
+      "stderr": "",
+      "stdin": "",
+      "stdout": "{\n  \"demo\": \"Demo mode answers every read from the sample data of one fictional app (app_demo). No key, no request. The data is not real. A write exits 10.\",\n  \"start\": \"export PURCHASELY_DEMO=1\",\n  \"app\": \"app_demo\",\n  \"try\": [\n    \"purchasely applications list\",\n    \"purchasely placements list --app app_demo\",\n    \"purchasely dashboard summary --app app_demo --output table\"\n  ],\n  \"stop\": \"unset PURCHASELY_DEMO\"\n}\n",
+      "test": "demo::purchasely demo"
+    },
+    {
+      "argv": [
+        "applications",
+        "list"
+      ],
+      "code": 0,
+      "env": {
+        "PURCHASELY_DEMO": "1"
+      },
+      "stderr": "purchasely env=prod surface=management identity=- key=- demo=on (sample data, not real)\n",
+      "stdin": "",
+      "stdout": "{\n  \"mobile_applications\": [\n    {\n      \"id\": \"app_demo\",\n      \"name\": \"Sample Meditation App (demo)\",\n      \"client_id\": \"cli_demo\",\n      \"default_language\": \"en\",\n      \"default_dashboard_currency\": \"USD\",\n      \"default_integration_currency\": \"USD\",\n      \"default_screen_id\": \"pres_demo_onboarding\",\n      \"redeem_presentation_id\": null,\n      \"icon_url\": null,\n      \"show_purchasely\": true,\n      \"has_mocked_data\": true,\n      \"client_webhook_url\": null,\n      \"s2s_notifications_endpoints\": [],\n      \"ios_platform\": {\n        \"bundle_id\": \"com.example.meditation.demo\"\n      },\n      \"android_platform\": {\n        \"package_name\": \"com.example.meditation.demo\"\n      },\n      \"stripe_platform\": null,\n      \"platforms_configured\": {\n        \"ios\": true,\n        \"android\": true,\n        \"stripe\": false\n      },\n      \"created_at\": \"<DATE>T09:30:00Z\",\n      \"updated_at\": \"<DATE>T14:05:00Z\"\n    }\n  ]\n}\n",
+      "test": "demo::applications list"
+    }
+  ]
+}

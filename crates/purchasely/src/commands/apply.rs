@@ -312,9 +312,9 @@ fn validate(r: &Value, n: usize) -> Result<(), CliError> {
             return Err(bad("has a body that is not a JSON string".into()));
         }
     }
-    if let Some(c) = get(r, "confirm").and_then(Value::as_str)
-        && c != "query"
-        && c != "body"
+    // TS: `r.confirm !== undefined && r.confirm !== "query" && r.confirm !== "body"`; a null or a boolean too.
+    if let Some(c) = get(r, "confirm")
+        && !matches!(c.as_str().as_deref(), Some("query" | "body"))
     {
         return Err(bad("has an unknown confirm placement".into()));
     }
@@ -323,19 +323,19 @@ fn validate(r: &Value, n: usize) -> Result<(), CliError> {
 fn write_plan(file: &str, v: &Value) -> Result<(), CliError> {
     exec::write_plan(std::path::Path::new(file), v)
 }
+/// TS `emit(rt.d, o, value, { env: "-", key: null, name: "apply" })`: the options of the command line.
 fn emit(rt: &Runtime, g: &Globals, v: Value, name: &str) -> Result<(), CliError> {
-    let env = rt.env(g.env.as_deref()).unwrap_or_else(|_| "prod".into());
     output::emit(
         &rt.d,
         &v,
         &EmitOptions {
-            table: false,
+            table: g.output.as_deref() == Some("table"),
             out: g.out.clone(),
-            env,
+            env: "-".into(),
             key: None,
             name: name.into(),
             columns: None,
-            width: 120,
+            width: rt.d.columns.unwrap_or(120) as usize,
         },
     )
 }
@@ -528,6 +528,74 @@ mod tests {
             ["https://api.purchasely.io/management/v1/applications/allowed/placements/p"]
         );
         let _ = std::fs::remove_dir_all(root);
+    }
+    fn one_request_plan(name: &str, extra: &str) -> std::path::PathBuf {
+        let root = std::env::temp_dir().join(format!("apply-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).unwrap();
+        let plan = root.join("plan.json");
+        std::fs::write(
+            &plan,
+            format!(
+                r#"{{"version":1,"requests":[{{"command":"placements update","env":"prod","method":"PATCH","url":"https://api.purchasely.io/management/v1/applications/app_1/placements/p","body":"{{\"name\":\"x\"}}"{extra}}}]}}"#
+            ),
+        )
+        .unwrap();
+        plan
+    }
+    /// TS `check`: a present confirm that is not "query" or "body" refuses the whole plan before any send.
+    #[test]
+    fn a_confirm_that_is_not_a_placement_refuses_the_plan() {
+        for value in ["false", "null", "1"] {
+            let plan = one_request_plan("confirm", &format!(r#","confirm":{value}"#));
+            let seen = Rc::new(RefCell::new(Seen::default()));
+            let mut rt = apply_runtime(plan.parent().unwrap(), seen.clone());
+            let e = run_apply(&mut rt, &[plan.to_str().unwrap(), "--dry-run"]).unwrap_err();
+            assert_eq!(
+                (e.exit, e.messages[0].as_str()),
+                (
+                    EXIT::REFUSED,
+                    "Request #1 of the plan has an unknown confirm placement. The CLI sent nothing."
+                ),
+                "{value}"
+            );
+            assert!(seen.borrow().stdout.is_empty());
+            let _ = std::fs::remove_dir_all(plan.parent().unwrap());
+        }
+    }
+    /// TS `emit(rt.d, o, ...)`: apply keeps --output table and --out.
+    #[test]
+    fn apply_keeps_the_output_options() {
+        let plan = one_request_plan("output", "");
+        let seen = Rc::new(RefCell::new(Seen::default()));
+        let mut rt = apply_runtime(plan.parent().unwrap(), seen.clone());
+        run_apply(
+            &mut rt,
+            &[plan.to_str().unwrap(), "--dry-run", "--output", "table"],
+        )
+        .unwrap();
+        let table = seen.borrow().stdout.clone();
+        assert!(!table.trim_start().starts_with('{'), "{table}");
+        assert!(table.contains("placements update"), "{table}");
+        let file = plan.parent().unwrap().join("out.json");
+        seen.borrow_mut().stdout.clear();
+        run_apply(
+            &mut rt,
+            &[
+                plan.to_str().unwrap(),
+                "--dry-run",
+                "--out",
+                file.to_str().unwrap(),
+            ],
+        )
+        .unwrap();
+        assert!(
+            std::fs::read_to_string(&file)
+                .unwrap()
+                .contains("\"pending\"")
+        );
+        assert!(seen.borrow().stdout.contains("\"file\""));
+        let _ = std::fs::remove_dir_all(plan.parent().unwrap());
     }
     fn apply_runtime(root: &std::path::Path, seen: Rc<RefCell<Seen>>) -> Runtime {
         let mut env = BTreeMap::new();

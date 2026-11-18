@@ -895,73 +895,108 @@ fn release_count_skips_the_tag_of_the_run() {
     assert!(out.contains("native_count=1\n"), "{out}");
 }
 
+/// A fake gh with one directory of assets per tag under $STATE/releases. A `<tag>.draft` file marks a
+/// draft. As gh, a download refuses to replace a file without --clobber.
+const RELEASE_GH: &str = r#"#!/bin/sh
+printf '%s\n' "$*" >> "$STATE/log"
+rel="$STATE/releases/$3"
+dest=.; pat=; prev=; clobber=
+for a in "$@"; do [ "$prev" = -D ] && dest=$a; [ "$prev" = -p ] && pat=$a; [ "$a" = --clobber ] && clobber=1; prev=$a; done
+case "$1 $2" in
+  'release view') [ -d "$rel" ] || exit 1; if [ -e "$rel.draft" ]; then echo true; else echo false; fi ;;
+  'release download')
+    [ -d "$rel" ] || exit 1; mkdir -p "$dest"
+    for f in "$rel"/*; do
+      n=$(basename "$f"); [ -z "$pat" ] || [ "$n" = "$pat" ] || continue
+      if [ -e "$dest/$n" ] && [ -z "$clobber" ]; then echo "$dest/$n already exists" >&2; exit 1; fi
+      cp "$f" "$dest/$n"
+    done ;;
+  'release upload') mkdir -p "$rel"; shift 3; for f in "$@"; do [ "$f" = --clobber ] || cp "$f" "$rel/"; done ;;
+  'release edit') rm -f "$rel.draft" ;;
+  'release create') ;;
+  *) exit 1 ;;
+esac
+"#;
+
+/// Writes the SHA256SUMS of the named files of a directory.
+fn write_sums(dir: &Path, glob: &str) {
+    let ok = Command::new("sh")
+        .args(["-c", &format!("shasum -a 256 {glob} > SHA256SUMS")])
+        .current_dir(dir)
+        .status()
+        .unwrap();
+    assert!(ok.success());
+}
+
+/// Runs a step of release.yml with the fake gh, in `$STATE/work`.
+fn run_release_step(sandbox: &Sandbox, step: &str, state: &Path, env: &[(&str, &str)]) -> Output {
+    let fakebin = sandbox.path("fakebin");
+    fs::create_dir_all(&fakebin).unwrap();
+    executable(&fakebin.join("gh"), RELEASE_GH);
+    let workflow = fs::read_to_string(repo().join(".github/workflows/release.yml")).unwrap();
+    let work = state.join("work");
+    let temp = state.join("temp");
+    fs::create_dir_all(&work).unwrap();
+    fs::create_dir_all(&temp).unwrap();
+    let mut command = Command::new("bash");
+    command
+        .args(["-e", "-o", "pipefail", "-c", &step_script(&workflow, step)])
+        .current_dir(&work)
+        .env(
+            "PATH",
+            format!(
+                "{}:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin",
+                fakebin.display()
+            ),
+        )
+        .env("STATE", state)
+        .env("RUNNER_TEMP", &temp);
+    for (k, v) in env {
+        command.env(k, v);
+    }
+    command.output().unwrap()
+}
+
+/// The out/ of a native build of `version`: four archives with `tag` in their bytes and their SHA256SUMS.
+fn native_out(dir: &Path, version: &str, tag: &str) {
+    fs::create_dir_all(dir).unwrap();
+    for target in TARGETS {
+        fs::write(
+            dir.join(format!("purchasely-{version}-{target}.tar.gz")),
+            format!("{tag} {target}"),
+        )
+        .unwrap();
+    }
+    write_sums(dir, "purchasely-*.tar.gz");
+}
+
+fn publish(sandbox: &Sandbox, state: &Path, version: &str, count: &str, promote: &str) -> Output {
+    run_release_step(
+        sandbox,
+        "Publish immutable release assets",
+        state,
+        &[
+            ("VERSION", version),
+            ("NATIVE_COUNT", count),
+            ("BRIDGE_RELEASES", "2"),
+            ("PROMOTE", promote),
+        ],
+    )
+}
+
 /// The publish step against a fake gh: a rerun checks the published assets and creates nothing; a new
 /// stable release carries the reinstall line of plan 4.6 in the window and in the third native release.
 #[test]
 fn publish_step_reruns_and_release_notes() {
     let sandbox = Sandbox::new();
-    let fakebin = sandbox.path("fakebin");
-    fs::create_dir_all(&fakebin).unwrap();
-    executable(
-        &fakebin.join("gh"),
-        r#"#!/bin/sh
-printf '%s\n' "$*" >> "$STATE/log"
-case "$1 $2" in
-  'release view') [ -d "$STATE/published" ] ;;
-  'release download') dest=; prev=; for a in "$@"; do [ "$prev" = -D ] && dest=$a; prev=$a; done; mkdir -p "$dest"; cp "$STATE"/published/* "$dest"/ ;;
-  'release create') ;;
-  *) exit 1 ;;
-esac
-"#,
-    );
-    let workflow = fs::read_to_string(repo().join(".github/workflows/release.yml")).unwrap();
-    let script = step_script(&workflow, "Publish immutable release assets");
-    let run = |version: &str, count: &str, state: &Path| {
-        let work = state.join("work");
-        fs::create_dir_all(work.join("out")).unwrap();
-        for target in TARGETS {
-            fs::write(
-                work.join(format!("out/purchasely-{version}-{target}.tar.gz")),
-                target,
-            )
-            .unwrap();
-        }
-        fs::write(work.join("out/SHA256SUMS"), "").unwrap();
-        Command::new("bash")
-            .args(["-e", "-o", "pipefail", "-c", &script])
-            .current_dir(&work)
-            .env(
-                "PATH",
-                format!("{}:/usr/bin:/bin:/usr/sbin:/sbin", fakebin.display()),
-            )
-            .env("STATE", state)
-            .env("RUNNER_TEMP", &work)
-            .env("VERSION", version)
-            .env("NATIVE_COUNT", count)
-            .env("BRIDGE_RELEASES", "2")
-            .output()
-            .unwrap()
-    };
     let line = "Install it again: `curl -fsSL https://cli.purchasely.io/install.sh | sh`.";
 
-    // Rerun of 1.0.1: published, with its four archives and SHA256SUMS.
+    // Rerun of 1.0.3: published, with its four archives and SHA256SUMS. The run rebuilt other bytes.
     let state = sandbox.path("rerun");
-    let published = state.join("published");
-    fs::create_dir_all(&published).unwrap();
-    for target in TARGETS {
-        fs::write(
-            published.join(format!("purchasely-1.0.1-{target}.tar.gz")),
-            target,
-        )
-        .unwrap();
-    }
-    let sums = Command::new("sh")
-        .args(["-c", "shasum -a 256 purchasely-* > SHA256SUMS"])
-        .current_dir(&published)
-        .status()
-        .unwrap();
-    assert!(sums.success());
-    let o = run("1.0.1", "1", &state);
+    let published = state.join("releases/v1.0.3");
+    native_out(&published, "1.0.3", "published");
+    native_out(&state.join("work/out"), "1.0.3", "rebuilt");
+    let o = publish(&sandbox, &state, "1.0.3", "3", "true");
     let log = fs::read_to_string(state.join("log")).unwrap();
     assert!(
         o.status.success(),
@@ -969,13 +1004,19 @@ esac
         String::from_utf8_lossy(&o.stderr)
     );
     assert!(!log.contains("release create"), "{log}");
+    assert!(!log.contains("release upload"), "{log}");
+    assert!(!log.contains("release edit"), "{log}");
     // A published asset that does not match its SHA256SUMS fails the rerun.
     fs::write(
-        published.join("purchasely-1.0.1-linux-x64.tar.gz"),
+        published.join("purchasely-1.0.3-linux-x64.tar.gz"),
         "changed",
     )
     .unwrap();
-    assert!(!run("1.0.1", "1", &state).status.success());
+    assert!(
+        !publish(&sandbox, &state, "1.0.3", "3", "true")
+            .status
+            .success()
+    );
 
     for (version, count, carries) in [
         ("1.0.0", "0", true),
@@ -983,8 +1024,8 @@ esac
         ("1.0.3", "3", false),
     ] {
         let state = sandbox.path(&format!("new-{version}"));
-        fs::create_dir_all(&state).unwrap();
-        let o = run(version, count, &state);
+        native_out(&state.join("work/out"), version, "new");
+        let o = publish(&sandbox, &state, version, count, "true");
         let log = fs::read_to_string(state.join("log")).unwrap();
         assert!(
             o.status.success(),
@@ -994,4 +1035,278 @@ esac
         assert!(log.contains(&format!("release create v{version}")), "{log}");
         assert_eq!(log.contains(line), carries, "{version}: {log}");
     }
+}
+
+/// A rerun of a window release: the real window SHA256SUMS lists the bridge, which is an asset of
+/// v0.9.0 and not of the window release. The rerun checks it from v0.9.0.
+#[test]
+fn publish_rerun_of_a_window_release_checks_the_bridge_from_its_tag() {
+    let sandbox = Sandbox::new();
+    let bridge = sandbox.path("bridge");
+    let packed = sandbox.pack(&["--bridge", bridge.to_str().unwrap()]);
+    assert!(
+        packed.status.success(),
+        "{}",
+        String::from_utf8_lossy(&packed.stderr)
+    );
+    let window = sandbox.path("window");
+    let packed = Command::new("sh")
+        .arg(repo().join("scripts/pack-release.sh"))
+        .args([
+            "--version",
+            "1.0.1",
+            "--native",
+            "1.0.1",
+            "--native-release-count",
+            "2",
+            window.to_str().unwrap(),
+        ])
+        .env("P12B_BIN_DIR", sandbox.path("bins"))
+        .env(
+            "P12B_REFERENCE_BIN",
+            sandbox.path("bins/linux-x64/purchasely"),
+        )
+        .env("P12B_BRIDGE_ARCHIVE", bridge.join("purchasely-0.9.0.tgz"))
+        .output()
+        .unwrap();
+    assert!(
+        packed.status.success(),
+        "{}",
+        String::from_utf8_lossy(&packed.stderr)
+    );
+    let sums = fs::read_to_string(window.join("SHA256SUMS")).unwrap();
+    assert!(sums.contains("  purchasely-0.9.0.tgz"), "{sums}");
+
+    let state = sandbox.path("state");
+    let release = state.join("releases/v1.0.1");
+    let bridge_release = state.join("releases/v0.9.0");
+    fs::create_dir_all(&release).unwrap();
+    fs::create_dir_all(&bridge_release).unwrap();
+    // The release holds what the workflow attaches: the four archives and SHA256SUMS.
+    for target in TARGETS {
+        let name = format!("purchasely-1.0.1-{target}.tar.gz");
+        fs::copy(window.join(&name), release.join(&name)).unwrap();
+    }
+    fs::copy(window.join("SHA256SUMS"), release.join("SHA256SUMS")).unwrap();
+    fs::copy(
+        bridge.join("purchasely-0.9.0.tgz"),
+        bridge_release.join("purchasely-0.9.0.tgz"),
+    )
+    .unwrap();
+    native_out(&state.join("work/out"), "1.0.1", "rebuilt");
+
+    let o = publish(&sandbox, &state, "1.0.1", "1", "true");
+    let log = fs::read_to_string(state.join("log")).unwrap();
+    assert!(
+        o.status.success(),
+        "{}{log}",
+        String::from_utf8_lossy(&o.stderr)
+    );
+    assert!(
+        log.contains("release download v0.9.0 -p purchasely-0.9.0.tgz"),
+        "{log}"
+    );
+    assert!(!log.contains("release create"), "{log}");
+
+    // A bridge under v0.9.0 that does not match the window SHA256SUMS fails the rerun.
+    fs::write(bridge_release.join("purchasely-0.9.0.tgz"), "other bridge").unwrap();
+    assert!(
+        !publish(&sandbox, &state, "1.0.1", "1", "true")
+            .status
+            .success()
+    );
+}
+
+/// An interrupted gh release create leaves a draft: the rerun uploads its assets, checks them and
+/// publishes the draft. An older version does not take the "Latest" mark.
+#[test]
+fn publish_rerun_publishes_a_draft() {
+    let sandbox = Sandbox::new();
+    for (version, promote) in [("1.0.4", "true"), ("1.0.2", "false")] {
+        let state = sandbox.path(&format!("draft-{version}"));
+        let release = state.join(format!("releases/v{version}"));
+        // A complete draft of an interrupted run, with other bytes than this run.
+        native_out(&release, version, "first run");
+        fs::write(state.join(format!("releases/v{version}.draft")), "").unwrap();
+        native_out(&state.join("work/out"), version, "rerun");
+        let o = publish(&sandbox, &state, version, "3", promote);
+        let log = fs::read_to_string(state.join("log")).unwrap();
+        assert!(
+            o.status.success(),
+            "{}{log}",
+            String::from_utf8_lossy(&o.stderr)
+        );
+        assert!(!log.contains("release create"), "{log}");
+        assert!(log.contains(&format!("release upload v{version}")), "{log}");
+        assert!(
+            log.contains(&format!(
+                "release edit v{version} --draft=false --latest={promote}"
+            )),
+            "{log}"
+        );
+        assert!(!state.join(format!("releases/v{version}.draft")).exists());
+        assert_eq!(
+            fs::read_to_string(release.join(format!("purchasely-{version}-linux-x64.tar.gz")))
+                .unwrap(),
+            "rerun linux-x64"
+        );
+    }
+}
+
+/// A late rerun of 1.0.2 after 1.0.3 is the latest stable release does not promote Pages and the
+/// formula; a rerun of the latest and a newer version do.
+#[test]
+fn an_older_release_does_not_promote_pages_and_formula() {
+    if !Command::new("sh")
+        .args(["-c", "command -v jq"])
+        .output()
+        .unwrap()
+        .status
+        .success()
+    {
+        eprintln!("skip: jq is unavailable for the fake gh");
+        return;
+    }
+    let sandbox = Sandbox::new();
+    let pages = sandbox.path("pages");
+    fs::create_dir_all(&pages).unwrap();
+    fs::write(
+        pages.join("1.json"),
+        r#"[{"tag_name":"v1.1.0-rc.1","draft":false,"prerelease":true},{"tag_name":"v1.0.10","draft":true,"prerelease":false},{"tag_name":"v1.0.3","draft":false,"prerelease":false},{"tag_name":"v1.0.2","draft":false,"prerelease":false},{"tag_name":"v1.0.1","draft":false,"prerelease":false},{"tag_name":"v1.0.0","draft":false,"prerelease":false},{"tag_name":"v0.9.0","draft":false,"prerelease":false}]"#,
+    )
+    .unwrap();
+    let fakebin = sandbox.path("fakebin");
+    fs::create_dir_all(&fakebin).unwrap();
+    executable(
+        &fakebin.join("gh"),
+        "#!/bin/sh\nf=; prev=\nfor a in \"$@\"; do [ \"$prev\" = --jq ] && f=$a; prev=$a; done\nfor p in \"$PAGES\"/*.json; do jq -r \"$f\" \"$p\"; done\n",
+    );
+    let work = sandbox.path("work");
+    fs::create_dir_all(work.join("packaging")).unwrap();
+    fs::write(
+        work.join("packaging/bridge.env"),
+        "BRIDGE_VERSION=0.9.0\nBRIDGE_RELEASES=2\n",
+    )
+    .unwrap();
+    let workflow = fs::read_to_string(repo().join(".github/workflows/release.yml")).unwrap();
+    for (tag, promote) in [
+        ("v1.0.2", false),
+        ("v0.9.0", false),
+        ("v1.0.3", true),
+        ("v1.0.4", true),
+        ("v1.0.20", true),
+    ] {
+        let output_file = sandbox.path(&format!("github-output-{tag}"));
+        let o = Command::new("bash")
+            .args([
+                "-e",
+                "-o",
+                "pipefail",
+                "-c",
+                &step_script(&workflow, "Read the release"),
+            ])
+            .current_dir(&work)
+            .env(
+                "PATH",
+                format!("{}:/usr/bin:/bin:/opt/homebrew/bin", fakebin.display()),
+            )
+            .env("PAGES", &pages)
+            .env("GITHUB_REF_NAME", tag)
+            .env("GITHUB_REPOSITORY", "Purchasely/x")
+            .env("GITHUB_OUTPUT", &output_file)
+            .output()
+            .unwrap();
+        assert!(o.status.success(), "{}", String::from_utf8_lossy(&o.stderr));
+        let out = fs::read_to_string(&output_file).unwrap();
+        assert!(
+            out.contains(&format!("promote={promote}\n")),
+            "{tag}: {out}"
+        );
+        let stdout = String::from_utf8_lossy(&o.stdout);
+        assert_eq!(
+            stdout.contains("older than the latest stable v1.0.3"),
+            !promote,
+            "{tag}: {stdout}"
+        );
+    }
+    for (job, text) in jobs(&workflow) {
+        if job == "deploy" || job == "formula" {
+            let condition = text
+                .lines()
+                .find(|l| l.trim_start().starts_with("if: "))
+                .unwrap_or("");
+            assert!(
+                condition.contains("needs.prepare.outputs.promote == 'true'"),
+                "{job}: {condition}"
+            );
+        }
+    }
+}
+
+/// The Pages snapshot of a rerun: the rebuilt archives give way to the published release assets, and
+/// latest.json names the hash of the published SHA256SUMS.
+#[test]
+fn pages_snapshot_uses_the_published_release_assets() {
+    let sandbox = Sandbox::new();
+    let state = sandbox.path("state");
+    let release = state.join("releases/v1.0.4");
+    native_out(&release, "1.0.4", "published");
+    let out = state.join("work/out");
+    native_out(&out, "1.0.4", "rebuilt");
+    let hash = |path: &Path| {
+        let o = Command::new("shasum")
+            .args(["-a", "256"])
+            .arg(path)
+            .output()
+            .unwrap();
+        String::from_utf8_lossy(&o.stdout)
+            .split_whitespace()
+            .next()
+            .unwrap()
+            .to_owned()
+    };
+    fs::write(
+        out.join("latest.json"),
+        format!(
+            r#"{{"version":"1.0.4","sha256":"{}"}}"#,
+            hash(&out.join("SHA256SUMS"))
+        ),
+    )
+    .unwrap();
+    fs::write(out.join("install.sh"), "installer").unwrap();
+    let o = run_release_step(
+        &sandbox,
+        "Use the published release assets",
+        &state,
+        &[("VERSION", "1.0.4")],
+    );
+    let log = fs::read_to_string(state.join("log")).unwrap_or_default();
+    assert!(
+        o.status.success(),
+        "{}{log}",
+        String::from_utf8_lossy(&o.stderr)
+    );
+    for target in TARGETS {
+        let name = format!("purchasely-1.0.4-{target}.tar.gz");
+        assert_eq!(
+            fs::read(out.join(&name)).unwrap(),
+            fs::read(release.join(&name)).unwrap(),
+            "{name}"
+        );
+    }
+    assert_eq!(
+        fs::read(out.join("SHA256SUMS")).unwrap(),
+        fs::read(release.join("SHA256SUMS")).unwrap()
+    );
+    assert_eq!(
+        fs::read_to_string(out.join("latest.json")).unwrap().trim(),
+        format!(
+            r#"{{"version":"1.0.4","sha256":"{}"}}"#,
+            hash(&release.join("SHA256SUMS"))
+        )
+    );
+    assert_eq!(
+        fs::read_to_string(out.join("install.sh")).unwrap(),
+        "installer"
+    );
 }

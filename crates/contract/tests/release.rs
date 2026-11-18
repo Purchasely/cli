@@ -1017,6 +1017,20 @@ fn publish_step_reruns_and_release_notes() {
             .status
             .success()
     );
+    // An attached archive without a line in SHA256SUMS fails the rerun.
+    native_out(&published, "1.0.3", "published");
+    let sums = fs::read_to_string(published.join("SHA256SUMS")).unwrap();
+    let kept: String = sums
+        .lines()
+        .filter(|l| !l.ends_with("linux-x64.tar.gz"))
+        .map(|l| format!("{l}\n"))
+        .collect();
+    fs::write(published.join("SHA256SUMS"), kept).unwrap();
+    assert!(
+        !publish(&sandbox, &state, "1.0.3", "3", "true")
+            .status
+            .success()
+    );
 
     for (version, count, carries) in [
         ("1.0.0", "0", true),
@@ -1122,7 +1136,11 @@ fn publish_rerun_of_a_window_release_checks_the_bridge_from_its_tag() {
 #[test]
 fn publish_rerun_publishes_a_draft() {
     let sandbox = Sandbox::new();
-    for (version, promote) in [("1.0.4", "true"), ("1.0.2", "false")] {
+    for (version, promote, latest) in [
+        ("1.0.4", "true", "true"),
+        ("1.0.2", "false", "false"),
+        ("1.1.0-rc.1", "true", "false"),
+    ] {
         let state = sandbox.path(&format!("draft-{version}"));
         let release = state.join(format!("releases/v{version}"));
         // A complete draft of an interrupted run, with other bytes than this run.
@@ -1140,7 +1158,7 @@ fn publish_rerun_publishes_a_draft() {
         assert!(log.contains(&format!("release upload v{version}")), "{log}");
         assert!(
             log.contains(&format!(
-                "release edit v{version} --draft=false --latest={promote}"
+                "release edit v{version} --draft=false --latest={latest}"
             )),
             "{log}"
         );
@@ -1229,6 +1247,38 @@ fn an_older_release_does_not_promote_pages_and_formula() {
             "{tag}: {stdout}"
         );
     }
+    // A rerun of failed jobs keeps the prepare outputs: deploy and formula check again before promoting.
+    for (job, text) in jobs(&workflow) {
+        if job != "deploy" && job != "formula" {
+            continue;
+        }
+        let gate = step_script(&text, "Gate on the newest stable release");
+        for (version, promote) in [("1.0.2", false), ("1.0.3", true), ("1.0.4", true)] {
+            let output_file = sandbox.path(&format!("gate-{job}-{version}"));
+            let o = Command::new("bash")
+                .args(["-e", "-o", "pipefail", "-c", &gate])
+                .current_dir(&work)
+                .env(
+                    "PATH",
+                    format!("{}:/usr/bin:/bin:/opt/homebrew/bin", fakebin.display()),
+                )
+                .env("PAGES", &pages)
+                .env("GH_REPO", "Purchasely/x")
+                .env("VERSION", version)
+                .env("GITHUB_OUTPUT", &output_file)
+                .output()
+                .unwrap();
+            assert!(o.status.success(), "{}", String::from_utf8_lossy(&o.stderr));
+            let out = fs::read_to_string(&output_file).unwrap();
+            assert_eq!(out, format!("promote={promote}\n"), "{job} {version}");
+        }
+        for step in text.split("\n      - ").skip(2) {
+            assert!(
+                step.contains("if: steps.gate.outputs.promote == 'true'"),
+                "{job}: a step after the gate runs without it: {step}"
+            );
+        }
+    }
     for (job, text) in jobs(&workflow) {
         if job == "deploy" || job == "formula" {
             let condition = text
@@ -1309,4 +1359,39 @@ fn pages_snapshot_uses_the_published_release_assets() {
         fs::read_to_string(out.join("install.sh")).unwrap(),
         "installer"
     );
+}
+
+/// The formula reads the published release assets: the verify step downloads SHA256SUMS and the four
+/// archives of the release and checks them.
+#[test]
+fn formula_uses_the_published_release_assets() {
+    let sandbox = Sandbox::new();
+    let state = sandbox.path("state");
+    let release = state.join("releases/v1.0.4");
+    native_out(&release, "1.0.4", "published");
+    let o = run_release_step(
+        &sandbox,
+        "Verify immutable assets and checksums",
+        &state,
+        &[("VERSION", "1.0.4")],
+    );
+    let log = fs::read_to_string(state.join("log")).unwrap_or_default();
+    assert!(
+        o.status.success(),
+        "{}{log}",
+        String::from_utf8_lossy(&o.stderr)
+    );
+    let out = state.join("work/out");
+    assert_eq!(
+        fs::read(out.join("SHA256SUMS")).unwrap(),
+        fs::read(release.join("SHA256SUMS")).unwrap()
+    );
+    for target in TARGETS {
+        let name = format!("purchasely-1.0.4-{target}.tar.gz");
+        assert_eq!(
+            fs::read(out.join(&name)).unwrap(),
+            fs::read(release.join(&name)).unwrap(),
+            "{name}"
+        );
+    }
 }

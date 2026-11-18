@@ -83,9 +83,9 @@ jobs:
             assets=(out/purchasely-"$VERSION"-darwin-arm64.tar.gz out/purchasely-"$VERSION"-darwin-x64.tar.gz out/purchasely-"$VERSION"-linux-arm64.tar.gz out/purchasely-"$VERSION"-linux-x64.tar.gz out/SHA256SUMS)
           fi
           expected=$(for a in "${assets[@]}"; do basename "$a"; done | LC_ALL=C sort)
-          # An older version must not take the "Latest" mark from a newer release.
+          # An older version and a prerelease must not take the "Latest" mark.
           latest_flag=--latest=true
-          [ "$PROMOTE" = true ] || latest_flag=--latest=false
+          if [ "$PROMOTE" != true ] || [[ "$VERSION" == *-* ]]; then latest_flag=--latest=false; fi
           # Download the release assets and check each one against the release SHA256SUMS.
           verify() {
             local published="$RUNNER_TEMP/published"
@@ -132,11 +132,28 @@ jobs:
     if: needs.prepare.outputs.prerelease == 'false' && needs.prepare.outputs.promote == 'true'
     runs-on: ubuntu-latest
     steps:
+      - name: Gate on the newest stable release
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          # A rerun of failed jobs keeps the prepare outputs of its first attempt: check again before promoting.
+          latest=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name | ltrimstr("v")' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$VERSION" | sort -V | tail -1)" != "$VERSION" ]; then
+            echo "::notice::v$VERSION is older than the latest stable v$latest: this job does not promote it."
+            echo 'promote=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'promote=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: steps.gate.outputs.promote == 'true'
         with:
           name: release-files
           path: out
       - name: Use the published release assets
+        if: steps.gate.outputs.promote == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           # No checkout in this job: gh needs the repository by name.
@@ -155,9 +172,11 @@ jobs:
           mv "$RUNNER_TEMP/latest.json" out/latest.json
       # Node runs wrangler, the Pages deploy tool, here only. The CLI itself needs no Node.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.gate.outputs.promote == 'true'
         with:
           node-version: 22
       - name: Deploy Pages snapshot
+        if: steps.gate.outputs.promote == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -170,10 +189,27 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Gate on the newest stable release
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          # A rerun of failed jobs keeps the prepare outputs of its first attempt: check again before promoting.
+          latest=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name | ltrimstr("v")' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$VERSION" | sort -V | tail -1)" != "$VERSION" ]; then
+            echo "::notice::v$VERSION is older than the latest stable v$latest: this job does not promote it."
+            echo 'promote=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'promote=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.gate.outputs.promote == 'true'
         with:
           ref: main
       - name: Verify immutable assets and checksums
+        if: steps.gate.outputs.promote == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.prepare.outputs.version }}
@@ -188,9 +224,12 @@ jobs:
           for target in darwin-arm64 darwin-x64 linux-arm64 linux-x64; do
             grep -q "  purchasely-$VERSION-$target.tar.gz$" out/SHA256SUMS
           done
-      - run: sh scripts/update-formula.sh '${{ needs.prepare.outputs.version }}' out/SHA256SUMS > Formula/purchasely.rb
-      - run: ruby -c Formula/purchasely.rb
+      - if: steps.gate.outputs.promote == 'true'
+        run: sh scripts/update-formula.sh '${{ needs.prepare.outputs.version }}' out/SHA256SUMS > Formula/purchasely.rb
+      - if: steps.gate.outputs.promote == 'true'
+        run: ruby -c Formula/purchasely.rb
       - name: Commit formula to main
+        if: steps.gate.outputs.promote == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.prepare.outputs.version }}

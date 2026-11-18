@@ -77,7 +77,17 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         ));
     }
     let raw = p.arguments.get(1).ok_or_else(|| usage("missing path"))?;
-    let full = exec::validate_api_path(raw)?;
+    // TS: the URL parser encodes a non-ASCII character of the checked path, and nothing else.
+    let full = exec::validate_api_path(raw)?
+        .chars()
+        .map(|c| {
+            if c.is_ascii() {
+                c.to_string()
+            } else {
+                encode(c.encode_utf8(&mut [0; 4]))
+            }
+        })
+        .collect::<String>();
     let path = &full["/management/v1".len()..];
     let mut query = Vec::new();
     for item in p.options.get("query").into_iter().flatten() {
@@ -93,10 +103,13 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
         return Err(usage("A GET takes no body. Do not pass --data."));
     }
     let body = if let Some(d) = p.opt("data") {
-        Some(request::json_body(&request::read_data(
-            d,
-            &rt.d.host.read_stdin(),
-        )?)?)
+        // TS `readData`: stdin is read for `-` only.
+        let stdin = if d == "-" {
+            rt.d.host.read_stdin()
+        } else {
+            String::new()
+        };
+        Some(request::json_body(&request::read_data(d, &stdin)?)?)
     } else {
         None
     };
@@ -145,7 +158,8 @@ fn run(p: &Parsed, rt: &mut Runtime) -> Result<(), CliError> {
             body: b,
         })
     };
-    exec::execute(rt, p, build, "api", true, exec::Meta::default())
+    let name = format!("api-{}", method.to_ascii_lowercase());
+    exec::execute(rt, p, build, &name, true, exec::Meta::default())
 }
 fn find_op(method: &str, path: &str) -> Option<crate::management::spec::Op> {
     let (_, ops) = spec::embedded_spec();
@@ -218,7 +232,7 @@ mod tests {
             String::new()
         }
         fn read_stdin(&self) -> String {
-            String::new()
+            panic!("the command read stdin")
         }
         fn now(&self) -> i64 {
             1_700_000_000_000
@@ -240,7 +254,13 @@ mod tests {
         }
     }
     fn runtime(capture: Rc<RefCell<Vec<Request>>>) -> Runtime {
-        let root = std::env::temp_dir().join(format!("p6b-api-{}", std::process::id()));
+        // One dir per runtime: two tests in one limiter dir wait forever on the fake clock.
+        static NEXT: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+        let root = std::env::temp_dir().join(format!(
+            "p6b-api-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
+        ));
         let mut env = BTreeMap::new();
         env.insert("PURCHASELY_API_KEY".into(), "pk_mgmt_live_SECRET123".into());
         Runtime::new(Deps {
@@ -309,6 +329,61 @@ mod tests {
                 "write_allowlist.staging is set in the config, and this write targets no app. Writes go to the listed apps only."
             ]
         );
+    }
+    /// TS `readData` reads stdin for `-` only: inline JSON and `@file` never wait on an open pipe.
+    #[test]
+    fn data_reads_stdin_for_dash_only() {
+        let mut rt = runtime(Rc::new(RefCell::new(Vec::new())));
+        let file = std::env::temp_dir().join(format!("api-data-{}.json", std::process::id()));
+        std::fs::write(&file, "{}").unwrap();
+        let at = format!("@{}", file.display());
+        for data in ["{}", at.as_str()] {
+            let args = [
+                "api",
+                "PATCH",
+                "/applications/app_1",
+                "--data",
+                data,
+                "--env",
+                "staging",
+                "--dry-run",
+            ];
+            run_api(&mut rt, &args).unwrap();
+        }
+        let _ = std::fs::remove_file(file);
+    }
+    /// TS sends `url.href`: the URL parser encodes a non-ASCII path character.
+    #[test]
+    fn non_ascii_path_segments_are_encoded() {
+        let calls = Rc::new(RefCell::new(Vec::new()));
+        let mut rt = runtime(calls.clone());
+        run_api(&mut rt, &["api", "GET", "/applications/café"]).unwrap();
+        assert_eq!(
+            calls.borrow()[0].url,
+            "https://api.purchasely.io/management/v1/applications/caf%C3%A9"
+        );
+    }
+    /// TS `execute(..., { name: \`api-${method.toLowerCase()}\` })`: the plan keeps the method in the command.
+    #[test]
+    fn plan_command_names_the_method() {
+        let mut rt = runtime(Rc::new(RefCell::new(Vec::new())));
+        let plan = std::env::temp_dir().join(format!("api-plan-{}.json", std::process::id()));
+        let _ = std::fs::remove_file(&plan);
+        let args = [
+            "api",
+            "PATCH",
+            "/applications/app_1",
+            "--data",
+            "{}",
+            "--env",
+            "staging",
+            "--plan",
+            plan.to_str().unwrap(),
+        ];
+        run_api(&mut rt, &args).unwrap();
+        let text = std::fs::read_to_string(&plan).unwrap();
+        let _ = std::fs::remove_file(&plan);
+        assert!(text.contains("\"command\": \"api-patch\""), "{text}");
     }
     #[test]
     fn api_path_validation_blocks_encoded_traversal() {

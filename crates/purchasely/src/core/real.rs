@@ -18,8 +18,21 @@ pub struct RealHost {
 
 impl Default for RealHost {
     fn default() -> Self {
-        Self::new(std::env::vars().collect())
+        Self::new(process_env())
     }
+}
+
+/// The environment as Node `process.env` gives it: an invalid UTF-8 byte becomes U+FFFD. `std::env::vars`
+/// panics on such an entry, with its value in the message.
+pub fn process_env() -> BTreeMap<String, String> {
+    std::env::vars_os()
+        .map(|(k, v)| {
+            (
+                k.to_string_lossy().into_owned(),
+                v.to_string_lossy().into_owned(),
+            )
+        })
+        .collect()
 }
 
 impl RealHost {

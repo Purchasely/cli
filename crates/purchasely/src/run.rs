@@ -291,7 +291,7 @@ fn dispatch(
 }
 
 fn default_deps(program: Program) -> Deps {
-    let env: BTreeMap<String, String> = std::env::vars().collect();
+    let env = crate::core::real::process_env();
     let [config_dir, state_dir, cache_dir] = data_dirs(&env, account_home);
     let host: Box<dyn Host> = Box::new(RealHost::new(env.clone()));
     let columns = terminal_columns();
@@ -376,7 +376,15 @@ fn terminal_columns() -> Option<u16> {
 
 pub fn main(program: Program) {
     let deps = default_deps(program);
-    let output = catch_run(|| run(std::env::args().skip(1).collect(), deps));
+    let output = catch_run(|| {
+        run(
+            std::env::args_os()
+                .skip(1)
+                .map(|a| a.to_string_lossy().into_owned())
+                .collect(),
+            deps,
+        )
+    });
     if !output.stderr.is_empty() {
         let _ = io::stderr().write_all(output.stderr.as_bytes());
     }

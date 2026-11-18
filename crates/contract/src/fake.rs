@@ -362,6 +362,17 @@ impl FakeHost {
             });
         }
         let result = &expected["result"];
+        // The recording keeps the tar call, not the files it wrote: unpack the local archive for real, so the
+        // command finds the payload (the production code has no replay fallback).
+        if file == "tar"
+            && actual_args.first().is_some_and(|a| a == "-xzf")
+            && result["code"].as_i64().unwrap_or(0) == 0
+        {
+            let unpacked = std::process::Command::new("tar").args(actual_args).status();
+            if !unpacked.is_ok_and(|s| s.success()) {
+                self.fail(format!("tar {actual_args:?} failed"));
+            }
+        }
         Ok(ExecResult {
             code: result["code"].as_i64().unwrap_or(0) as i32,
             stdout: result["stdout"].as_str().unwrap_or_default().into(),

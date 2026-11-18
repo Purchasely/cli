@@ -8,7 +8,6 @@ use super::{
 use std::{
     fs, io,
     path::{Path, PathBuf},
-    sync::atomic::{AtomicU64, Ordering},
 };
 
 pub const AGENTS: [&str; 6] = ["claude", "codex", "copilot", "gemini", "cursor", "opencode"];
@@ -17,7 +16,6 @@ const REPO: &str = "Purchasely/Purchasely-AI-Plugin";
 const TARBALL: &str =
     "https://codeload.github.com/Purchasely/Purchasely-AI-Plugin/tar.gz/refs/tags/";
 const MARKER: &str = ".purchasely-cli";
-static NEXT_RELEASE: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Verb {
@@ -416,12 +414,23 @@ fn release_payload(d: &Deps, raw_tag: &str) -> Result<(PathBuf, PathBuf), CliErr
         let _ = fs::set_permissions(&d.cache_dir, fs::Permissions::from_mode(0o700));
         let _ = fs::set_permissions(&cache, fs::Permissions::from_mode(0o700));
     }
-    let id = NEXT_RELEASE.fetch_add(1, Ordering::Relaxed);
-    let dir = cache.join(format!(
-        "release-{:06x}",
-        (d.host.now() as u64 ^ id) & 0xffffff
-    ));
-    fs::create_dir_all(&dir).map_err(|_| download_error())?;
+    // TS `mkdtempSync(join(cache, "ai", "release-"))`: six random characters, a new folder, mode 0700.
+    let dir = (0..100)
+        .find_map(|_| {
+            const ALNUM: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let mut bytes = [0u8; 6];
+            getrandom::fill(&mut bytes).ok()?;
+            let name: String = bytes
+                .iter()
+                .map(|b| ALNUM[*b as usize % ALNUM.len()] as char)
+                .collect();
+            let dir = cache.join(format!("release-{name}"));
+            let mut builder = fs::DirBuilder::new();
+            #[cfg(unix)]
+            std::os::unix::fs::DirBuilderExt::mode(&mut builder, 0o700);
+            builder.create(&dir).ok().map(|_| dir)
+        })
+        .ok_or_else(download_error)?;
     let response = d
         .host
         .fetch(Request {
@@ -454,12 +463,8 @@ fn release_payload(d: &Deps, raw_tag: &str) -> Result<(PathBuf, PathBuf), CliErr
         version_tag(raw_tag)
     ));
     if !src.exists() {
-        // The replay Host records the tar invocation but does not execute it. Unpack the recorded local archive.
-        let unpack = std::process::Command::new("tar").args(&args).status();
-        if !unpack.is_ok_and(|s| s.success()) || !src.exists() {
-            let _ = fs::remove_dir_all(&dir);
-            return Err(download_error());
-        }
+        let _ = fs::remove_dir_all(&dir);
+        return Err(download_error());
     }
     Ok((dir, src))
 }

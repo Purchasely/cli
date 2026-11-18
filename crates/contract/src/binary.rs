@@ -318,6 +318,22 @@ fn normalize_binary_text(text: &str, root: Option<&Path>) -> String {
     value = normalize_iso_dates(&value);
     normalize_binary_roots(&value)
 }
+/// Length of a pre-release suffix such as `-rc.1` or `-beta.12`, not `-darwin-arm64`.
+fn prerelease_len(rest: &[u8]) -> usize {
+    let letters = rest
+        .iter()
+        .skip(1)
+        .take_while(|b| b.is_ascii_lowercase())
+        .count();
+    if rest.first() != Some(&b'-') || letters == 0 || rest.get(1 + letters) != Some(&b'.') {
+        return 0;
+    }
+    let digits = rest[2 + letters..]
+        .iter()
+        .take_while(|b| b.is_ascii_digit())
+        .count();
+    if digits == 0 { 0 } else { 2 + letters + digits }
+}
 fn normalize_version_tokens(input: &str) -> String {
     let bytes = input.as_bytes();
     let mut out = String::new();
@@ -335,7 +351,7 @@ fn normalize_version_tokens(input: &str) -> String {
             }
             if dots >= 2 {
                 out.push_str("<VERSION>");
-                i = j;
+                i = j + prerelease_len(&bytes[j..]);
                 continue;
             }
             out.push_str(&input[start..j]);
@@ -389,6 +405,19 @@ fn normalize_binary_roots(input: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn version_tokens_take_a_prerelease_suffix_only() {
+        assert_eq!(normalize_version_tokens("1.0.0-rc.1\n"), "<VERSION>\n");
+        assert_eq!(
+            normalize_version_tokens("v1.2.3-beta.12 ok"),
+            "v<VERSION> ok"
+        );
+        assert_eq!(
+            normalize_version_tokens("ply-1.0.0-darwin-arm64.tar.gz"),
+            "ply-<VERSION>-darwin-arm64.tar.gz"
+        );
+        assert_eq!(normalize_version_tokens("1.0.0-rc"), "<VERSION>-rc");
+    }
     #[test]
     fn binary_runner_replays_recorded_output_comparison() {
         let r = BinaryResult {

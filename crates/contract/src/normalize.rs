@@ -5,9 +5,10 @@ pub fn normalize(input: &str, root: &str, pid: u32, version: &str) -> String {
     let mut value = input.replace(root, "<ROOT>");
     value = map_ts_root(&value, "<ROOT>");
     value = replace_release_dir(&value);
+    // UUIDs first: a random UUID group can hold the pid digits between two hyphens.
+    value = replace_uuids(&value);
     value = replace_pid(&value, pid);
     value = replace_mkdtemp(&value);
-    value = replace_uuids(&value);
     value = replace_man_date(&value);
     value = value.replace(version, "<VERSION>");
     value
@@ -181,6 +182,15 @@ mod tests {
     fn uuid_replacement_preserves_correlation() {
         let id = "123e4567-e89b-42d3-a456-426614174000";
         assert_eq!(replace_uuids(&format!("{id} {id}")), "<UUID1> <UUID1>");
+    }
+    #[test]
+    fn a_uuid_group_equal_to_the_pid_stays_a_uuid() {
+        // The second group is exactly the pid, between two hyphens.
+        let id = "1234abcd-4567-42d3-a456-426614174000";
+        assert_eq!(
+            normalize(&format!("{id} 4567"), "/none", 4567, "9.9.9"),
+            "<UUID1> <PID>"
+        );
     }
     #[test]
     fn pid_is_replaced() {

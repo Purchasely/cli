@@ -87,12 +87,16 @@ fn bridge_tgz_accepted_by_old_installer() {
         "purchasely-0.9.0/bin/purchasely",
         "purchasely-0.9.0/bin/linux-x64/purchasely",
         "purchasely-0.9.0/install.sh",
+        "purchasely-0.9.0/package.json",
     ] {
         assert!(
             files.lines().any(|line| line == expected),
             "missing {expected}: {files}"
         );
     }
+    // A package.json with "type": "module" above the install root (~/package.json) must not turn the
+    // CommonJS shim into an ES module: the bridge ships its own "type": "commonjs".
+    fs::write(sandbox.path("package.json"), r#"{"type":"module"}"#).unwrap();
     let old_installer = repo().join("crates/contract/tests/fixtures/old-install.sh");
     let site = sandbox.path("site");
     fs::create_dir_all(&site).unwrap();
@@ -780,4 +784,53 @@ fn release_count_adds_the_pages() {
     assert!(o.status.success(), "{}", String::from_utf8_lossy(&o.stderr));
     let out = fs::read_to_string(&output_file).unwrap();
     assert!(out.contains("native_count=32\n"), "{out}");
+}
+
+/// The bridge is the Pages snapshot while 0.9.0 is the latest: it carries the reference page.
+#[test]
+fn bridge_pack_writes_the_reference_page() {
+    let sandbox = Sandbox::new();
+    let out = sandbox.path("out");
+    let result = sandbox.pack(&["--bridge", out.to_str().unwrap()]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(
+        fs::read_to_string(out.join("reference.html"))
+            .unwrap()
+            .trim(),
+        "<html>reference</html>"
+    );
+}
+
+/// Plan 4.2: each native archive holds README.md and LICENSE.
+#[test]
+fn native_archives_hold_readme_and_license() {
+    let sandbox = Sandbox::new();
+    let out = sandbox.path("out");
+    let result = sandbox.pack(&["--version", "1.0.0", out.to_str().unwrap()]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    for target in TARGETS {
+        let archive = out.join(format!("purchasely-1.0.0-{target}.tar.gz"));
+        let listing = Command::new("tar")
+            .arg("-tzf")
+            .arg(&archive)
+            .output()
+            .unwrap();
+        let files = String::from_utf8_lossy(&listing.stdout);
+        for name in ["README.md", "LICENSE"] {
+            assert!(
+                files
+                    .lines()
+                    .any(|l| l == format!("purchasely-1.0.0/{name}")),
+                "{target}: missing {name}: {files}"
+            );
+        }
+    }
 }

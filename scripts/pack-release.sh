@@ -51,6 +51,8 @@ if [ "$bridge" -eq 1 ]; then
   [ "$version" = "$(sed -n 's/^BRIDGE_VERSION=//p' packaging/bridge.env)" ] || { echo "--bridge requires the configured bridge version" >&2; exit 2; }
   mkdir -p "$stage/dist/bin"
   cp packaging/legacy/purchasely.js "$stage/dist/bin/purchasely.js"
+  # The shim is CommonJS: a parent package.json with "type": "module" (~/package.json) must not change that.
+  printf '{"type":"commonjs"}\n' >"$stage/package.json"
   cp packaging/legacy/dispatch.sh "$stage/bin/purchasely"
   chmod +x "$stage/bin/purchasely"
   for target in darwin-arm64 darwin-x64 linux-x64 linux-arm64; do
@@ -58,11 +60,11 @@ if [ "$bridge" -eq 1 ]; then
     mkdir -p "$stage/bin/$target"
     cp "$P12B_BIN_DIR/$target/purchasely" "$stage/bin/$target/purchasely"
   done
-  if [ -n "${P12B_REFERENCE_BIN:-}" ]; then
-    PURCHASELY_DISABLE_AUTOUPDATE=1 "$P12B_REFERENCE_BIN" reference --format man >"$stage/man/purchasely.1"
-  else
-    printf '.TH PURCHASELY 1 "2026" "purchasely %s"\n' "$version" >"$stage/man/purchasely.1"
-  fi
+  # The bridge is the Pages snapshot while 0.9.0 is the latest: the reference page and the man page are real.
+  [ -n "${P12B_REFERENCE_BIN:-}" ] && refbin=$P12B_REFERENCE_BIN || refbin="$P12B_BIN_DIR/linux-x64/purchasely"
+  [ -x "$refbin" ] || { echo "missing reference binary: $refbin" >&2; exit 1; }
+  PURCHASELY_DISABLE_AUTOUPDATE=1 "$refbin" reference --format html >"$out/reference.html"
+  PURCHASELY_DISABLE_AUTOUPDATE=1 "$refbin" reference --format man >"$stage/man/purchasely.1"
   archive="purchasely-$version.tgz"
   COPYFILE_DISABLE=1 tar -czf "$out/$archive" -C "$work" "purchasely-$version"
   size=$(wc -c <"$out/$archive" | tr -d ' ')
@@ -83,6 +85,7 @@ else
     cp "$P12B_BIN_DIR/$target/purchasely" "$top/bin/purchasely"
     cp "$stage/install.sh" "$top/install.sh"
     cp "$stage/man/purchasely.1" "$top/man/purchasely.1"
+    cp README.md LICENSE "$top/"
     (cd "$target_work" && COPYFILE_DISABLE=1 tar -czf "$out/purchasely-$version-$target.tar.gz" "purchasely-$version")
     rm -rf "$target_work"
   done
